@@ -11,12 +11,12 @@
 class UdpSocket : public IUdpSocket
 {
 public:
-    UdpSocket(std::string const& addr, short int port);
-    virtual ~UdpSocket();
+    UdpSocket(short int port);
+    virtual ~UdpSocket() {}
 
 public:
-    virtual size_t send(IBuffer const* buffer) const;
-    virtual IBuffer* recv() const;
+    virtual ssize_t send(Buffer const* buffer) const;
+    virtual Buffer* recv() const;
     virtual void close() const;
     virtual bool isReadable() const;
     virtual bool isWritable() const;
@@ -26,17 +26,14 @@ public:
 public:
     int getSocket() const; //DO TO TYPEDEF FOR SOCKET
     short int getPort() const;
-    std::string getAddr() const;
 
     void setPort(short int port);
-    void setAddr(std::string const& add);
 
 private:
     UdpSocket(UdpSocket const& sock) = delete;
     UdpSocket& operator=(UdpSocket const& sock) = delete;
 
 private:
-    std::string _addr;
     short int   _port;
     int         _socket;//DO TO TYPEDEF FOR SOCKET
 };

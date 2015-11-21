@@ -13,7 +13,7 @@ public:
     virtual ~IUdpSocket() {}
 
 public:
-    bool bind() const = 0;
+    virtual bool bind() const = 0;
 };
 
 #endif //RTYPE_IUDPSOCKET_HPP

@@ -45,3 +45,8 @@ std::string const* Buffer::data()
 {
     return (new std::string(_data.begin(), _data.end()));
 }
+
+size_t Buffer::size() const
+{
+    return (_data.size());
+}

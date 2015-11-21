@@ -35,6 +35,7 @@ public:
     bool empty() const;
     uint8_t const* data() const;
     std::string const* data();
+    size_t size() const;
 
 private:
     Buffer(Buffer const& buffer) = delete;

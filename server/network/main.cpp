@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Buffer.hpp"
+#include "UdpSocket.hpp"
 
 int main()
 {
@@ -19,4 +20,6 @@ int main()
   toto.consume(42);
   std::cout << toto.data()->c_str() << std::endl;
   std::cout << (int)toto.empty() << std::endl;
+    IUdpSocket* lol = new UdpSocket(4242);
+    lol->bind();
 }
