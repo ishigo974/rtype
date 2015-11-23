@@ -10,10 +10,11 @@
 class ITcpAcceptor
 {
 public:
-    virtual ~ITcpAcceptor() {}
+    virtual ~ITcpAcceptor()
+    { }
 
 public:
-    virtual ITcpSocket const* accept() const = 0;
+    virtual ITcpSocket const *accept() const = 0;
 };
 
 #endif //RTYPE_ITCPACCEPTOR_HPP

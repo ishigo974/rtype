@@ -12,18 +12,22 @@ class TcpSocket : public ITcpSocket
 {
 public:
     TcpSocket(std::string const& addr, short int port);
-    virtual ~TcpSocket() {}
+    TcpSocket(int socket, std::string const& addr,
+              short int port); //TODO typedef
+    virtual ~TcpSocket()
+    { }
 
 public:
-    virtual ssize_t send(Buffer const* buffer) const;
-    virtual Buffer* recv() const;
-    virtual void close() const;
-    virtual bool isReadable() const;
-    virtual bool isWritable() const;
+    virtual ssize_t      send(Buffer const *buffer) const;
+    virtual Buffer const *recv() const;
+    virtual void         close() const;
+    virtual bool         isReadable() const;
+    virtual bool         isWritable() const;
 
 public:
-    int getSocket() const; //DO TO TYPEDEF FOR SOCKET
+    int       getSocket() const; //DO TO TYPEDEF FOR SOCKET
     short int getPort() const;
+    std::string const& getAddr() const;
 
     void setPort(short int port);
     void setAddr(std::string const& addr);
@@ -33,9 +37,9 @@ private:
     TcpSocket& operator=(TcpSocket const& sock) = delete;
 
 private:
-    short int _port;
+    short int   _port;
     std::string _addr;
-    int _socket;
+    int         _socket;
 
 };
 

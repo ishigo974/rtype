@@ -4,9 +4,6 @@
 
 #include <cstring>
 #include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/types.h>
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port)
@@ -21,7 +18,7 @@ ssize_t UdpSocket::send(const Buffer *buffer) const
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
 }
 
-Buffer *UdpSocket::recv() const
+Buffer const *UdpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
     ssize_t ret;
@@ -29,11 +26,11 @@ Buffer *UdpSocket::recv() const
 
     if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
         return (nullptr);
-    toRead->setData(buff, ret);
+    toRead->setData(buff, (uint32_t) ret);
     std::memset(buff, 0, 256);
     while ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) != -1)
     {
-        toRead->append(buff, ret);
+        toRead->append(buff, (uint32_t) ret);
         std::memset(buff, 0, 256);
     }
     return (toRead);
@@ -64,10 +61,8 @@ bool UdpSocket::bind() const
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port        = htons(_port);
 
-    if (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
-               sizeof(addr)) < 0)
-        return false;
-    return true;
+    return (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
+                   sizeof(addr)) >= 0);
 }
 
 short int UdpSocket::getPort() const

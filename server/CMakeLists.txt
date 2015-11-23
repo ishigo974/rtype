@@ -7,15 +7,15 @@ project(rtype_server)
 #	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 #endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "")
-  set(CMAKE_BUILD_TYPE Debug)
-endif()
+if (CMAKE_BUILD_TYPE STREQUAL "")
+    set(CMAKE_BUILD_TYPE Debug)
+endif ()
 
 # Define sources and executable
 include_directories(network)
 file(GLOB source_files
-	network/*.hpp
-	network/*.cpp
-)
+        network/*.hpp
+        network/*.cpp
+        )
 
 add_executable(${EXECUTABLE_NAME} ${source_files})

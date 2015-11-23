@@ -5,10 +5,6 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <netdb.h>
-#include <netinet/in.h>
-#include <string>
-#include <sys/socket.h>
-#include <sys/types.h>
 #include "TcpAcceptor.hpp"
 #include "TcpSocket.hpp"
 
@@ -21,11 +17,20 @@ TcpAcceptor::TcpAcceptor(short int port)
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port        = htons(_port);
 
-    if (::bind(_socket, reinterpret_cast<struct sockaddr *>(&server),
-               sizeof(server)) < 0)
+    if ((_socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")
+            ->p_proto)) == -1)
+        //TODO throw exception
+        std::cerr << "Can' listen" << std::endl;
+    if (::bind(_socket, (const struct sockaddr *) (&server),
+               sizeof(server)) == -1)
         //TODO throw exception;
-        ;
+        std::cout << "Can't bind port" << std::endl;
 
+}
+
+TcpAcceptor::~TcpAcceptor()
+{
+    close(_socket);
 }
 
 ITcpSocket const *TcpAcceptor::accept() const
@@ -34,7 +39,11 @@ ITcpSocket const *TcpAcceptor::accept() const
     int                socket; //TODO typedef
     unsigned int       struct_len;
 
-    listen(_socket, 2);
+    if (listen(_socket, 5) == -1)
+    {
+        std::cerr << "Nothing to listen" << std::endl;
+        return (nullptr);
+    }
     struct_len  = sizeof(client);
     if ((socket = ::accept(_socket,
                            reinterpret_cast<struct sockaddr *>(&client),
@@ -43,8 +52,6 @@ ITcpSocket const *TcpAcceptor::accept() const
         std::cerr << "Can't accept on socket." << std::endl;
         return (nullptr);
     }
-
-    TcpSocket *ret = new TcpSocket(std::string(inet_ntoa(client.sin_addr)),
-                                   socket);
+    TcpSocket *ret = new TcpSocket(socket, inet_ntoa(client.sin_addr), _port);
     return (ret);
 }

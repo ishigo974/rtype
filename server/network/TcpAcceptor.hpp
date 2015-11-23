@@ -11,10 +11,10 @@ class TcpAcceptor : public ITcpAcceptor
 {
 public:
     TcpAcceptor(short int port);
-    virtual ~TcpAcceptor() {}
+    virtual ~TcpAcceptor();
 
 public:
-    virtual ITcpSocket const* accept() const;
+    virtual ITcpSocket const *accept() const;
 
 private:
     TcpAcceptor(TcpAcceptor const& acceptor) = delete;
@@ -22,7 +22,7 @@ private:
 
 private:
     short int _port;
-    int _socket; //TODO
+    int       _socket; //TODO typedef
 };
 
 #endif //RTYPE_TCPACCEPTOR_HPP

@@ -10,7 +10,8 @@
 class ITcpSocket : public ISocket
 {
 public:
-    virtual ~ITcpSocket(){}
+    virtual ~ITcpSocket()
+    { }
 };
 
 #endif //RTYPE_ITCPSOCKET_HPP
