@@ -14,6 +14,11 @@ endif()
 # Define sources and executable
 file (GLOB source_files
 	core/*.cpp
+	core/*.hpp
+	graphics/*.cpp
+	graphics/*.hpp
+	network/*.cpp
+	network/*.hpp
 )
 add_executable(${EXECUTABLE_NAME} ${source_files})
 
