@@ -35,7 +35,7 @@ private:
     fd_set                   _writeFds;
     int                      _secValue;
     int                      _usecValue;
-    int                      _size;
+    unsigned int             _maxFd;
     static int               defaultSecVal;
     static int               defaultUsecVal;
 };

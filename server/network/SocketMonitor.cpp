@@ -4,10 +4,11 @@
 
 #include <algorithm>
 #include <ctime>
+#include <iostream>
 #include "SocketMonitor.hpp"
 #include "TcpSocket.hpp"
 
-int SocketMonitor::defaultSecVal  = 2;
+int SocketMonitor::defaultSecVal  = 42;
 int SocketMonitor::defaultUsecVal = 0;
 
 SocketMonitor::SocketMonitor()
@@ -34,16 +35,14 @@ void SocketMonitor::deleteSocket(ITcpSocket *socket)
         == _socketList.end())
         return;
     _socketList.erase(it);
-    --_size;
+    --_maxFd;
 }
 
 bool SocketMonitor::isMonitored(ITcpSocket *socket) const
 {
-    if (std::find(_socketList.begin(), _socketList.end(),
-                  static_cast<TcpSocket *>(socket)->getAddr())
-        != _socketList.end())
-        return true;
-    return false;
+    return std::find(_socketList.begin(), _socketList.end(),
+                     static_cast<TcpSocket *>(socket)->getAddr())
+           != _socketList.end();
 }
 
 void SocketMonitor::registerSocket(ITcpSocket *socket)
@@ -52,9 +51,10 @@ void SocketMonitor::registerSocket(ITcpSocket *socket)
     socket->registerToMonitor(&_writeFds);
     _socketList.insert(_socketList.end(), static_cast<TcpSocket *>(socket)
             ->getAddr());
-    ++_size;
+    ++_maxFd;
 }
 
+#include <iostream>
 int SocketMonitor::update()
 {
     struct timeval tv;
@@ -62,6 +62,7 @@ int SocketMonitor::update()
     tv.tv_sec  = _secValue;
     tv.tv_usec = _usecValue;
 
+    std::cout << "<<<< " << this->_size << std::endl;
     return ::select(_size + 1, &_readFds, &_writeFds, NULL, &tv);
 }
 
