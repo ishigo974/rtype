@@ -7,7 +7,7 @@
 
 #include "ITcpSocket.hpp"
 
-class ITcpAcceptor
+class ITcpAcceptor: public ITcpSocket
 {
 public:
     virtual ~ITcpAcceptor()
@@ -15,6 +15,10 @@ public:
 
 public:
     virtual ITcpSocket const *accept() const = 0;
+
+public:
+    virtual void registerToMonitor(fd_set *fdSet) const = 0;
+    virtual void deleteFromMonitor(fd_set *fdSet) const = 0;
 };
 
 #endif //RTYPE_ITCPACCEPTOR_HPP

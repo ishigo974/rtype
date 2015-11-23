@@ -7,18 +7,34 @@
 #include "SocketMonitor.hpp"
 #include "TcpSocket.hpp"
 
+int SocketMonitor::defaultSecVal  = 2;
+int SocketMonitor::defaultUsecVal = 0;
+
 SocketMonitor::SocketMonitor()
 {
-    _secValue  = 2;
-    _usecValue = 0;
+    _secValue = SocketMonitor::defaultSecVal;
+    _usecValue = SocketMonitor::defaultUsecVal;
+    _size = 0;
+
+    FD_ZERO(&_writeFds);
+    FD_ZERO(&_readFds);
 }
+
+SocketMonitor::~SocketMonitor()
+{ }
 
 void SocketMonitor::deleteSocket(ITcpSocket *socket)
 {
+    std::vector<std::string>::iterator it;
+
     socket->deleteFromMonitor(&_readFds);
     socket->deleteFromMonitor(&_writeFds);
-    _socketList.erase(std::find(_socketList.begin(), _socketList.end(),
-                                static_cast<TcpSocket *>(socket)->getAddr()));
+    if ((it = std::find(_socketList.begin(), _socketList.end(),
+                        static_cast<TcpSocket *>(socket)->getAddr()))
+        == _socketList.end())
+        return;
+    _socketList.erase(it);
+    --_size;
 }
 
 bool SocketMonitor::isMonitored(ITcpSocket *socket) const
@@ -36,16 +52,17 @@ void SocketMonitor::registerSocket(ITcpSocket *socket)
     socket->registerToMonitor(&_writeFds);
     _socketList.insert(_socketList.end(), static_cast<TcpSocket *>(socket)
             ->getAddr());
+    ++_size;
 }
 
-int SocketMonitor::update() const
+int SocketMonitor::update()
 {
     struct timeval tv;
 
     tv.tv_sec  = _secValue;
     tv.tv_usec = _usecValue;
 
-    return ::select(_socketList.size() + 1, &_readFds, &_writeFds, NULL, &tv);
+    return ::select(_size + 1, &_readFds, &_writeFds, NULL, &tv);
 }
 
 void SocketMonitor::setSec(int value)

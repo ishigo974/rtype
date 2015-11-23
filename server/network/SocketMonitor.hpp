@@ -12,16 +12,14 @@
 class SocketMonitor : public ISocketMonitor
 {
 public:
-    virtual ~SocketMonitor()
-    { }
-
+    virtual ~SocketMonitor();
     SocketMonitor();
 
 public:
     virtual void registerSocket(ITcpSocket *socket);
     virtual void deleteSocket(ITcpSocket *socket);
     virtual bool isMonitored(ITcpSocket *socket) const;
-    virtual int  update() const;
+    virtual int  update();
 
 public:
     void setSec(int value);
@@ -37,6 +35,9 @@ private:
     fd_set                   _writeFds;
     int                      _secValue;
     int                      _usecValue;
+    int                      _size;
+    static int               defaultSecVal;
+    static int               defaultUsecVal;
 };
 
 

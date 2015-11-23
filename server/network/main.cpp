@@ -4,6 +4,7 @@
 #include "UdpSocket.hpp"
 #include "TcpAcceptor.hpp"
 #include "TcpSocket.hpp"
+#include "SocketMonitor.hpp"
 
 int main()
 {
@@ -24,6 +25,8 @@ int main()
     TcpAcceptor tcpsock(2121);
     TcpSocket   *tmp;
 
+    SocketMonitor test;
+
     tmp = (TcpSocket *) tcpsock.accept();
     if (tmp != nullptr)
     {
@@ -31,6 +34,15 @@ int main()
         toto.setData("TU SUCE DES BITES\n", 18);
         std::cout << toto.data()->c_str() << std::endl;
         tmp->send(&toto);
-        delete tmp;
+    }
+    test.registerSocket(&tcpsock);
+    test.registerSocket(tmp);
+    int retval;
+    while ((retval = test.update()) >= 0 && errno != EINTR)
+    {
+        if (retval == 0)
+            std::cerr << "Timeout" << std::endl;
+        else
+            std::cout << retval << " - LOL" << std::endl;
     }
 }

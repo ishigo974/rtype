@@ -30,7 +30,7 @@ TcpAcceptor::TcpAcceptor(short int port)
 
 TcpAcceptor::~TcpAcceptor()
 {
-    close(_socket);
+    ::close(_socket);
 }
 
 ITcpSocket const *TcpAcceptor::accept() const
@@ -54,4 +54,72 @@ ITcpSocket const *TcpAcceptor::accept() const
     }
     TcpSocket *ret = new TcpSocket(socket, inet_ntoa(client.sin_addr), _port);
     return (ret);
+}
+
+ssize_t TcpAcceptor::send(const Buffer *buffer) const
+{
+    return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
+}
+
+Buffer const *TcpAcceptor::recv() const
+{
+    Buffer  *toRead = new Buffer;
+    ssize_t ret;
+    char    *buff;
+
+    buff = new char[256];
+
+    if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
+        return (nullptr);
+    toRead->setData(buff, (uint32_t) ret);
+    std::memset(buff, 0, 256);
+    while ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) != -1)
+    {
+        toRead->append(buff, (uint32_t) ret);
+        std::memset(buff, 0, 256);
+    }
+    return (toRead);
+}
+
+void TcpAcceptor::close() const
+{
+    ::close(_socket);
+}
+
+//TODO
+bool TcpAcceptor::isReadable() const
+{
+    return (true);
+}
+
+//TODO
+bool TcpAcceptor::isWritable() const
+{
+    return (true);
+}
+
+short int TcpAcceptor::getPort() const
+{
+    return (this->_port);
+}
+
+//TODO typedef
+int TcpAcceptor::getSocket() const
+{
+    return (this->_socket);
+}
+
+void TcpAcceptor::setPort(short int port)
+{
+    _port = port;
+}
+
+void TcpAcceptor::registerToMonitor(fd_set *fdSet) const
+{
+    FD_SET(_socket, fdSet);
+}
+
+void TcpAcceptor::deleteFromMonitor(fd_set *fdSet) const
+{
+    FD_CLR(_socket, fdSet);
 }

@@ -10,13 +10,14 @@
 class ISocketMonitor
 {
 public:
-    virtual ~ISocketMonitor() {}
+    virtual ~ISocketMonitor()
+    { }
 
 public:
-    virtual void registerSocket(ITcpSocket* socket) = 0;
-    virtual void deleteSocket(ITcpSocket* socket) = 0;
-    virtual bool isMonitored(ITcpSocket* socket) const = 0;
-    virtual int update() const = 0;
+    virtual void registerSocket(ITcpSocket *socket)    = 0;
+    virtual void deleteSocket(ITcpSocket *socket)      = 0;
+    virtual bool isMonitored(ITcpSocket *socket) const = 0;
+    virtual int  update()                              = 0;
 };
 
 
