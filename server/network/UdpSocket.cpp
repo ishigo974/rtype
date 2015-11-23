@@ -4,16 +4,13 @@
 
 #include <cstring>
 #include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/types.h>
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port)
 {
 
     _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("UDP")->p_proto);
-    _port = port;
+    _port   = port;
 }
 
 ssize_t UdpSocket::send(const Buffer *buffer) const
@@ -21,19 +18,19 @@ ssize_t UdpSocket::send(const Buffer *buffer) const
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
 }
 
-Buffer* UdpSocket::recv() const
+Buffer const *UdpSocket::recv() const
 {
-    Buffer* toRead = new Buffer;
+    Buffer  *toRead = new Buffer;
     ssize_t ret;
-    char* buff = new char[256];
+    char    *buff   = new char[256];
 
     if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
         return (nullptr);
-    toRead->setData(buff, ret);
+    toRead->setData(buff, (uint32_t) ret);
     std::memset(buff, 0, 256);
     while ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) != -1)
     {
-        toRead->append(buff, ret);
+        toRead->append(buff, (uint32_t) ret);
         std::memset(buff, 0, 256);
     }
     return (toRead);
@@ -60,12 +57,12 @@ bool UdpSocket::bind() const
 {
     struct sockaddr_in addr;
 
-    addr.sin_family = AF_INET;
+    addr.sin_family      = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(_port);
-    if (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) < 0)
-        return false;
-    return true;
+    addr.sin_port        = htons(_port);
+
+    return (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
+                   sizeof(addr)) >= 0);
 }
 
 short int UdpSocket::getPort() const

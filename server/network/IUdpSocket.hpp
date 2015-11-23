@@ -10,7 +10,8 @@
 class IUdpSocket : public ISocket
 {
 public:
-    virtual ~IUdpSocket() {}
+    virtual ~IUdpSocket()
+    { }
 
 public:
     virtual bool bind() const = 0;

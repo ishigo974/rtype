@@ -12,7 +12,7 @@ void Buffer::consume(uint32_t size)
     if (size > _data.size())
     {
         _data.erase(_data.begin(), _data.end());
-        return ;
+        return;
     }
     _data.erase(_data.begin(), _data.begin() + size);
 }
@@ -22,7 +22,7 @@ bool Buffer::empty() const
     return (_data.empty());
 }
 
-void Buffer::append(char const* data, uint32_t size)
+void Buffer::append(char const *data, uint32_t size)
 {
     std::string tmp(data, size);
 
@@ -36,12 +36,12 @@ void Buffer::setData(char const *data, uint32_t size)
     _data.assign(tmp.begin(), tmp.end());
 }
 
-uint8_t const* Buffer::data() const
+uint8_t const *Buffer::data() const
 {
     return (_data.data());
 }
 
-std::string const* Buffer::data()
+std::string const *Buffer::data()
 {
     return (new std::string(_data.begin(), _data.end()));
 }
