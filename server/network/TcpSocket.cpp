@@ -30,7 +30,9 @@ Buffer const *TcpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
     ssize_t ret;
-    char    *buff   = new char[256];
+    char    *buff;
+
+    buff = new char[256];
 
     if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
         return (nullptr);
@@ -85,4 +87,14 @@ void TcpSocket::setPort(short int port)
 void TcpSocket::setAddr(const std::string& addr)
 {
     _addr = addr;
+}
+
+void TcpSocket::registerToMonitor(fd_set *fdSet) const
+{
+    FD_SET(_socket, fdSet);
+}
+
+void TcpSocket::deleteFromMonitor(fd_set *fdSet) const
+{
+    FD_CLR(_socket, fdSet);
 }

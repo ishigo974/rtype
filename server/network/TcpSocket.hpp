@@ -25,6 +25,10 @@ public:
     virtual bool         isWritable() const;
 
 public:
+    virtual void registerToMonitor(fd_set *fdSet) const;
+    virtual void deleteFromMonitor(fd_set *fdSet) const;
+
+public:
     int       getSocket() const; //DO TO TYPEDEF FOR SOCKET
     short int getPort() const;
     std::string const& getAddr() const;
@@ -40,7 +44,6 @@ private:
     short int   _port;
     std::string _addr;
     int         _socket;
-
 };
 
 #endif //RTYPE_TCPSOCKET_HPP
