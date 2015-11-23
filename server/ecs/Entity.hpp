@@ -3,7 +3,6 @@
 
 # include <string>
 # include <memory>
-# include <unordered_map>
 # include "IComponent.hpp"
 # include "ComponentMask.hpp"
 # include "IStringable.hpp"
@@ -12,10 +11,6 @@ namespace ECS
 {
   class Entity : IStringable
   {
-  protected:
-    typedef std::unordered_map<ComponentMask,
-                               std::unique_ptr<IComponent> >    ComponentMap;
-
   public:
     Entity();
     Entity(unsigned int id);
@@ -46,6 +41,7 @@ namespace ECS
 
   public:
     unsigned int          getId() const;
+    ComponentMask         getComponentMask() const;
 
   public:
     virtual std::string   toString() const;

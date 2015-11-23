@@ -72,6 +72,11 @@ namespace ECS
     return _id;
   }
 
+  ComponentMask   Entity::getComponentMask() const
+  {
+    return _mask;
+  }
+
   std::string     Entity::toString() const
   {
     std::ostringstream  ss;
@@ -79,11 +84,9 @@ namespace ECS
     ss << "Entity {"
        << "\n\t _id " << _id
        << "\n\t _mask " << _mask
-       << "\n\t _components ";
+       << "\n\t _components";
     for (auto&& i : _components)
-    {
-      ss << i.second->getName() << " ";
-    }
+      ss << " " << i.second->getName();
     ss << std::endl;
     return ss.str();
   }
