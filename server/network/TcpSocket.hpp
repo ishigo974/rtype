@@ -1,0 +1,42 @@
+//
+// Created by Denis Le Borgne on 21/11/2015.
+//
+
+#ifndef RTYPE_TCPSOCKET_HPP
+#define RTYPE_TCPSOCKET_HPP
+
+# include "Buffer.hpp"
+# include "ISocket.hpp"
+
+class TcpSocket : ISocket
+{
+public:
+    TcpSocket(std::string const& addr, short int port);
+    virtual ~TcpSocket() {}
+
+public:
+    virtual ssize_t send(Buffer const* buffer) const;
+    virtual Buffer* recv() const;
+    virtual void close() const;
+    virtual bool isReadable() const;
+    virtual bool isWritable() const;
+
+public:
+    int getSocket() const; //DO TO TYPEDEF FOR SOCKET
+    short int getPort() const;
+
+    void setPort(short int port);
+    void setAddr(std::string const& addr);
+
+private:
+    TcpSocket(TcpSocket const& sock) = delete;
+    TcpSocket& operator=(TcpSocket const& sock) = delete;
+
+private:
+    short int _port;
+    std::string _addr;
+    int _socket;
+
+};
+
+#endif //RTYPE_TCPSOCKET_HPP
