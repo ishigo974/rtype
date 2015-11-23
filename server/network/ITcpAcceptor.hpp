@@ -5,13 +5,15 @@
 #ifndef RTYPE_ITCPACCEPTOR_HPP
 #define RTYPE_ITCPACCEPTOR_HPP
 
+#include "ITcpSocket.hpp"
+
 class ITcpAcceptor
 {
 public:
-    virtual ITcpAcceptor() {}
+    virtual ~ITcpAcceptor() {}
 
 public:
-    virtual ISocket const* accept() const = 0;
+    virtual ITcpSocket const* accept() const = 0;
 };
 
 #endif //RTYPE_ITCPACCEPTOR_HPP

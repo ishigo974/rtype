@@ -14,8 +14,7 @@ public:
     virtual ~TcpAcceptor() {}
 
 public:
-
-    virtual ISocket const* accept() const;
+    virtual ITcpSocket const* accept() const;
 
 private:
     TcpAcceptor(TcpAcceptor const& acceptor) = delete;
@@ -23,6 +22,7 @@ private:
 
 private:
     short int _port;
+    int _socket; //TODO
 };
 
 #endif //RTYPE_TCPACCEPTOR_HPP

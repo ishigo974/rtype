@@ -6,9 +6,9 @@
 #define RTYPE_TCPSOCKET_HPP
 
 # include "Buffer.hpp"
-# include "ISocket.hpp"
+# include "ITcpSocket.hpp"
 
-class TcpSocket : ISocket
+class TcpSocket : public ITcpSocket
 {
 public:
     TcpSocket(std::string const& addr, short int port);
