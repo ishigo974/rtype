@@ -25,7 +25,11 @@ TcpAcceptor::TcpAcceptor(short int port)
                sizeof(server)) == -1)
         //TODO throw exception;
         std::cout << "Can't bind port" << std::endl;
-
+    if (listen(_socket, 5) == -1)
+    {
+        std::cerr << "Nothing to listen" << std::endl;
+        //TODO throw exception
+    }
 }
 
 TcpAcceptor::~TcpAcceptor()
@@ -39,11 +43,6 @@ ITcpSocket const *TcpAcceptor::accept() const
     int                socket; //TODO typedef
     unsigned int       struct_len;
 
-    if (listen(_socket, 5) == -1)
-    {
-        std::cerr << "Nothing to listen" << std::endl;
-        return (nullptr);
-    }
     struct_len  = sizeof(client);
     if ((socket = ::accept(_socket,
                            reinterpret_cast<struct sockaddr *>(&client),
