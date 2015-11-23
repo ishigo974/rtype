@@ -3,7 +3,7 @@
 //
 
 #ifndef RTYPE_GAMEOBJECT_HPP
-#define RTYPE_GAMEOBJECT_HPP
+# define RTYPE_GAMEOBJECT_HPP
 
 class GameObject
 {
