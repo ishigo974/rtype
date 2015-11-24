@@ -3,7 +3,9 @@
 //
 
 #include <cstring>
+#include <iostream>
 #include <netdb.h>
+#include <sstream>
 #include "TcpSocket.hpp"
 
 TcpSocket::TcpSocket(std::string const& addr, short int port)
@@ -51,19 +53,6 @@ void TcpSocket::close() const
     ::close(_socket);
 }
 
-//TODO
-bool TcpSocket::isReadable(fd_set* fdSet) const
-{
-    return FD_ISSET(_socket, fdSet) != 0;
-}
-
-//TODO
-bool TcpSocket::isWritable(fd_set* fdSet) const
-{
-    return FD_ISSET(_socket, fdSet) != 0;
-}
-
-
 short int TcpSocket::getPort() const
 {
     return (this->_port);
@@ -90,14 +79,32 @@ void TcpSocket::setAddr(const std::string& addr)
     _addr = addr;
 }
 
-void TcpSocket::registerToMonitor(fd_set *fdSet, unsigned int* maxFd) const
+void TcpSocket::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
 {
     FD_SET(_socket, fdSet);
     if (_socket > *maxFd)
-        *maxFd = _socket;
+        *maxFd = (unsigned int) _socket;
 }
 
 void TcpSocket::deleteFromMonitor(fd_set *fdSet) const
 {
     FD_CLR(_socket, fdSet);
+}
+
+std::string TcpSocket::toString() const
+{
+    std::ostringstream ss;
+
+    ss << "TcpSocket {"
+    << "\n\tAddresse " << this->_addr
+    << "\n\tSocket " << this->_socket
+    << "\n\tPort " << this->_port
+    << "\n}" << std::endl;
+
+    return ss.str();
+}
+
+TcpSocket::~TcpSocket()
+{
+    this->close();
 }

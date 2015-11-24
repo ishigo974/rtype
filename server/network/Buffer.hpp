@@ -7,14 +7,18 @@
 
 # include <vector>
 # include <string>
+# include "IStringable.hpp"
 
-class Buffer
+class Buffer : public IStringable
 {
 public :
     Buffer();
 
     ~Buffer()
     { }
+
+public:
+    virtual std::string toString() const;
 
 public:
 

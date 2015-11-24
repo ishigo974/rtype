@@ -3,7 +3,9 @@
 //
 
 #include <cstring>
+#include <iostream>
 #include <netdb.h>
+#include <sstream>
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port)
@@ -41,18 +43,6 @@ void UdpSocket::close() const
     ::close(_socket);
 }
 
-//TODO
-bool UdpSocket::isReadable() const
-{
-    return (true);
-}
-
-//TODO
-bool UdpSocket::isWritable() const
-{
-    return (true);
-}
-
 bool UdpSocket::bind() const
 {
     struct sockaddr_in addr;
@@ -79,4 +69,16 @@ int UdpSocket::getSocket() const
 void UdpSocket::setPort(short int port)
 {
     _port = port;
+}
+
+std::string UdpSocket::toString() const
+{
+    std::ostringstream ss;
+
+    ss << "UdpSocket {"
+    << "\n\tSocket " << this->_socket
+    << "\n\tPort " << this->_port
+    << "\n}" << std::endl;
+
+    return ss.str();
 }

@@ -2,6 +2,8 @@
 // Created by Denis Le Borgne on 19/11/2015.
 //
 
+#include <iostream>
+#include <sstream>
 #include "Buffer.hpp"
 
 Buffer::Buffer()
@@ -49,4 +51,15 @@ std::string const *Buffer::data()
 size_t Buffer::size() const
 {
     return (_data.size());
+}
+
+std::string Buffer::toString() const
+{
+    std::ostringstream ss;
+
+    ss << "Buffer {"
+    << "\n\t Data" << this->data();
+    ss << "\n}" << std::endl;
+
+    return ss.str();
 }

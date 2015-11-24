@@ -17,13 +17,15 @@ public:
     { }
 
 public:
-    virtual ssize_t        send(Buffer const *buffer) const;
-    virtual Buffer const * recv() const;
-    virtual void           close() const;
-    virtual bool           isReadable() const;
-    virtual bool           isWritable() const;
+    virtual ssize_t      send(Buffer const *buffer) const;
+    virtual Buffer const *recv() const;
+    virtual void         close() const;
 
+public:
     virtual bool bind() const;
+
+public:
+    virtual std::string toString() const;
 
 public:
     int       getSocket() const; //DO TO TYPEDEF FOR SOCKET

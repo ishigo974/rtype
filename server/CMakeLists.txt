@@ -13,6 +13,7 @@ endif ()
 
 # Define sources and executable
 include_directories(network)
+include_directories(ecs)
 file(GLOB source_files
         network/*.hpp
         network/*.cpp

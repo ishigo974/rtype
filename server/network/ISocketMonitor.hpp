@@ -5,21 +5,22 @@
 #ifndef RTYPE_ISOCKETMONITOR_HPP
 #define RTYPE_ISOCKETMONITOR_HPP
 
+#include "IStringable.hpp"
 #include "ITcpSocket.hpp"
 
-class ISocketMonitor
+class ISocketMonitor : public IStringable
 {
 public:
     virtual ~ISocketMonitor()
     { }
 
 public:
-    virtual void registerSocket(ITcpSocket *socket)   = 0;
-    virtual void deleteSocket(ITcpSocket *socket)     = 0;
-    virtual bool isReadMonitored(ITcpSocket *socket)  = 0;
-    virtual bool isWriteMonitored(ITcpSocket *socket) = 0;
-    virtual void clearFds()                           = 0;
-    virtual int  update()                             = 0;
+    virtual void registerSocket(ITcpSocket *socket) = 0;
+    virtual void deleteSocket(ITcpSocket *socket)   = 0;
+    virtual bool isReadable(ITcpSocket *socket)     = 0;
+    virtual bool isWritable(ITcpSocket *socket)     = 0;
+    virtual void clearFds()                         = 0;
+    virtual int  update()                           = 0;
 };
 
 

@@ -40,7 +40,7 @@ int main()
             std::cerr << "Timeout" << std::endl;
         else if (retval > 0)
         {
-            if (test.isReadMonitored(&tcpsock))
+            if (test.isReadable(&tcpsock))
             {
                 tmp = static_cast<TcpSocket *>(tcpsock.accept());
                 if (tmp != nullptr)
@@ -52,8 +52,9 @@ int main()
                 }
             }
         }
+        std::cout << test.toString() << std::endl;
         test.clearFds();
-        if (!test.isReadMonitored(&tcpsock))
+        if (!test.isReadable(&tcpsock))
         {
             std::cout << "IsMonitored" << std::endl;
             test.registerSocket(&tcpsock);

@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <netdb.h>
+#include <sstream>
 #include "TcpAcceptor.hpp"
 #include "TcpSocket.hpp"
 
@@ -85,18 +86,6 @@ void TcpAcceptor::close() const
     ::close(_socket);
 }
 
-//TODO
-bool TcpAcceptor::isReadable(fd_set* fdSet) const
-{
-    return FD_ISSET(_socket, fdSet) != 0;
-}
-
-//TODO
-bool TcpAcceptor::isWritable(fd_set* fdSet) const
-{
-    return FD_ISSET(_socket, fdSet) != 0;
-}
-
 short int TcpAcceptor::getPort() const
 {
     return (this->_port);
@@ -113,7 +102,7 @@ void TcpAcceptor::setPort(short int port)
     _port = port;
 }
 
-void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int* maxFd) const
+void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
 {
     FD_SET(_socket, fdSet);
     if (*maxFd < _socket)
@@ -123,4 +112,16 @@ void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int* maxFd) const
 void TcpAcceptor::deleteFromMonitor(fd_set *fdSet) const
 {
     FD_CLR(_socket, fdSet);
+}
+
+std::string TcpAcceptor::toString() const
+{
+    std::ostringstream ss;
+
+    ss << "TcpAcceptor {"
+    << "\n\tSocket " << this->_socket
+    << "\n\tPort " << this->_port
+    << "\n}" << std::endl;
+
+    return ss.str();
 }

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include "SocketMonitor.hpp"
 #include "TcpSocket.hpp"
 
@@ -37,20 +38,22 @@ void SocketMonitor::deleteSocket(ITcpSocket *socket)
     _socketList.erase(it);
 }
 
-bool SocketMonitor::isWriteMonitored(ITcpSocket *socket)
+bool SocketMonitor::isWritable(ITcpSocket *socket)
 {
-    return socket->isWritable(&_writeFds);
+    return FD_ISSET(socket->getSocket(), &_writeFds) > 0;
 }
 
-bool SocketMonitor::isReadMonitored(ITcpSocket *socket)
+bool SocketMonitor::isReadable(ITcpSocket *socket)
 {
-    return socket->isReadable(&_readFds);
+    return FD_ISSET(socket->getSocket(), &_readFds) > 0;
 }
 
 void SocketMonitor::clearFds()
 {
     FD_ZERO(&_writeFds);
     FD_ZERO(&_readFds);
+    _socketList.erase(_socketList.begin(), _socketList.end());
+    _maxFd = 0;
 }
 
 void SocketMonitor::registerSocket(ITcpSocket *socket)
@@ -79,4 +82,20 @@ void SocketMonitor::setSec(int value)
 void SocketMonitor::setUsec(int value)
 {
     _usecValue = value;
+}
+
+std::string SocketMonitor::toString() const
+{
+    std::ostringstream ss;
+
+    ss << "SocketMonitor {"
+    << "\n\tFD Max " << this->_maxFd
+    << "\n\tTimeout Second " << this->_secValue
+    << "\n\tTimeout uSecond " << this->_usecValue
+    << "\n\tSocket Addr List [";
+    for (auto&& e : _socketList)
+        ss << "(" << e.data() << ") ";
+    ss << "]\n}" << std::endl;
+
+    return ss.str();
 }

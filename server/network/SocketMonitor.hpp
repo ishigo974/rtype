@@ -18,10 +18,13 @@ public:
 public:
     virtual void registerSocket(ITcpSocket *socket);
     virtual void deleteSocket(ITcpSocket *socket);
-    virtual bool isReadMonitored(ITcpSocket *socket);
-    virtual bool isWriteMonitored(ITcpSocket *socket);
+    virtual bool isReadable(ITcpSocket *socket);
+    virtual bool isWritable(ITcpSocket *socket);
     virtual void clearFds();
     virtual int  update();
+
+public:
+    virtual std::string toString() const;
 
 public:
     void setSec(int value);
