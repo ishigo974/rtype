@@ -6,7 +6,7 @@
 
 namespace ECS
 {
-  class ECSUT : public ABaseUT
+  class ECSUT : public UnitTesting::ABaseUT
   {
   public:
     ECSUT();
@@ -16,9 +16,12 @@ namespace ECS
     ECSUT(ECSUT const& other) = delete;
     ECSUT&                operator=(ECSUT const& other) = delete;
 
+  protected:
+    static void           entityLifeRecycling();
+
   public:
     virtual void          registerTests();
-    virtual std::string   getName();
+    virtual std::string   getName() const;
   };
 }
 

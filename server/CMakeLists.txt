@@ -19,6 +19,7 @@ include_directories(network)
 include_directories(ecs)
 include_directories(exceptions)
 include_directories(base_ut)
+include_directories(unit_tests)
 
 file(GLOB source_files
         network/*.hpp
@@ -30,14 +31,15 @@ file(GLOB source_files
       )
 
 file(GLOB ut_source_files
-        network/*.hpp
-        network/*.cpp
+        main_ut.cpp
         ecs/*.hpp
       	ecs/*.cpp
       	exceptions/*.hpp
       	exceptions/*.cpp
       	base_ut/*.hpp
-      	base_ut/*.cpp
+        base_ut/*.cpp
+        unit_tests/*.hpp
+        unit_tests/*.cpp
       )
 
 add_executable(${EXECUTABLE_NAME} ${source_files})
