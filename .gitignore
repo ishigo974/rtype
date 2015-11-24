@@ -3,8 +3,12 @@
 \#*#
 .DS_Store
 *.so
+<<<<<<< HEAD
 .idea/
 *.exe
 *.ilk
 *.pdb
 build/
+=======
+.idea/
+>>>>>>> rc_core
