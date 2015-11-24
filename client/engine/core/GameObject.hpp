@@ -29,7 +29,8 @@ public:
     uint getLayer() const;
     void setLayer(uint _layer);
 
-    friend void swap(GameObject& first, GameObject& second);
+private:
+    void swap(GameObject& first, GameObject& second);
 
 protected:
     uint _layer;

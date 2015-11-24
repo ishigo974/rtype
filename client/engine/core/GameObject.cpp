@@ -72,7 +72,7 @@ void GameObject::setLayer(uint _layer)
     GameObject::_layer = _layer;
 }
 
-void swap(GameObject& first, GameObject& second)
+void GameObject::swap(GameObject& first, GameObject& second)
 {
     std::swap(first._layer, second._layer);
 }

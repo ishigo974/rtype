@@ -25,8 +25,14 @@ void sfml_test()
     }
 }
 
-void gameObjectTest()
+bool gameObjectTest()
 {
+    GameObject a(0, "LEL", 1);
+    GameObject b = std::move(a);
+
+    std::cout << b.toString() << std::endl;
+
+    return (true);
 }
 
 int main()

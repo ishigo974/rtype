@@ -7,7 +7,8 @@
 Object::Object()
 { }
 
-Object::Object(uint _id, std::string const& _name) : _id(_id), _name(_name)
+Object::Object(uint _id, std::string const& _name)
+        : _id(_id), _name(_name)
 { }
 
 Object::Object(Object const& other)
@@ -66,7 +67,7 @@ void Object::setName(std::string const& _name)
     Object::_name = _name;
 }
 
-void swap(Object& first, Object& second)
+void Object::swap(Object& first, Object& second)
 {
     std::swap(first._name, second._name);
     std::swap(first._id, second._id);

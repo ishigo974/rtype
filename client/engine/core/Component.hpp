@@ -9,7 +9,19 @@
 
 class Component : public Object
 {
-    
+public:
+    Component();
+    Component(uint _id, std::string const& _name);
+    Component(Component const& other);
+    Component(Component&& other);
+    Component& operator=(Component other);
+    virtual ~Component();
+
+    bool operator==(Component const& other);
+    bool operator!=(Component const& other);
+
+private:
+    void swap(Component& first, Component& second);
 };
 
 

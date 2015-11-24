@@ -32,7 +32,8 @@ public:
 
     virtual std::string const& toString();
 
-    friend void swap(Object& first, Object& second);
+private:
+    void swap(Object& first, Object& second);
 
 protected:
     uint        _id;
