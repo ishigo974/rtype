@@ -82,7 +82,7 @@ void TcpSocket::setAddr(const std::string& addr)
 void TcpSocket::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
 {
     FD_SET(_socket, fdSet);
-    if (_socket > *maxFd)
+    if ((unsigned int) _socket > *maxFd)
         *maxFd = (unsigned int) _socket;
 }
 

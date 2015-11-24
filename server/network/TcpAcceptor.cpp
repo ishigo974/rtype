@@ -105,8 +105,8 @@ void TcpAcceptor::setPort(short int port)
 void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
 {
     FD_SET(_socket, fdSet);
-    if (*maxFd < _socket)
-        *maxFd = _socket;
+    if (*maxFd < (unsigned int) _socket)
+        *maxFd = (unsigned int) _socket;
 }
 
 void TcpAcceptor::deleteFromMonitor(fd_set *fdSet) const
