@@ -38,7 +38,12 @@ namespace UnitTesting
     //                                    std::string const& file);
 
   protected:
-    std::map<std:string, TestHandler>   _tests;
+    static std::string    colorRed;
+    static std::string    colorGreen;
+    static std::string    colorBase;
+
+  protected:
+    std::map<std::string, TestHandler>   _tests;
   };
 }
 
