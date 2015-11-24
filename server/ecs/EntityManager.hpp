@@ -4,6 +4,7 @@
 # include <memory>
 # include <unordered_map>
 # include "Entity.hpp"
+# include "IComponent.hpp"
 # include "ComponentMask.hpp"
 # include "IStringable.hpp"
 
@@ -32,14 +33,20 @@ namespace ECS
 
   public:
     Entity&                     create(ComponentMask mask = 0);
-    void                        remove(unsigned int id);
+    void                        destroy(unsigned int id);
+
+  public:
+    void                        registerComponent(IComponent* component);
+    bool                        removeComponent(ComponentMask mask);
 
   public:
     virtual std::string         toString() const;
 
   protected:
+    unsigned int                _nextId;
     EntityMap                   _actives;
     EntityMap                   _inactives;
+    ComponentMap                _components;
 
   protected:
     static UniqueEmPtr          instance;

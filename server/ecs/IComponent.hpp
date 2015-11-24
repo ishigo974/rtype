@@ -2,6 +2,8 @@
 # define ICOMPONENT_HPP_
 
 # include <string>
+# include <memory>
+# include <unordered_map>
 # include "ComponentMask.hpp"
 
 namespace ECS
@@ -17,6 +19,9 @@ namespace ECS
     virtual IComponent*     clone() const = 0;
     virtual void            clear() = 0;
   };
+
+  typedef std::unordered_map<ComponentMask,
+                             std::unique_ptr<IComponent> >    ComponentMap;
 }
 
 #endif /* !ICOMPONENT_HPP_ */
