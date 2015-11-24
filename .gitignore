@@ -4,3 +4,7 @@
 .DS_Store
 *.so
 .idea/
+*.exe
+*.ilk
+*.pdb
+build/

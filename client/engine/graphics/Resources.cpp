@@ -2,11 +2,11 @@
 #include <stdexcept>
 #include "Resources.hpp"
 
-Resources::Resources(const std::string &path)
+Resources::Resources()
 {
 	this->_textures["MissingTexture"] = sf::Texture();
-	if (! this->_textures["MissingTexture"].loadFromFile(path))
-		throw std::runtime_error(path + std::string(" not found"));
+	if (! this->_textures["MissingTexture"].loadFromFile("res/MissingTexture.png"))
+		throw std::runtime_error("res/MissingTexture.png not found");
 	this->_textures["MissingTexture"].setRepeated(true);
 }
 

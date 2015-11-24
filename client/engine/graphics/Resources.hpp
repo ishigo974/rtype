@@ -7,7 +7,7 @@
 class Resources
 {
 public:
-	Resources(const std::string &path = "res/MissingTexture.png");
+	Resources();
 	~Resources() {}
 	Resources(const Resources &) = delete;
 	Resources& operator=(const Resources &) = delete;
