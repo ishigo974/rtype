@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "GameObject.hpp"
 
-int main()
+void sfml_test()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape  shape(100.f);
@@ -21,6 +23,14 @@ int main()
         window.draw(shape);
         window.display();
     }
+}
 
+void gameObjectTest()
+{
+}
+
+int main()
+{
+    gameObjectTest();
     return 0;
 }

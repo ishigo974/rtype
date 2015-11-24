@@ -9,6 +9,8 @@ if (WIN32)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 endif ()
 
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++11")
+
 if (CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE Debug)
 endif ()
@@ -17,12 +19,12 @@ endif ()
 # Define sources #
 # -------------- #
 file(GLOB source_files
-        core/*.cpp
-        core/*.hpp
-        graphics/*.cpp
-        graphics/*.hpp
-        network/*.cpp
-        network/*.hpp
+        engine/core/*.cpp
+        engine/core/*.hpp
+        engine/graphics/*.cpp
+        engine/graphics/*.hpp
+        engine/network/*.cpp
+        engine/network/*.hpp
         )
 
 # ------------------- #
