@@ -14,17 +14,17 @@ public:
     virtual ~TcpAcceptor();
 
 public:
-    virtual ITcpSocket const *accept() const;
+    virtual ITcpSocket *accept() const;
 
 public:
     virtual ssize_t      send(Buffer const *buffer) const;
     virtual Buffer const *recv() const;
     virtual void         close() const;
-    virtual bool         isReadable() const;
-    virtual bool         isWritable() const;
+    virtual bool         isReadable(fd_set *fdSet) const;
+    virtual bool         isWritable(fd_set *fdSet) const;
 
 public:
-    virtual void registerToMonitor(fd_set *fdSet) const;
+    virtual void registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const;
     virtual void deleteFromMonitor(fd_set *fdSet) const;
 
 public:

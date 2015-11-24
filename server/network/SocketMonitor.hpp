@@ -18,7 +18,9 @@ public:
 public:
     virtual void registerSocket(ITcpSocket *socket);
     virtual void deleteSocket(ITcpSocket *socket);
-    virtual bool isMonitored(ITcpSocket *socket) const;
+    virtual bool isReadMonitored(ITcpSocket *socket);
+    virtual bool isWriteMonitored(ITcpSocket *socket);
+    virtual void clearFds();
     virtual int  update();
 
 public:
@@ -35,7 +37,7 @@ private:
     fd_set                   _writeFds;
     int                      _secValue;
     int                      _usecValue;
-    unsigned int             _maxFd;
+    unsigned int             _maxFd; //TODO typedef
     static int               defaultSecVal;
     static int               defaultUsecVal;
 };

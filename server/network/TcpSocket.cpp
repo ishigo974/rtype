@@ -52,16 +52,17 @@ void TcpSocket::close() const
 }
 
 //TODO
-bool TcpSocket::isReadable() const
+bool TcpSocket::isReadable(fd_set* fdSet) const
 {
-    return (true);
+    return FD_ISSET(_socket, fdSet) != 0;
 }
 
 //TODO
-bool TcpSocket::isWritable() const
+bool TcpSocket::isWritable(fd_set* fdSet) const
 {
-    return (true);
+    return FD_ISSET(_socket, fdSet) != 0;
 }
+
 
 short int TcpSocket::getPort() const
 {
@@ -89,9 +90,11 @@ void TcpSocket::setAddr(const std::string& addr)
     _addr = addr;
 }
 
-void TcpSocket::registerToMonitor(fd_set *fdSet) const
+void TcpSocket::registerToMonitor(fd_set *fdSet, unsigned int* maxFd) const
 {
     FD_SET(_socket, fdSet);
+    if (_socket > *maxFd)
+        *maxFd = _socket;
 }
 
 void TcpSocket::deleteFromMonitor(fd_set *fdSet) const

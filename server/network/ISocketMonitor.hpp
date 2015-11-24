@@ -14,10 +14,12 @@ public:
     { }
 
 public:
-    virtual void registerSocket(ITcpSocket *socket)    = 0;
-    virtual void deleteSocket(ITcpSocket *socket)      = 0;
-    virtual bool isMonitored(ITcpSocket *socket) const = 0;
-    virtual int  update()                              = 0;
+    virtual void registerSocket(ITcpSocket *socket)   = 0;
+    virtual void deleteSocket(ITcpSocket *socket)     = 0;
+    virtual bool isReadMonitored(ITcpSocket *socket)  = 0;
+    virtual bool isWriteMonitored(ITcpSocket *socket) = 0;
+    virtual void clearFds()                           = 0;
+    virtual int  update()                             = 0;
 };
 
 

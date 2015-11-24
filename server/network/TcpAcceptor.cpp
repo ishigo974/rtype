@@ -37,7 +37,7 @@ TcpAcceptor::~TcpAcceptor()
     ::close(_socket);
 }
 
-ITcpSocket const *TcpAcceptor::accept() const
+ITcpSocket *TcpAcceptor::accept() const
 {
     struct sockaddr_in client;
     int                socket; //TODO typedef
@@ -86,15 +86,15 @@ void TcpAcceptor::close() const
 }
 
 //TODO
-bool TcpAcceptor::isReadable() const
+bool TcpAcceptor::isReadable(fd_set* fdSet) const
 {
-    return (true);
+    return FD_ISSET(_socket, fdSet) != 0;
 }
 
 //TODO
-bool TcpAcceptor::isWritable() const
+bool TcpAcceptor::isWritable(fd_set* fdSet) const
 {
-    return (true);
+    return FD_ISSET(_socket, fdSet) != 0;
 }
 
 short int TcpAcceptor::getPort() const
@@ -113,9 +113,11 @@ void TcpAcceptor::setPort(short int port)
     _port = port;
 }
 
-void TcpAcceptor::registerToMonitor(fd_set *fdSet) const
+void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int* maxFd) const
 {
     FD_SET(_socket, fdSet);
+    if (*maxFd < _socket)
+        *maxFd = _socket;
 }
 
 void TcpAcceptor::deleteFromMonitor(fd_set *fdSet) const

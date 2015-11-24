@@ -16,6 +16,7 @@ include_directories(network)
 file(GLOB source_files
         network/*.hpp
         network/*.cpp
+        ecs/*.hpp
         )
 
 add_executable(${EXECUTABLE_NAME} ${source_files})

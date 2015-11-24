@@ -15,8 +15,8 @@ public:
     { }
 
 public:
-    virtual void registerToMonitor(fd_set *fd) const = 0;
-    virtual void deleteFromMonitor(fd_set *fd) const = 0;
+    virtual void registerToMonitor(fd_set *fd, unsigned int *maxFd) const = 0;
+    virtual void deleteFromMonitor(fd_set *fd) const                      = 0;
 };
 
 #endif //RTYPE_ITCPSOCKET_HPP
