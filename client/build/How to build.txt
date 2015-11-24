@@ -1,2 +1,0 @@
-In this folder (rtype/client/build) :
-cmake ..
