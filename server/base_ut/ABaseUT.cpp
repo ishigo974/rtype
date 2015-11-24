@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdexcept>
 #include "ABaseUT.hpp"
+#include "AssertError.hpp"
+#include "ValueError.hpp"
 
 namespace UnitTesting
 {
@@ -29,8 +31,8 @@ namespace UnitTesting
     for (auto&& test: _tests)
     {
       try {
-        std::cout << "Running test " + test->first ": ";
-        (*test->second)();
+        std::cout << "Running test " + test.first + ": ";
+        (*test.second)();
         std::cout << colorGreen << "OK" << colorBase << std::endl;
       } catch (Exception::AssertError const& e) {
         std::cout << colorRed << "KO" << colorBase << std::endl;
@@ -49,7 +51,7 @@ namespace UnitTesting
     if (it == _tests.end())
       throw Exception::ValueError("Test '" + name + "' does not exists'");
     try {
-      std::cout << "Running test " + it->first ": ";
+      std::cout << "Running test " + it->first + ": ";
       (*it->second)();
       std::cout << colorGreen << "OK" << colorBase << std::endl;
     } catch (Exception::AssertError const& e) {
@@ -70,7 +72,7 @@ namespace UnitTesting
   /*
   ** Static functions
   */
-  static void         ABaseUT::assert(bool res, std::string const& file,
+  void                ABaseUT::assert(bool res, std::string const& file,
                                       unsigned int line)
   {
     if (!res)

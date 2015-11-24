@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 set(EXECUTABLE_NAME "server_rtype")
+set(UT_NAME "server_ut")
 project(rtype_server)
 
 #if (WIN32)
@@ -16,10 +17,28 @@ endif ()
 # Define sources and executable
 include_directories(network)
 include_directories(ecs)
+include_directories(exceptions)
+include_directories(base_ut)
+
 file(GLOB source_files
         network/*.hpp
         network/*.cpp
         ecs/*.hpp
-        )
+	      ecs/*.cpp
+	      exceptions/*.hpp
+	      exceptions/*.cpp
+      )
+
+file(GLOB ut_source_files
+        network/*.hpp
+        network/*.cpp
+        ecs/*.hpp
+      	ecs/*.cpp
+      	exceptions/*.hpp
+      	exceptions/*.cpp
+      	base_ut/*.hpp
+      	base_ut/*.cpp
+      )
 
 add_executable(${EXECUTABLE_NAME} ${source_files})
+add_executable(${UT_NAME} ${ut_source_files})

@@ -33,7 +33,8 @@ namespace UnitTesting
     void                registerTest(std::string const& name, TestHandler th);
 
   protected:
-    static void         assert(bool res);
+    static void         assert(bool res, std::string const& file,
+                               unsigned int line);
     // static void         assertWithFile(std::string const& output,
     //                                    std::string const& file);
 
