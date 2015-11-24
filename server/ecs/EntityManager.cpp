@@ -58,14 +58,20 @@ namespace ECS
     return *_actives[_nextId - 1];
   }
 
-  void              EntityManager::destroy(unsigned int id)
+  bool              EntityManager::destroy(unsigned int id)
   {
     EntityMap::iterator it = _actives.find(id);
 
     if (it == _actives.end())
-      throw std::runtime_error("Wrong id"); // to do
+      return false;
     _inactives[id] = std::unique_ptr<Entity>(std::move(it->second));
     _actives.erase(it);
+    return true;
+  }
+
+  bool              EntityManager::destroy(Entity const& entity)
+  {
+    return destroy(entity.getId());
   }
 
   void              EntityManager::registerComponent(IComponent* component)

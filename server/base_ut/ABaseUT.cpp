@@ -12,10 +12,11 @@ namespace UnitTesting
   std::string          ABaseUT::colorRed    = "\033[1;31m";
   std::string          ABaseUT::colorGreen  = "\033[1;32m";
   std::string          ABaseUT::colorBase   = "\033[m";
+
   /*
   ** Constructor/Destructor
   */
-  ABaseUT::ABaseUT()
+  ABaseUT::ABaseUT() : _isInit(false)
   {
   }
 
@@ -26,8 +27,13 @@ namespace UnitTesting
   /*
   ** Public member functions
   */
-  void                ABaseUT::run() const
+  void                ABaseUT::run()
   {
+    if (!_isInit)
+    {
+      registerTests();
+      _isInit = true;
+    }
     for (auto&& test: _tests)
     {
       try {
@@ -44,8 +50,13 @@ namespace UnitTesting
     }
   }
 
-  void                ABaseUT::run(std::string const& name) const
+  void                ABaseUT::run(std::string const& name)
   {
+    if (!_isInit)
+    {
+      registerTests();
+      _isInit = true;
+    }
     auto it = _tests.find(name);
 
     if (it == _tests.end())
@@ -73,10 +84,11 @@ namespace UnitTesting
   ** Static functions
   */
   void                ABaseUT::assert(bool res, std::string const& file,
-                                      unsigned int line)
+                                      unsigned int line,
+                                      std::string const& expr)
   {
     if (!res)
       throw Exception::AssertError(file + ":" + std::to_string(line) +
-                                   ": assertion failed");
+                                   ": assertion " + expr + " failed");
   }
 }

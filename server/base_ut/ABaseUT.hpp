@@ -4,7 +4,7 @@
 # include <string>
 # include <map>
 
-# define UT_ASSERT(res)   (ABaseUT::assert(res, __FILE__, __LINE__))
+# define UT_ASSERT(res) (ABaseUT::assert(res, __FILE__, __LINE__, __STRING(res)))
 
 namespace UnitTesting
 {
@@ -22,8 +22,8 @@ namespace UnitTesting
     ABaseUT&     operator=(ABaseUT const& other) = delete;
 
   public:
-    void                run() const;
-    void                run(std::string const& name) const;
+    void                run();
+    void                run(std::string const& name);
 
   public:
     virtual std::string getName() const = 0;
@@ -34,7 +34,7 @@ namespace UnitTesting
 
   protected:
     static void         assert(bool res, std::string const& file,
-                               unsigned int line);
+                               unsigned int line, std::string const& expr);
     // static void         assertWithFile(std::string const& output,
     //                                    std::string const& file);
 
@@ -44,7 +44,8 @@ namespace UnitTesting
     static std::string    colorBase;
 
   protected:
-    std::map<std::string, TestHandler>   _tests;
+    bool                                  _isInit;
+    std::map<std::string, TestHandler>    _tests;
   };
 }
 

@@ -33,7 +33,8 @@ namespace ECS
 
   public:
     Entity&                     create(ComponentMask mask = 0);
-    void                        destroy(unsigned int id);
+    bool                        destroy(unsigned int id);
+    bool                        destroy(Entity const& entity);
 
   public:
     void                        registerComponent(IComponent* component);
