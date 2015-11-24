@@ -20,20 +20,20 @@ endif ()
 # -------------------------- #
 # Define include directories #
 # -------------------------- #
-include_directories(core)
-include_directories(graphics)
-include_directories(network)
+include_directories(engine/core)
+include_directories(engine/graphics)
+include_directories(engine/network)
 
 # -------------- #
 # Define sources #
 # -------------- #
 file(GLOB source_files
-        core/*.cpp
-        core/*.hpp
-        graphics/*.cpp
-        graphics/*.hpp
-        network/*.cpp
-        network/*.hpp
+        engine/core/*.cpp
+        engine/core/*.hpp
+        engine/graphics/*.cpp
+        engine/graphics/*.hpp
+        engine/network/*.cpp
+        engine/network/*.hpp
         )
 
 # ------------------- #
