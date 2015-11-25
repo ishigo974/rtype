@@ -8,7 +8,7 @@
 Object::Object()
 { }
 
-Object::Object(uint _id, std::string const& _name)
+Object::Object(unsigned int _id, std::string const& _name)
         : _id(_id), _name(_name)
 { }
 

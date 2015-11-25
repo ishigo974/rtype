@@ -34,7 +34,6 @@ public:
 
     virtual std::string toString();
 
-
 protected:
     void swap(Object& first, Object& second);
 

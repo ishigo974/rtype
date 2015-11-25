@@ -11,6 +11,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 if (WIN32)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 /WX -std=c++14")
+endif ()
+
+if (UNIX)
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "")
@@ -20,6 +25,8 @@ endif ()
 # -------------- #
 # Define sources #
 # -------------- #
+include_directories(lib)
+
 file(GLOB source_files
         engine/core/*.cpp
         engine/core/*.hpp
@@ -27,6 +34,7 @@ file(GLOB source_files
         engine/graphics/*.hpp
         engine/network/*.cpp
         engine/network/*.hpp
+        lib/*.hpp
         )
 
 # ------------------- #

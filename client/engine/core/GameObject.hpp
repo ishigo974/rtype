@@ -24,7 +24,7 @@ public:
     virtual bool operator==(GameObject const& other);
     virtual bool operator!=(GameObject const& other);
 
-    virtual std::string toString() override;
+    virtual std::string toString();
 
     int  getLayer() const;
     void setLayer(unsigned int _layer);

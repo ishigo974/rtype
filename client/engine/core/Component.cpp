@@ -7,7 +7,7 @@
 Component::Component()
 { }
 
-Component::Component(uint _id, std::string const& _name, u_int16_t _mask)
+Component::Component(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask)
         : Object(_id, _name), _mask(_mask)
 { }
 
@@ -47,12 +47,12 @@ void Component::swap(Component& first, Component& second)
     std::swap(first._mask, second._mask);
 }
 
-u_int16_t Component::getMask() const
+RTypes::my_uint16_t Component::getMask() const
 {
     return _mask;
 }
 
-void Component::setMask(u_int16_t _mask)
+void Component::setMask(RTypes::my_uint16_t _mask)
 {
     Component::_mask = _mask;
 }
