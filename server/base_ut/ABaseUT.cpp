@@ -40,9 +40,9 @@ namespace UnitTesting
       try {
         std::cout << "Running test " + test.first + ": ";
         (*test.second)();
-        std::cout << colorGreen << "OK" << colorBase << std::endl;
+        std::cout << colorGreen << " OK" << colorBase << std::endl;
       } catch (Exception::AssertError const& e) {
-        std::cout << colorRed << "KO" << colorBase << std::endl;
+        std::cout << colorRed << " KO" << colorBase << std::endl;
         std::cerr << e.what() << std::endl;
       } catch (std::exception const& e) {
         std::cout << colorRed << "KO" << colorBase << std::endl;
@@ -65,9 +65,9 @@ namespace UnitTesting
     try {
       std::cout << "Running test " + it->first + ": ";
       (*it->second)();
-      std::cout << colorGreen << "OK" << colorBase << std::endl;
+      std::cout << colorGreen << " OK" << colorBase << std::endl;
     } catch (Exception::AssertError const& e) {
-      std::cout << colorRed << "KO" << colorBase << std::endl;
+      std::cout << colorRed << " KO" << colorBase << std::endl;
       std::cerr << e.what() << std::endl;
     }
   }
@@ -91,5 +91,6 @@ namespace UnitTesting
     if (!res)
       throw Exception::AssertError(file + ":" + std::to_string(line) +
                                    ": assertion " + expr + " failed");
+    std::cout << ".";
   }
 }

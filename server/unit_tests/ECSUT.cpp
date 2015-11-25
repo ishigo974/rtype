@@ -19,7 +19,7 @@ namespace ECS
   */
   void          ECSUT::registerTests()
   {
-    registerTest("EntityLifeRecycling", &ECSUT::entityLifeRecycling);
+    registerTest("EntityLifeRecyclingSimple", &ECSUT::entityLifeRecyclingSimple);
   }
 
   std::string   ECSUT::getName() const
@@ -30,7 +30,7 @@ namespace ECS
   /*
   ** Unit tests
   */
-  void          ECSUT::entityLifeRecycling()
+  void          ECSUT::entityLifeRecyclingSimple()
   {
     EntityManager&    em      = EntityManager::getInstance();
     Entity*           entity  = &(em.create());

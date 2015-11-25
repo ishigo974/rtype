@@ -17,7 +17,7 @@ namespace ECS
     ECSUT&                operator=(ECSUT const& other) = delete;
 
   protected:
-    static void           entityLifeRecycling();
+    static void           entityLifeRecyclingSimple();
 
   public:
     virtual void          registerTests();
