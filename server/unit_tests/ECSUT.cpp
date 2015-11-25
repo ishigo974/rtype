@@ -136,6 +136,7 @@ namespace ECS
       UT_ASSERT(c1->getData() == "Tea est trop fort");
       UT_ASSERT(c2->getData() == "Tea est trop swag");
     }
+    em.clean();
   }
 
   namespace Sample
