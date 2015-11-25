@@ -79,14 +79,24 @@ namespace ECS
     return destroy(entity.getId());
   }
 
-  Entity&           EntityManager::get(unsigned int id)
+  Entity&           EntityManager::get(unsigned int id) const
   {
-    EntityMap::iterator   it;
+    EntityMap::const_iterator   it;
 
     if ((it = _actives.find(id)) == _actives.end())
       throw Exception::ValueError("Id " + std::to_string(id) +
                                   " does not match any entity");
     return *it->second;
+  }
+
+  EntityCollection  EntityManager::getByMask(ComponentMask mask) const
+  {
+    EntityCollection  res;
+
+    for (auto& entity : _actives)
+      if ((entity.second->getComponentMask() & mask) == mask)
+        res.push_back(entity.second.get());
+    return res;
   }
 
   void              EntityManager::clean()

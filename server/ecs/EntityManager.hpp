@@ -35,7 +35,8 @@ namespace ECS
     Entity&                     create(ComponentMask mask = 0);
     bool                        destroy(unsigned int id);
     bool                        destroy(Entity const& entity);
-    Entity&                     get(unsigned int id);
+    Entity&                     get(unsigned int id) const;
+    EntityCollection            getByMask(ComponentMask mask) const;
     void                        clean();
 
   public:

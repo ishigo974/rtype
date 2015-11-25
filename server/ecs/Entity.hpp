@@ -3,6 +3,7 @@
 
 # include <string>
 # include <memory>
+# include <vector>
 # include "IComponent.hpp"
 # include "ComponentMask.hpp"
 # include "IStringable.hpp"
@@ -51,6 +52,8 @@ namespace ECS
     ComponentMask         _mask;
     ComponentMap          _components;
   };
+
+  typedef std::vector<Entity*>     EntityCollection;
 }
 
 #endif /* !ENTITY_HPP_ */

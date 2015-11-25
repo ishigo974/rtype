@@ -23,7 +23,7 @@ namespace UnitTesting
 
   private:
     ABaseUT(ABaseUT const& other) = delete;
-    ABaseUT&     operator=(ABaseUT const& other) = delete;
+    ABaseUT&            operator=(ABaseUT const& other) = delete;
 
   public:
     void                run();
@@ -39,8 +39,6 @@ namespace UnitTesting
   protected:
     static void         assert(bool res, std::string const& file,
                                unsigned int line, std::string const& expr);
-    // static void         assertWithFile(std::string const& output,
-    //                                    std::string const& file);
 
   protected:
     static std::string    colorRed;
