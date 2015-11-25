@@ -4,6 +4,10 @@
 # include <string>
 # include <map>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+# define __STRING(res)    #res
+#endif
+
 # define UT_ASSERT(res) (ABaseUT::assert(res, __FILE__, __LINE__, __STRING(res)))
 
 namespace UnitTesting
