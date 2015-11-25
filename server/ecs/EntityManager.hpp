@@ -36,6 +36,7 @@ namespace ECS
     bool                        destroy(unsigned int id);
     bool                        destroy(Entity const& entity);
     Entity&                     get(unsigned int id);
+    void                        clean();
 
   public:
     void                        registerComponent(IComponent* component);

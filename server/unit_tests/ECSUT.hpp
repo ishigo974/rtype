@@ -3,6 +3,8 @@
 
 # include <string>
 # include "ABaseUT.hpp"
+# include "IComponent.hpp"
+# include "ComponentMask.hpp"
 
 namespace ECS
 {
@@ -18,11 +20,70 @@ namespace ECS
 
   protected:
     static void           entityLifeRecyclingSimple();
+    static void           entityLifeRecyclingWithComponent();
 
   public:
     virtual void          registerTests();
     virtual std::string   getName() const;
   };
+
+  namespace Sample
+  {
+    enum SampleMask : ComponentMask
+    {
+      COMPMASK_ONE    = 1 << 1,
+      COMPMASK_TWO    = 1 << 2,
+      COMPMASK_THREE  = 1 << 3
+    };
+
+    class Component1 : public IComponent
+    {
+    public:
+      Component1();
+      virtual ~Component1();
+
+    public:
+      virtual std::string     getName() const;
+      virtual ComponentMask   getMask() const;
+      virtual IComponent*     clone() const;
+      virtual void            clear();
+
+    public:
+      static const ComponentMask    mask;
+    };
+
+    class Component2 : public IComponent
+    {
+    public:
+      Component2();
+      virtual ~Component2();
+
+    public:
+      virtual std::string     getName() const;
+      virtual ComponentMask   getMask() const;
+      virtual IComponent*     clone() const;
+      virtual void            clear();
+
+    public:
+      static const ComponentMask    mask;
+    };
+
+    class Component3 : public IComponent
+    {
+    public:
+      Component3();
+      virtual ~Component3();
+
+    public:
+      virtual std::string     getName() const;
+      virtual ComponentMask   getMask() const;
+      virtual IComponent*     clone() const;
+      virtual void            clear();
+
+    public:
+      static const ComponentMask    mask;
+    };
+  }
 }
 
 #endif /* !ECSUT_HPP_ */

@@ -89,6 +89,13 @@ namespace ECS
     return *it->second;
   }
 
+  void              EntityManager::clean()
+  {
+    _actives.clear();
+    _inactives.clear();
+    _nextId = 0;
+  }
+
   void              EntityManager::registerComponent(IComponent* component)
   {
     _components[component->getMask()] = std::unique_ptr<IComponent>(component);

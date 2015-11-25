@@ -16,7 +16,7 @@ namespace UnitTesting
   }
 
   /*
-  ** Publi member functions
+  ** Public member functions
   */
   void              UTManager::run(std::vector<std::string> const& groups)
   {
