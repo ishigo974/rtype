@@ -12,7 +12,7 @@ class Object
 {
 public:
     Object();
-    Object(uint _id, std::string const& _name);
+    Object(unsigned int _id, std::string const& _name);
 
     Object(Object const& other);
     Object(Object&& other);
@@ -24,21 +24,23 @@ public:
     virtual bool operator==(Object const& other);
     virtual bool operator!=(Object const& other);
 
-    uint getId() const;
-    void setId(uint _id);
+    virtual unsigned int getMask();
+
+    unsigned int getId() const;
+    void         setId(unsigned int _id);
 
     std::string const& getName() const;
     void setName(std::string const& _name);
 
-    virtual std::string const& toString();
+    virtual std::string toString();
 
-private:
+
+protected:
     void swap(Object& first, Object& second);
 
 protected:
-    uint        _id;
-    std::string _name;
-    std::string _toString;
+    unsigned int _id;
+    std::string  _name;
 };
 
 #endif //RTYPE_OBJECT_HPP

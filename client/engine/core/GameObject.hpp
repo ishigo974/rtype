@@ -13,7 +13,7 @@ class GameObject : public Object
 public:
 
     GameObject();
-    GameObject(uint _id, std::string const& _name, uint _layer);
+    GameObject(unsigned int _id, std::string const& _name, int _layer);
 
     GameObject(GameObject const& other);
     GameObject(GameObject&& other);
@@ -24,16 +24,16 @@ public:
     virtual bool operator==(GameObject const& other);
     virtual bool operator!=(GameObject const& other);
 
-    virtual std::string const& toString() override;
+    virtual std::string toString() override;
 
-    uint getLayer() const;
-    void setLayer(uint _layer);
+    int  getLayer() const;
+    void setLayer(unsigned int _layer);
 
-private:
+protected:
     void swap(GameObject& first, GameObject& second);
 
 protected:
-    uint _layer;
+    int _layer;
 };
 
 

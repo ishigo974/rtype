@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <assert.h>
+#include <memory>
 #include "GameObject.hpp"
+#include "Component.hpp"
 
 void sfml_test()
 {
@@ -27,16 +30,17 @@ void sfml_test()
 
 bool gameObjectTest()
 {
-    GameObject a(0, "LEL", 1);
-    GameObject b = std::move(a);
+    Component c(1, "Test", 1);
+    Component d(c);
 
-    std::cout << b.toString() << std::endl;
+    std::cout << d.toString() << std::endl;
 
     return (true);
 }
 
 int main()
 {
-    gameObjectTest();
+    assert(gameObjectTest());
+
     return 0;
 }
