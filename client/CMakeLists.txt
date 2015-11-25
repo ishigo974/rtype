@@ -9,8 +9,6 @@ set(EXECUTABLE_NAME "rtype")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 
 if (WIN32)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 /WX -std=c++14")
 endif ()
 
@@ -18,13 +16,10 @@ if (UNIX)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 endif ()
 
-if (CMAKE_BUILD_TYPE STREQUAL "")
-    set(CMAKE_BUILD_TYPE Debug)
-endif ()
-
 # -------------- #
 # Define sources #
 # -------------- #
+
 include_directories(lib)
 
 file(GLOB source_files
@@ -40,6 +35,7 @@ file(GLOB source_files
 # ------------------- #
 # Detect and add SFML #
 # ------------------- #
+
 if (WIN32)
     set(CMAKE_MODULE_PATH "C:\\SFML-2.3.2\\cmake\\Modules" ${CMAKE_MODULE_PATH})
     set(SFML_ROOT "C:\\SFML-2.3.2")
@@ -60,7 +56,8 @@ if (SFML_FOUND)
 endif ()
 
 if (Boost_FOUND)
-
+    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
+    include_directories(${Boost_INCLUDE_DIR})
 endif ()
 
 # ---- #
@@ -68,6 +65,9 @@ endif ()
 # ---- #
 
 add_executable(${EXECUTABLE_NAME} ${source_files})
+
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
 

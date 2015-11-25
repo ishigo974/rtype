@@ -1,9 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <assert.h>
 #include <memory>
 #include "GameObject.hpp"
-#include "Component.hpp"
+#include "EntityManager.hpp"
 
 void sfml_test()
 {
@@ -30,17 +29,20 @@ void sfml_test()
 
 bool gameObjectTest()
 {
-    Component c(1, "Test", 1);
-    Component d(c);
+    EntityManager entityManager;
 
-    std::cout << d.toString() << std::endl;
+    GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+    GameObject *b = entityManager.createEntity<GameObject>("Test", 2);
+
+    std::cout << a->toString() << std::endl;
+    std::cout << b->toString() << std::endl;
 
     return (true);
 }
 
 int main()
 {
-    assert(gameObjectTest());
+    gameObjectTest();
 
     return 0;
 }

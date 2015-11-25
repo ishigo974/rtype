@@ -11,7 +11,6 @@ class GameObject : public Object
 {
 
 public:
-
     GameObject();
     GameObject(unsigned int _id, std::string const& _name, int _layer);
 
@@ -28,6 +27,8 @@ public:
 
     int  getLayer() const;
     void setLayer(unsigned int _layer);
+
+    virtual unsigned int getMask();
 
 protected:
     void swap(GameObject& first, GameObject& second);

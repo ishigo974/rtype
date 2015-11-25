@@ -72,3 +72,8 @@ void GameObject::swap(GameObject& first, GameObject& second)
 {
     std::swap(first._layer, second._layer);
 }
+
+unsigned int GameObject::getMask()
+{
+
+}

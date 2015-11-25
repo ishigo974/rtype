@@ -15,9 +15,23 @@
 class EntityManager
 {
 public:
-    std::vector<Object *>   getByMask(unsigned int mask);
+    EntityManager();
+    ~EntityManager();
+
+    std::vector<Object *> getByMask(unsigned int mask);
+
+    template<class T, class ...Args, typename = std::enable_if<std::is_base_of<Object, T>::value> >
+    T *createEntity(Args... args)
+    {
+        _ids += 1;
+        _entities[_ids] = std::make_unique<T>(std::ref(_ids), args...);
+
+        return (dynamic_cast<T *>(_entities[_ids].get()));
+    }
+
 private:
     std::unordered_map<unsigned int, std::unique_ptr<Object> > _entities;
+    unsigned int                                               _ids;
 };
 
 

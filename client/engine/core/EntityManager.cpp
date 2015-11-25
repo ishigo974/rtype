@@ -16,3 +16,13 @@ std::vector<Object *> EntityManager::getByMask(unsigned int mask)
 
     return (tmp);
 }
+
+EntityManager::~EntityManager()
+{
+    _entities.clear();
+}
+
+EntityManager::EntityManager()
+{
+    _ids = 0;
+}
