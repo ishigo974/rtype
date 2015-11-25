@@ -75,5 +75,5 @@ void GameObject::swap(GameObject& first, GameObject& second)
 
 unsigned int GameObject::getMask()
 {
-
+    return 0;
 }
