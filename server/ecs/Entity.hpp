@@ -35,7 +35,7 @@ namespace ECS
       ComponentType*                  res;
 
       if ((it = _components.find(mask)) == _components.end()
-          || (res = dynamic_cast<ComponentType*>(it->second)) == nullptr)
+          || (res = dynamic_cast<ComponentType*>(it->second.get())) == nullptr)
         return nullptr;
       return res;
     }

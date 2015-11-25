@@ -23,6 +23,8 @@ namespace ECS
                  &ECSUT::entityLifeRecyclingSimple);
     registerTest("EntityLifeRecyclingWithComponent",
                  &ECSUT::entityLifeRecyclingWithComponent);
+    registerTest("SystemProcess", &ECSUT::systemProcess);
+
   }
 
   std::string   ECSUT::getName() const
@@ -96,6 +98,46 @@ namespace ECS
     em.clean();
   }
 
+  void          ECSUT::systemProcess()
+  {
+    EntityManager&    em      = EntityManager::getInstance();
+    Sample::System1   sys;
+    EntityCollection  entities;
+
+    em.registerComponent(new Sample::Component1());
+    em.registerComponent(new Sample::Component2());
+    em.registerComponent(new Sample::Component3());
+    em.create(Sample::Component1::mask | Sample::Component2::mask);
+    em.create(Sample::Component1::mask | Sample::Component2::mask
+              | Sample::Component3::mask);
+    em.create(Sample::Component1::mask | Sample::Component2::mask
+              | Sample::Component3::mask);
+    em.create(Sample::Component1::mask);
+    em.create(Sample::Component2::mask);
+    em.create(Sample::Component3::mask);
+    em.create(Sample::Component1::mask | Sample::Component2::mask);
+    em.create(Sample::Component1::mask | Sample::Component2::mask);
+    UT_ASSERT(em.getByMask(Sample::Component1::mask).size() == 6);
+    UT_ASSERT(em.getByMask(Sample::Component1::mask
+                           | Sample::Component3::mask).size() == 2);
+    sys.process();
+    entities = em.getByMask(Sample::Component1::mask
+                            | Sample::Component2::mask);
+    UT_ASSERT(entities.size() == 5);
+    for (auto& entity: entities)
+    {
+      Sample::Component1*   c1;
+      Sample::Component2*   c2;
+
+      c1 = entity->getComponent<Sample::Component1>(Sample::Component1::mask);
+      UT_ASSERT(c1 != nullptr);
+      c2 = entity->getComponent<Sample::Component2>(Sample::Component2::mask);
+      UT_ASSERT(c2 != nullptr);
+      UT_ASSERT(c1->getData() == "Tea est trop fort");
+      UT_ASSERT(c2->getData() == "Tea est trop swag");
+    }
+  }
+
   namespace Sample
   {
     /* Component1 */
@@ -103,6 +145,12 @@ namespace ECS
 
     Component1::Component1() {}
     Component1::~Component1() {}
+
+    std::string const& Component1::getData() const
+    { return _data; }
+
+    void            Component1::setData(std::string const& data)
+    { _data = data; }
 
     std::string     Component1::getName() const
     { return "Component1"; }
@@ -120,6 +168,12 @@ namespace ECS
 
     Component2::Component2() {}
     Component2::~Component2() {}
+
+    std::string const& Component2::getData() const
+    { return _data; }
+
+    void            Component2::setData(std::string const& data)
+    { _data = data; }
 
     std::string     Component2::getName() const
     { return "Component2"; }
@@ -148,5 +202,27 @@ namespace ECS
     { return new Component3(); }
 
     void            Component3::clear() {}
+
+    /* System1 */
+    System1::System1() {}
+
+    System1::~System1() {}
+
+    void          System1::processEntity(Entity& e)
+    {
+      Component1* c1 = e.getComponent<Component1>(Component1::mask);
+      Component2* c2 = e.getComponent<Component2>(Component2::mask);
+
+      if (c1 == NULL || c2 == NULL)
+        return ;
+      c1->setData("Tea est trop fort");
+      c2->setData("Tea est trop swag");
+    }
+
+    ComponentMask System1::getMask() const
+    { return (Component1::mask | Component2::mask); }
+
+    std::string   System1::getName() const
+    { return "System1"; }
   }
 }

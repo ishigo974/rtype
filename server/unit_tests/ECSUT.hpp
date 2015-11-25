@@ -3,8 +3,9 @@
 
 # include <string>
 # include "ABaseUT.hpp"
-# include "IComponent.hpp"
 # include "ComponentMask.hpp"
+# include "IComponent.hpp"
+# include "ASystem.hpp"
 
 namespace ECS
 {
@@ -21,6 +22,7 @@ namespace ECS
   protected:
     static void           entityLifeRecyclingSimple();
     static void           entityLifeRecyclingWithComponent();
+    static void           systemProcess();
 
   public:
     virtual void          registerTests();
@@ -43,6 +45,10 @@ namespace ECS
       virtual ~Component1();
 
     public:
+      std::string const&      getData() const;
+      void                    setData(std::string const& data);
+
+    public:
       virtual std::string     getName() const;
       virtual ComponentMask   getMask() const;
       virtual IComponent*     clone() const;
@@ -50,6 +56,9 @@ namespace ECS
 
     public:
       static const ComponentMask    mask;
+
+    protected:
+      std::string             _data;
     };
 
     class Component2 : public IComponent
@@ -59,6 +68,10 @@ namespace ECS
       virtual ~Component2();
 
     public:
+      std::string const&      getData() const;
+      void                    setData(std::string const& data);
+
+    public:
       virtual std::string     getName() const;
       virtual ComponentMask   getMask() const;
       virtual IComponent*     clone() const;
@@ -66,6 +79,9 @@ namespace ECS
 
     public:
       static const ComponentMask    mask;
+
+    protected:
+      std::string             _data;
     };
 
     class Component3 : public IComponent
@@ -82,6 +98,18 @@ namespace ECS
 
     public:
       static const ComponentMask    mask;
+    };
+
+    class System1 : public ASystem
+    {
+    public:
+      System1();
+      virtual ~System1();
+
+    public:
+      virtual void          processEntity(Entity& e);
+      virtual ComponentMask getMask() const;
+      virtual std::string   getName() const;
     };
   }
 }
