@@ -15,6 +15,7 @@ namespace ECS
   public:
     typedef std::unique_ptr<EntityManager>        UniqueEmPtr;
     typedef std::unique_ptr<Entity>               UniqueEntityPtr;
+    typedef std::unique_ptr<IComponent>           UniqueCompPtr;
     typedef std::unordered_map<unsigned int,
                                UniqueEntityPtr>   EntityMap;
 
@@ -40,8 +41,8 @@ namespace ECS
     void                        clean();
 
   public:
-    void                        registerComponent(IComponent* component);
-    bool                        removeComponent(ComponentMask mask);
+    void      registerComponent(UniqueCompPtr component);
+    bool      removeComponent(ComponentMask mask);
 
   public:
     virtual std::string         toString() const;

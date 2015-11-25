@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ECSUT.hpp"
 #include "EntityManager.hpp"
 
@@ -67,9 +68,9 @@ namespace ECS
     EntityManager&    em      = EntityManager::getInstance();
     Entity*           entity;
 
-    em.registerComponent(new Sample::Component1());
-    em.registerComponent(new Sample::Component2());
-    em.registerComponent(new Sample::Component3());
+    em.registerComponent(std::make_unique<Sample::Component1>());
+    em.registerComponent(std::make_unique<Sample::Component2>());
+    em.registerComponent(std::make_unique<Sample::Component3>());
 
     entity = &(em.create(Sample::Component1::mask | Sample::Component2::mask));
     UT_ASSERT(entity->getId() == 0);
@@ -104,9 +105,9 @@ namespace ECS
     Sample::System1   sys;
     EntityCollection  entities;
 
-    em.registerComponent(new Sample::Component1());
-    em.registerComponent(new Sample::Component2());
-    em.registerComponent(new Sample::Component3());
+    em.registerComponent(std::make_unique<Sample::Component1>());
+    em.registerComponent(std::make_unique<Sample::Component2>());
+    em.registerComponent(std::make_unique<Sample::Component3>());
     em.create(Sample::Component1::mask | Sample::Component2::mask);
     em.create(Sample::Component1::mask | Sample::Component2::mask
               | Sample::Component3::mask);

@@ -57,7 +57,8 @@ namespace ECS
     for (auto&& pair : _components)
     {
       if ((mask & pair.first) != 0)
-        _actives[_nextId]->addComponent(pair.second->clone());
+        _actives[_nextId]
+          ->addComponent(UniqueCompPtr(pair.second->clone()));
     }
     ++_nextId;
     return *_actives[_nextId - 1];
@@ -106,9 +107,9 @@ namespace ECS
     _nextId = 0;
   }
 
-  void              EntityManager::registerComponent(IComponent* component)
+  void              EntityManager::registerComponent(UniqueCompPtr component)
   {
-    _components[component->getMask()] = std::unique_ptr<IComponent>(component);
+    _components[component->getMask()] = std::move(component);
   }
 
   bool              EntityManager::removeComponent(ComponentMask mask)

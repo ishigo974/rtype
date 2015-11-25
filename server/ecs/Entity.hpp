@@ -25,7 +25,7 @@ namespace ECS
     void                  clear();
 
   public:
-    void                  addComponent(IComponent* component);
+    void                  addComponent(std::unique_ptr<IComponent> component);
     bool                  removeComponent(ComponentMask mask);
 
     template <typename ComponentType>

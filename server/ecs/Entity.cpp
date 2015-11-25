@@ -51,10 +51,10 @@ namespace ECS
       i.second->clear();
   }
 
-  void            Entity::addComponent(IComponent* component)
+  void            Entity::addComponent(std::unique_ptr<IComponent> component)
   {
-    _components[component->getMask()] = std::unique_ptr<IComponent>(component);
     _mask |= component->getMask();
+    _components[component->getMask()] = std::move(component);
   }
 
   bool            Entity::removeComponent(ComponentMask mask)
