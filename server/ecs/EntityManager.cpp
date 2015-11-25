@@ -1,5 +1,8 @@
 #include <sstream>
+#include <iostream>
+#include <algorithm>
 #include "EntityManager.hpp"
+#include "ValueError.hpp"
 
 namespace ECS
 {
@@ -35,18 +38,20 @@ namespace ECS
   */
   Entity&           EntityManager::create(ComponentMask mask)
   {
-    for (auto&& pair : _inactives)
-    {
-      if (pair.second->getComponentMask() == mask)
-      {
-        unsigned int    id;
+    EntityMap::iterator   it =
+      std::find_if(_inactives.begin(), _inactives.end(),
+        [mask](std::pair<const unsigned int, UniqueEntityPtr> const& e)->bool
+        { return e.second->getComponentMask() == mask; });
 
-        id = pair.first;
-        _actives[id] = std::unique_ptr<Entity>(std::move(pair.second));
-        _inactives.erase(id);
-        _actives[id]->clear();
-        return *_actives[id];
-      }
+    if (it != _inactives.end())
+    {
+      unsigned int    id;
+
+      id = it->first;
+      _actives[id] = std::unique_ptr<Entity>(std::move(it->second));
+      _inactives.erase(id);
+      _actives[id]->clear();
+      return *_actives[id];
     }
     _actives[_nextId] = std::make_unique<Entity>(_nextId);
     for (auto&& pair : _components)
@@ -72,6 +77,16 @@ namespace ECS
   bool              EntityManager::destroy(Entity const& entity)
   {
     return destroy(entity.getId());
+  }
+
+  Entity&           EntityManager::get(unsigned int id)
+  {
+    EntityMap::iterator   it;
+
+    if ((it = _actives.find(id)) == _actives.end())
+      throw Exception::ValueError("Id " + std::to_string(id) +
+                                  " does not match any entity");
+    return *it->second;
   }
 
   void              EntityManager::registerComponent(IComponent* component)
