@@ -90,7 +90,7 @@ Buffer const* TcpAcceptor::recv() const
 Buffer const *TcpAcceptor::recv() const
 {
     Buffer  *toRead = new Buffer;
-    size_t ret;
+    ssize_t ret;
     char    *buff;
 
     buff = new char[256];

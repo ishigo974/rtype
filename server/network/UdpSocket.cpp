@@ -36,13 +36,18 @@ Buffer const* UdpSocket::recv() const
 #else
 size_t UdpSocket::send(const Buffer *buffer) const
 {
-    return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
+    ssize_t ret;
+
+    if ((ret = ::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT))
+        == -1)
+        ; //TODO throw
+    return (static_cast<size_t>(ret));
 }
 
 Buffer const *UdpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
-    size_t ret;
+    ssize_t ret;
     char    *buff   = new char[256];
 
     if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)

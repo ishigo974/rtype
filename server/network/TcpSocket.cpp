@@ -40,8 +40,12 @@ size_t TcpSocket::send(Buffer const* buffer) const
 #else
 size_t TcpSocket::send(const Buffer *buffer) const
 {
-    return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
-}
+    ssize_t ret;
+
+    if ((ret = ::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT))
+        == -1)
+        ; //TODO throw
+    return (static_cast<size_t>(ret));}
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -54,7 +58,7 @@ Buffer const* TcpSocket::recv() const
 Buffer const *TcpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
-    size_t ret;
+    ssize_t ret;
     char    *buff;
 
     buff = new char[256];
