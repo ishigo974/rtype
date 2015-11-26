@@ -17,7 +17,7 @@ public:
     { }
 
 public:
-    virtual ssize_t      send(Buffer const *buffer) const;
+    virtual size_t      send(Buffer const *buffer) const;
     virtual Buffer const *recv() const;
     virtual void         close() const;
 

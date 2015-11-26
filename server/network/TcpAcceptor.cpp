@@ -1,16 +1,22 @@
 //
 // Created by Denis Le Borgne on 23/11/2015.
 //
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
+#else
 #include <arpa/inet.h>
-#include <iostream>
 #include <netdb.h>
+#endif
+#include <iostream>
 #include <sstream>
 #include "TcpAcceptor.hpp"
 #include "TcpSocket.hpp"
 
 TcpAcceptor::TcpAcceptor(short int port)
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	(void)port;
+#else
     struct sockaddr_in server;
 
     _port = port;
@@ -31,15 +37,23 @@ TcpAcceptor::TcpAcceptor(short int port)
         std::cerr << "Nothing to listen" << std::endl;
         //TODO throw exception
     }
+#endif
 }
 
 TcpAcceptor::~TcpAcceptor()
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#else
     ::close(_socket);
+#endif
 }
 
 ITcpSocket *TcpAcceptor::accept() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	return nullptr;
+#else
+
     struct sockaddr_in client;
     int                socket; //TODO typedef
     unsigned int       struct_len;
@@ -54,13 +68,25 @@ ITcpSocket *TcpAcceptor::accept() const
     }
     TcpSocket *ret = new TcpSocket(socket, inet_ntoa(client.sin_addr), _port);
     return (ret);
+#endif
 }
 
-ssize_t TcpAcceptor::send(const Buffer *buffer) const
+size_t TcpAcceptor::send(const Buffer *buffer) const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	return 0;
+#else
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
+#endif
 }
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+Buffer const* TcpAcceptor::recv() const
+{
+	return nullptr;
+}
+
+#else
 Buffer const *TcpAcceptor::recv() const
 {
     Buffer  *toRead = new Buffer;
@@ -80,10 +106,15 @@ Buffer const *TcpAcceptor::recv() const
     }
     return (toRead);
 }
+#endif
 
 void TcpAcceptor::close() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
     ::close(_socket);
+#endif
 }
 
 short int TcpAcceptor::getPort() const
@@ -100,18 +131,6 @@ int TcpAcceptor::getSocket() const
 void TcpAcceptor::setPort(short int port)
 {
     _port = port;
-}
-
-void TcpAcceptor::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
-{
-    FD_SET(_socket, fdSet);
-    if (*maxFd < (unsigned int) _socket)
-        *maxFd = (unsigned int) _socket;
-}
-
-void TcpAcceptor::deleteFromMonitor(fd_set *fdSet) const
-{
-    FD_CLR(_socket, fdSet);
 }
 
 std::string TcpAcceptor::toString() const

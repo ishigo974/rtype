@@ -15,7 +15,7 @@ public:
     { }
 
 public:
-    virtual ssize_t      send(Buffer const *buffer) const = 0;
+    virtual size_t      send(Buffer const *buffer) const = 0;
     virtual Buffer const *recv() const                    = 0;
     virtual void         close() const                    = 0;
     virtual int          getSocket() const                = 0; //TODO typedef
