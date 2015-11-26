@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ECSUT.hpp"
 #include "EntityManager.hpp"
+#include "SystemManager.hpp"
 
 namespace ECS
 {
@@ -25,7 +26,7 @@ namespace ECS
     registerTest("EntityLifeRecyclingWithComponent",
                  &ECSUT::entityLifeRecyclingWithComponent);
     registerTest("SystemProcess", &ECSUT::systemProcess);
-
+    registerTest("SystemManager", &ECSUT::systemManager);
   }
 
   std::string   ECSUT::getName() const
@@ -125,6 +126,37 @@ namespace ECS
     entities = em.getByMask(Sample::Component1::mask
                             | Sample::Component2::mask);
     UT_ASSERT(entities.size() == 5);
+    for (auto& entity: entities)
+    {
+      Sample::Component1*   c1;
+      Sample::Component2*   c2;
+
+      c1 = entity->getComponent<Sample::Component1>(Sample::Component1::mask);
+      UT_ASSERT(c1 != nullptr);
+      c2 = entity->getComponent<Sample::Component2>(Sample::Component2::mask);
+      UT_ASSERT(c2 != nullptr);
+      UT_ASSERT(c1->getData() == "Tea est trop fort");
+      UT_ASSERT(c2->getData() == "Tea est trop swag");
+    }
+    em.clean();
+  }
+
+  void          ECSUT::systemManager()
+  {
+    EntityManager&    em        = EntityManager::getInstance();
+    SystemManager&    sm        = SystemManager::getInstance();
+    EntityCollection  entities;
+
+    em.registerComponent(std::make_unique<Sample::Component1>());
+    em.registerComponent(std::make_unique<Sample::Component2>());
+    em.registerComponent(std::make_unique<Sample::Component3>());
+    sm.registerSystem(std::make_unique<Sample::System1>());
+    em.create(Sample::Component1::mask | Sample::Component2::mask);
+    em.create(Sample::Component1::mask | Sample::Component2::mask);
+    sm.processAll();
+    entities = em.getByMask(Sample::Component1::mask
+                            | Sample::Component2::mask);
+    UT_ASSERT(entities.size() == 2);
     for (auto& entity: entities)
     {
       Sample::Component1*   c1;

@@ -23,6 +23,7 @@ namespace ECS
     static void           entityLifeRecyclingSimple();
     static void           entityLifeRecyclingWithComponent();
     static void           systemProcess();
+    static void           systemManager();
 
   public:
     virtual void          registerTests();
