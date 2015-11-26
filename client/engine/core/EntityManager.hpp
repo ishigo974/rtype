@@ -21,7 +21,7 @@ public:
     std::vector<Object *> getByMask(unsigned int mask);
 
     template<class T, class ...Args, typename = std::enable_if<std::is_base_of<Object, T>::value> >
-    T *createEntity(Args... args)
+    T *createEntity(Args ...args)
     {
         _ids += 1;
         _entities[_ids] = std::make_unique<T>(std::ref(_ids), args...);
