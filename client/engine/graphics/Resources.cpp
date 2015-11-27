@@ -5,8 +5,8 @@
 Resources::Resources()
 {
 	this->_textures["MissingTexture"] = sf::Texture();
-	if (! this->_textures["MissingTexture"].loadFromFile("res/MissingTexture.png"))
-		throw std::runtime_error("res/MissingTexture.png not found");
+	if (! this->_textures["MissingTexture"].loadFromFile("../res/MissingTexture.png"))
+		throw std::runtime_error("../res/MissingTexture.png not found");
 	this->_textures["MissingTexture"].setRepeated(true);
 }
 
