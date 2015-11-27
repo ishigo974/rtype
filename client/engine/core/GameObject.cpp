@@ -2,12 +2,13 @@
 // Created by naliwe on 23/11/15.
 //
 
+#include <iostream>
 #include "GameObject.hpp"
 
 GameObject::GameObject()
 { }
 
-GameObject::GameObject(unsigned int _id, std::string const& _name, unsigned int _layer)
+GameObject::GameObject(unsigned int _id, std::string const& _name, int _layer)
         : Object(_id, _name), _layer(_layer)
 { }
 
@@ -44,25 +45,20 @@ bool GameObject::operator!=(GameObject const& other)
     return (!GameObject::operator==(other));
 }
 
-std::string const& GameObject::toString()
+std::string GameObject::toString()
 {
-    if (_toString.empty())
-    {
-        std::stringstream ss;
+    std::stringstream ss;
 
-        ss << "GameObject {"
-        << "\n\tid: " << _id
-        << "\n\tname: " << _name
-        << "\n\tlayer: " << _layer
-        << "\n}" << std::endl;
+    ss << "GameObject {"
+    << "\n\tid: " << _id
+    << "\n\tname: " << _name
+    << "\n\tlayer: " << _layer
+    << "\n}" << std::endl;
 
-        _toString = ss.str();
-    }
-
-    return (_toString);
+    return (ss.str());
 }
 
-unsigned int GameObject::getLayer() const
+int GameObject::getLayer() const
 {
     return _layer;
 }
@@ -72,7 +68,17 @@ void GameObject::setLayer(unsigned int _layer)
     GameObject::_layer = _layer;
 }
 
-void GameObject::swap(GameObject& first, GameObject& second) const
+void GameObject::swap(GameObject& first, GameObject& second)
 {
     std::swap(first._layer, second._layer);
+}
+
+unsigned int GameObject::getMask()
+{
+    return 0;
+}
+
+Transform const* GameObject::getTransform()
+{
+    return (dynamic_cast<Transform *>(_components[0].get()));
 }

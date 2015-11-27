@@ -5,15 +5,20 @@
 #ifndef RTYPE_GAMEOBJECT_HPP_
 # define RTYPE_GAMEOBJECT_HPP_
 
+# include <vector>
+# include <memory>
+#include <algorithm>
 # include "Object.hpp"
+# include "Component.hpp"
+#include "../graphics/SpriteRenderer.hpp"
+#include "Transform.hpp"
 
 class GameObject : public Object
 {
 
 public:
-
     GameObject();
-    GameObject(unsigned int _id, std::string const& _name, unsigned int _layer);
+    GameObject(unsigned int _id, std::string const& _name, int _layer);
 
     GameObject(GameObject const& other);
     GameObject(GameObject&& other);
@@ -24,16 +29,38 @@ public:
     virtual bool operator==(GameObject const& other);
     virtual bool operator!=(GameObject const& other);
 
-    virtual std::string const& toString() override;
+    virtual std::string toString();
 
-    unsigned int getLayer() const;
+    int  getLayer() const;
     void setLayer(unsigned int _layer);
 
-private:
-    void swap(GameObject& first, GameObject& second) const;
+    virtual unsigned int getMask();
+
+    template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
+    T *getComponent() const
+    {
+        auto selected = std::find_if(_components.begin(), _components.end(), [](auto && e)
+        {
+            return (e->getMask() == T::Mask);
+        });
+
+        return ((selected == _components.end()) ? nullptr : dynamic_cast<T *>(selected->get()));
+    };
+
+	template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
+	void addComponent(T comp)
+	{
+		_components.push_back(std::make_unique<T>(comp));
+	}
+
+    Transform const* getTransform();
 
 protected:
-    unsigned int _layer;
+    void swap(GameObject& first, GameObject& second);
+
+protected:
+    int                                      _layer;
+    std::vector<std::unique_ptr<Component> > _components;
 };
 
 
