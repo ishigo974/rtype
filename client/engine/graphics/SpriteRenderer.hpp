@@ -26,7 +26,7 @@ public:
 	const gu::Rect<int>& getRect() const;
 
 protected:
-	const std::string		path;
+	std::string		path;
 	gu::Rect<int>			rect;
 };
 

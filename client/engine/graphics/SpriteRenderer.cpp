@@ -13,7 +13,7 @@ SpriteRenderer::SpriteRenderer(unsigned _id, std::string const& _name,
 {}
 
 SpriteRenderer::SpriteRenderer(SpriteRenderer const& other)
-	: Component(other)
+	: Component(other), path(other.getPath()), rect(other.getRect())
 {}
 
 SpriteRenderer::SpriteRenderer(SpriteRenderer&& other)
