@@ -11,6 +11,9 @@ namespace gu
 		T w;
 		T h;
 
+		Rect(const T& x, const T& y, const T& w, const T& h)
+			: x(x), y(y), w(w), h(h) {}
+
 		bool operator==(const Rect& rhs)
 		{
 			return this->x == rhs.x

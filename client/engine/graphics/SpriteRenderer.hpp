@@ -15,19 +15,19 @@ public:
 	SpriteRenderer(SpriteRenderer&& other);
 
 protected:
-	bool operator==(SpriteRenderer const& other);
-	bool operator!=(SpriteRenderer const& other);
-	SpriteRenderer& operator=(SpriteRenderer other);
-	void swap(SpriteRenderer& lhs, SpriteRenderer& rhs);
-	std::string const& toString() const;
+	bool				operator==(SpriteRenderer const& other);
+	bool				operator!=(SpriteRenderer const& other);
+	SpriteRenderer&		operator=(SpriteRenderer other);
+	void				swap(SpriteRenderer& lhs, SpriteRenderer& rhs);
+	std::string const&	toString() const;
 
 public:
-	const std::string& getPath() const;
-	const gu::Rect<int>& getRect() const;
+	const std::string&		getPath() const;
+	const gu::Rect<int>&	getRect() const;
 
 protected:
 	std::string		path;
-	gu::Rect<int>			rect;
+	gu::Rect<int>	rect;
 };
 
 
