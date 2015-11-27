@@ -10,7 +10,7 @@ std::vector<Object *> EntityManager::getByMask(unsigned int mask)
 
     for (auto &&e : _entities)
     {
-        if (e.second->getMask() == mask)
+        if ((e.second->getMask() & mask) == mask)
             tmp.push_back(e.second.get());
     }
 
