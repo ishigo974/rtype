@@ -13,30 +13,26 @@ public:
     TcpAcceptor(short int port);
     virtual ~TcpAcceptor();
 
-public:
-    virtual ITcpSocket *accept() const;
-
-public:
-    virtual size_t      send(Buffer const *buffer) const;
-    virtual Buffer const *recv() const;
-    virtual void         close() const;
-
-public:
-    virtual std::string toString() const;
-
-public:
-    int       getSocket() const; //DO TO TYPEDEF FOR SOCKET
-    short int getPort() const;
-
-    void setPort(short int port);
-
 private:
     TcpAcceptor(TcpAcceptor const& acceptor) = delete;
     TcpAcceptor& operator=(TcpAcceptor const& acceptor) = delete;
 
+public:
+    virtual ITcpSocket*   accept() const;
+
+public:
+    virtual std::string   toString() const;
+
+public:
+    int           getSocket() const; //DO TO TYPEDEF FOR SOCKET
+    short int     getPort() const;
+
+public:
+    void          setPort(short int port);
+
 private:
-    short int _port;
-    int       _socket; //TODO typedef
+    short int     _port;
+    int           _socket; //TODO typedef
 };
 
 #endif //RTYPE_TCPACCEPTOR_HPP

@@ -5,10 +5,11 @@
 # include <memory>
 # include <unordered_map>
 # include "ComponentMask.hpp"
+# include "IStringable.hpp"
 
 namespace ECS
 {
-  class IComponent
+  class IComponent : public IStringable
   {
   public:
     virtual ~IComponent() {}

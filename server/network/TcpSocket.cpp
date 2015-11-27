@@ -38,14 +38,15 @@ size_t TcpSocket::send(Buffer const* buffer) const
 }
 
 #else
-size_t TcpSocket::send(const Buffer *buffer) const
+size_t        TcpSocket::send(Buffer const& buffer) const
 {
-    ssize_t ret;
+  ssize_t ret;
 
-    if ((ret = ::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT))
-        == -1)
-        ; //TODO throw
-    return (static_cast<size_t>(ret));}
+  if ((ret = ::send(_socket, buffer.data(), buffer.size(), MSG_DONTWAIT))
+      == -1)
+    throw std::runtime_error("send failed");
+  return (ret);
+}
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -55,24 +56,15 @@ Buffer const* TcpSocket::recv() const
 }
 
 #else
-Buffer const *TcpSocket::recv() const
+size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    Buffer  *toRead = new Buffer;
-    ssize_t ret;
-    char    *buff;
+  ssize_t     ret;
+  char*       buff = new char[len];
 
-    buff = new char[256];
-
-    if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
-        return (nullptr);
-    toRead->setData(buff, (uint32_t) ret);
-    std::memset(buff, 0, 256);
-    while ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) != -1)
-    {
-        toRead->append(buff, (uint32_t) ret);
-        std::memset(buff, 0, 256);
-    }
-    return (toRead);
+  if ((ret = ::recv(_socket, buff, len, MSG_DONTWAIT)) == -1)
+    throw std::runtime_error("receive failed");
+  buffer.setData(buff, ret);
+  return ret;
 }
 #endif
 

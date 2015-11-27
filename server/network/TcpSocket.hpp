@@ -17,12 +17,12 @@ public:
     virtual ~TcpSocket();
 
 public:
-    virtual size_t      send(Buffer const *buffer) const;
-    virtual Buffer const *recv() const;
-    virtual void         close() const;
+    virtual size_t        send(Buffer const& buffer) const;
+    virtual size_t        receive(Buffer& buffer, size_t len) const;
+    virtual void          close() const;
 
 public:
-    virtual std::string toString() const;
+    virtual std::string   toString() const;
 
 public:
     int       getSocket() const; //DO TO TYPEDEF FOR SOCKET

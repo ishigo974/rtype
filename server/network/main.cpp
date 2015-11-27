@@ -47,7 +47,7 @@ int main()
                 {
                     std::cout << tmp->getAddr() << std::endl;
                     toto.setData("TU SUCE DES BITES\n", 18);
-                    tmp->send(&toto);
+                    tmp->send(toto);
                     test.registerSocket(tmp);
                 }
             }

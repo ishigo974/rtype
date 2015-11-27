@@ -11,19 +11,20 @@
 
 class Buffer : public IStringable
 {
-public :
+public:
     Buffer();
+    ~Buffer();
 
-    ~Buffer()
-    { }
+public:
+    Buffer(Buffer const& buffer);
+    Buffer& operator=(Buffer const& buffer);
 
 public:
     virtual std::string toString() const;
 
 public:
-
-    void append(char const *data, uint32_t size);
-    void setData(char const *data, uint32_t size);
+    void append(char const *data, size_t size);
+    void setData(char const *data, size_t size);
 
     template<typename T>
     void append(T const& data)
@@ -37,15 +38,12 @@ public:
         _data.assign(data.begin(), data.end());
     }
 
-    void              consume(uint32_t size);
+    void              consume(size_t size);
     bool              empty() const;
     uint8_t const     *data() const;
     std::string const *data();
     size_t            size() const;
-
-private:
-    Buffer(Buffer const& buffer) = delete;
-    Buffer& operator=(Buffer const& buffer) = delete;
+    void              clear();
 
 private:
     std::vector<uint8_t> _data;

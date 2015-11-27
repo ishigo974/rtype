@@ -17,9 +17,9 @@ public:
     { }
 
 public:
-    virtual size_t      send(Buffer const *buffer) const;
-    virtual Buffer const *recv() const;
-    virtual void         close() const;
+    virtual size_t    send(Buffer const& buffer) const;
+    virtual size_t    receive(Buffer& buffer, size_t len) const;
+    virtual void      close() const;
 
 public:
     virtual bool bind() const;

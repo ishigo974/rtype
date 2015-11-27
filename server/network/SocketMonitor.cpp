@@ -32,7 +32,7 @@ SocketMonitor::SocketMonitor()
 SocketMonitor::~SocketMonitor()
 { }
 
-void SocketMonitor::deleteSocket(ITcpSocket *socket)
+void SocketMonitor::deleteSocket(IMonitorable *socket)
 {
     std::vector<std::string>::iterator it;
 
@@ -50,7 +50,7 @@ void SocketMonitor::deleteSocket(ITcpSocket *socket)
     _socketList.erase(it);
 }
 
-void SocketMonitor::registerSocket(ITcpSocket *socket)
+void SocketMonitor::registerSocket(IMonitorable *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
@@ -62,7 +62,7 @@ void SocketMonitor::registerSocket(ITcpSocket *socket)
 		->getAddr());
 }
 
-bool SocketMonitor::isWritable(ITcpSocket *socket)
+bool SocketMonitor::isWritable(IMonitorable *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	return true;
@@ -71,7 +71,7 @@ bool SocketMonitor::isWritable(ITcpSocket *socket)
 #endif
 }
 
-bool SocketMonitor::isReadable(ITcpSocket *socket)
+bool SocketMonitor::isReadable(IMonitorable *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	return true;

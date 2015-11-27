@@ -34,9 +34,9 @@ namespace ECS
   {
     enum SampleMask : ComponentMask
     {
-      COMPMASK_ONE    = 1 << 1,
-      COMPMASK_TWO    = 1 << 2,
-      COMPMASK_THREE  = 1 << 3
+      COMPMASK_ONE    = 1 << 0,
+      COMPMASK_TWO    = 1 << 1,
+      COMPMASK_THREE  = 1 << 2
     };
 
     class Component1 : public IComponent
@@ -54,6 +54,9 @@ namespace ECS
       virtual ComponentMask   getMask() const;
       virtual IComponent*     clone() const;
       virtual void            clear();
+
+    public:
+      virtual std::string     toString() const;
 
     public:
       static const ComponentMask    mask;
@@ -79,6 +82,9 @@ namespace ECS
       virtual void            clear();
 
     public:
+      virtual std::string     toString() const;
+
+    public:
       static const ComponentMask    mask;
 
     protected:
@@ -96,6 +102,9 @@ namespace ECS
       virtual ComponentMask   getMask() const;
       virtual IComponent*     clone() const;
       virtual void            clear();
+
+    public:
+      virtual std::string     toString() const;
 
     public:
       static const ComponentMask    mask;
