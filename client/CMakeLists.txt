@@ -21,6 +21,8 @@ endif ()
 # -------------- #
 
 include_directories(lib)
+include_directories(engine/core)
+include_directories(engine/graphics)
 
 file(GLOB source_files
         engine/core/*.cpp

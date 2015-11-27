@@ -7,9 +7,9 @@
 Transform::Transform() : Component()
 { }
 
-Transform::Transform(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask,
+Transform::Transform(unsigned int _id, std::string const& _name,
                      cu::Position const& pos, cu::Scale scale, cu::Rotation rot)
-        : Component(_id, _name, _mask),
+        : Component(_id, _name),
           _position(pos), _scale(scale), _rotation(rot)
 { }
 

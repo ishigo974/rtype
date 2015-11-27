@@ -11,7 +11,7 @@ class Behaviour : public Component
 {
 public:
     Behaviour();
-    Behaviour(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask);
+    Behaviour(unsigned int _id, std::string const& _name);
     Behaviour(Behaviour const& other);
     Behaviour(Behaviour&& other);
     Behaviour& operator=(Behaviour other);

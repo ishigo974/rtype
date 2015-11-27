@@ -13,7 +13,7 @@ class Transform : public Component
 
 public:
     Transform();
-    Transform(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask,
+    Transform(unsigned int _id, std::string const& _name,
               cu::Position const& pos, cu::Scale scale, cu::Rotation rot);
     Transform(Transform const& other);
     Transform(Transform&& other);

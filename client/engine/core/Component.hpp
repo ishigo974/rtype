@@ -12,7 +12,7 @@ class Component : public Object
 {
 public:
     Component();
-    Component(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask);
+    Component(unsigned int _id, std::string const& _name);
     Component(Component const& other);
     Component(Component&& other);
     virtual Component& operator=(Component other);
@@ -22,15 +22,10 @@ public:
     virtual bool operator!=(Component const& other);
 
     RTypes::my_uint16_t getMask() const;
-    void                setMask(RTypes::my_uint16_t _mask);
 
     virtual std::string toString();
 
-protected:
-    virtual void swap(Component& first, Component& second);
-
-private:
-    RTypes::my_uint16_t _mask;
+    static RTypes::my_uint16_t const Mask = 0;
 };
 
 #endif /* !RTYPE_COMPONENT_HPP_ */

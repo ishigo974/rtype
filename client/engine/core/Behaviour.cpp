@@ -7,8 +7,8 @@
 Behaviour::Behaviour()
 { }
 
-Behaviour::Behaviour(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask)
-        : Component(_id, _name, _mask)
+Behaviour::Behaviour(unsigned int _id, std::string const& _name)
+        : Component(_id, _name)
 { }
 
 Behaviour::Behaviour(Behaviour const& other) : Component(other)

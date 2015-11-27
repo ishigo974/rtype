@@ -5,7 +5,13 @@
 #ifndef RTYPE_GAMEOBJECT_HPP_
 # define RTYPE_GAMEOBJECT_HPP_
 
+# include <vector>
+# include <memory>
+#include <bits/algorithmfwd.h>
 # include "Object.hpp"
+# include "Component.hpp"
+#include "../graphics/SpriteRenderer.hpp"
+#include "Transform.hpp"
 
 class GameObject : public Object
 {
@@ -30,11 +36,25 @@ public:
 
     virtual unsigned int getMask();
 
+    template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
+    T *getComponent() const
+    {
+        auto selected = std::find_if(_components.begin(), _components.end(), [](auto && e)
+        {
+            return (e->getMask() == T::Mask);
+        });
+
+        return ((selected == _components.end()) ? nullptr : dynamic_cast<T *>(selected->get()));
+    };
+
+    Transform const* getTransform();
+
 protected:
     void swap(GameObject& first, GameObject& second);
 
 protected:
-    int _layer;
+    int                                      _layer;
+    std::vector<std::unique_ptr<Component> > _components;
 };
 
 

@@ -7,14 +7,12 @@
 Component::Component()
 { }
 
-Component::Component(unsigned int _id, std::string const& _name, RTypes::my_uint16_t _mask)
-        : Object(_id, _name), _mask(_mask)
+Component::Component(unsigned int _id, std::string const& _name)
+        : Object(_id, _name)
 { }
 
 Component::Component(Component const& other) : Object(other)
-{
-    _mask = other.getMask();
-}
+{ }
 
 Component::Component(Component&& other) : Component(other)
 {
@@ -34,7 +32,7 @@ Component::~Component()
 bool Component::operator==(Component const& other)
 {
     return (Object::operator==(other) &&
-            _mask == other.getMask());
+            Mask == other.getMask());
 }
 
 bool Component::operator!=(Component const& other)
@@ -42,19 +40,9 @@ bool Component::operator!=(Component const& other)
     return (!Component::operator==(other));
 }
 
-void Component::swap(Component& first, Component& second)
-{
-    std::swap(first._mask, second._mask);
-}
-
 RTypes::my_uint16_t Component::getMask() const
 {
-    return _mask;
-}
-
-void Component::setMask(RTypes::my_uint16_t _mask)
-{
-    Component::_mask = _mask;
+    return Mask;
 }
 
 std::string Component::toString()
@@ -64,7 +52,7 @@ std::string Component::toString()
     ss << "Component {"
     << "\n\tid: " << _id
     << "\n\tname: " << _name
-    << "\n\tmask: " << _mask
+    << "\n\tmask: " << Mask
     << "\n}" << std::endl;
 
     return (ss.str());

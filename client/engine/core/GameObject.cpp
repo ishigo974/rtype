@@ -77,3 +77,8 @@ unsigned int GameObject::getMask()
 {
     return 0;
 }
+
+Transform const* GameObject::getTransform()
+{
+    return (dynamic_cast<Transform *>(_components[0].get()));
+}
