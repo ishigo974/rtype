@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include "Component.hpp"
 
 Component::Component()

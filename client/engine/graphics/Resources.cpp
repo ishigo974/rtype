@@ -23,6 +23,12 @@ const	sf::Texture &Resources::getTexture(const std::string & path) const
 	}
 }
 
+const sf::Texture& Resources::operator[](const std::string & path) const
+{
+	return this->getTexture(path);
+}
+
+
 bool	Resources::addTexture(const std::string & path, bool repeated)
 {
 	this->_textures[path] = sf::Texture();

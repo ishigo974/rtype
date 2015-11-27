@@ -1,7 +1,3 @@
-//
-// Created by naliwe on 23/11/15.
-//
-
 #ifndef RTYPE_GAMEOBJECT_HPP_
 # define RTYPE_GAMEOBJECT_HPP_
 

@@ -3,6 +3,7 @@
 
 # include <SFML/Graphics.hpp>
 # include "Resources.hpp"
+# include "GameObject.hpp"
 
 class Renderer
 {
@@ -14,6 +15,10 @@ public:
 
 public:
 	void		init();
+
+public:// To be honest, I don't know yet if it will stay public
+	void	render();
+	void	draw(const GameObject &);
 
 private:
 	sf::RenderWindow	_win;

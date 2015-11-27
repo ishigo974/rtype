@@ -14,6 +14,7 @@ public:
 
 public:
 	const sf::Texture & getTexture(const std::string &) const;
+	const sf::Texture & operator[](const std::string &) const;
 	bool addTexture(const std::string & path, bool repeated = false);
 
 private:
