@@ -2,16 +2,24 @@
 // Created by Denis Le Borgne on 21/11/2015.
 //
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
+#include <netdb.h>
+#endif
 #include <cstring>
 #include <iostream>
-#include <netdb.h>
 #include <sstream>
 #include "TcpSocket.hpp"
 
 TcpSocket::TcpSocket(std::string const& addr, short int port)
 {
-    _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
-    _port   = port;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
+	_socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
+#endif
+	_port   = port;
     _addr   = addr;
 }
 
@@ -23,15 +31,30 @@ TcpSocket::TcpSocket(int socket, std::string const& addr, short int port)
     _addr   = addr;
 }
 
-ssize_t TcpSocket::send(const Buffer *buffer) const
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+size_t TcpSocket::send(Buffer const* buffer) const
+{
+	return 0;
+}
+
+#else
+size_t TcpSocket::send(const Buffer *buffer) const
 {
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
 }
+#endif
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+Buffer const* TcpSocket::recv() const
+{
+	return nullptr;
+}
+
+#else
 Buffer const *TcpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
-    ssize_t ret;
+    size_t ret;
     char    *buff;
 
     buff = new char[256];
@@ -47,10 +70,15 @@ Buffer const *TcpSocket::recv() const
     }
     return (toRead);
 }
+#endif
 
 void TcpSocket::close() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
     ::close(_socket);
+#endif
 }
 
 short int TcpSocket::getPort() const
@@ -77,18 +105,6 @@ void TcpSocket::setPort(short int port)
 void TcpSocket::setAddr(const std::string& addr)
 {
     _addr = addr;
-}
-
-void TcpSocket::registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const
-{
-    FD_SET(_socket, fdSet);
-    if ((unsigned int) _socket > *maxFd)
-        *maxFd = (unsigned int) _socket;
-}
-
-void TcpSocket::deleteFromMonitor(fd_set *fdSet) const
-{
-    FD_CLR(_socket, fdSet);
 }
 
 std::string TcpSocket::toString() const

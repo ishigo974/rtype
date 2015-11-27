@@ -17,13 +17,9 @@ public:
     virtual ~TcpSocket();
 
 public:
-    virtual ssize_t      send(Buffer const *buffer) const;
+    virtual size_t      send(Buffer const *buffer) const;
     virtual Buffer const *recv() const;
     virtual void         close() const;
-
-public:
-    virtual void registerToMonitor(fd_set *fdSet, unsigned int *maxFd) const;
-    virtual void deleteFromMonitor(fd_set *fdSet) const;
 
 public:
     virtual std::string toString() const;

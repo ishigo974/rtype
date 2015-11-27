@@ -2,20 +2,39 @@
 // Created by Denis Le Borgne on 21/11/2015.
 //
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
+#include <netdb.h>
+#endif
 #include <cstring>
 #include <iostream>
-#include <netdb.h>
 #include <sstream>
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port)
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
+#else
     _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("UDP")->p_proto);
-    _port   = port;
+#endif
+	_port   = port;
 }
 
-ssize_t UdpSocket::send(const Buffer *buffer) const
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+size_t UdpSocket::send(Buffer const* buffer) const
+{
+	return 0;
+}
+
+Buffer const* UdpSocket::recv() const
+{
+	return nullptr;
+}
+
+#else
+size_t UdpSocket::send(const Buffer *buffer) const
 {
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
 }
@@ -23,7 +42,7 @@ ssize_t UdpSocket::send(const Buffer *buffer) const
 Buffer const *UdpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
-    ssize_t ret;
+    size_t ret;
     char    *buff   = new char[256];
 
     if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
@@ -37,14 +56,22 @@ Buffer const *UdpSocket::recv() const
     }
     return (toRead);
 }
+#endif
 
 void UdpSocket::close() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
     ::close(_socket);
+#endif
 }
 
 bool UdpSocket::bind() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	return true;
+#else
     struct sockaddr_in addr;
 
     addr.sin_family      = AF_INET;
@@ -53,6 +80,7 @@ bool UdpSocket::bind() const
 
     return (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
                    sizeof(addr)) >= 0);
+#endif
 }
 
 short int UdpSocket::getPort() const

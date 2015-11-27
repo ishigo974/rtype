@@ -36,9 +36,13 @@ private:
 
 private:
     std::vector<std::string> _socketList;
-    fd_set                   _readFds;
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
+#else
+	fd_set                   _readFds;
     fd_set                   _writeFds;
-    int                      _secValue;
+#endif
+	int                      _secValue;
     int                      _usecValue;
     unsigned int             _maxFd; //TODO typedef
     static int               defaultSecVal;
