@@ -6,9 +6,12 @@
 #define RTYPE_BEHAVIOUR_HPP
 
 # include "Component.hpp"
+# include "RTypes.hpp"
 
 class Behaviour : public Component
 {
+public:
+    static const unsigned int Mask = 3;
 public:
     Behaviour();
     Behaviour(unsigned int _id, std::string const& _name);
@@ -25,6 +28,8 @@ public:
     bool isEnabled() const;
     void setEnabled(bool _enabled);
 
+
+    virtual RTypes::my_uint16_t getMask() const;
 protected:
     void swap(Behaviour& first, Behaviour& second);
 

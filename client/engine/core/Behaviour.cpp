@@ -59,5 +59,10 @@ void Behaviour::setEnabled(bool _enabled)
 void Behaviour::update()
 {
     if (!_enabled)
-        return ;
+        return;
+}
+
+RTypes::my_uint16_t Behaviour::getMask() const
+{
+    return Mask;
 }
