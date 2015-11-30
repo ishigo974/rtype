@@ -197,6 +197,9 @@ namespace ECS
 
     void            Component1::clear() {}
 
+    std::string     Component1::toString() const
+    { return "Component1 {" + _data + "}\n"; }
+
     /* Component2 */
     const ComponentMask   Component2::mask = Sample::COMPMASK_TWO;
 
@@ -220,6 +223,9 @@ namespace ECS
 
     void            Component2::clear() {}
 
+    std::string     Component2::toString() const
+    { return "Component2 {" + _data + "}\n"; }
+
     /* Component3 */
     const ComponentMask   Component3::mask = Sample::COMPMASK_THREE;
 
@@ -236,6 +242,9 @@ namespace ECS
     { return new Component3(); }
 
     void            Component3::clear() {}
+
+    std::string     Component3::toString() const
+    { return "Component3 {}\n"; }
 
     /* System1 */
     System1::System1() {}

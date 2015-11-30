@@ -3,15 +3,15 @@
 //
 
 #ifndef RTYPE_ITCPACCEPTOR_HPP
-#define RTYPE_ITCPACCEPTOR_HPP
+# define RTYPE_ITCPACCEPTOR_HPP
 
-#include "ITcpSocket.hpp"
+# include "ITcpSocket.hpp"
+# include "IMonitorable.hpp"
 
-class ITcpAcceptor : public ITcpSocket
+class ITcpAcceptor : public IMonitorable
 {
 public:
-    virtual ~ITcpAcceptor()
-    { }
+    virtual ~ITcpAcceptor() {}
 
 public:
     virtual ITcpSocket *accept() const = 0;

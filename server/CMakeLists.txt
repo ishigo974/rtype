@@ -22,6 +22,8 @@ include_directories(network)
 include_directories(ecs)
 include_directories(exceptions)
 include_directories(base_ut)
+include_directories(components)
+include_directories(classes)
 include_directories(unit_tests)
 
 file(GLOB source_files
@@ -37,6 +39,10 @@ file(GLOB ut_source_files
         main_ut.cpp
         ecs/*.hpp
       	ecs/*.cpp
+        classes/*.hpp
+        classes/*.cpp
+        components/*.hpp
+        components/*.cpp
       	exceptions/*.hpp
       	exceptions/*.cpp
       	base_ut/*.hpp

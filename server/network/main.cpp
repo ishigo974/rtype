@@ -14,18 +14,17 @@ int main()
 {
     Buffer toto;
 
-   // std::cout << (int) toto.empty() << std::endl;
-    toto.setData(std::string("LABITE"));
-   // std::cout << (int) toto.empty() << std::endl;
-   // std::cout << toto.data()->c_str() << std::endl;
-    toto.consume(2);
-    //std::cout << toto.data()->c_str() << std::endl;
-   // std::cout << (int) toto.empty() << std::endl;
+    toto.setData(42);
+    std::cout << (int) toto.empty() << std::endl;
+    std::cout << toto.data()->c_str() << std::endl;
+    toto.consume(toto.size());
+    std::cout << toto.data()->c_str() << std::endl;
+    std::cout << (int) toto.empty() << std::endl;
     toto.append(" TAMERE", 8);
-  //  std::cout << toto.data()->c_str() << std::endl;
+    std::cout << toto.data()->c_str() << std::endl;
     toto.consume(42);
- //   std::cout << toto.data()->c_str() << std::endl;
- //   std::cout << (int) toto.empty() << std::endl;
+    std::cout << toto.data()->c_str() << std::endl;
+    std::cout << (int) toto.empty() << std::endl;
     TcpAcceptor tcpsock(2121);
     TcpSocket   *tmp;
 
@@ -47,7 +46,7 @@ int main()
                 {
                     std::cout << tmp->getAddr() << std::endl;
                     toto.setData("TU SUCE DES BITES\n", 18);
-                    tmp->send(&toto);
+                    tmp->send(toto);
                     test.registerSocket(tmp);
                 }
             }

@@ -16,10 +16,10 @@ public:
     SocketMonitor();
 
 public:
-    virtual void registerSocket(ITcpSocket *socket);
-    virtual void deleteSocket(ITcpSocket *socket);
-    virtual bool isReadable(ITcpSocket *socket);
-    virtual bool isWritable(ITcpSocket *socket);
+    virtual void registerSocket(IMonitorable *socket);
+    virtual void deleteSocket(IMonitorable *socket);
+    virtual bool isReadable(IMonitorable *socket);
+    virtual bool isWritable(IMonitorable *socket);
     virtual void clearFds();
     virtual int  update();
 

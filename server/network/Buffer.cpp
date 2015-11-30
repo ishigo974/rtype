@@ -9,7 +9,23 @@
 Buffer::Buffer()
 { }
 
-void Buffer::consume(uint32_t size)
+Buffer::~Buffer()
+{ }
+
+Buffer::Buffer(Buffer const& other) : _data(other._data)
+{
+}
+
+Buffer& Buffer::operator=(Buffer const& other)
+{
+    if (this != &other)
+    {
+        _data = other._data;
+    }
+    return *this;
+}
+
+void Buffer::consume(size_t size)
 {
     if (size > _data.size())
     {
@@ -24,14 +40,17 @@ bool Buffer::empty() const
     return (_data.empty());
 }
 
-void Buffer::append(char const *data, uint32_t size)
+void Buffer::append(char const *data, size_t size)
 {
     std::string tmp(data, size);
 
-    _data.insert(_data.end(), tmp.begin(), tmp.end());
+    if (_data.empty())
+        setData(data, size);
+    else
+        _data.insert(_data.end(), tmp.begin(), tmp.end());
 }
 
-void Buffer::setData(char const *data, uint32_t size)
+void Buffer::setData(char const *data, size_t size)
 {
     std::string tmp(data, size);
 
@@ -51,6 +70,11 @@ std::string const *Buffer::data()
 size_t Buffer::size() const
 {
     return (_data.size());
+}
+
+void    Buffer::clear()
+{
+    _data.clear();
 }
 
 std::string Buffer::toString() const

@@ -34,8 +34,8 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
 #else
     _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
 #endif
-    _port   = port;
-    _addr   = addr;
+    _port = port;
+    _addr = addr;
 }
 
 TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
@@ -53,15 +53,14 @@ size_t TcpSocket::send(Buffer const* buffer) const
 
 #else
 
-size_t TcpSocket::send(const Buffer *buffer) const
+size_t        TcpSocket::send(Buffer const& buffer) const
 {
     ssize_t ret;
 
-    if ((ret = ::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT))
+    if ((ret = ::send(_socket, buffer.data(), buffer.size(), MSG_DONTWAIT))
         == -1)
-    { ;//TODO throw
-    }
-    return (static_cast<size_t>(ret));
+        throw std::runtime_error("send failed");
+    return (ret);
 }
 
 #endif
@@ -74,24 +73,15 @@ Buffer const* TcpSocket::recv() const
 
 #else
 
-Buffer const *TcpSocket::recv() const
+size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    Buffer  *toRead = new Buffer;
     ssize_t ret;
-    char    *buff;
+    char *buff = new char[len];
 
-    buff = new char[256];
-
-    if ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) == -1)
-        return (nullptr);
-    toRead->setData(buff, (uint32_t) ret);
-    std::memset(buff, 0, 256);
-    while ((ret = ::recv(_socket, buff, 256, MSG_DONTWAIT)) != -1)
-    {
-        toRead->append(buff, (uint32_t) ret);
-        std::memset(buff, 0, 256);
-    }
-    return (toRead);
+    if ((ret = ::recv(_socket, buff, len, MSG_DONTWAIT)) == -1)
+        throw std::runtime_error("receive failed");
+    buffer.setData(buff, ret);
+    return ret;
 }
 
 #endif
