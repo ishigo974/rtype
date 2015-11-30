@@ -1,10 +1,6 @@
-//
-// Created by Denis Le Borgne on 23/11/2015.
-//
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
 #endif
+
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -12,99 +8,100 @@
 #include "SocketMonitor.hpp"
 #include "TcpSocket.hpp"
 
-int SocketMonitor::defaultSecVal  = 5;
-int SocketMonitor::defaultUsecVal = 0;
+/*
+** Static variables
+*/
+const time_t        SocketMonitor::defaultSecVal  = 5;
+const suseconds_t   SocketMonitor::defaultUsecVal = 0;
 
-SocketMonitor::SocketMonitor()
+/*
+** Constructor/Destructor
+*/
+SocketMonitor::SocketMonitor() :
+    _secValue(defaultSecVal), _usecValue(defaultUsecVal), _maxFd(0)
 {
-    _secValue  = SocketMonitor::defaultSecVal;
-    _usecValue = SocketMonitor::defaultUsecVal;
-	_maxFd = 0;
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
-#else
-	FD_ZERO(&_writeFds);
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #else
+    FD_ZERO(&_writeFds);
     FD_ZERO(&_readFds);
-#endif
+    FD_ZERO(&_tmpReadFds);
+    FD_ZERO(&_tmpWriteFds);
+    #endif
 }
 
 SocketMonitor::~SocketMonitor()
-{ }
-
-void SocketMonitor::deleteSocket(IMonitorable *socket)
 {
-    std::vector<std::string>::iterator it;
-
-    it = _socketList.begin();
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
-#else
-	FD_CLR(socket->getSocket(), &_readFds);
-	FD_CLR(socket->getSocket(), &_writeFds);
-#endif
-	if ((it = std::find(_socketList.begin(), _socketList.end(),
-                        static_cast<TcpSocket *>(socket)->getAddr()))
-        == _socketList.end())
-        return;
-    _socketList.erase(it);
 }
 
-void SocketMonitor::registerSocket(IMonitorable *socket)
+/*
+** Public member functions
+*/
+void SocketMonitor::registerSocket(IMonitorable const* socket)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #else
+    FD_SET(socket->getSocket(), &_readFds);
+    FD_SET(socket->getSocket(), &_writeFds);
+    #endif
 
-#else
-	FD_SET(socket->getSocket(), &_readFds);
-	FD_SET(socket->getSocket(), &_readFds);
-#endif
-	_socketList.insert(_socketList.end(), static_cast<TcpSocket *>(socket)
-		->getAddr());
+    if (socket->getSocket() > _maxFd)
+    _maxFd = socket->getSocket();
 }
 
-bool SocketMonitor::isWritable(IMonitorable *socket)
+void SocketMonitor::deleteSocket(IMonitorable const* socket)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	return true;
-#else
-    return FD_ISSET(socket->getSocket(), &_writeFds) > 0;
-#endif
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #else
+    FD_CLR(socket->getSocket(), &_readFds);
+    FD_CLR(socket->getSocket(), &_writeFds);
+    #endif
+
+    if (socket->getSocket() == _maxFd)
+    --_maxFd;
 }
 
-bool SocketMonitor::isReadable(IMonitorable *socket)
+bool SocketMonitor::isWritable(IMonitorable const* socket)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	return true;
-#else
-    return FD_ISSET(socket->getSocket(), &_readFds) > 0;
-#endif
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    return true;
+    #else
+    return FD_ISSET(socket->getSocket(), &_tmpWriteFds) != 0;
+    #endif
+}
+
+bool SocketMonitor::isReadable(IMonitorable const* socket)
+{
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    return true;
+    #else
+    return FD_ISSET(socket->getSocket(), &_tmpReadFds) != 0;
+    #endif
 }
 
 void SocketMonitor::clearFds()
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
-#else
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #else
     FD_ZERO(&_writeFds);
     FD_ZERO(&_readFds);
-#endif
-    _socketList.erase(_socketList.begin(), _socketList.end());
-    _maxFd = 0;
+    FD_ZERO(&_tmpReadFds);
+    FD_ZERO(&_tmpWriteFds);
+    #endif
 }
 
-int SocketMonitor::update()
+void SocketMonitor::update()
 {
+    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    #else
+    struct timeval tv;
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	return 0;
-#else
-	struct timeval tv;
-
-	tv.tv_sec = _secValue;
-	tv.tv_usec = _usecValue;
-
-    return ::select(_maxFd + 1, &_readFds, NULL, NULL, &tv);
-#endif
+    tv.tv_sec = _secValue;
+    tv.tv_usec = _usecValue;
+    _tmpReadFds = _readFds;
+    _tmpWriteFds = _writeFds;
+    if (select(_maxFd + 1, &_tmpReadFds, &_tmpWriteFds, NULL, &tv) == -1)
+    throw std::runtime_error("select failed");
+    #endif
 }
 
 void SocketMonitor::setSec(int value)
@@ -121,14 +118,10 @@ std::string SocketMonitor::toString() const
 {
     std::ostringstream ss;
 
-    ss << "SocketMonitor {"
-    << "\n\tFD Max " << this->_maxFd
-    << "\n\tTimeout Second " << this->_secValue
-    << "\n\tTimeout uSecond " << this->_usecValue
-    << "\n\tSocket Addr List [";
-    for (auto&& e : _socketList)
-        ss << "(" << e.data() << ") ";
-    ss << "]\n}" << std::endl;
-
+    ss  << "SocketMonitor {"
+    << "\n\t_fdMax: " << _maxFd
+    << "\n\t_secValue " << _secValue
+    << "\n\t_usecValue " << _usecValue
+    << std::endl;
     return ss.str();
 }

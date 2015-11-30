@@ -10,52 +10,52 @@
 
 namespace ECS
 {
-  class EntityManager
-  {
-  public:
-    typedef std::unique_ptr<EntityManager>        UniqueEmPtr;
-    typedef std::unique_ptr<Entity>               UniqueEntityPtr;
-    typedef std::unique_ptr<IComponent>           UniqueCompPtr;
-    typedef std::unordered_map<unsigned int,
-                               UniqueEntityPtr>   EntityMap;
+    class EntityManager
+    {
+    public:
+        typedef std::unique_ptr<EntityManager>        UniqueEmPtr;
+        typedef std::unique_ptr<Entity>               UniqueEntityPtr;
+        typedef std::unique_ptr<IComponent>           UniqueCompPtr;
+        typedef std::unordered_map<unsigned int,
+                                    UniqueEntityPtr>   EntityMap;
 
-  protected:
-    EntityManager();
+    protected:
+        EntityManager();
 
-  public:
-    virtual ~EntityManager();
+    public:
+        virtual ~EntityManager();
 
-  private:
-    EntityManager(EntityManager const& other) = delete;
-    EntityManager&              operator=(EntityManager const& other) = delete;
+    private:
+        EntityManager(EntityManager const& other) = delete;
+        EntityManager&          operator=(EntityManager const& other) = delete;
 
-  public:
-    static EntityManager&       getInstance();
+    public:
+        static EntityManager&   getInstance();
 
-  public:
-    Entity&                     create(ComponentMask mask = 0);
-    bool                        destroy(unsigned int id);
-    bool                        destroy(Entity const& entity);
-    Entity&                     get(unsigned int id) const;
-    EntityCollection            getByMask(ComponentMask mask) const;
-    void                        clean();
+    public:
+        Entity&                 create(ComponentMask mask = 0);
+        bool                    destroy(unsigned int id);
+        bool                    destroy(Entity const& entity);
+        Entity&                 get(unsigned int id) const;
+        EntityCollection        getByMask(ComponentMask mask) const;
+        void                    clean();
 
-  public:
-    void      registerComponent(UniqueCompPtr component);
-    bool      removeComponent(ComponentMask mask);
+    public:
+        void        registerComponent(UniqueCompPtr component);
+        bool        removeComponent(ComponentMask mask);
 
-  public:
-    virtual std::string         toString() const;
+    public:
+        virtual std::string         toString() const;
 
-  protected:
-    unsigned int                _nextId;
-    EntityMap                   _actives;
-    EntityMap                   _inactives;
-    ComponentMap                _components;
+    protected:
+        unsigned int                _nextId;
+        EntityMap                   _actives;
+        EntityMap                   _inactives;
+        ComponentMap                _components;
 
-  protected:
-    static UniqueEmPtr          instance;
-  };
+    protected:
+        static UniqueEmPtr          instance;
+    };
 }
 
 #endif /* !ENTITYMANAGER_HPP_ */
