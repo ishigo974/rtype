@@ -28,13 +28,14 @@ public:
     template<typename T>
     void append(T const& data)
     {
-        _data.insert(_data.end(), data.begin(), data.end());
+        _data.insert(_data.end(), sizeof(data), data);
     }
 
     template<typename T>
     void setData(T const& data)
     {
-        _data.assign(data.begin(), data.end());
+        _data.erase(_data.begin(), _data.end());
+        _data.insert(data.end(), sizeof(data), data);
     }
 
     void              consume(uint32_t size);

@@ -1,12 +1,17 @@
 //
 // Created by Denis Le Borgne on 23/11/2015.
 //
+
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
 #else
+
 #include <arpa/inet.h>
 #include <netdb.h>
+
 #endif
+
 #include <iostream>
 #include <sstream>
 #include "TcpAcceptor.hpp"
@@ -15,7 +20,7 @@
 TcpAcceptor::TcpAcceptor(short int port)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	(void)port;
+    (void)port;
 #else
     struct sockaddr_in server;
 
@@ -51,11 +56,20 @@ TcpAcceptor::~TcpAcceptor()
 ITcpSocket *TcpAcceptor::accept() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	return nullptr;
+    rSocket socket;
+    struct sockaddr addr;
+    int socklen;
+
+    socklen = sizeof(addr);
+    if ((socket = accept(_socket, &addr, &socklen)) == INVALID_SOCKET)
+        return (nullptr);
+    TcpSocket* ret - new TcpSocket(socket, (struct in_addr *)inet_ntoa(addr),
+     _port);
+    return ret;
 #else
 
     struct sockaddr_in client;
-    int                socket; //TODO typedef
+    rSocket            socket;
     unsigned int       struct_len;
 
     struct_len  = sizeof(client);
@@ -74,7 +88,7 @@ ITcpSocket *TcpAcceptor::accept() const
 size_t TcpAcceptor::send(const Buffer *buffer) const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-	return 0;
+    return 0;
 #else
     return (::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT));
 #endif
@@ -83,10 +97,11 @@ size_t TcpAcceptor::send(const Buffer *buffer) const
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 Buffer const* TcpAcceptor::recv() const
 {
-	return nullptr;
+    return nullptr;
 }
 
 #else
+
 Buffer const *TcpAcceptor::recv() const
 {
     Buffer  *toRead = new Buffer;
@@ -106,12 +121,13 @@ Buffer const *TcpAcceptor::recv() const
     }
     return (toRead);
 }
+
 #endif
 
 void TcpAcceptor::close() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
+    closesocket(_socket);
 #else
     ::close(_socket);
 #endif
@@ -122,8 +138,7 @@ short int TcpAcceptor::getPort() const
     return (this->_port);
 }
 
-//TODO typedef
-int TcpAcceptor::getSocket() const
+rSocket TcpAcceptor::getSocket() const
 {
     return (this->_socket);
 }

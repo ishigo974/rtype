@@ -12,12 +12,12 @@ class TcpSocket : public ITcpSocket
 {
 public:
     TcpSocket(std::string const& addr, short int port);
-    TcpSocket(int socket, std::string const& addr,
-              short int port); //TODO typedef
+    TcpSocket(rSocket socket, std::string const& addr,
+              short int port);
     virtual ~TcpSocket();
 
 public:
-    virtual size_t      send(Buffer const *buffer) const;
+    virtual size_t       send(Buffer const *buffer) const;
     virtual Buffer const *recv() const;
     virtual void         close() const;
 
@@ -25,7 +25,7 @@ public:
     virtual std::string toString() const;
 
 public:
-    int       getSocket() const; //DO TO TYPEDEF FOR SOCKET
+    rSocket   getSocket() const;
     short int getPort() const;
     std::string const& getAddr() const;
 
@@ -39,7 +39,7 @@ private:
 private:
     short int   _port;
     std::string _addr;
-    int         _socket;
+    rSocket     _socket;
 };
 
 #endif //RTYPE_TCPSOCKET_HPP

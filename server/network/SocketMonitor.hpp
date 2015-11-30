@@ -39,14 +39,14 @@ private:
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
 #else
-	fd_set                   _readFds;
-    fd_set                   _writeFds;
+    fd_set _readFds;
+    fd_set _writeFds;
 #endif
-	int                      _secValue;
-    int                      _usecValue;
-    unsigned int             _maxFd; //TODO typedef
-    static int               defaultSecVal;
-    static int               defaultUsecVal;
+    int        _secValue;
+    int        _usecValue;
+    rSocket    _maxFd;
+    static int defaultSecVal;
+    static int defaultUsecVal;
 };
 
 

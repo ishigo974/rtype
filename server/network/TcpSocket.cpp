@@ -3,10 +3,15 @@
 //
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #else
+
 #include <netdb.h>
+
 #endif
+
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -15,16 +20,25 @@
 TcpSocket::TcpSocket(std::string const& addr, short int port)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    WSADATA wsaData;
 
+    if (WSAStartup(MAKEWORD(2, 2);, &wsaData) != 0)
+    { ; //TODO throw
+    }
+    if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+    {
+        WSACleanup();
+        //TODO throw
+    }
+    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 #else
-	_socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
+    _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
 #endif
-	_port   = port;
+    _port   = port;
     _addr   = addr;
 }
 
-TcpSocket::TcpSocket(int socket, std::string const& addr, short int port)
-//TODO typedef
+TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
 {
     _socket = socket;
     _port   = port;
@@ -34,27 +48,32 @@ TcpSocket::TcpSocket(int socket, std::string const& addr, short int port)
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 size_t TcpSocket::send(Buffer const* buffer) const
 {
-	return 0;
+    return 0;
 }
 
 #else
+
 size_t TcpSocket::send(const Buffer *buffer) const
 {
     ssize_t ret;
 
     if ((ret = ::send(_socket, buffer->data(), buffer->size(), MSG_DONTWAIT))
         == -1)
-        ; //TODO throw
-    return (static_cast<size_t>(ret));}
+    { ;//TODO throw
+    }
+    return (static_cast<size_t>(ret));
+}
+
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 Buffer const* TcpSocket::recv() const
 {
-	return nullptr;
+    return nullptr;
 }
 
 #else
+
 Buffer const *TcpSocket::recv() const
 {
     Buffer  *toRead = new Buffer;
@@ -74,12 +93,13 @@ Buffer const *TcpSocket::recv() const
     }
     return (toRead);
 }
+
 #endif
 
 void TcpSocket::close() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
+    closesocket(_socket);
 #else
     ::close(_socket);
 #endif
@@ -90,8 +110,7 @@ short int TcpSocket::getPort() const
     return (this->_port);
 }
 
-//TODO typedef
-int TcpSocket::getSocket() const
+rSocket TcpSocket::getSocket() const
 {
     return (this->_socket);
 }
@@ -126,5 +145,8 @@ std::string TcpSocket::toString() const
 
 TcpSocket::~TcpSocket()
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    WSACleanup();
+#endif
     this->close();
 }
