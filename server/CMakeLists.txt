@@ -27,13 +27,17 @@ include_directories(classes)
 include_directories(unit_tests)
 
 file(GLOB source_files
-	  main.cpp
+        main.cpp
+        ecs/*.hpp
+      	ecs/*.cpp
         network/*.hpp
         network/*.cpp
-        ecs/*.hpp
-	      ecs/*.cpp
-	      exceptions/*.hpp
-	      exceptions/*.cpp
+        classes/*.hpp
+        classes/*.cpp
+        components/*.hpp
+        components/*.cpp
+      	exceptions/*.hpp
+      	exceptions/*.cpp
       )
 
 file(GLOB ut_source_files

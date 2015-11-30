@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Server.hpp"
 #include "Entity.hpp"
 #include "EntityManager.hpp"
@@ -34,12 +35,19 @@ namespace RType
   */
   void          Server::run()
   {
+    display("Server is now running on port " +
+            std::to_string(_acceptor.getPort()) + ")");
     while (!_quit)
     {
       _monitor.update();
       if (_monitor.isReadable(&_acceptor))
         onClientConnection();
     }
+  }
+
+  std::string   Server::toString() const
+  {
+    return std::to_string(_acceptor.getPort()); // TODO
   }
 
   /*
@@ -53,5 +61,15 @@ namespace RType
 
     entity.getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP)
           ->setSocket(std::unique_ptr<ITcpSocket>(socket));
+    display("New connection from " + socket->getAddr() + " " +
+            std::to_string(socket->getPort()));
+  }
+
+  /*
+  ** Static functions
+  */
+  void          Server::display(std::string const& msg)
+  {
+    std::cout << "| " << msg << std::endl;
   }
 }

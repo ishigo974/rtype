@@ -33,7 +33,7 @@ TcpAcceptor::TcpAcceptor(short int port)
             ->p_proto)) == -1)
         //TODO throw exception
         std::cerr << "Can' listen" << std::endl;
-    if (::bind(_socket, (const struct sockaddr *) (&server),
+    if (::bind(_socket, reinterpret_cast<const struct sockaddr *>(&server),
                sizeof(server)) == -1)
         //TODO throw exception;
         std::cout << "Can't bind port" << std::endl;
@@ -63,8 +63,8 @@ ITcpSocket *TcpAcceptor::accept() const
     socklen = sizeof(addr);
     if ((socket = accept(_socket, &addr, &socklen)) == INVALID_SOCKET)
         return (nullptr);
-    TcpSocket* ret - new TcpSocket(socket, (struct in_addr *)inet_ntoa(addr),
-     _port);
+    TcpSocket* ret = new TcpSocket(socket, reinterpret_cast<struct in_addr *>(inet_ntoa(addr)),
+                                   _port);
     return ret;
 #else
 

@@ -1,62 +1,21 @@
-#include <string>
 #include <iostream>
-#include "Buffer.hpp"
-#include "UdpSocket.hpp"
-#include "TcpAcceptor.hpp"
-#include "TcpSocket.hpp"
-#include "SocketMonitor.hpp"
+#include "Server.hpp"
 
-/*
- * TODO Patch Select
- */
-
-int main()
+int   main(int ac, char **av)
 {
-    Buffer toto;
+  short int   port = RType::Server::defaultPort;
 
-    toto.setData(42);
-    std::cout << (int) toto.empty() << std::endl;
-    std::cout << toto.data()->c_str() << std::endl;
-    toto.consume(toto.size());
-    std::cout << toto.data()->c_str() << std::endl;
-    std::cout << (int) toto.empty() << std::endl;
-    toto.append(" TAMERE", 8);
-    std::cout << toto.data()->c_str() << std::endl;
-    toto.consume(42);
-    std::cout << toto.data()->c_str() << std::endl;
-    std::cout << (int) toto.empty() << std::endl;
-    TcpAcceptor tcpsock(2121);
-    TcpSocket   *tmp;
+  if (ac > 1)
+    port = std::stoi(std::string(av[1]));
 
-    SocketMonitor test;
+  try {
+    RType::Server   server(port);
 
-    test.registerSocket(&tcpsock);
-    int retval;
-    while ((retval = test.update()) >= 0 && errno != EINTR)
-    {
-        std::cout << "Retval : " << retval << std::endl;
-        if (retval == 0)
-            std::cerr << "Timeout" << std::endl;
-        else if (retval > 0)
-        {
-            if (test.isReadable(&tcpsock))
-            {
-                tmp = static_cast<TcpSocket *>(tcpsock.accept());
-                if (tmp != nullptr)
-                {
-                    std::cout << tmp->getAddr() << std::endl;
-                    toto.setData("TU SUCE DES BITES\n", 18);
-                    tmp->send(toto);
-                    test.registerSocket(tmp);
-                }
-            }
-        }
-        std::cout << test.toString() << std::endl;
-        test.clearFds();
-        if (!test.isReadable(&tcpsock))
-        {
-            std::cout << "IsMonitored" << std::endl;
-            test.registerSocket(&tcpsock);
-        }
-    }
+    server.run();
+  } catch (std::exception const& e) {
+
+    std::cerr << "Fatal error: " << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
 }

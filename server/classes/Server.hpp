@@ -24,6 +24,12 @@ namespace RType
     void          onClientConnection();
 
   public:
+    virtual std::string  toString() const;
+
+  protected:
+    static void   display(std::string const& msg);
+
+  public:
     static const short int    defaultPort;
 
   protected:
