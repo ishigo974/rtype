@@ -40,6 +40,19 @@ bool Buffer::empty() const
     return (_data.empty());
 }
 
+template <>
+void Buffer::append(std::string const& data)
+{
+    _data.insert(_data.end(), data.begin(), data.end());
+}
+
+template <>
+void Buffer::append(Buffer const& data)
+{
+    _data.insert(_data.end(), data._data.begin(), data._data.end());
+}
+
+
 void Buffer::append(char const *data, size_t size)
 {
     std::string tmp(data, size);

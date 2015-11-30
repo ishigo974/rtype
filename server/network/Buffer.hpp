@@ -34,15 +34,10 @@ public:
 
         while (i > 0)
         {
-            tmp = data >> (8 * i);
+            tmp = (data >> (8 * i));
             _data.push_back(tmp);
             --i;
         }
-    }
-
-    void append(std::string const& data)
-    {
-        _data.insert(_data.end(), data.begin(), data.end());
     }
 
     void setData(std::string const& data)
@@ -76,5 +71,8 @@ public:
 private:
     std::vector<uint8_t> _data;
 };
+
+template <>
+void Buffer::append<Buffer>(Buffer const& data);
 
 #endif //RTYPE_BUFFER_HPP

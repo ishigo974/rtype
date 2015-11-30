@@ -27,6 +27,7 @@ include_directories(classes)
 include_directories(unit_tests)
 
 file(GLOB source_files
+	  main.cpp
         network/*.hpp
         network/*.cpp
         ecs/*.hpp
@@ -39,6 +40,8 @@ file(GLOB ut_source_files
         main_ut.cpp
         ecs/*.hpp
       	ecs/*.cpp
+        network/*.hpp
+        network/*.cpp
         classes/*.hpp
         classes/*.cpp
         components/*.hpp

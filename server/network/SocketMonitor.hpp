@@ -12,8 +12,8 @@
 class SocketMonitor : public ISocketMonitor
 {
 public:
-    virtual ~SocketMonitor();
     SocketMonitor();
+    virtual ~SocketMonitor();
 
 public:
     virtual void registerSocket(IMonitorable *socket);
