@@ -1,4 +1,9 @@
+#include <iostream>
+#include <SFML/Window.hpp>
 #include "Renderer.hpp"
+#include "Transform.hpp"
+#include "SpriteRenderer.hpp"
+
 
 Renderer::Renderer() :
 	_win(sf::VideoMode(1280, 720), "Hey-Type")
@@ -22,7 +27,10 @@ void Renderer::draw(const GameObject& object)
     Transform      *tr = object.getComponent<Transform>();
     sf::Sprite     sprite;
 
-    sprite.setTexture(this->_res[sr->getPath()]);
+	if (!sr || !tr)
+		return;
+    sprite.setTexture(*this->_res[sr->getPath()]);
+	std::cout << "ck" << std::endl;
     sprite.setTextureRect(sf::IntRect(sr->getRect().x,
                                       sr->getRect().y,
                                       sr->getRect().w,

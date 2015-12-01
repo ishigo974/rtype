@@ -44,14 +44,23 @@ namespace cu
         _y = o.Y();
     }
 
-    Position::Position(Position&& other) : Position(other)
-    {
-        std::swap(*this, other);
-    }
+	Position::Position(Position&& other) :
+
+		_x(std::move(other._x)), _y(std::move(other._x)) //caca
+	{
+	}
+
+	//Position::Position(Position&& other) : Position(other)
+	//{
+	//	std::swap(*this, other);
+	//}
+
 
     Position& Position::operator=(Position other)
     {
-        std::swap(*this, other);
+        //std::swap(*this, other);
+		this->_x = other.X();
+		this->_y = other.Y();
 
         return (*this);
     }
@@ -71,9 +80,8 @@ namespace cu
         _angle = other.getAngle();
     }
 
-    Rotation::Rotation(Rotation&& other) : Rotation(other)
+    Rotation::Rotation(Rotation&& other) : _angle(std::move(other._angle))
     {
-        std::swap(*this, other);
     }
 
     float Rotation::getAngle() const
@@ -88,7 +96,8 @@ namespace cu
 
     Rotation& Rotation::operator=(Rotation other)
     {
-        std::swap(*this, other);
+        //std::swap(*this, other);
+		this->_angle = other.getAngle();
 
         return (*this);
     }

@@ -5,6 +5,7 @@
 #include "GameObject.hpp"
 #include "EntityManager.hpp"
 #include "Renderer.hpp"
+#include "SpriteRenderer.hpp"
 
 bool gameObjectTest()
 {
@@ -32,8 +33,13 @@ void renderTest()
 	Renderer r;
 	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
 	SpriteRenderer sr(2, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 100));
+	Transform tr(3, "yoy", cu::Position(100, 100), cu::Scale(1, 1), cu::Rotation(0));
 	a->addComponent(sr);
+	a->addComponent(tr);
+	r.init();
+	std::cout << "ok" << std::endl;
 	r.draw(*a);
+	std::cout << "ko" << std::endl;
 	while (1)
 	{
 		r.render();

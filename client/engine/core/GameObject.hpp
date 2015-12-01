@@ -7,11 +7,10 @@
 
 # include <vector>
 # include <memory>
-#include <algorithm>
+# include <algorithm>
 # include "Object.hpp"
 # include "Component.hpp"
-#include "../graphics/SpriteRenderer.hpp"
-#include "Transform.hpp"
+# include "Transform.hpp"
 
 class GameObject : public Object
 {

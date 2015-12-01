@@ -3,13 +3,23 @@
 
 Resources::Resources()
 {
-	this->_textures["MissingTexture"] = sf::Texture();
-	if (! this->_textures["MissingTexture"].loadFromFile("MissingTexture.png"))
+	this->_textures["MissingTexture"] = new sf::Texture();
+	if (! this->_textures["MissingTexture"]->loadFromFile("MissingTexture.png"))
 		throw std::runtime_error("../../res/MissingTexture.png not found");
 	//this->_textures["MissingTexture"].setRepeated(true);
 }
 
-const sf::Texture& Resources::getTexture(const std::string& path) const
+Resources::~Resources()
+{
+	for (auto it = this->_textures.begin();
+	it != this->_textures.end();
+		++it)
+	{
+		delete it->second;
+	}
+}
+
+const sf::Texture* Resources::getTexture(const std::string& path) const
 {
     try
     {
@@ -22,22 +32,20 @@ const sf::Texture& Resources::getTexture(const std::string& path) const
     }
 }
 
-const sf::Texture& Resources::operator[](const std::string& path) const
+const sf::Texture* Resources::operator[](const std::string& path) const
 {
 	return this->getTexture(path);
 }
 
 bool    Resources::addTexture(const std::string& path, bool repeated)
 {
-    this->_textures[path] = sf::Texture();
-	if (!this->_textures[path].loadFromFile(path))
+    this->_textures[path] = new sf::Texture();
+	if (!this->_textures[path]->loadFromFile(path))
 	{
+		delete this->_textures[path];
 		this->_textures.erase(path);
 		return false;
 	}
 	else
 		return false;
 }
-
-Resources::~Resources()
-{ }
