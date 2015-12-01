@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include "Renderer.hpp"
 #include "Transform.hpp"
 #include "SpriteRenderer.hpp"
@@ -27,10 +28,8 @@ void Renderer::draw(const GameObject& object)
     Transform      *tr = object.getComponent<Transform>();
     sf::Sprite     sprite;
 
-	if (!sr || !tr)
-		return;
+	this->_win.clear(sf::Color::White);
     sprite.setTexture(*this->_res[sr->getPath()]);
-	std::cout << "ck" << std::endl;
     sprite.setTextureRect(sf::IntRect(sr->getRect().x,
                                       sr->getRect().y,
                                       sr->getRect().w,
