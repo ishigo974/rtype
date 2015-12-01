@@ -22,12 +22,12 @@ Transform::Transform(Transform const& other) : Component(other)
 
 Transform::Transform(Transform&& other) : Transform(other)
 {
-    std::swap(*this, other);
+    swap(other);
 }
 
 Transform& Transform::operator=(Transform other)
 {
-    std::swap(*this, other);
+    swap(other);
 
     return (*this);
 }
@@ -69,6 +69,14 @@ void Transform::swap(Transform& second)
     swap(_position, second._position);
     swap(_scale, second._scale);
     swap(_rotation, second._rotation);
+}
+
+namespace std {
+    template<>
+    void swap<Transform>(Transform &a, Transform &b)
+    {
+        a.swap(b);
+    }
 }
 
 cu::Position const& Transform::getPosition() const

@@ -18,12 +18,12 @@ Behaviour::Behaviour(Behaviour const& other) : Component(other)
 
 Behaviour::Behaviour(Behaviour&& other) : Behaviour(other)
 {
-    swap(*this, other);
+    swap(other);
 }
 
 Behaviour& Behaviour::operator=(Behaviour other)
 {
-    swap(*this, other);
+    swap(other);
 
     return (*this);
 }
@@ -41,9 +41,20 @@ bool Behaviour::operator!=(Behaviour const& other)
     return (!Behaviour::operator==(other));
 }
 
-void Behaviour::swap(Behaviour& first, Behaviour& second)
+void Behaviour::swap(Behaviour& other)
 {
-    std::swap(first._enabled, second._enabled);
+    using std::swap;
+
+    swap(_enabled, other._enabled);
+}
+
+namespace std
+{
+    template<>
+    void swap<Behaviour>(Behaviour& a, Behaviour& b)
+    {
+        a.swap(b);
+    }
 }
 
 bool Behaviour::isEnabled() const

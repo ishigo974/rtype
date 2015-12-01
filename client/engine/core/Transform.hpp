@@ -15,9 +15,11 @@ public:
     Transform();
     Transform(unsigned int _id, std::string const& _name,
               cu::Position const& pos, cu::Scale scale, cu::Rotation rot);
+
     Transform(Transform const& other);
     Transform(Transform&& other);
     virtual Transform& operator=(Transform other);
+
     virtual ~Transform();
 
     virtual bool operator==(Transform const& other);

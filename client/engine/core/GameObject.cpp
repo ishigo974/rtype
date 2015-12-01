@@ -19,12 +19,12 @@ GameObject::GameObject(GameObject const& other) : Object(other)
 
 GameObject::GameObject(GameObject&& other) : GameObject(other)
 {
-    swap(*this, other);
+    swap(other);
 }
 
 GameObject& GameObject::operator=(GameObject other)
 {
-    swap(*this, other);
+    swap(other);
 
     return (*this);
 }
@@ -68,9 +68,19 @@ void GameObject::setLayer(unsigned int _layer)
     GameObject::_layer = _layer;
 }
 
-void GameObject::swap(GameObject& first, GameObject& second)
+void GameObject::swap(GameObject& other)
 {
-    std::swap(first._layer, second._layer);
+    using std::swap;
+
+    swap(_layer, other._layer);
+}
+
+namespace std {
+    template<>
+    void swap<GameObject>(GameObject &a, GameObject &b)
+    {
+        a.swap(b);
+    }
 }
 
 unsigned int GameObject::getMask()

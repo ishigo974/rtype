@@ -32,6 +32,8 @@ namespace cu
 
         std::string toString();
 
+        void swap(Position &other);
+
     private:
         float _x;
         float _y;
@@ -44,9 +46,12 @@ namespace cu
     public:
         Rotation();
         Rotation(float angle);
+
         Rotation(Rotation const& other);
         Rotation(Rotation&& other);
         Rotation& operator=(Rotation other);
+
+        ~Rotation();
 
         bool operator==(Rotation const& other);
         bool operator!=(Rotation const& other);
@@ -55,6 +60,8 @@ namespace cu
         void  setAngle(float _angle);
 
         std::string toString();
+
+        void swap(Rotation &other);
 
     private:
         float _angle;

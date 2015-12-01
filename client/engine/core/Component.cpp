@@ -16,12 +16,12 @@ Component::Component(Component const& other) : Object(other)
 
 Component::Component(Component&& other) : Component(other)
 {
-    swap(*this, other);
+    swap(other);
 }
 
 Component& Component::operator=(Component other)
 {
-    swap(*this, other);
+    swap(other);
 
     return (*this);
 }
@@ -56,4 +56,20 @@ std::string Component::toString()
     << "\n}" << std::endl;
 
     return (ss.str());
+}
+
+void Component::swap(Component& other)
+{
+    using std::swap;
+
+    swap(_id, other._id);
+    swap(_name, other._name);
+}
+
+namespace std {
+    template<>
+    void swap<Component>(Component &a, Component &b)
+    {
+        a.swap(b);
+    }
 }

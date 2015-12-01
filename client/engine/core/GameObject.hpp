@@ -52,8 +52,7 @@ public:
 
     Transform const* getTransform();
 
-protected:
-    void swap(GameObject& first, GameObject& second);
+    void swap(GameObject& other);
 
 protected:
     int                                      _layer;

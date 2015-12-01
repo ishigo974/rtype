@@ -30,8 +30,8 @@ public:
 
 
     virtual RTypes::my_uint16_t getMask() const;
-protected:
-    void swap(Behaviour& first, Behaviour& second);
+
+    void swap(Behaviour& other);
 
 private:
     bool _enabled;

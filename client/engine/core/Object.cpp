@@ -21,12 +21,12 @@ Object::Object(Object const& other)
 Object::Object(Object&& other)
         : Object(other)
 {
-    swap(*this, other);
+    swap(other);
 }
 
 Object& Object::operator=(Object other)
 {
-    swap(*this, other);
+    swap(other);
 
     return (*this);
 }
@@ -64,10 +64,20 @@ void Object::setName(std::string const& _name)
     Object::_name = _name;
 }
 
-void Object::swap(Object& first, Object& second)
+void Object::swap(Object& other)
 {
-    std::swap(first._name, second._name);
-    std::swap(first._id, second._id);
+    using std::swap;
+
+    swap(_name, other._name);
+    swap(_id, other._id);
+}
+
+namespace std {
+    template<>
+    void swap<Object>(Object &a, Object &b)
+    {
+        a.swap(b);
+    }
 }
 
 bool Object::operator==(Object const& other)

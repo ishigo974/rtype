@@ -16,6 +16,7 @@ public:
 
     Object(Object const& other);
     Object(Object&& other);
+
     Object& operator=(Object other);
 
     virtual ~Object()
@@ -34,8 +35,7 @@ public:
 
     virtual std::string toString();
 
-protected:
-    void swap(Object& first, Object& second);
+    void swap(Object& other);
 
 protected:
     unsigned int _id;
