@@ -21,7 +21,7 @@ public:
     virtual bool operator==(Component const& other);
     virtual bool operator!=(Component const& other);
 
-    RTypes::my_uint16_t getMask() const;
+    virtual RTypes::my_uint16_t getMask() const;
 
     virtual std::string toString();
 

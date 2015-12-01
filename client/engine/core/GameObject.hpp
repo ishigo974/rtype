@@ -12,6 +12,8 @@
 # include "Component.hpp"
 # include "Transform.hpp"
 
+# include <iostream>
+
 class GameObject : public Object
 {
 
@@ -35,22 +37,19 @@ public:
 
     virtual unsigned int getMask();
 
+    void addComponent(std::unique_ptr<Component> newComp);
+
     template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
     T *getComponent() const
     {
         auto selected = std::find_if(_components.begin(), _components.end(), [](auto && e)
         {
+            std::cout << e->getMask();
             return (e->getMask() == T::Mask);
         });
 
         return ((selected == _components.end()) ? nullptr : dynamic_cast<T *>(selected->get()));
     };
-
-	template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
-	void addComponent(T comp)
-	{
-		_components.push_back(std::make_unique<T>(comp));
-	}
 
     Transform const* getTransform();
 

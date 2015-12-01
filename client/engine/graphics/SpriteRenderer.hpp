@@ -24,6 +24,7 @@ public:
 
     std::string const&   getPath() const;
     gu::Rect<int> const& getRect() const;
+	RTypes::my_uint16_t	getMask() const;
 
 public:
     static RTypes::my_uint16_t const Mask = 0b0000000010000000;

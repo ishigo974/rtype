@@ -6,6 +6,7 @@
 #include "EntityManager.hpp"
 #include "Renderer.hpp"
 #include "SpriteRenderer.hpp"
+#include "Behaviour.hpp"
 
 bool gameObjectTest()
 {
@@ -14,12 +15,19 @@ bool gameObjectTest()
     GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
     assert(a->getId() == 1);
     assert(a->getName() == "Test");
-    assert(a->getLayer()== 1);
+    assert(a->getLayer() == 1);
 
     GameObject *b = entityManager.createEntity<GameObject>("Test", 2);
     assert(b->getId() == 2);
     assert(b->getName() == "Test");
-    assert(b->getLayer()== 2);
+    assert(b->getLayer() == 2);
+
+    a->addComponent(std::make_unique<Behaviour>(10, "Behave"));
+
+    Behaviour *be = a->getComponent<Behaviour>();
+
+    assert(be != nullptr);
+    assert(be->getName() == "Behave");
 
     std::cout << a->toString() << std::endl;
     std::cout << b->toString() << std::endl;
@@ -34,14 +42,15 @@ void renderTest()
 	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
 	SpriteRenderer sr(2, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 100));
 	Transform tr(3, "yoy", cu::Position(100, 100), cu::Scale(1, 1), cu::Rotation(0));
-	a->addComponent(sr);
-	a->addComponent(tr);
+	a->addComponent(std::make_unique<SpriteRenderer>(sr));
+	a->addComponent(std::make_unique<Transform>(tr));
 	r.init();
 	std::cout << "ok" << std::endl;
-	r.draw(*a);
+	
 	std::cout << "ko" << std::endl;
 	while (1)
 	{
+		r.draw(*a);
 		r.render();
 	}
 }

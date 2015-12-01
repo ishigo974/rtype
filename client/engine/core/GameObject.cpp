@@ -82,3 +82,8 @@ Transform const* GameObject::getTransform()
 {
     return (dynamic_cast<Transform *>(_components[0].get()));
 }
+
+void GameObject::addComponent(std::unique_ptr<Component> newComp)
+{
+    _components.push_back(std::move(newComp));
+}
