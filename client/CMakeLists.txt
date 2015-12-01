@@ -46,7 +46,7 @@ endif ()
 
 if (UNIX)
     set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-    set(SFML_ROOT "/usr")
+    set(SFML_ROOT "/usr/local")
 endif ()
 
 find_package(SFML 2 REQUIRED system window graphics network audio)
