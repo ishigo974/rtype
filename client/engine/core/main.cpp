@@ -55,8 +55,8 @@ void renderTest()
 
 int main()
 {
-//    if (gameObjectTest())
-//        std::cout << "gameObjectTest passed -> OK" << std::endl;
+    if (gameObjectTest())
+        std::cout << "gameObjectTest passed -> OK" << std::endl;
 	renderTest();
     return (0);
 }
