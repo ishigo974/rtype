@@ -3,10 +3,12 @@
 #include "Server.hpp"
 #include "Entity.hpp"
 #include "EntityManager.hpp"
+#include "SystemManager.hpp"
 #include "ITcpSocket.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
 #include "IComponent.hpp"
+#include "LobbySystem.hpp"
 
 namespace RType
 {
@@ -38,12 +40,14 @@ namespace RType
     void          Server::run()
     {
         display("Server is now running on port " +
-        std::to_string(_acceptor.getPort()));
+                std::to_string(_acceptor.getPort()));
         while (!_quit)
         {
             _monitor.update();
             if (_monitor.isReadable(&_acceptor))
                 onClientConnection();
+            ECS::EntityManager::getInstance().updateAll();
+            ECS::SystemManager::getInstance().processAll();
         }
     }
 
@@ -60,6 +64,9 @@ namespace RType
         _monitor.registerSocket(&_acceptor);
         ECS::EntityManager::getInstance().registerComponent(
             std::make_unique<Component::NetworkTCP>()
+        );
+        ECS::SystemManager::getInstance().registerSystem(
+            std::make_unique<System::Lobby>()
         );
     }
 

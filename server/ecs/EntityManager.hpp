@@ -38,6 +38,7 @@ namespace ECS
         bool                    destroy(Entity const& entity);
         Entity&                 get(unsigned int id) const;
         EntityCollection        getByMask(ComponentMask mask) const;
+        void                    updateAll();
         void                    clean();
 
     public:

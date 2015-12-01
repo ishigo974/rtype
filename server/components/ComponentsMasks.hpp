@@ -5,13 +5,13 @@
 
 namespace RType
 {
-  namespace Component
-  {
-    enum Masks
+    namespace Component
     {
-      MASK_NETWORKTCP   = 1
-    };
-  }
+        enum Masks
+        {
+            MASK_NETWORKTCP   = 1
+        };
+    }
 }
 
 #endif /* !COMPONENTSMASKS_HPP_ */

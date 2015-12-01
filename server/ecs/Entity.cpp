@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include "Entity.hpp"
+#include "IBehaviour.hpp"
 
 namespace ECS
 {
@@ -65,6 +66,17 @@ namespace ECS
       return true;
     }
     return false;
+  }
+
+  void              Entity::update()
+  {
+      for (auto& c: _components)
+      {
+          IBehaviour*   b = dynamic_cast<IBehaviour*>(c.second.get());
+
+          if (b != nullptr)
+            b->update();
+      }
   }
 
   unsigned int    Entity::getId() const

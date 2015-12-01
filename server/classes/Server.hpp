@@ -25,7 +25,7 @@ namespace RType
         void            onClientConnection();
 
     public:
-        virtual std::string  toString() const;
+        virtual std::string     toString() const;
 
     protected:
         static void   display(std::string const& msg);

@@ -10,46 +10,48 @@
 
 namespace RType
 {
-  namespace Component
-  {
-    class NetworkTCP : public ECS::IBehaviour
+    namespace Component
     {
-    public:
-      typedef std::unique_ptr<ITcpSocket>   UniqueITcpSockPtr;
+        class NetworkTCP : public ECS::IBehaviour
+        {
+        public:
+            typedef std::unique_ptr<ITcpSocket>   UniqueITcpSockPtr;
 
-    public:
-      NetworkTCP();
-      NetworkTCP(UniqueITcpSockPtr socket);
-      virtual ~NetworkTCP();
+        public:
+            NetworkTCP();
+            NetworkTCP(UniqueITcpSockPtr socket);
+            virtual ~NetworkTCP();
 
-    public:
-      NetworkTCP(NetworkTCP const& other);
-      NetworkTCP&             operator=(NetworkTCP const& other);
+        public:
+            NetworkTCP(NetworkTCP const& other);
+            NetworkTCP&             operator=(NetworkTCP const& other);
 
-    public:
-      void                    setSocket(UniqueITcpSockPtr socket);
+        public:
+            void                setSocket(UniqueITcpSockPtr socket);
+            void                pushData(Buffer const& buffer);
+            Buffer              popData();
 
-    public:
-      virtual void            update();
+        public:
+            virtual void        update();
 
-    public:
-      virtual std::string           getName() const;
-      virtual ECS::ComponentMask    getMask() const;
-      virtual ECS::IComponent*      clone() const;
-      virtual void                  clear();
+        public:
+            virtual std::string         getName() const;
+            virtual ECS::ComponentMask  getMask() const;
+            virtual ECS::IComponent*    clone() const;
+            virtual void                clear();
 
-    public:
-      virtual std::string           toString() const;
+        public:
+            virtual std::string           toString() const;
 
-    protected:
-      static const size_t     bufferSize;
+        protected:
+            static const size_t     bufferSize;
 
-    protected:
-      UniqueITcpSockPtr       _socket;
-      Buffer                  _toSend;
-      Buffer                  _received;
-    };
-  }
+        protected:
+            UniqueITcpSockPtr       _socket;
+            Buffer                  _toSend;
+            Buffer                  _received;
+        };
+    }
 }
 
 #endif /* !NETWORKTCP_HPP_ */

@@ -9,45 +9,45 @@
 
 namespace ECS
 {
-  class SystemManager : public IStringable
-  {
-  public:
-    typedef std::unique_ptr<SystemManager>        UniqueSmPtr;
-    typedef std::unique_ptr<ASystem>              UniqueSystemPtr;
-    typedef std::unordered_map<std::string,
-                               UniqueSystemPtr>   SystemMap;
+    class SystemManager : public IStringable
+    {
+    public:
+        typedef std::unique_ptr<SystemManager>          UniqueSmPtr;
+        typedef std::unique_ptr<ASystem>                UniqueSystemPtr;
+        typedef std::unordered_map<std::string,
+                                    UniqueSystemPtr>    SystemMap;
 
-  protected:
-    SystemManager();
+    protected:
+        SystemManager();
 
-  public:
-    virtual ~SystemManager();
+    public:
+        virtual ~SystemManager();
 
-  private:
-    SystemManager(SystemManager const& other) = delete;
-    SystemManager&              operator=(SystemManager const& other) = delete;
+    private:
+        SystemManager(SystemManager const& other) = delete;
+        SystemManager&          operator=(SystemManager const& other) = delete;
 
-  public:
-    static SystemManager&       getInstance();
+    public:
+        static SystemManager&   getInstance();
 
-  public:
-    void                        processAll() const;
-    void                        process(std::string const& name) const;
-    void                        process(ComponentMask mask) const;
+    public:
+        void                processAll() const;
+        void                process(std::string const& name) const;
+        void                process(ComponentMask mask) const;
 
-  public:
-    void                        registerSystem(UniqueSystemPtr system);
-    bool                        removeSystem(std::string const& name);
+    public:
+        void                registerSystem(UniqueSystemPtr system);
+        bool                removeSystem(std::string const& name);
 
-  public:
-    std::string                 toString() const;
+    public:
+        std::string         toString() const;
 
-  protected:
-    SystemMap                   _systems;
+    protected:
+        SystemMap           _systems;
 
-  protected:
-    static UniqueSmPtr          instance;
-  };
+    protected:
+        static UniqueSmPtr  instance;
+    };
 }
 
 #endif /* !SYSTEMMANAGER_HPP_ */

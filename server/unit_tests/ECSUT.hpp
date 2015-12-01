@@ -9,119 +9,122 @@
 
 namespace ECS
 {
-  class ECSUT : public UnitTesting::ABaseUT
-  {
-  public:
-    ECSUT();
-    virtual ~ECSUT();
-
-  private:
-    ECSUT(ECSUT const& other) = delete;
-    ECSUT&                operator=(ECSUT const& other) = delete;
-
-  protected:
-    static void           entityLifeRecyclingSimple();
-    static void           entityLifeRecyclingWithComponent();
-    static void           systemProcess();
-    static void           systemManager();
-
-  public:
-    virtual void          registerTests();
-    virtual std::string   getName() const;
-  };
-
-  namespace Sample
-  {
-    enum SampleMask : ComponentMask
-    {
-      COMPMASK_ONE    = 1 << 0,
-      COMPMASK_TWO    = 1 << 1,
-      COMPMASK_THREE  = 1 << 2
-    };
-
-    class Component1 : public IComponent
+    class ECSUT : public UnitTesting::ABaseUT
     {
     public:
-      Component1();
-      virtual ~Component1();
+        ECSUT();
+        virtual ~ECSUT();
 
-    public:
-      std::string const&      getData() const;
-      void                    setData(std::string const& data);
-
-    public:
-      virtual std::string     getName() const;
-      virtual ComponentMask   getMask() const;
-      virtual IComponent*     clone() const;
-      virtual void            clear();
-
-    public:
-      virtual std::string     toString() const;
-
-    public:
-      static const ComponentMask    mask;
+    private:
+        ECSUT(ECSUT const& other) = delete;
+        ECSUT&                operator=(ECSUT const& other) = delete;
 
     protected:
-      std::string             _data;
+        static void           entityLifeRecyclingSimple();
+        static void           entityLifeRecyclingWithComponent();
+        static void           systemProcess();
+        static void           systemManager();
+
+    public:
+        virtual void          registerTests();
+        virtual std::string   getName() const;
     };
 
-    class Component2 : public IComponent
+    namespace Sample
     {
-    public:
-      Component2();
-      virtual ~Component2();
+        enum SampleMask : ComponentMask
+        {
+            COMPMASK_ONE    = 1 << 0,
+            COMPMASK_TWO    = 1 << 1,
+            COMPMASK_THREE  = 1 << 2
+        };
 
-    public:
-      std::string const&      getData() const;
-      void                    setData(std::string const& data);
+        class Component1 : public IComponent
+        {
+        public:
+            Component1();
+            virtual ~Component1();
 
-    public:
-      virtual std::string     getName() const;
-      virtual ComponentMask   getMask() const;
-      virtual IComponent*     clone() const;
-      virtual void            clear();
+        public:
+            std::string const&      getData() const;
+            void                    setData(std::string const& data);
 
-    public:
-      virtual std::string     toString() const;
+        public:
+            virtual std::string     getName() const;
+            virtual ComponentMask   getMask() const;
+            virtual IComponent*     clone() const;
+            virtual void            clear();
 
-    public:
-      static const ComponentMask    mask;
+        public:
+            virtual std::string     toString() const;
 
-    protected:
-      std::string             _data;
-    };
+        public:
+            static const ComponentMask    mask;
 
-    class Component3 : public IComponent
-    {
-    public:
-      Component3();
-      virtual ~Component3();
+        protected:
+            std::string             _data;
+        };
 
-    public:
-      virtual std::string     getName() const;
-      virtual ComponentMask   getMask() const;
-      virtual IComponent*     clone() const;
-      virtual void            clear();
+        class Component2 : public IComponent
+        {
+        public:
+            Component2();
+            virtual ~Component2();
 
-    public:
-      virtual std::string     toString() const;
+        public:
+            std::string const&      getData() const;
+            void                    setData(std::string const& data);
 
-    public:
-      static const ComponentMask    mask;
-    };
+        public:
+            virtual std::string     getName() const;
+            virtual ComponentMask   getMask() const;
+            virtual IComponent*     clone() const;
+            virtual void            clear();
 
-    class System1 : public ASystem
-    {
-    public:
-      System1();
-      virtual ~System1();
+        public:
+            virtual std::string     toString() const;
 
-    public:
-      virtual void          processEntity(Entity& e);
-      virtual ComponentMask getMask() const;
-      virtual std::string   getName() const;
-    };
-  }
+        public:
+            static const ComponentMask    mask;
+
+        protected:
+            std::string             _data;
+        };
+
+        class Component3 : public IComponent
+        {
+        public:
+            Component3();
+            virtual ~Component3();
+
+        public:
+            virtual std::string     getName() const;
+            virtual ComponentMask   getMask() const;
+            virtual IComponent*     clone() const;
+            virtual void            clear();
+
+        public:
+            virtual std::string     toString() const;
+
+        public:
+            static const ComponentMask    mask;
+        };
+
+        class System1 : public ASystem
+        {
+        public:
+            System1();
+            virtual ~System1();
+
+        public:
+            virtual void            processEntity(Entity& e);
+            virtual ComponentMask   getMask() const;
+            virtual std::string     getName() const;
+
+        public:
+            virtual std::string     toString() const;
+        };
+    }
 }
 
 #endif /* !ECSUT_HPP_ */
