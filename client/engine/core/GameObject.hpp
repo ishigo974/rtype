@@ -45,7 +45,6 @@ public:
     {
         auto selected = std::find_if(_components.begin(), _components.end(), [](auto && e)
         {
-            std::cout << e->getMask();
             return (e->getMask() == T::Mask);
         });
 
