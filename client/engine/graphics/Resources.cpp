@@ -37,7 +37,7 @@ const sf::Texture* Resources::operator[](const std::string& path) const
 	return this->getTexture(path);
 }
 
-bool    Resources::addTexture(const std::string& path, bool repeated)
+bool    Resources::addTexture(const std::string& path, bool)
 {
     this->_textures[path] = new sf::Texture();
 	if (!this->_textures[path]->loadFromFile(path))
