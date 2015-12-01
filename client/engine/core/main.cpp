@@ -40,14 +40,11 @@ void renderTest()
 	EntityManager entityManager;
 	Renderer r;
 	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
-	SpriteRenderer sr(2, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 100));
+	SpriteRenderer sr(2, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
 	Transform tr(3, "yoy", cu::Position(100, 100), cu::Scale(1, 1), cu::Rotation(0));
 	a->addComponent(std::make_unique<SpriteRenderer>(sr));
 	a->addComponent(std::make_unique<Transform>(tr));
 	r.init();
-	std::cout << "ok" << std::endl;
-	
-	std::cout << "ko" << std::endl;
 	while (1)
 	{
 		r.draw(*a);
