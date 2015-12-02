@@ -21,7 +21,7 @@ public:
     virtual bool operator==(Component const& other);
     virtual bool operator!=(Component const& other);
 
-    void swap(Component &other);
+    virtual void swap(Component &other);
 
     virtual RTypes::my_uint16_t getMask() const;
 
@@ -29,5 +29,7 @@ public:
 
     static RTypes::my_uint16_t const Mask = 0;
 };
+
+static const Component ErrorComponent = Component(0, "Error");
 
 #endif /* !RTYPE_COMPONENT_HPP_ */

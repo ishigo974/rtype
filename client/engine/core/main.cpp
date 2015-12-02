@@ -2,11 +2,13 @@
 #include <iostream>
 #include <memory>
 #include <assert.h>
+#include <unistd.h>
 #include "GameObject.hpp"
 #include "EntityManager.hpp"
 #include "Renderer.hpp"
 #include "SpriteRenderer.hpp"
 #include "Behaviour.hpp"
+#include "BigBen.hpp"
 
 bool gameObjectTest()
 {
@@ -22,12 +24,16 @@ bool gameObjectTest()
     assert(b->getName() == "Test");
     assert(b->getLayer() == 2);
 
-    a->addComponent(std::make_unique<Behaviour>(10, "Behave"));
+    entityManager.attachComponent<Behaviour>(a, "Behave");
 
     Behaviour *be = a->getComponent<Behaviour>();
+    Transform t = a->transform();
 
     assert(be != nullptr);
     assert(be->getName() == "Behave");
+
+    assert(t.getPosition().X() == 0);
+    t.getPosition().setX(100);
 
     std::cout << a->toString() << std::endl;
     std::cout << b->toString() << std::endl;
@@ -41,22 +47,37 @@ void renderTest()
 	Renderer r;
 	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
 
-	a->addComponent(std::make_unique<SpriteRenderer>(2, "lel", "r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300)));
-	a->addComponent(std::make_unique<Transform>(3, "yoy", cu::Position(100, 100), cu::Scale(1, 1), cu::Rotation(0)));
+    entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
+    entityManager.attachComponent<SpriteRenderer>(a, "lel", "r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
 
 	r.init();
 
 	while (1)
 	{
+        usleep(10000);
 		r.draw(*a);
 		r.render();
 	}
+}
+
+bool timeTest()
+{
+    for (int i = 0 ; i < 5 ; ++i)
+    {
+        std::cout << "i = " << i << " ; elapsed = " << BigBen::get().getElapsedtime() << std::endl;
+        std::cout << "i = " << i << " ; fixedElapsed = " << BigBen::get().getFixedElapsedtime() << std::endl;
+        usleep(5000);
+    }
+
+    return (true);
 }
 
 int main()
 {
     if (gameObjectTest())
         std::cout << "gameObjectTest passed -> OK" << std::endl;
+    if (timeTest())
+        std::cout << "timeTest passed -> OK" << std::endl;
 	renderTest();
     return (0);
 }

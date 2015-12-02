@@ -5,20 +5,52 @@
 #include <sstream>
 #include "Utils.hpp"
 
+namespace std
+{
+    using cu::Position;
+    using cu::Rotation;
+    using cu::Vector2D;
+    using cu::Point2D;
+
+    template<>
+    void swap<Vector2D>(Vector2D& a, Vector2D& b)
+    {
+        a.swap(b);
+    }
+
+    template<>
+    void swap<Point2D>(Point2D& a, Point2D& b)
+    {
+        a.swap(b);
+    }
+
+    template<>
+    void swap<Position>(Position& a, Position& b)
+    {
+        a.swap(b);
+    }
+
+    template<>
+    void swap<Rotation>(Rotation& a, Rotation& b)
+    {
+        a.swap(b);
+    }
+}
+
 namespace cu
 {
 
     Position::Position()
+            : _point(0, 0)
     { }
 
     Position::Position(float x, float y)
-            : _x(x), _y(y)
+            : _point(x, y)
     { }
 
     bool Position::operator==(Position const& other)
     {
-        return (_x == other.X() &&
-                _y == other.Y());
+        return (_point == other._point);
     }
 
     bool Position::operator!=(Position const& other)
@@ -27,21 +59,28 @@ namespace cu
     }
 
     float Position::X() const
-    { return _x; }
+    {
+        return _point.x;
+    }
 
-    void Position::X(float _x)
-    { Position::_x = _x; }
+    void Position::setX(float _x)
+    {
+        _point.x = _x;
+    }
 
     float Position::Y() const
-    { return _y; }
+    {
+        return _point.y;
+    }
 
-    void Position::Y(float _y)
-    { Position::_y = _y; }
+    void Position::setY(float _y)
+    {
+        _point.y = _y;
+    }
 
     Position::Position(Position const& o)
     {
-        _x = o.X();
-        _y = o.Y();
+        _point = o._point;
     }
 
     Position::Position(Position&& other) : Position(other)
@@ -112,7 +151,7 @@ namespace cu
     {
         std::stringstream ss;
 
-        ss << "(" << _x << ", " << _y << ")";
+        ss << "(" << _point.x << ", " << _point.y << ")";
 
         return (ss.str());
     }
@@ -126,12 +165,27 @@ namespace cu
         return (ss.str());
     }
 
+    void Vector2D::swap(Vector2D& other)
+    {
+        using std::swap;
+
+        swap(x, other.x);
+        swap(y, other.y);
+    }
+
+    void Point2D::swap(Point2D& other)
+    {
+        using std::swap;
+
+        swap(x, other.x);
+        swap(y, other.y);
+    }
+
     void Position::swap(Position& other)
     {
         using std::swap;
 
-        swap(_x, other._x);
-        swap(_y, other._y);
+        swap(_point, other._point);
     }
 
     void Rotation::swap(Rotation& other)
@@ -140,21 +194,215 @@ namespace cu
 
         swap(_angle, other._angle);
     }
+
+    _Origin2D_ Origin2D;
+
+    Vector2D& Vector2D::rotate(float angle)
+    {
+        float s = sinf(angle);
+        float c = cosf(angle);
+
+        float nx = c * x - s * y;
+        float ny = s * x + c * y;
+
+        x = nx;
+        y = ny;
+
+        return (*this);
+    }
+
+    Point2D Point2D::operator/(float t) const
+    {
+        float f = 1.0F / t;
+        return (Point2D(x * f, y * f));
+    }
+
+    Point2D Point2D::operator*(float t) const
+    {
+        return (Point2D(x * t, y * t));
+    }
+
+    Vector2D Point2D::operator-(const Point2D& p) const
+    {
+        return (Vector2D(x - p.x, y - p.y));
+    }
+
+    Point2D Point2D::operator-(const Vector2D& v) const
+    {
+        return (Point2D(x - v.x, y - v.y));
+    }
+
+    Point2D Point2D::operator+(const Vector2D& v) const
+    {
+        return (Point2D(x + v.x, y + v.y));
+    }
+
+    Point2D Point2D::operator-(void) const
+    {
+        return (Point2D(-x, -y));
+    }
+
+    Point2D& Point2D::operator/=(float t)
+    {
+        float f = 1.0F / t;
+        x *= f;
+        y *= f;
+        return (*this);
+    }
+
+    Point2D& Point2D::operator*=(float t)
+    {
+        x *= t;
+        y *= t;
+        return (*this);
+    }
+
+    Point2D& Point2D::operator=(Point2D v)
+    {
+        swap(v);
+
+        return (*this);
+    }
+
+    Vector2D& Vector2D::normalize(void)
+    {
+        return (*this /= sqrtf(x * x + y * y));
+    }
+
+    bool Vector2D::operator!=(const Vector2D& v) const
+    {
+        return ((x != v.x) || (y != v.y));
+    }
+
+    bool Vector2D::operator==(const Vector2D& v) const
+    {
+        return ((x == v.x) && (y == v.y));
+    }
+
+    Vector2D Vector2D::operator&(const Vector2D& v) const
+    {
+        return (Vector2D(x * v.x, y * v.y));
+    }
+
+    float Vector2D::operator*(const Vector2D& v) const
+    {
+        return (x * v.x + y * v.y);
+    }
+
+    Vector2D Vector2D::operator/(float t) const
+    {
+        float f = 1.0F / t;
+        return (Vector2D(x * f, y * f));
+    }
+
+    Vector2D Vector2D::operator*(float t) const
+    {
+        return (Vector2D(x * t, y * t));
+    }
+
+    Vector2D Vector2D::operator-(const Vector2D& v) const
+    {
+        return (Vector2D(x - v.x, y - v.y));
+    }
+
+    Vector2D Vector2D::operator+(const Vector2D& v) const
+    {
+        return (Vector2D(x + v.x, y + v.y));
+    }
+
+    Vector2D Vector2D::operator-(void) const
+    {
+        return (Vector2D(-x, -y));
+    }
+
+    Vector2D& Vector2D::operator&=(Vector2D v)
+    {
+        swap(v);
+
+        return (*this);
+    }
+
+    Vector2D& Vector2D::operator/=(float t)
+    {
+        float f = 1.0F / t;
+
+        x *= f;
+        y *= f;
+
+        return (*this);
+    }
+
+    Vector2D& Vector2D::operator*=(float t)
+    {
+        x *= t;
+        y *= t;
+        return (*this);
+    }
+
+    Vector2D& Vector2D::operator-=(Vector2D v)
+    {
+        swap(v);
+
+        return (*this);
+    }
+
+    Vector2D& Vector2D::operator+=(Vector2D v)
+    {
+        swap(v);
+
+        return (*this);
+    }
+
+    const float& Vector2D::operator[](long k) const
+    {
+        return ((&x)[k]);
+    }
+
+    float& Vector2D::operator[](long k)
+    {
+        return ((&x)[k]);
+    }
+
+    Vector2D& Vector2D::set(float r, float s)
+    {
+        x = r;
+        y = s;
+        return (*this);
+    }
+
+    Vector2D::Vector2D(float r, float s)
+    {
+        x = r;
+        y = s;
+    }
 }
 
-namespace std {
-    using cu::Position;
-    using cu::Rotation;
+float inline SquaredMag(const cu::Vector2D& v)
+{
+    return (v.x * v.x + v.y * v.y);
+}
 
-    template<>
-    void swap<Position>(Position &a, Position &b)
-    {
-        a.swap(b);
-    }
+float inline InverseMag(const cu::Vector2D& v)
+{
+    return (1.0F / sqrtf(v.x * v.x + v.y * v.y));
+}
 
-    template<>
-    void swap<Rotation>(Rotation&a, Rotation &b)
-    {
-        a.swap(b);
-    }
+float inline Magnitude(const cu::Vector2D& v)
+{
+    return (sqrtf(v.x * v.x + v.y * v.y));
+}
+
+float inline dot(const cu::Vector2D& v1, const cu::Vector2D& v2)
+{
+    return (v1 * v2);
+}
+
+cu::Point2D inline operator*(float t, const cu::Point2D& p)
+{
+    return (cu::Point2D(t * p.x, t * p.y));
+}
+
+cu::Vector2D inline operator*(float t, const cu::Vector2D& v)
+{
+    return (cu::Vector2D(t * v.x, t * v.y));
 }

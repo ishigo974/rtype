@@ -31,7 +31,7 @@ GameObject& GameObject::operator=(GameObject other)
 
 GameObject::~GameObject()
 {
-
+    _components.clear();
 }
 
 bool GameObject::operator==(GameObject const& other)
@@ -88,12 +88,25 @@ unsigned int GameObject::getMask()
     return 0;
 }
 
-Transform const* GameObject::getTransform()
+void GameObject::addComponent(Component *const newComp)
 {
-    return (dynamic_cast<Transform *>(_components[0].get()));
+    _components.push_back(newComp);
 }
 
-void GameObject::addComponent(std::unique_ptr<Component> newComp)
+Transform& GameObject::transform() const
 {
-    _components.push_back(std::move(newComp));
+    Transform *tmp = getComponent<Transform>();
+
+    if (tmp == nullptr)
+        throw std::runtime_error("Transform not found");
+    return (*tmp);
+}
+
+SpriteRenderer& GameObject::renderer() const
+{
+    SpriteRenderer *tmp = getComponent<SpriteRenderer>();
+
+    if (tmp == nullptr)
+        throw std::runtime_error("Renderer not found");
+    return (*tmp);
 }

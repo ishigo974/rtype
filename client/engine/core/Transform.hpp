@@ -13,6 +13,8 @@ class Transform : public Component
 
 public:
     Transform();
+    Transform(unsigned int _id);
+    Transform(unsigned int _id, cu::Position const& pos);
     Transform(unsigned int _id, std::string const& _name,
               cu::Position const& pos, cu::Scale scale, cu::Rotation rot);
 
@@ -29,12 +31,15 @@ public:
 
     void swap(Transform& second);
 
+    cu::Position& getPosition();
     cu::Position const& getPosition() const;
     void setPosition(cu::Position const& _position);
 
+    cu::Scale& getScale();
     cu::Scale const& getScale() const;
     void setScale(cu::Scale const& _scale);
 
+    cu::Rotation& getRotation();
     cu::Rotation const& getRotation() const;
     void setRotation(cu::Rotation const& _rotation);
 
