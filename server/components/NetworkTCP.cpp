@@ -53,10 +53,14 @@ namespace RType
         */
         void            NetworkTCP::update()
         {
+            if (_socket == nullptr)
+                return ;
             if (SocketMonitor::getInstance().isReadable(_socket.get()))
             {
                 Buffer        tmp;
 
+                if (tmp.empty())
+                    onClientDisconnection();
                 _socket->receive(tmp, bufferSize);
                 _received.append(tmp);
             }
@@ -78,6 +82,11 @@ namespace RType
 
             _received.clear();
             return res;
+        }
+
+        bool            NetworkTCP::isConnected() const
+        {
+            return _socket != nullptr;
         }
 
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
@@ -115,6 +124,13 @@ namespace RType
             << "\n\t_received: " << _received.toString()
             << std::endl;
             return ss.str();
+        }
+
+        /*
+        ** Protected member functions
+        */
+        void                    NetworkTCP::onClientDisconnection()
+        {
         }
     }
 }
