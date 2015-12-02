@@ -1,4 +1,5 @@
 #include "Input.hpp"
+#include "Event.hpp"
 
 Input::Input(sf::RenderWindow& win) :
 	_win(win), _bindings(cu::Event::LAST_ACTION)
@@ -8,6 +9,7 @@ Input::Input(sf::RenderWindow& win) :
 	_bindings[cu::Event::DOWN] = sf::Keyboard::Down;
 	_bindings[cu::Event::LEFT] = sf::Keyboard::Left;
 	_bindings[cu::Event::SHOOT] = sf::Keyboard::Space;
+	_bindings[cu::Event::ESCAPE] = sf::Keyboard::Escape;
 }
 
 Input::~Input()
@@ -23,11 +25,13 @@ bool Input::pollEvent(cu::Event& event)
 	switch (e.type)
 	{
 		case sf::Event::KeyPressed:
+			event.type = cu::Event::KeyPressed;
 			return keyPressed(e, event);
 			break;
 		default:
 			return false;
 	}
+	return false;
 }
 
 bool Input::keyPressed(sf::Event const& e, cu::Event& event)
@@ -36,7 +40,7 @@ bool Input::keyPressed(sf::Event const& e, cu::Event& event)
 
 	for (i = cu::Event::UP; i != cu::Event::LAST_ACTION; ++i)
 	{
-		if (e.KeyPressed == _bindings[i])
+		if (e.key.code == _bindings[i])
 		{
 			event.key = static_cast<cu::Event::KeyEvent>(i);
 			return true;

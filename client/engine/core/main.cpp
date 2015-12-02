@@ -7,6 +7,8 @@
 #include "Renderer.hpp"
 #include "SpriteRenderer.hpp"
 #include "Behaviour.hpp"
+#include "Input.hpp"
+#include "Event.hpp"
 
 bool gameObjectTest()
 {
@@ -53,10 +55,32 @@ void renderTest()
 	}
 }
 
+void inputTest()
+{
+	Renderer r;
+	Input i(r.getWindow());
+	cu::Event e;
+
+	e.key = cu::Event::LAST_ACTION;
+	while (e.key != cu::Event::ESCAPE)
+	{
+		//std::cout << "?" << std::endl;
+		while (i.pollEvent(e))
+		{
+			std::cout << e.key << std::endl;
+		}
+		r.render();
+	}
+}
+
 int main()
 {
 //    if (gameObjectTest())
 //        std::cout << "gameObjectTest passed -> OK" << std::endl;
-	renderTest();
+
+	//renderTest();
+
+	inputTest();
+
     return (0);
 }

@@ -15,10 +15,13 @@ public:
     Renderer& operator=(const Renderer&) = delete;
 public:
     void init();
+    void render();
+
+public:
+	sf::RenderWindow& getWindow();
 
 public:
     // To be honest, I don't know yet if it will stay public
-    void render();
     void draw(const GameObject&);
 
 private:

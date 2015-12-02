@@ -21,6 +21,10 @@ void Renderer::render()
 	this->_win.display();
 }
 
+sf::RenderWindow& Renderer::getWindow()
+{
+	return _win;
+}
 
 void Renderer::draw(const GameObject& object)
 {
