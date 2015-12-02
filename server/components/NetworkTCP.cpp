@@ -110,7 +110,7 @@ namespace RType
             return new NetworkTCP(*this);
         }
 
-        void            NetworkTCP::clear()
+        void                NetworkTCP::clear()
         {
             _socket = nullptr;
         }

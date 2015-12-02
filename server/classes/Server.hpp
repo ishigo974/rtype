@@ -30,7 +30,7 @@ namespace RType
         virtual std::string     toString() const;
 
     public:
-        static void   display(std::string const& msg);
+        static void   display(std::string const& msg, bool err = false);
 
     public:
         static const short int    defaultPort;

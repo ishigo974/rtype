@@ -24,7 +24,7 @@ namespace RType
 
         public:
             NetworkTCP(NetworkTCP const& other);
-            NetworkTCP&             operator=(NetworkTCP const& other);
+            NetworkTCP&         operator=(NetworkTCP const& other);
 
         public:
             void                setSocket(UniqueITcpSockPtr socket);

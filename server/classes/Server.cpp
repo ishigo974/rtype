@@ -9,6 +9,7 @@
 #include "NetworkTCP.hpp"
 #include "IComponent.hpp"
 #include "LobbySystem.hpp"
+#include "NotImplemented.hpp"
 
 namespace RType
 {
@@ -51,11 +52,15 @@ namespace RType
                 std::to_string(_acceptor.getPort()));
         while (!_quit)
         {
-            _monitor.update();
-            if (_monitor.isReadable(&_acceptor))
-                onClientConnection();
-            _em.updateAll();
-            _sm.processAll();
+            try {
+                _monitor.update();
+                if (_monitor.isReadable(&_acceptor))
+                    onClientConnection();
+                _em.updateAll();
+                _sm.processAll();
+            } catch (Exception::NotImplemented const& e) {
+                display(std::string(e.what()), true);
+            } // TODO add exceptions
         }
     }
 
@@ -93,8 +98,11 @@ namespace RType
     /*
     ** Static functions
     */
-    void          Server::display(std::string const& msg)
+    void          Server::display(std::string const& msg, bool err)
     {
-        std::cout << "| " << msg << std::endl;
+        if (err)
+            std::cout << "| " << msg << std::endl;
+        else
+            std::cerr << "| " << msg << std::endl;
     }
 }

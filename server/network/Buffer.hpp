@@ -57,7 +57,7 @@ public:
     }
 
     template<typename T>
-    void setData(T const& data)
+    void    setData(T const& data)
     {
         uint8_t tmp;
         size_t  i = 0; //TODO change endianess
@@ -72,10 +72,21 @@ public:
     }
 
     template<typename T>
-    void setData(T const *data, size_t size)
+    void    setData(T const *data, size_t size)
     {
         _data.clear();
         append(data, size);
+    }
+
+    template <typename Type>
+    Type    get(unsigned int offset = 0) const
+    {
+        Type    res;
+
+        // TODO
+        static_cast<void>(offset);
+        static_cast<void>(res);
+        return res;
     }
 
 private:

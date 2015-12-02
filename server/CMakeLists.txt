@@ -25,6 +25,7 @@ include_directories(base_ut)
 include_directories(components)
 include_directories(systems)
 include_directories(classes)
+include_directories(commands)
 include_directories(unit_tests)
 
 file(GLOB source_files
@@ -39,6 +40,8 @@ file(GLOB source_files
         components/*.cpp
         systems/*.hpp
         systems/*.cpp
+	commands/*.hpp
+	commands/*.cpp
       	exceptions/*.hpp
       	exceptions/*.cpp
       )
@@ -55,6 +58,8 @@ file(GLOB net_files
 		components/*.cpp
 		systems/*.hpp
 		systems/*.cpp
+		commands/*.hpp
+		commands/*.cpp
 		exceptions/*.hpp
 		exceptions/*.cpp
 		)
