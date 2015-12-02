@@ -2,6 +2,7 @@
 // Created by naliwe on 23/11/15.
 //
 
+#include <iostream>
 #include "Object.hpp"
 
 Object::Object()
@@ -20,31 +21,27 @@ Object::Object(Object const& other)
 Object::Object(Object&& other)
         : Object(other)
 {
-    swap(*this, other);
+    swap(other);
 }
 
 Object& Object::operator=(Object other)
 {
-    swap(*this, other);
+    swap(other);
 
     return (*this);
 }
 
-std::string const& Object::toString()
+std::string Object::toString()
 {
-    if (_toString.empty())
-    {
-        std::stringstream ss;
+    std::stringstream ss;
 
-        ss << "Object {"
-        << "\n\tid: " << _id
-        << "\n\tname: " << _name
-        << "\n}" << std::endl;
+    ss << "Object {"
+    << "\n\tid: " << _id
+    << "\n\tname: " << _name
+    << "\n}" << std::endl;
 
-        _toString = ss.str();
-    }
 
-    return (_toString);
+    return (ss.str());
 }
 
 unsigned int Object::getId() const
@@ -67,10 +64,20 @@ void Object::setName(std::string const& _name)
     Object::_name = _name;
 }
 
-void Object::swap(Object& first, Object& second)
+void Object::swap(Object& other)
 {
-    std::swap(first._name, second._name);
-    std::swap(first._id, second._id);
+    using std::swap;
+
+    swap(_name, other._name);
+    swap(_id, other._id);
+}
+
+namespace std {
+    template<>
+    void swap<Object>(Object &a, Object &b)
+    {
+        a.swap(b);
+    }
 }
 
 bool Object::operator==(Object const& other)
@@ -84,4 +91,9 @@ bool Object::operator==(Object const& other)
 bool Object::operator!=(Object const& other)
 {
     return (!Object::operator==(other));
+}
+
+unsigned int Object::getMask()
+{
+    return 0;
 }

@@ -1,42 +1,62 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
+#include <assert.h>
 #include "GameObject.hpp"
-
-void sfml_test()
-{
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape  shape(100.f);
-
-    shape.setFillColor(sf::Color::Blue);
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-}
+#include "EntityManager.hpp"
+#include "Renderer.hpp"
+#include "SpriteRenderer.hpp"
+#include "Behaviour.hpp"
 
 bool gameObjectTest()
 {
-    GameObject a(0, "LEL", 1);
-    GameObject b = std::move(a);
+    EntityManager entityManager;
 
-    std::cout << b.toString() << std::endl;
+    GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+    assert(a->getId() == 1);
+    assert(a->getName() == "Test");
+    assert(a->getLayer() == 1);
+
+    GameObject *b = entityManager.createEntity<GameObject>("Test", 2);
+    assert(b->getId() == 2);
+    assert(b->getName() == "Test");
+    assert(b->getLayer() == 2);
+
+    a->addComponent(std::make_unique<Behaviour>(10, "Behave"));
+
+    Behaviour *be = a->getComponent<Behaviour>();
+
+    assert(be != nullptr);
+    assert(be->getName() == "Behave");
+
+    std::cout << a->toString() << std::endl;
+    std::cout << b->toString() << std::endl;
 
     return (true);
 }
 
+void renderTest()
+{
+	EntityManager entityManager;
+	Renderer r;
+	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+
+	a->addComponent(std::make_unique<SpriteRenderer>(2, "lel", "r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300)));
+	a->addComponent(std::make_unique<Transform>(3, "yoy", cu::Position(100, 100), cu::Scale(1, 1), cu::Rotation(0)));
+
+	r.init();
+
+	while (1)
+	{
+		r.draw(*a);
+		r.render();
+	}
+}
+
 int main()
 {
-    gameObjectTest();
-    return 0;
+//    if (gameObjectTest())
+//        std::cout << "gameObjectTest passed -> OK" << std::endl;
+	renderTest();
+    return (0);
 }
