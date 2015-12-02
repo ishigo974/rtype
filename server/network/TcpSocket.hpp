@@ -17,7 +17,7 @@ public:
     virtual ~TcpSocket();
 
 public:
-    virtual size_t        send(Buffer const& buffer) const;
+    virtual size_t        send(Buffer& buffer) const;
     virtual size_t        receive(Buffer& buffer, size_t len) const;
     virtual void          close() const;
 

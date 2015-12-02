@@ -28,8 +28,9 @@ public:
 public:
     void                consume(size_t size);
     bool                empty() const;
-    uint8_t const*      data() const;
-    size_t              size() const;
+	uint8_t*		    c_data();
+	uint8_t const*      data() const;
+	size_t              size() const;
     void                clear();
 
     template<typename T>

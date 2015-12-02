@@ -4,7 +4,10 @@
 
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <Windows.h>
+#pragma comment(lib,"ws2_32")
 #else
 
 #include <arpa/inet.h>
@@ -58,18 +61,18 @@ ITcpSocket *TcpAcceptor::accept() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     rSocket socket;
-    struct sockaddr addr;
-    int socklen;
+	struct sockaddr_in addr;
+	int socklen;
+	char *address = new char[16];
 
     socklen = sizeof(addr);
-    if ((socket = accept(_socket, &addr, &socklen)) == INVALID_SOCKET)
+    if ((socket = WSAAccept(_socket, reinterpret_cast<sockaddr*>(&addr), &socklen, nullptr, NULL)) == INVALID_SOCKET)
         return (nullptr);
-    TcpSocket* ret = new TcpSocket(socket, reinterpret_cast<struct in_addr *>(inet_ntoa(addr)),
-                                   _port);
+	inet_ntop(AF_INET, &(addr.sin_addr), address, INET_ADDRSTRLEN);
+    auto* ret = new TcpSocket(socket, address, _port);
     return ret;
 #else
-
-    struct sockaddr_in client;
+    struct sockaddr_in client;	
     rSocket            socket;
     unsigned int       struct_len;
 

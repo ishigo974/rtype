@@ -10,7 +10,7 @@ public:
     { }
 
 public:
-    virtual rSocket getSocket() const = 0; //TODO typedef
+    virtual rSocket getSocket() const = 0;
 };
 
 #endif /* !IMONITORABLE_HPP_ */

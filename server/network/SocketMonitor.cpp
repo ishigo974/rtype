@@ -11,8 +11,13 @@
 /*
 ** Static variables
 */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+const long			SocketMonitor::defaultSecVal = 5;
+const long			SocketMonitor::defaultUsecVal = 0;
+#else
 const time_t        SocketMonitor::defaultSecVal  = 5;
 const suseconds_t   SocketMonitor::defaultUsecVal = 0;
+#endif
 
 /*
 ** Constructor/Destructor

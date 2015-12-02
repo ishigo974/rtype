@@ -45,13 +45,23 @@ public:
 #endif
 
 private:
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	long	_secValue;
+	long    _usecValue;
+#else
     time_t          _secValue;
     suseconds_t     _usecValue;
+#endif
     rSocket         _maxFd;
 
 public:
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+	static const long			defaultSecVal;
+	static const long			defaultUsecVal;
+#else
     static const time_t       defaultSecVal;
     static const suseconds_t  defaultUsecVal;
+#endif
 };
 
 

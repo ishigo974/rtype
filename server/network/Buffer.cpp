@@ -67,6 +67,11 @@ uint8_t const*      Buffer::data() const
     return (_data.data());
 }
 
+uint8_t* Buffer::c_data()
+{
+	return _data.data();
+}
+
 size_t              Buffer::size() const
 {
     return (_data.size());
