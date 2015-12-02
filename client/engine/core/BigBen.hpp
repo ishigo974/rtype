@@ -20,6 +20,8 @@ public:
         return instance;
     }
 
+  static std::chrono::time_point<std::chrono::high_resolution_clock>	getTimeNow();
+
 private:
     BigBen();
     ~BigBen();

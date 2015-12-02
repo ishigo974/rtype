@@ -27,6 +27,11 @@ double BigBen::getFixedElapsedtime()
     return (t.count());
 }
 
+std::chrono::time_point<std::chrono::high_resolution_clock>	BigBen::getTimeNow()
+{
+  return _clock.now();
+}
+
 BigBen::BigBen()
 {
     _clock.now();
