@@ -26,31 +26,33 @@ public:
     virtual std::string toString() const;
 
 public:
-    void              consume(size_t size);
-    bool              empty() const;
-    uint8_t           *data();
-    uint8_t const     *data() const;
-    size_t            size() const;
-    void              clear();
+    void          consume(size_t size);
+    bool          empty() const;
+    uint8_t       *data();
+    uint8_t const *data() const;
+    size_t        size() const;
+    void          clear();
 
     template<typename T>
     void append(T const *data, size_t size)
     {
         for (unsigned int i = 0; i < size; ++i)
+        {
             append(data[i]);
+        }
     }
 
     template<typename T>
     void append(T const& data)
     {
         uint8_t tmp;
-        int     i = sizeof(data);
+        size_t  i = 0; //TODO change endianess
 
-        while (i > 0)
+        while (i < sizeof(data))
         {
-            tmp = (data >> (8 * i));
+            tmp = (data >> (8 * (i)));
             _data.push_back(tmp);
-            --i;
+            ++i;
         }
     }
 
@@ -58,14 +60,14 @@ public:
     void setData(T const& data)
     {
         uint8_t tmp;
-        int     i = sizeof(data);
+        size_t  i = 0; //TODO change endianess
 
         _data.erase(_data.begin(), _data.end());
-        while (i > 0)
+        while (i < sizeof(data))
         {
-            tmp = data >> (8 * i);
+            tmp = data >> (8 * (i - 1));
             _data.push_back(tmp);
-            --i;
+            ++i;
         }
     }
 

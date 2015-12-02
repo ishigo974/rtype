@@ -10,53 +10,23 @@
  * TODO Patch Select
  */
 
+union lol {
+    int a;
+    char b[4];
+};
+
 int main()
 {
     Buffer toto;
 
-    toto.setData(42);
-    std::cout << (int) toto.empty() << std::endl;
-    std::cout << toto.data()->c_str() << std::endl;
-    toto.consume(toto.size());
-    std::cout << toto.data()->c_str() << std::endl;
-    std::cout << (int) toto.empty() << std::endl;
-    toto.append(" TAMERE", 8);
-    std::cout << toto.data()->c_str() << std::endl;
-    toto.consume(42);
-    std::cout << toto.data()->c_str() << std::endl;
-    std::cout << (int) toto.empty() << std::endl;
-    TcpAcceptor tcpsock(2121);
-    TcpSocket   *tmp;
 
-    SocketMonitor test;
-
-    test.registerSocket(&tcpsock);
-    int retval;
-    while ((retval = test.update()) >= 0 && errno != EINTR)
-    {
-        std::cout << "Retval : " << retval << std::endl;
-        if (retval == 0)
-            std::cerr << "Timeout" << std::endl;
-        else if (retval > 0)
-        {
-            if (test.isReadable(&tcpsock))
-            {
-                tmp = static_cast<TcpSocket *>(tcpsock.accept());
-                if (tmp != nullptr)
-                {
-                    std::cout << tmp->getAddr() << std::endl;
-                    toto.setData("TU SUCE DES BITES\n", 18);
-                    tmp->send(toto);
-                    test.registerSocket(tmp);
-                }
-            }
-        }
-        std::cout << test.toString() << std::endl;
-        test.clearFds();
-        if (!test.isReadable(&tcpsock))
-        {
-            std::cout << "IsMonitored" << std::endl;
-            test.registerSocket(&tcpsock);
-        }
-    }
+//    toto.append(" TAMERE", 7);
+//    toto.append(" TONPERE", 9);
+    toto.append<int>(42);
+    lol a;
+    a.b[0] = toto[3];
+    a.b[1] = toto[2];
+    a.b[2] = toto[1];
+    a.b[3] = toto[0];
+    std::cout << a.a << std::endl;
 }

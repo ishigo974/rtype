@@ -43,6 +43,22 @@ file(GLOB source_files
       	exceptions/*.cpp
       )
 
+file(GLOB net_files
+		main_network.cpp
+		ecs/*.hpp
+		ecs/*.cpp
+		network/*.hpp
+		network/*.cpp
+		classes/*.hpp
+		classes/*.cpp
+		components/*.hpp
+		components/*.cpp
+		systems/*.hpp
+		systems/*.cpp
+		exceptions/*.hpp
+		exceptions/*.cpp
+		)
+
 file(GLOB ut_source_files
         main_ut.cpp
         ecs/*.hpp
@@ -64,4 +80,5 @@ file(GLOB ut_source_files
       )
 
 add_executable(${EXECUTABLE_NAME} ${source_files})
+add_executable(network_test ${net_files})
 add_executable(${UT_NAME} ${ut_source_files})

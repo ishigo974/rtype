@@ -12,6 +12,7 @@
 */
 Buffer::Buffer()
 {
+    _data.clear();
 }
 
 Buffer::~Buffer()
