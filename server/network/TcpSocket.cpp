@@ -48,14 +48,15 @@ TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-size_t TcpSocket::send(Buffer& buffer) const
+size_t TcpSocket::send(Buffer const& buffer) const
 {
     WSABUF toSend;
 	DWORD SendBytes;
 	size_t ret;
+    std::vector<char> str(buffer.data(), buffer.data() + buffer.size());
 
     toSend.len = buffer.size();
-    toSend.buf = reinterpret_cast<CHAR*>(buffer.c_data());
+	toSend.buf = str.data();
 	if ((ret = WSASend(_socket, &toSend, 1, &SendBytes, 0, nullptr, nullptr)) == SOCKET_ERROR)
 	{
 		;//TODO throw
@@ -65,7 +66,7 @@ size_t TcpSocket::send(Buffer& buffer) const
 
 #else
 
-size_t        TcpSocket::send(Buffer& buffer) const
+size_t        TcpSocket::send(Buffer const& buffer) const
 {
     ssize_t ret;
 

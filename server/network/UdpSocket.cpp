@@ -28,7 +28,7 @@ UdpSocket::UdpSocket(short int port)
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
-size_t    UdpSocket::send(Buffer& /*buffer*/) const
+size_t    UdpSocket::send(Buffer const& /*buffer*/) const
 {
     return 0;
 }
@@ -40,7 +40,7 @@ size_t    UdpSocket::receive(Buffer& /*buffer*/, size_t /*len*/) const
 
 #else
 
-size_t        UdpSocket::send(Buffer& buffer) const
+size_t        UdpSocket::send(Buffer const& buffer) const
 {
     ssize_t ret;
 

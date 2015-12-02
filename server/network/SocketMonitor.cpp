@@ -60,8 +60,7 @@ void SocketMonitor::registerSocket(IMonitorable const *socket)
     FD_SET(socket->getSocket(), &_readFds);
     FD_SET(socket->getSocket(), &_writeFds);
 #endif
-
-    if (socket->getSocket() > _maxFd)
+if (socket->getSocket() > _maxFd)
         _maxFd = socket->getSocket();
 }
 

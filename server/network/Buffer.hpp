@@ -17,31 +17,31 @@ public:
 
 public:
     Buffer(Buffer const& buffer);
-    Buffer&             operator=(Buffer const& buffer);
+    Buffer& operator=(Buffer const& buffer);
 
 public:
-    uint8_t&            operator[](size_t index);
+    uint8_t& operator[](size_t index);
 
 public:
     virtual std::string toString() const;
 
 public:
-    void                consume(size_t size);
-    bool                empty() const;
-	uint8_t*		    c_data();
-	uint8_t const*      data() const;
-	size_t              size() const;
-    void                clear();
+    void              consume(size_t size);
+    bool              empty() const;
+    uint8_t           *data();
+    uint8_t const     *data() const;
+    size_t            size() const;
+    void              clear();
 
     template<typename T>
-    void                append(T const* data, size_t size)
+    void append(T const *data, size_t size)
     {
         for (unsigned int i = 0; i < size; ++i)
             append(data[i]);
     }
 
     template<typename T>
-    void                append(T const& data)
+    void append(T const& data)
     {
         uint8_t tmp;
         int     i = sizeof(data);
@@ -55,7 +55,7 @@ public:
     }
 
     template<typename T>
-    void                setData(T const& data)
+    void setData(T const& data)
     {
         uint8_t tmp;
         int     i = sizeof(data);
@@ -70,7 +70,7 @@ public:
     }
 
     template<typename T>
-    void                setData(T const* data, size_t size)
+    void setData(T const *data, size_t size)
     {
         _data.clear();
         append(data, size);
@@ -80,10 +80,13 @@ private:
     std::vector<uint8_t> _data;
 };
 
-template <>
+template<>
 void Buffer::append(Buffer const& data);
 
-template <>
+template<>
+void Buffer::setData(Buffer const& data);
+
+template<>
 void Buffer::setData(std::string const& data);
 
 #endif //RTYPE_BUFFER_HPP

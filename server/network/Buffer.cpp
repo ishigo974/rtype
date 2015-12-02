@@ -67,7 +67,7 @@ uint8_t const*      Buffer::data() const
     return (_data.data());
 }
 
-uint8_t* Buffer::c_data()
+uint8_t* Buffer::data()
 {
 	return _data.data();
 }
@@ -106,6 +106,13 @@ template <>
 void                Buffer::append(Buffer const& data)
 {
     _data.insert(_data.end(), data._data.begin(), data._data.end());
+}
+
+template <>
+void                Buffer::setData(Buffer const& data)
+{
+    _data.erase(_data.begin(), _data.end());
+    _data.assign(data._data.begin(), data._data.end());
 }
 
 template <>
