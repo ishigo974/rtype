@@ -86,7 +86,7 @@ namespace RType
             throw std::runtime_error("NetworkTCP component not found");
         comp->setSocket(std::unique_ptr<ITcpSocket>(socket));
         _monitor.registerSocket(socket);
-		display("New connection from " + socket->getAddr() + " " +
+		display("New connection from " + socket->getAddr() + ":" +
                 std::to_string(socket->getPort()));
     }
 

@@ -29,7 +29,7 @@ namespace RType
     public:
         virtual std::string     toString() const;
 
-    protected:
+    public:
         static void   display(std::string const& msg);
 
     public:

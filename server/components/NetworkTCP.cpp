@@ -3,6 +3,7 @@
 #include "NetworkTCP.hpp"
 #include "ComponentsMasks.hpp"
 #include "SocketMonitor.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -59,9 +60,9 @@ namespace RType
             {
                 Buffer        tmp;
 
+                _socket->receive(tmp, bufferSize);
                 if (tmp.empty())
                     onClientDisconnection();
-                _socket->receive(tmp, bufferSize);
                 _received.append(tmp);
             }
             if (!_toSend.empty())
@@ -119,10 +120,11 @@ namespace RType
             std::ostringstream  ss;
 
             ss << "Component::NetworkTCP {"
-            << "\n\t_socket: " << _socket->getSocket()
-            << "\n\t_toSend: " << _toSend.toString()
-            << "\n\t_received: " << _received.toString()
-            << std::endl;
+                << "\n\t_socket: "
+                << (_socket == nullptr ? -1. : _socket->getSocket())
+                << "\n\t_toSend: " << _toSend.toString()
+                << "\n\t_received: " << _received.toString()
+                << std::endl;
             return ss.str();
         }
 
@@ -131,6 +133,10 @@ namespace RType
         */
         void                    NetworkTCP::onClientDisconnection()
         {
+            Server::display("Client disconnected (" + _socket->getAddr() + ":" +
+                            std::to_string(_socket->getPort()) + ")");
+            SocketMonitor::getInstance().deleteSocket(_socket.get());
+            _socket = nullptr;
         }
     }
 }
