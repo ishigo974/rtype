@@ -7,10 +7,10 @@ class IMonitorable
 {
 public:
     virtual ~IMonitorable()
-    { }
+    {}
 
 public:
-    virtual rSocket getSocket() const = 0; //TODO typedef
+    virtual rSocket getSocket() const = 0;
 };
 
 #endif /* !IMONITORABLE_HPP_ */

@@ -20,12 +20,20 @@ namespace RType
     /*
     ** Constructors/Destructor
     */
-    Server::Server() : _quit(false), _monitor(), _acceptor(Server::defaultPort)
+    Server::Server() :
+        _quit(false), _acceptor(Server::defaultPort),
+        _monitor(SocketMonitor::getInstance()),
+        _em(ECS::EntityManager::getInstance()),
+        _sm(ECS::SystemManager::getInstance())
     {
         init();
     }
 
-    Server::Server(short int port) : _quit(false), _monitor(), _acceptor(port)
+    Server::Server(short int port) :
+        _quit(false), _acceptor(port),
+        _monitor(SocketMonitor::getInstance()),
+        _em(ECS::EntityManager::getInstance()),
+        _sm(ECS::SystemManager::getInstance())
     {
         init();
     }
@@ -46,8 +54,8 @@ namespace RType
             _monitor.update();
             if (_monitor.isReadable(&_acceptor))
                 onClientConnection();
-            ECS::EntityManager::getInstance().updateAll();
-            ECS::SystemManager::getInstance().processAll();
+            _em.updateAll();
+            _sm.processAll();
         }
     }
 
@@ -62,26 +70,22 @@ namespace RType
     void            Server::init()
     {
         _monitor.registerSocket(&_acceptor);
-        ECS::EntityManager::getInstance().registerComponent(
-            std::make_unique<Component::NetworkTCP>()
-        );
-        ECS::SystemManager::getInstance().registerSystem(
-            std::make_unique<System::Lobby>()
-        );
+        _em.registerComponent(std::make_unique<Component::NetworkTCP>());
+        _sm.registerSystem(std::make_unique<System::Lobby>());
     }
 
     void            Server::onClientConnection()
     {
         Component::NetworkTCP*  comp;
         ITcpSocket*             socket = _acceptor.accept();
-        ECS::Entity&            entity =
-            ECS::EntityManager::getInstance().create(Component::MASK_NETWORKTCP);
+        ECS::Entity&            entity = _em.create(Component::MASK_NETWORKTCP);
 
         comp = entity
             .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
         if (comp == nullptr)
             throw std::runtime_error("NetworkTCP component not found");
         comp->setSocket(std::unique_ptr<ITcpSocket>(socket));
+        _monitor.registerSocket(socket);
         display("New connection from " + socket->getAddr() + " " +
                 std::to_string(socket->getPort()));
     }

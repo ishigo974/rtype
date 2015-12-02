@@ -1,6 +1,8 @@
 #include <sstream>
+#include <iostream>
 #include "NetworkTCP.hpp"
 #include "ComponentsMasks.hpp"
+#include "SocketMonitor.hpp"
 
 namespace RType
 {
@@ -15,12 +17,12 @@ namespace RType
         ** Constructor/Destructor
         */
         NetworkTCP::NetworkTCP() :
-        _socket(nullptr), _toSend(), _received()
+            _socket(nullptr), _toSend(), _received()
         {
         }
 
         NetworkTCP::NetworkTCP(UniqueITcpSockPtr socket) :
-        _socket(std::move(socket)), _toSend(), _received()
+            _socket(std::move(socket)), _toSend(), _received()
         {
         }
 
@@ -32,7 +34,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         NetworkTCP::NetworkTCP(NetworkTCP const& other) :
-        _toSend(other._toSend), _received(other._received)
+            _toSend(other._toSend), _received(other._received)
         {
         }
 
@@ -51,12 +53,18 @@ namespace RType
         */
         void            NetworkTCP::update()
         {
-            Buffer        tmp;
+            if (SocketMonitor::getInstance().isReadable(_socket.get()))
+            {
+                Buffer        tmp;
 
-            while (_socket->receive(tmp, bufferSize) > 0)
+                _socket->receive(tmp, bufferSize);
                 _received.append(tmp);
-            _socket->send(_toSend);
-            _toSend.clear();
+            }
+            if (!_toSend.empty())
+            {
+                _socket->send(_toSend);
+                _toSend.clear();
+            }
         }
 
         void            NetworkTCP::pushData(Buffer const& buffer)

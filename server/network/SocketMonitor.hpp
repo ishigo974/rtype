@@ -7,18 +7,27 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "IStringable.hpp"
 #include "IMonitorable.hpp"
 
 class SocketMonitor : public IStringable
 {
 public:
+    typedef std::unique_ptr<SocketMonitor>          UniqueMonitorPtr;
+
+protected:
     SocketMonitor();
+
+public:
     virtual ~SocketMonitor();
 
 private:
     SocketMonitor(SocketMonitor const& monitor) = delete;
     SocketMonitor& operator=(SocketMonitor const& monitor) = delete;
+
+public:
+    static SocketMonitor&   getInstance();
 
 public:
     void    registerSocket(IMonitorable const* socket);
@@ -29,8 +38,8 @@ public:
     void    update();
 
 public:
-    void    setSec(int value);
-    void    setUsec(int value);
+    void    setSec(time_t value);
+    void    setUsec(suseconds_t value);
 
 public:
     virtual std::string toString() const;
@@ -50,8 +59,12 @@ private:
     rSocket         _maxFd;
 
 public:
-    static const time_t       defaultSecVal;
-    static const suseconds_t  defaultUsecVal;
+    static const time_t             defaultSecVal;
+    static const suseconds_t        defaultUsecVal;
+    static const unsigned int       noFd;
+
+protected:
+    static UniqueMonitorPtr     instance;
 };
 
 

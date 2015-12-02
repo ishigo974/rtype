@@ -27,7 +27,8 @@ namespace RType
                 .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP)
                 ->popData();
 
-            std::cout << data.data() << std::endl;
+            if (!data.empty())
+                std::cout << data.data() << std::endl;
         }
 
         ECS::ComponentMask  Lobby::getMask() const
