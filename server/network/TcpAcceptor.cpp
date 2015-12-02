@@ -16,6 +16,7 @@
 
 #endif
 
+#include <stdexcept>
 #include <iostream>
 #include <sstream>
 #include "TcpAcceptor.hpp"
@@ -24,7 +25,7 @@
 TcpAcceptor::TcpAcceptor(short int port)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    (void)port;
+    static_cast<void>(port);
 #else
     struct sockaddr_in server;
 
@@ -35,17 +36,12 @@ TcpAcceptor::TcpAcceptor(short int port)
 
     if ((_socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")
             ->p_proto)) == -1)
-        //TODO throw exception
-        std::cerr << "Can' listen" << std::endl;
+        throw std::runtime_error("socket failed");
     if (::bind(_socket, reinterpret_cast<const struct sockaddr *>(&server),
                sizeof(server)) == -1)
-        //TODO throw exception;
-        std::cout << "Can't bind port" << std::endl;
+        throw std::runtime_error("can't bind port " + std::to_string(port));
     if (listen(_socket, 5) == -1)
-    {
-        std::cerr << "Nothing to listen" << std::endl;
-        //TODO throw exception
-    }
+        throw std::runtime_error("listen failed");
 #endif
 }
 

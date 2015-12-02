@@ -7,7 +7,7 @@ class IMonitorable
 {
 public:
     virtual ~IMonitorable()
-    { }
+    {}
 
 public:
     virtual rSocket getSocket() const = 0;

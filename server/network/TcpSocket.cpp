@@ -65,7 +65,7 @@ size_t TcpSocket::send(Buffer& buffer) const
 
 #else
 
-size_t        TcpSocket::send(Buffer const& buffer) const
+size_t        TcpSocket::send(Buffer& buffer) const
 {
     ssize_t ret;
 

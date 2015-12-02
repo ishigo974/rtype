@@ -1,6 +1,8 @@
 #ifndef SERVER_HPP_
 # define SERVER_HPP_
 
+# include "EntityManager.hpp"
+# include "SystemManager.hpp"
 # include "SocketMonitor.hpp"
 # include "TcpAcceptor.hpp"
 
@@ -34,9 +36,11 @@ namespace RType
         static const short int    defaultPort;
 
     protected:
-        bool            _quit;
-        SocketMonitor   _monitor;
-        TcpAcceptor     _acceptor;
+        bool                    _quit;
+        TcpAcceptor             _acceptor;
+        SocketMonitor&          _monitor;
+        ECS::EntityManager&     _em;
+        ECS::SystemManager&     _sm;
     };
 }
 
