@@ -34,6 +34,22 @@ public:
     void          clear();
 
     template<typename T>
+    T get(unsigned int offset = 0) const
+    {
+        T      ret  = 0;
+        size_t size = sizeof(T);
+
+        while (size > 0)
+        {
+            ret = ret << 8;
+            ret = ret | _data[offset];
+            ++offset;
+            --size;
+        }
+        return ret;
+    }
+
+    template<typename T>
     void append(T const *data, size_t size)
     {
         for (unsigned int i = 0; i < size; ++i)
@@ -46,13 +62,13 @@ public:
     void append(T const& data)
     {
         uint8_t tmp;
-        size_t  i = 0; //TODO change endianess
+        size_t  i = sizeof(T); //TODO change endianess
 
-        while (i < sizeof(data))
+        while (i > 0)
         {
-            tmp = (data >> (8 * (i)));
+            tmp = (data >> (8 * (i - 1)));
             _data.push_back(tmp);
-            ++i;
+            --i;
         }
     }
 
@@ -60,14 +76,14 @@ public:
     void setData(T const& data)
     {
         uint8_t tmp;
-        size_t  i = 0; //TODO change endianess
+        size_t  i = sizeof(T); //TODO change endianess
 
         _data.erase(_data.begin(), _data.end());
-        while (i < sizeof(data))
+        while (i > 0)
         {
             tmp = data >> (8 * (i - 1));
             _data.push_back(tmp);
-            ++i;
+            --i;
         }
     }
 
