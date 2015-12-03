@@ -86,10 +86,10 @@ size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 
 #else
 
-size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
+size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    ssize_t ret;
-    char    *buff = new char[len];
+    ssize_t     ret;
+    char*       buff = new char[len];
 
     if ((ret = ::recv(_socket, buff, len, 0)) == -1)
         throw std::runtime_error("receive failed");

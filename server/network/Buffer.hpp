@@ -73,7 +73,7 @@ public:
     }
 
     template<typename T>
-    void setData(T const& data)
+    void    setData(T const& data)
     {
         uint8_t tmp;
         size_t  i = sizeof(T); //TODO change endianess
@@ -88,7 +88,7 @@ public:
     }
 
     template<typename T>
-    void setData(T const *data, size_t size)
+    void    setData(T const *data, size_t size)
     {
         _data.clear();
         append(data, size);

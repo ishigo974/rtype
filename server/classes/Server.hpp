@@ -29,8 +29,8 @@ namespace RType
     public:
         virtual std::string     toString() const;
 
-    protected:
-        static void   display(std::string const& msg);
+    public:
+        static void   display(std::string const& msg, bool err = false);
 
     public:
         static const short int    defaultPort;

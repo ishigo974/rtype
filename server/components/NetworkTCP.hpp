@@ -24,12 +24,13 @@ namespace RType
 
         public:
             NetworkTCP(NetworkTCP const& other);
-            NetworkTCP&             operator=(NetworkTCP const& other);
+            NetworkTCP&         operator=(NetworkTCP const& other);
 
         public:
             void                setSocket(UniqueITcpSockPtr socket);
             void                pushData(Buffer const& buffer);
             Buffer              popData();
+            bool                isConnected() const;
 
         public:
             virtual void        update();
@@ -41,7 +42,10 @@ namespace RType
             virtual void                clear();
 
         public:
-            virtual std::string           toString() const;
+            virtual std::string         toString() const;
+
+        protected:
+            void                        onClientDisconnection();
 
         protected:
             static const size_t     bufferSize;

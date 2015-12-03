@@ -3,6 +3,7 @@
 #include "NetworkTCP.hpp"
 #include "ComponentsMasks.hpp"
 #include "SocketMonitor.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -53,11 +54,15 @@ namespace RType
         */
         void            NetworkTCP::update()
         {
+            if (_socket == nullptr)
+                return ;
             if (SocketMonitor::getInstance().isReadable(_socket.get()))
             {
                 Buffer        tmp;
 
                 _socket->receive(tmp, bufferSize);
+                if (tmp.empty())
+                    onClientDisconnection();
                 _received.append(tmp);
             }
             if (!_toSend.empty())
@@ -80,6 +85,11 @@ namespace RType
             return res;
         }
 
+        bool            NetworkTCP::isConnected() const
+        {
+            return _socket != nullptr;
+        }
+
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
         {
             _socket = std::move(socket);
@@ -100,7 +110,7 @@ namespace RType
             return new NetworkTCP(*this);
         }
 
-        void            NetworkTCP::clear()
+        void                NetworkTCP::clear()
         {
             _socket = nullptr;
         }
@@ -110,11 +120,23 @@ namespace RType
             std::ostringstream  ss;
 
             ss << "Component::NetworkTCP {"
-            << "\n\t_socket: " << _socket->getSocket()
-            << "\n\t_toSend: " << _toSend.toString()
-            << "\n\t_received: " << _received.toString()
-            << std::endl;
+                << "\n\t_socket: "
+                << (_socket == nullptr ? -1. : _socket->getSocket())
+                << "\n\t_toSend: " << _toSend.toString()
+                << "\n\t_received: " << _received.toString()
+                << std::endl;
             return ss.str();
+        }
+
+        /*
+        ** Protected member functions
+        */
+        void                    NetworkTCP::onClientDisconnection()
+        {
+            Server::display("Client disconnected (" + _socket->getAddr() + ":" +
+                            std::to_string(_socket->getPort()) + ")");
+            SocketMonitor::getInstance().deleteSocket(_socket.get());
+            _socket = nullptr;
         }
     }
 }
