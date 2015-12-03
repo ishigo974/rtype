@@ -26,15 +26,16 @@ public:
     virtual std::string toString() const;
 
 public:
-    void          consume(size_t size);
-    bool          empty() const;
-    uint8_t       *data();
-    uint8_t const *data() const;
-    size_t        size() const;
-    void          clear();
+    void            consume(size_t size);
+    bool            empty() const;
+    uint8_t*        data();
+    uint8_t const*  data() const;
+    size_t          size() const;
+    void            clear();
+    std::string     getString(size_t len = 0, size_t offset = 0) const;
 
     template<typename T>
-    T get(unsigned int offset = 0) const
+    T       get(size_t offset = 0) const
     {
         T      ret  = 0;
         size_t size = sizeof(T);
@@ -50,16 +51,14 @@ public:
     }
 
     template<typename T>
-    void append(T const *data, size_t size)
+    void    append(T const *data, size_t size)
     {
         for (unsigned int i = 0; i < size; ++i)
-        {
             append(data[i]);
-        }
     }
 
     template<typename T>
-    void append(T const& data)
+    void    append(T const& data)
     {
         uint8_t tmp;
         size_t  i = sizeof(T); //TODO change endianess
@@ -100,6 +99,9 @@ private:
 
 template<>
 void Buffer::append(Buffer const& data);
+
+template<>
+void Buffer::append(std::string const& data);
 
 template<>
 void Buffer::setData(Buffer const& data);

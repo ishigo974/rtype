@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Request.hpp"
 #include "NotImplemented.hpp"
 
@@ -14,9 +15,10 @@ namespace RType
         { LR_LISTROOMS,     {} },
         { LR_CREATEROOM,    { "room_name" } },
         { LR_JOINROOM,      { "room_id" } },
-        { LR_READY,         { "username" } },
+        { LR_QUITROOM,      {} },
+        { LR_READY,         {} },
         { LR_NOTREADY,      {} },
-        { LR_USERNAME,      {} }
+        { LR_USERNAME,      { "username"} }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
         { "size",       sizeof(uint32_t) },
@@ -46,7 +48,8 @@ namespace RType
     ** Copy constructor and assign operator
     */
     Request::Request(Request const& other) :
-        _code(other._code), _data(other._data)
+        _protocol(other._protocol), _code(other._code),
+        _size(other._size), _data(other._data)
     {
     }
 
@@ -54,7 +57,9 @@ namespace RType
     {
         if (this != &other)
         {
+            _protocol = other._protocol;
             _code = other._code;
+            _size = other._size;
             _data = other._data;
         }
         return *this;
@@ -63,6 +68,16 @@ namespace RType
     /*
     ** Public member functions
     */
+    template <>
+    std::string         Request::get(std::string const& key) const
+    {
+        DataMap::const_iterator it = _data.find(key);
+
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        return it->second.getString();
+    }
+
     Request::Protocol   Request::getProtocol() const
     {
         return _protocol;
@@ -86,15 +101,16 @@ namespace RType
         size_t      dataSize;
 
         if (raw.size() < headerSize)
-            throw std::runtime_error("incomplete request"); // TODO
+            throw std::runtime_error("1 incomplete request"); // TODO
         _code = raw.get<uint16_t>();
-        dataSize = raw.get<uint32_t>();
+        dataSize = raw.get<uint32_t>(sizeof(uint16_t));
         if (raw.size() - headerSize < dataSize)
-            throw std::runtime_error("incomplete request"); // TODO
+            throw std::runtime_error("2 incomplete request"); // TODO
         if (_protocol == PROTOCOL_LOBBY)
             parseLobby(raw);
         else if (_protocol == PROTOCOL_INGAME)
             parseInGame(raw);
+        _size = headerSize + dataSize;
     }
 
     void            Request::parseLobby(Buffer const& raw)
@@ -127,7 +143,7 @@ namespace RType
             if (size > left)
                 throw std::runtime_error("invalid request (size)"); // TODO
             if (size > tmp.size())
-                throw std::runtime_error("incomplete request"); // TODO
+                throw std::runtime_error("3 incomplete request"); // TODO
             res.setData(tmp.data(), size);
             tmp.consume(size);
             _data.insert(std::make_pair(it->first, res));

@@ -63,7 +63,7 @@ namespace RType
         void            parseLobby(Buffer const& raw);
         void            parseInGame(Buffer const& raw);
 
-    protected:
+    public:
         static const LobbyReqMap    lobbyRequests;
         static const DataSizeMap    dataSizes;
         static const uint16_t       unsetCode;
@@ -76,6 +76,9 @@ namespace RType
         size_t          _size;
         DataMap         _data;
     };
+
+    template <>
+    std::string     Request::get(std::string const& key) const;
 }
 
 #endif /* !REQUEST_HPP_ */

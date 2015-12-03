@@ -35,7 +35,7 @@ namespace UnitTesting
       _isInit = true;
     }
     std::cout << "Running " << getName() << " unit tests:" << std::endl;
-    for (auto&& test: _tests)
+    for (auto& test: _tests)
     {
       try {
         std::cout << "Running test " + test.first + ": ";

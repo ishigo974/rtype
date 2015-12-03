@@ -83,6 +83,13 @@ void                Buffer::clear()
     _data.clear();
 }
 
+std::string         Buffer::getString(size_t len, size_t offset) const
+{
+    if (len == 0)
+        return std::string(_data.begin() + offset, _data.end());
+    return std::string(_data.begin() + offset, _data.begin() + len);
+}
+
 std::string         Buffer::toString() const
 {
     std::ostringstream ss;
