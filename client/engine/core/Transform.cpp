@@ -8,6 +8,14 @@ Transform::Transform() : Component()
 {
 }
 
+Transform::Transform(unsigned int _id)
+        : Component(_id, "Transform"), _position(0, 0), _scale(1, 1), _rotation(0)
+{ }
+
+Transform::Transform(unsigned int _id, cu::Position const& pos)
+        : Component(_id, "Transform"), _position(pos)
+{ }
+
 Transform::Transform(unsigned int _id, std::string const& _name,
                      cu::Position const& pos,
                      cu::Scale const& scale,
@@ -78,11 +86,16 @@ void Transform::swap(Transform& second)
 
 namespace std
 {
-	template <>
-	void swap<Transform>(Transform& a, Transform& b)
-	{
-		a.swap(b);
-	}
+    template<>
+    void swap<Transform>(Transform& a, Transform& b)
+    {
+        a.swap(b);
+    }
+}
+
+cu::Position& Transform::getPosition()
+{
+    return _position;
 }
 
 cu::Position const& Transform::getPosition() const
@@ -95,6 +108,11 @@ void Transform::setPosition(cu::Position const& _position)
 	Transform::_position = _position;
 }
 
+cu::Scale& Transform::getScale()
+{
+    return _scale;
+}
+
 cu::Scale const& Transform::getScale() const
 {
 	return _scale;
@@ -105,6 +123,11 @@ void Transform::setScale(cu::Scale const& _scale)
 	Transform::_scale = _scale;
 }
 
+cu::Rotation& Transform::getRotation()
+{
+    return _rotation;
+}
+
 cu::Rotation const& Transform::getRotation() const
 {
 	return _rotation;
@@ -112,6 +135,5 @@ cu::Rotation const& Transform::getRotation() const
 
 void Transform::setRotation(cu::Rotation const& _rotation)
 {
-	Transform::_rotation = _rotation;
+    Transform::_rotation = _rotation;
 }
-

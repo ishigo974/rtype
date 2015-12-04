@@ -13,10 +13,10 @@
 # include "Transform.hpp"
 
 # include <iostream>
+#include <SpriteRenderer.hpp>
 
 class GameObject : public Object
 {
-
 public:
     GameObject();
     GameObject(unsigned int _id, std::string const& _name, int _layer);
@@ -30,6 +30,9 @@ public:
     virtual bool operator==(GameObject const& other);
     virtual bool operator!=(GameObject const& other);
 
+    virtual Transform& transform() const;
+    virtual SpriteRenderer& renderer() const;
+
     virtual std::string toString();
 
     int  getLayer() const;
@@ -37,26 +40,24 @@ public:
 
     virtual unsigned int getMask();
 
-    void addComponent(std::unique_ptr<Component> newComp);
+    void addComponent(Component *const newComp);
 
     template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
     T *getComponent() const
     {
-        auto selected = std::find_if(_components.begin(), _components.end(), [](auto && e)
+        auto selected = std::find_if(_components.begin(), _components.end(), [](auto& e)
         {
             return (e->getMask() == T::Mask);
         });
 
-        return ((selected == _components.end()) ? nullptr : dynamic_cast<T *>(selected->get()));
+        return ((selected == _components.end()) ? nullptr : static_cast<T *>(*selected));
     };
-
-    Transform const* getTransform();
 
     void swap(GameObject& other);
 
 protected:
-    int                                      _layer;
-    std::vector<std::unique_ptr<Component> > _components;
+    int                      _layer;
+    std::vector<Component *> _components;
 };
 
 

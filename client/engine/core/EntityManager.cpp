@@ -25,4 +25,5 @@ EntityManager::~EntityManager()
 EntityManager::EntityManager()
 {
     _ids = 0;
+    _compIds = 0;
 }

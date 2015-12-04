@@ -76,6 +76,6 @@ add_executable(${EXECUTABLE_NAME} ${source_files})
 
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} m)
 #target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
 #target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
-

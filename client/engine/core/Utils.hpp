@@ -9,6 +9,88 @@
 
 namespace cu
 {
+    class Vector2D
+    {
+    public:
+
+        float x;
+        float y;
+
+        Vector2D()
+        { }
+
+        Vector2D(float r, float s);
+        Vector2D& set(float r, float s);
+
+        float      & operator[](long k);
+        const float& operator[](long k) const;
+
+        Vector2D& operator+=(Vector2D v);
+        Vector2D& operator-=(Vector2D);
+        Vector2D& operator*=(float t);
+        Vector2D& operator/=(float t);
+        Vector2D& operator&=(Vector2D v);
+
+        Vector2D operator-(void) const;
+        Vector2D operator+(const Vector2D& v) const;
+        Vector2D operator-(const Vector2D& v) const;
+        Vector2D operator*(float t) const;
+        Vector2D operator/(float t) const;
+        float    operator*(const Vector2D& v) const;
+        Vector2D operator&(const Vector2D& v) const;
+        bool operator==(const Vector2D& v) const;
+        bool operator!=(const Vector2D& v) const;
+
+        Vector2D& normalize(void);
+        Vector2D& rotate(float angle);
+
+        void swap(Vector2D& other);
+    };
+
+
+    class Point2D : public Vector2D
+    {
+    public:
+        Point2D()
+        { }
+
+        Point2D(float r, float s) : Vector2D(r, s)
+        { }
+
+        Point2D& operator=(Point2D v);
+        Point2D& operator*=(float t);
+        Point2D& operator/=(float t);
+        Point2D operator-(void) const;
+        Point2D operator+(const Vector2D& v) const;
+        Point2D  operator-(const Vector2D& v) const;
+        Vector2D operator-(const Point2D& p) const;
+        Point2D operator*(float t) const;
+        Point2D operator/(float t) const;
+
+        void swap(Point2D& other);
+    };
+
+
+    Vector2D inline operator*(float t, const Vector2D& v);
+    Point2D inline  operator*(float t, const Point2D& p);
+    float inline dot(const Vector2D& v1, const Vector2D& v2);
+    float inline magnitude(const Vector2D& v);
+    float inline inverseMag(const Vector2D& v);
+    float inline squaredMag(const Vector2D& v);
+
+    struct _Origin2D_
+    {
+        const Point2D& operator+(const Vector2D& v)
+        {
+            return (static_cast<const Point2D&>(v));
+        }
+
+        Point2D operator-(const Vector2D& v)
+        {
+            return (Point2D(-v.x, -v.y));
+        }
+    };
+
     class Position
     {
     public:
@@ -25,18 +107,17 @@ namespace cu
         bool operator!=(Position const& other);
 
         float X() const;
-        void  X(float _x);
+        void  setX(float _x);
 
         float Y() const;
-        void  Y(float _y);
+        void  setY(float _y);
 
         std::string toString();
 
-        void swap(Position &other);
+        void swap(Position& other);
 
     private:
-        float _x;
-        float _y;
+        Point2D _point;
     };
 
     typedef Position Scale;
@@ -61,11 +142,13 @@ namespace cu
 
         std::string toString();
 
-        void swap(Rotation &other);
+        void swap(Rotation& other);
 
     private:
         float _angle;
     };
+
+    extern _Origin2D_ Origin2D;
 }
 
 #endif //RTYPE_UTILS_HPP
