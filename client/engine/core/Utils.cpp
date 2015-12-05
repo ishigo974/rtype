@@ -25,17 +25,17 @@ namespace std
         a.swap(b);
     }
 
-    template<>
-    void swap<Position>(Position& a, Position& b)
-    {
-        a.swap(b);
-    }
+    //template<>
+    //void swap<Position>(Position& a, Position& b)
+    //{
+    //    a.swap(b);
+    //}
 
-    template<>
-    void swap<Rotation>(Rotation& a, Rotation& b)
-    {
-        a.swap(b);
-    }
+    //template<>
+    //void swap<Rotation>(Rotation& a, Rotation& b)
+    //{
+    //    a.swap(b);
+    //}
 }
 
 namespace cu

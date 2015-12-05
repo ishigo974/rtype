@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <assert.h>
-#include <unistd.h>
+//#include <unistd.h> // Windows les gars.......................................................................................................................
 #include "GameObject.hpp"
 #include "EntityManager.hpp"
 #include "Renderer.hpp"
@@ -56,7 +56,7 @@ void renderTest()
 
 	while (1)
 	{
-        usleep(10000);
+        //usleep(10000); // Windows.......
 		r.draw(*a);
 		r.render();
 	}
@@ -85,7 +85,7 @@ bool timeTest()
     {
         std::cout << "i = " << i << " ; elapsed = " << BigBen::get().getElapsedtime() << std::endl;
         std::cout << "i = " << i << " ; fixedElapsed = " << BigBen::get().getFixedElapsedtime() << std::endl;
-        usleep(5000);
+        //usleep(5000); // Windows...
     }
 
     return (true);

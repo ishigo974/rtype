@@ -27,11 +27,9 @@ bool Input::pollEvent(cu::Event& event)
 		case sf::Event::KeyPressed:
 			event.type = cu::Event::KeyPressed;
 			return keyPressed(e, event);
-			break;
 		default:
 			return false;
 	}
-	return false;
 }
 
 bool Input::keyPressed(sf::Event const& e, cu::Event& event)

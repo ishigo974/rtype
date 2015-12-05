@@ -24,10 +24,10 @@ Collider::Collider(Collider&& other) : Collider(other)
 
 }
 
-Collider& Collider::operator=(Collider other)
-{
-    return Collider::operator=(other); // WTF sale fiotte de merde. Et ca veut passer Koala. // vhb
-}
+//Collider& Collider::operator=(Collider other)
+//{
+//    return Collider::operator=(other); // WTF sale fiotte de merde. Et ca veut passer Koala. // vhb
+//}
 
 Collider::~Collider()
 {

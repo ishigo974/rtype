@@ -15,7 +15,7 @@ public:
 
     Collider(Collider const& other);
     Collider(Collider&& other);
-    virtual Collider& operator=(Collider other);
+    //virtual Collider& operator=(Collider other);
 
     virtual ~Collider();
 
