@@ -155,7 +155,6 @@ namespace RType
                     Request     request =
                         Request(Request::PROTOCOL_LOBBY, _received);
 
-                    std::cout << "request has been built" << std::endl;
                     _received.consume(request.size());
                     _requests.push(request);
                 }

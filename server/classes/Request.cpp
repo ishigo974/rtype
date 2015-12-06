@@ -157,7 +157,9 @@ namespace RType
                 left -= sizeof(uint32_t);
             }
             else
+            {
                 size = it->second;
+            }
             if (size > left)
                 throw Exception::InvalidRequest("Request can't fit argument");
             if (size > tmp.size())
