@@ -66,13 +66,13 @@ public:
     void append(T const& data)
     {
         uint8_t tmp;
-        size_t  i = sizeof(T);
+        size_t  i = 0;
 
-        while (i > 0)
+        while (i < sizeof(T))
         {
-            tmp = (data >> (8 * (i - 1)));
+            tmp = (data >> (8 * (i)));
             _data.push_back(tmp);
-            --i;
+            ++i;
         }
     }
 
@@ -80,14 +80,14 @@ public:
     void setData(T const& data)
     {
         uint8_t tmp;
-        size_t  i = sizeof(T);
+        size_t  i = 0;
 
         _data.erase(_data.begin(), _data.end());
-        while (i > 0)
+        while (i < sizeof(T))
         {
-            tmp = data >> (8 * (i - 1));
+            tmp = data >> (8 * (i));
             _data.push_back(tmp);
-            --i;
+            ++i;
         }
     }
 
