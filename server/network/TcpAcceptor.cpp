@@ -65,11 +65,7 @@ TcpAcceptor::TcpAcceptor(short int port)
 
 TcpAcceptor::~TcpAcceptor()
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    closesocket(_socket);
-#else
-    ::close(_socket);
-#endif
+    close();
 }
 
 ITcpSocket *TcpAcceptor::accept() const

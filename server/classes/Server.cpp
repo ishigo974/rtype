@@ -61,7 +61,7 @@ namespace RType
                 _sm.processAll();
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
-            } catch (Exception::InvalidRequest const& e) {
+            } catch (Exception::InvalidRequest const& /*e*/) {
                 // TODO handle
             }
             // TODO add exceptions
