@@ -23,13 +23,31 @@
 #include "TcpSocket.hpp"
 
 TcpAcceptor::TcpAcceptor(short int port)
+        : _port(port)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    static_cast<void>(port);
+    WSADATA wsaData;
+    struct sockaddr_in server;
+
+    server.sin_family = AF_INET;
+    server.sin_port = htons(_port);
+
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    { ; //TODO throw
+    }
+    if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+    {
+        WSACleanup();
+        //TODO throw
+    }
+    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (::bind(_socket, (SOCKADDR *)&server, sizeof(server)) == SOCKET_ERROR)
+        throw std::runtime_error("can't bind port " + std::to_string(port));
+    if (::listen(_socket, SOMAXCONN) == SOCKET_ERROR)
+        throw std::runtime_error("listen failed");
 #else
     struct sockaddr_in server;
 
-    _port = port;
     server.sin_family      = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port        = htons(_port);
@@ -40,7 +58,7 @@ TcpAcceptor::TcpAcceptor(short int port)
     if (::bind(_socket, reinterpret_cast<const struct sockaddr *>(&server),
                sizeof(server)) == -1)
         throw std::runtime_error("can't bind port " + std::to_string(port));
-    if (listen(_socket, 5) == -1)
+    if (::listen(_socket, SOMAXCONN) == -1)
         throw std::runtime_error("listen failed");
 #endif
 }
@@ -48,6 +66,7 @@ TcpAcceptor::TcpAcceptor(short int port)
 TcpAcceptor::~TcpAcceptor()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    closesocket(_socket);
 #else
     ::close(_socket);
 #endif
@@ -57,18 +76,18 @@ ITcpSocket *TcpAcceptor::accept() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     rSocket socket;
-	struct sockaddr_in addr;
-	int socklen;
-	char *address = new char[16];
+    struct sockaddr_in addr;
+    int socklen;
+    char *address = new char[16];
 
     socklen = sizeof(addr);
     if ((socket = WSAAccept(_socket, reinterpret_cast<sockaddr*>(&addr), &socklen, nullptr, NULL)) == INVALID_SOCKET)
         return (nullptr);
-	inet_ntop(AF_INET, &(addr.sin_addr), address, INET_ADDRSTRLEN);
+    inet_ntop(AF_INET, &(addr.sin_addr), address, INET_ADDRSTRLEN);
     auto* ret = new TcpSocket(socket, address, _port);
     return ret;
 #else
-    struct sockaddr_in client;	
+    struct sockaddr_in client;
     rSocket            socket;
     unsigned int       struct_len;
 

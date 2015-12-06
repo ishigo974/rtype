@@ -34,7 +34,7 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
     }
     _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 #else
-    _socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("TCP")->p_proto);
+    _socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
 #endif
     _port = port;
     _addr = addr;
@@ -51,16 +51,16 @@ TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
 size_t TcpSocket::send(Buffer const& buffer) const
 {
     WSABUF toSend;
-	DWORD SendBytes;
-	size_t ret;
+    DWORD SendBytes;
+    size_t ret;
     std::vector<char> str(buffer.data(), buffer.data() + buffer.size());
 
     toSend.len = buffer.size();
-	toSend.buf = str.data();
-	if ((ret = WSASend(_socket, &toSend, 1, &SendBytes, 0, nullptr, nullptr)) == SOCKET_ERROR)
-	{
-		;//TODO throw
-	}
+    toSend.buf = str.data();
+    if ((ret = WSASend(_socket, &toSend, 1, &SendBytes, 0, nullptr, nullptr)) == SOCKET_ERROR)
+    {
+        ;//TODO throw
+    }
     return ret;
 }
 
@@ -81,15 +81,27 @@ size_t        TcpSocket::send(Buffer const& buffer) const
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    return 0;
+    WSABUF wsabuf;
+    DWORD read_size = 0;
+
+    wsabuf.buf = new char[len];
+    wsabuf.len = len;
+    if (::WSARecv(_socket, &wsabuf, 1, &read_size, nullptr, nullptr, nullptr)
+                  == SOCKET_ERROR)
+          {
+            delete wsabuf.buf;
+            return 0;
+          }
+        buffer.append(wsabuf.buf, read_size);
+        return (read_size);
 }
 
 #else
 
 size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    ssize_t     ret;
-    char*       buff = new char[len];
+    ssize_t ret;
+    char *buff = new char[len];
 
     if ((ret = ::recv(_socket, buff, len, 0)) == -1)
         throw std::runtime_error("receive failed");

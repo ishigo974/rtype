@@ -129,3 +129,14 @@ void                Buffer::setData(std::string const& data)
     _data.erase(_data.begin(), _data.end());
     _data.assign(data.begin(), data.end());
 }
+
+bool Buffer::isBigEndian() const
+{
+    uint16_t i;
+
+    i = 1;
+
+    if ((i >> 8) == 1)
+        return true;
+    return false;
+}
