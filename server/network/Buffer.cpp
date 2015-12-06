@@ -53,7 +53,7 @@ void                Buffer::consume(size_t size)
     if (size > _data.size())
     {
         _data.erase(_data.begin(), _data.end());
-        return;
+        return ;
     }
     _data.erase(_data.begin(), _data.begin() + size);
 }
