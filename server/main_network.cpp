@@ -18,7 +18,7 @@ int main()
 
 
 //    toto.append(" TAMERE", 7);
-    toto.append<uint32_t>(4042);
-    toto.append(" TONPERE", 9);
+    toto.setData<uint32_t>(4042);
+//    toto.append(" TONPERE", 9);
     std::cout << toto.get<uint32_t>() << std::endl;
 }

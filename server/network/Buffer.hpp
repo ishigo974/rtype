@@ -43,7 +43,7 @@ public:
         while (size > 0)
         {
             ret = ret << 8;
-            if (isBigEndian() == false)
+            if (!isBigEndian())
             {
                 ret = ret | _data[offset];
                 ++offset;

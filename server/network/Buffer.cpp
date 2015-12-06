@@ -134,6 +134,7 @@ bool                Buffer::isBigEndian() const
 {
     uint16_t        i = 1;
 
+    std::cout << i << " - " << (i >> 8) << std::endl;
     if ((i >> 8) == 0)
         return true;
     return false;
