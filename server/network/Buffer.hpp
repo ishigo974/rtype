@@ -49,9 +49,7 @@ public:
                 ++offset;
             }
             else
-            {
-                ret = ret | _data[size - 1];
-            }
+                ret = ret | _data[offset + size - 1];
             --size;
         }
         return ret;

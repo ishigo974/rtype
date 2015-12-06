@@ -4,6 +4,8 @@
 #include "ComponentsMasks.hpp"
 #include "SocketMonitor.hpp"
 #include "Server.hpp"
+#include "Buffer.hpp"
+#include "IncompleteRequest.hpp"
 
 namespace RType
 {
@@ -70,24 +72,30 @@ namespace RType
                 _socket->send(_toSend);
                 _toSend.clear();
             }
+            buildRequests();
         }
 
-        void            NetworkTCP::pushData(Buffer const& buffer)
+        void            NetworkTCP::send(Buffer const& buffer)
         {
             _toSend.append(buffer);
-        }
-
-        Buffer          NetworkTCP::popData()
-        {
-            Buffer      res = _received;
-
-            _received.clear();
-            return res;
         }
 
         bool            NetworkTCP::isConnected() const
         {
             return _socket != nullptr;
+        }
+
+        bool            NetworkTCP::isRequest() const
+        {
+            return !_requests.empty();
+        }
+
+        Request         NetworkTCP::popRequest()
+        {
+            Request     request = _requests.front();
+
+            _requests.pop();
+            return request;
         }
 
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
@@ -121,7 +129,7 @@ namespace RType
 
             ss << "Component::NetworkTCP {"
                 << "\n\t_socket: "
-                << (_socket == nullptr ? -1. : _socket->getSocket())
+                << (_socket == nullptr ? -1 : _socket->getSocket())
                 << "\n\t_toSend: " << _toSend.toString()
                 << "\n\t_received: " << _received.toString()
                 << std::endl;
@@ -137,6 +145,22 @@ namespace RType
                             std::to_string(_socket->getPort()) + ")");
             SocketMonitor::getInstance().deleteSocket(_socket.get());
             _socket = nullptr;
+        }
+
+        void                    NetworkTCP::buildRequests()
+        {
+            try {
+                while (!_received.empty())
+                {
+                    Request     request =
+                        Request(Request::PROTOCOL_LOBBY, _received);
+
+                    std::cout << "request has been built" << std::endl;
+                    _received.consume(request.size());
+                    _requests.push(request);
+                }
+            } catch (Exception::IncompleteRequest const& e) {
+            }
         }
     }
 }

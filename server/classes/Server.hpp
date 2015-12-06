@@ -17,7 +17,7 @@ namespace RType
 
     private:
         Server(Server const& other) = delete;
-        Server&       operator=(Server const& other) = delete;
+        Server&         operator=(Server const& other) = delete;
 
     public:
         void            run();

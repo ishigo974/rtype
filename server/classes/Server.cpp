@@ -10,6 +10,7 @@
 #include "IComponent.hpp"
 #include "LobbySystem.hpp"
 #include "NotImplemented.hpp"
+#include "IncompleteRequest.hpp"
 
 namespace RType
 {
@@ -60,7 +61,9 @@ namespace RType
                 _sm.processAll();
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
-            } // TODO add exceptions
+            } catch (Exception::IncompleteRequest const& e) {
+            }
+            // TODO add exceptions
         }
     }
 

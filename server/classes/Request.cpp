@@ -1,6 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include "Request.hpp"
 #include "NotImplemented.hpp"
+#include "InvalidRequest.hpp"
+#include "IncompleteRequest.hpp"
 
 namespace RType
 {
@@ -93,6 +96,19 @@ namespace RType
         return _size;
     }
 
+    std::string         Request::toString() const
+    {
+        std::ostringstream  ss;
+
+        ss << "Request {"
+            << "\n\t_protocol: " << _protocol
+            << "\n\t_code: " << _code
+            << "\n\t_size: " << _size
+            << "\n\tnb data: " << _data.size()
+            << "\n}\n";
+        return ss.str();
+    }
+
     /*
     ** Protected member function
     */
@@ -101,22 +117,24 @@ namespace RType
         size_t      dataSize;
 
         if (raw.size() < headerSize)
-            throw std::runtime_error("1 incomplete request"); // TODO
+            throw Exception::IncompleteRequest("Buffer can't contain a \
+                                                request header");
         _code = raw.get<uint16_t>();
         dataSize = raw.get<uint32_t>(sizeof(uint16_t));
+        _size = headerSize + dataSize;
         if (raw.size() - headerSize < dataSize)
-            throw std::runtime_error("2 incomplete request"); // TODO
+            throw Exception::IncompleteRequest("Buffer can't contain \
+                                                request's data");
         if (_protocol == PROTOCOL_LOBBY)
             parseLobby(raw);
         else if (_protocol == PROTOCOL_INGAME)
             parseInGame(raw);
-        _size = headerSize + dataSize;
     }
 
     void            Request::parseLobby(Buffer const& raw)
     {
         Buffer                          tmp = raw;
-        size_t                          left = raw.size() - headerSize;
+        size_t                          left = _size - headerSize;
         LobbyReqMap::const_iterator     it =
             lobbyRequests.find(static_cast<LobbyRequest>(_code));
 
@@ -141,9 +159,10 @@ namespace RType
             else
                 size = it->second;
             if (size > left)
-                throw std::runtime_error("invalid request (size)"); // TODO
+                throw Exception::InvalidRequest("Request can't fit argument");
             if (size > tmp.size())
-                throw std::runtime_error("3 incomplete request"); // TODO
+                throw Exception::IncompleteRequest("Buffer can't \
+                                                    contain argument");
             res.setData(tmp.data(), size);
             tmp.consume(size);
             _data.insert(std::make_pair(it->first, res));

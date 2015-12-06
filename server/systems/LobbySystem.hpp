@@ -25,6 +25,9 @@ namespace RType
             virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;
             virtual std::string         toString() const;
+
+        protected:
+            void                        handleRequest();
         };
     }
 }

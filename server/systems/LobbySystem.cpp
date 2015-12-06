@@ -1,7 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include "LobbySystem.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
+#include "Request.hpp"
 
 namespace RType
 {
@@ -23,12 +25,15 @@ namespace RType
         */
         void                Lobby::processEntity(ECS::Entity& e)
         {
-            Buffer          data = e
-                .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP)
-                ->popData();
+            Component::NetworkTCP*  network = e
+                .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
 
-            if (!data.empty())
-                std::cout << data.data() << std::endl;
+            while (network->isRequest())
+            {
+                Request     request = network->popRequest();
+
+                std::cout << request << std::endl; // todo
+            }
         }
 
         ECS::ComponentMask  Lobby::getMask() const
@@ -44,6 +49,13 @@ namespace RType
         std::string         Lobby::toString() const
         {
             return "LobbySystem { mask: " + std::to_string(getMask()) + "}";
+        }
+
+        /*
+        ** Protected member functions
+        */
+        void                Lobby::handleRequest()
+        {
         }
     }
 }

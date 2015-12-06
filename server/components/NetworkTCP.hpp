@@ -2,11 +2,13 @@
 # define NETWORKTCP_HPP_
 
 # include <memory>
+# include <queue>
 # include <string>
 # include "IComponent.hpp"
 # include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
 # include "ITcpSocket.hpp"
+# include "Request.hpp"
 
 namespace RType
 {
@@ -28,9 +30,10 @@ namespace RType
 
         public:
             void                setSocket(UniqueITcpSockPtr socket);
-            void                pushData(Buffer const& buffer);
-            Buffer              popData();
+            void                send(Buffer const& buffer);
             bool                isConnected() const;
+            bool                isRequest() const;
+            Request             popRequest();
 
         public:
             virtual void        update();
@@ -46,6 +49,7 @@ namespace RType
 
         protected:
             void                        onClientDisconnection();
+            void                        buildRequests();
 
         protected:
             static const size_t     bufferSize;
@@ -54,6 +58,7 @@ namespace RType
             UniqueITcpSockPtr       _socket;
             Buffer                  _toSend;
             Buffer                  _received;
+            std::queue<Request>     _requests;
         };
     }
 }

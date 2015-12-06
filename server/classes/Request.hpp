@@ -4,10 +4,11 @@
 # include <vector>
 # include <unordered_map>
 # include "Buffer.hpp"
+# include "IStringable.hpp"
 
 namespace RType
 {
-    class Request
+    class Request : public IStringable
     {
     public:
         enum Protocol
@@ -62,6 +63,9 @@ namespace RType
         void            parse(Buffer const& raw);
         void            parseLobby(Buffer const& raw);
         void            parseInGame(Buffer const& raw);
+
+    public:
+        virtual std::string     toString() const;
 
     public:
         static const LobbyReqMap    lobbyRequests;
