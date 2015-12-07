@@ -31,7 +31,7 @@ TcpAcceptor::TcpAcceptor(short int port)
 
     server.sin_family = AF_INET;
     server.sin_port = htons(_port);
-    server.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+    server.sin_addr.s_addr = INADDR_ANY;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
