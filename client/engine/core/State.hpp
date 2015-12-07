@@ -26,16 +26,18 @@ public:
     void swap(State& o);
 
     template<class Predicate, class ...Args>
-    void addTransition(Predicate p, Args ...args, std::string const& state)
+    void addTransition(std::string const& state, Predicate p, Args ...args)
     {
-        _transitions[state] = std::make_unique<Transition>(p, args...);
+        _transitions[state] = std::make_shared<Transition_<Predicate, Args...> >(p, args...);
     };
 
     bool canMove(std::string& out);
 
+    std::string const& getName() const;
+
 protected:
     std::string                                         _name;
-    std::map<std::string, std::unique_ptr<Transition> > _transitions;
+    std::map<std::string, std::shared_ptr<Transition> > _transitions;
 };
 
 

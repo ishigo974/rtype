@@ -14,6 +14,7 @@ State::State(std::string const& name)
 State::State(State const& o)
 {
     _name = o._name;
+    _transitions = o._transitions;
 }
 
 State::State(State&& o) : State(o)
@@ -50,7 +51,7 @@ namespace std
 
 bool State::canMove(std::string& out)
 {
-    for (auto e : _transitions)
+    for (auto &&e : _transitions)
     {
         if (e.second->validate())
         {
@@ -60,4 +61,9 @@ bool State::canMove(std::string& out)
     }
 
     return (false);
+}
+
+std::string const& State::getName() const
+{
+    return (_name);
 }

@@ -13,9 +13,12 @@ public:
     StateMachine(State const& initialState);
 
     void move();
+    void addState(State const& state) throw(std::logic_error);
 
 private:
     std::map<std::string, State> _states;
+
+public:
     State& _current;
 };
 

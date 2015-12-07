@@ -24,6 +24,12 @@ public:
     Transition_()
     { }
 
+    Transition_(Predicate pred, Args... args)
+            : _pred(pred)
+    {
+        _args = std::make_tuple(args...);
+    }
+
     Transition_(Transition_ const& o)
     {
         _pred = o._pred;
@@ -40,12 +46,6 @@ public:
         swap(o);
 
         return (*this);
-    }
-
-    Transition_(int id, Predicate pred, Args... args)
-            : _pred(pred)
-    {
-        _args = std::make_tuple(args...);
     }
 
     template<std::size_t ...I>
@@ -72,13 +72,10 @@ private:
     std::tuple<Args...>          _args;
 };
 
-namespace std
+template<class Predicate, class ...Args>
+void swap(Transition_<Predicate, Args...>& a, Transition_<Predicate, Args...>& b)
 {
-    template<class Predicate, class ...Args>
-    void swap(Transition_<Predicate, Args...>& a, Transition_<Predicate, Args...>& b)
-    {
-        a.swap(b);
-    }
+    a.swap(b);
 }
 
 #endif //RTYPE_TRANSITION_HPP
