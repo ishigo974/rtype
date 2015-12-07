@@ -158,7 +158,7 @@ namespace RType
                     _received.consume(request.size());
                     _requests.push(request);
                 }
-            } catch (Exception::IncompleteRequest const& e) {
+            } catch (Exception::IncompleteRequest const& /*e*/) {
             }
         }
     }

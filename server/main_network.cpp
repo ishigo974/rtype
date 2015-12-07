@@ -16,7 +16,6 @@ int main()
 {
     Buffer toto;
 
-
 //    toto.append(" TAMERE", 7);
     toto.setData<uint32_t>(4042);
 //    toto.append(" TONPERE", 9);
