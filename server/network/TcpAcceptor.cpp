@@ -31,17 +31,15 @@ TcpAcceptor::TcpAcceptor(short int port)
 
     server.sin_family = AF_INET;
     server.sin_port = htons(_port);
+    server.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    { ; //TODO throw
-    }
-    if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
     {
-        WSACleanup();
-        //TODO throw
+        throw std::runtime_error("WSAStartup failed");
     }
-    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (::bind(_socket, (SOCKADDR *)&server, sizeof(server)) == SOCKET_ERROR)
+    if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == SOCKET_ERROR)
+        throw std::runtime_error("Socket failed");
+    if (::bind(_socket, reinterpret_cast<SOCKADDR *>(&server), sizeof(server)) == SOCKET_ERROR)
         throw std::runtime_error("can't bind port " + std::to_string(port));
     if (::listen(_socket, SOMAXCONN) == SOCKET_ERROR)
         throw std::runtime_error("listen failed");

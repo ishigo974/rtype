@@ -3,7 +3,7 @@
 
 int   main(int ac, char **av)
 {
-  short int   port = RType::Server::defaultPort;
+  int port = 6667;
 
   if (ac > 1)
     port = std::stoi(std::string(av[1]));
