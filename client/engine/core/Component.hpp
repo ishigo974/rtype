@@ -3,15 +3,12 @@
 
 # include "Object.hpp"
 # include "RTypes.hpp"
-# include "GameObject.hpp"
-
-class GameObject;
 
 class Component : public Object
 {
 public:
     Component();
-    Component(unsigned int _id, std::string const& _name, GameObject *parent = nullptr);
+    Component(unsigned int _id, std::string const& _name);
     Component(Component const& other);
     Component(Component&& other);
     virtual Component& operator=(Component other);
@@ -27,9 +24,6 @@ public:
     virtual std::string toString();
 
     static RTypes::my_uint16_t const Mask = 0;
-
-protected:
-	GameObject *_parent;
 };
 
 static const Component ErrorComponent = Component(0, "Error");

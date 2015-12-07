@@ -7,30 +7,29 @@
 class Behaviour : public Component
 {
 public:
-    static const unsigned int Mask = 3;
+  static const unsigned int Mask = 3;
+
 public:
-    Behaviour();
-    Behaviour(unsigned int _id, std::string const& _name);
-    Behaviour(Behaviour const& other);
-    Behaviour(Behaviour&& other);
-    Behaviour& operator=(Behaviour other);
-    virtual ~Behaviour();
+  Behaviour();
+  Behaviour(unsigned int _id, std::string const& _name);
+  Behaviour(Behaviour const& other);
+  Behaviour(Behaviour&& other);
+  Behaviour& operator=(Behaviour other);
+  virtual ~Behaviour();
 
-    bool operator==(Behaviour const& other);
-    bool operator!=(Behaviour const& other);
+  bool operator==(Behaviour const& other);
+  bool operator!=(Behaviour const& other);
 
-    virtual void update(double elapsedTime);
+  virtual void update(double elapsedTime);
 
-    bool isEnabled() const;
-    void setEnabled(bool _enabled);
+  bool isEnabled() const;
+  void setEnabled(bool _enabled);
 
+  virtual RTypes::my_uint16_t getMask() const;
+  void swap(Behaviour& other);
 
-    virtual RTypes::my_uint16_t getMask() const;
-
-    void swap(Behaviour& other);
-
-private:
-    bool _enabled;
+protected:
+  bool _enabled;
 };
 
 

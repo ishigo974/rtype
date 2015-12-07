@@ -46,27 +46,28 @@ bool gameObjectTest()
 
 void renderAndInputsTest()
 {
-	Renderer r;
-	Input i(r.getWindow());
-	EntityManager entityManager;
-	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
-	cu::Event e;
+  Renderer r;
+  Input i(r.getWindow());
+  EntityManager entityManager;
+  GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+  cu::Event e;
 
-    entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
+  entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
+  entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
 
-	r.init();
-	e.key = cu::Event::LAST_ACTION;
+  r.init();
+  e.key = cu::Event::LAST_ACTION;
 
-	while (e.key != cu::Event::ESCAPE)
+  while (e.key != cu::Event::ESCAPE)
+    {
+      while (i.pollEvent(e))
 	{
-		while (i.pollEvent(e))
-		{
-			std::cout << "Key pressed : " << e.key << std::endl;
-		}
-		r.draw(*a);
-		r.render();
+	  std::cout << "Key pressed : " << e.key << std::endl;
 	}
+      r.draw(*a);
+      r.render();
+    }
+  std::cout << "Escape pressed" << std::endl;
 }
 
 bool timeTest()
@@ -83,28 +84,29 @@ bool timeTest()
 
 void backgroundTest()
 {
-	Renderer r;
-	Input i(r.getWindow());
-	EntityManager entityManager;
-	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
-	cu::Event e;
+  Renderer r;
+  Input i(r.getWindow());
+  EntityManager entityManager;
+  GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+  cu::Event e;
 
-	entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-	entityManager.attachComponent<ScrollingBackground>(a, "lel", "../res/bg1.jpg",
-												  gu::Rect<int>(0, 0, 512, 512), 1);
+  entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
+  entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/bg1.jpg",
+						gu::Rect<int>(0, 0, 512, 512));
 
-	r.init();
-	e.key = cu::Event::LAST_ACTION;
+  r.init();
+  e.key = cu::Event::LAST_ACTION;
 
-	while (e.key != cu::Event::ESCAPE)
+  while (e.key != cu::Event::ESCAPE)
+    {
+      while (i.pollEvent(e))
 	{
-		while (i.pollEvent(e))
-		{
-			std::cout << "Key pressed : " << e.key << std::endl;
-		}
-		r.draw(*a);
-		r.render();
+	  std::cout << "Key pressed : " << e.key << std::endl;
 	}
+      r.draw(*a);
+      r.render();
+    }
+  std::cout << "Escape pressed" << std::endl;
 }
 
 int main()
