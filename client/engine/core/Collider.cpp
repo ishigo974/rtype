@@ -1,7 +1,3 @@
-//
-// Created by naliwe on 01/12/15.
-//
-
 #include "Collider.hpp"
 
 Collider::Collider() : Component()

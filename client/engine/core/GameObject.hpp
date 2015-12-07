@@ -15,6 +15,8 @@
 # include <iostream>
 #include <SpriteRenderer.hpp>
 
+class Component;
+
 class GameObject : public Object
 {
 public:

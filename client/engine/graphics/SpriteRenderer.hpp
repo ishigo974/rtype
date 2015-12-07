@@ -24,10 +24,11 @@ public:
 
     std::string const&   getPath() const;
     gu::Rect<int> const& getRect() const;
+	void setRect(gu::Rect<int> const&);
 	RTypes::my_uint16_t	getMask() const;
 
 public:
-    static RTypes::my_uint16_t const Mask = 0b0000000010000000;
+    static RTypes::my_uint16_t const Mask = 128;
 
 protected:
     std::string   _path;

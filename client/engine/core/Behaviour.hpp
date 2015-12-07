@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 26/11/15.
-//
-
 #ifndef RTYPE_BEHAVIOUR_HPP
 #define RTYPE_BEHAVIOUR_HPP
 
@@ -23,7 +19,7 @@ public:
     bool operator==(Behaviour const& other);
     bool operator!=(Behaviour const& other);
 
-    virtual void update();
+    virtual void update(double elapsedTime);
 
     bool isEnabled() const;
     void setEnabled(bool _enabled);

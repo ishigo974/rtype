@@ -11,6 +11,7 @@
 #include "Input.hpp"
 #include "Event.hpp"
 #include "BigBen.hpp"
+#include "ScrollingBackground.hpp"
 
 bool gameObjectTest()
 {
@@ -43,40 +44,29 @@ bool gameObjectTest()
     return (true);
 }
 
-void renderTest()
+void renderAndInputsTest()
 {
-	EntityManager entityManager;
 	Renderer r;
+	Input i(r.getWindow());
+	EntityManager entityManager;
 	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+	cu::Event e;
 
     entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", "r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
+    entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
 
 	r.init();
+	e.key = cu::Event::LAST_ACTION;
 
-	while (1)
+	while (e.key != cu::Event::ESCAPE)
 	{
-        //usleep(10000); // Windows.......
+		while (i.pollEvent(e))
+		{
+			std::cout << "Key pressed : " << e.key << std::endl;
+		}
 		r.draw(*a);
 		r.render();
 	}
-}
-
-void inputTest()
-{
-  Renderer r;
-  Input i(r.getWindow());
-  cu::Event e;
-
-  e.key = cu::Event::LAST_ACTION;
-  while (e.key != cu::Event::ESCAPE)
-    {
-      while (i.pollEvent(e))
-	{
-	  std::cout << "Key pressed : " << e.key << std::endl;
-	}
-      r.render();
-    }
 }
 
 bool timeTest()
@@ -91,13 +81,38 @@ bool timeTest()
     return (true);
 }
 
+void backgroundTest()
+{
+	Renderer r;
+	Input i(r.getWindow());
+	EntityManager entityManager;
+	GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+	cu::Event e;
+
+	entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
+	entityManager.attachComponent<ScrollingBackground>(a, "lel", "../res/bg1.jpg",
+												  gu::Rect<int>(0, 0, 512, 512), 1);
+
+	r.init();
+	e.key = cu::Event::LAST_ACTION;
+
+	while (e.key != cu::Event::ESCAPE)
+	{
+		while (i.pollEvent(e))
+		{
+			std::cout << "Key pressed : " << e.key << std::endl;
+		}
+		r.draw(*a);
+		r.render();
+	}
+}
+
 int main()
 {
   if (gameObjectTest())
     std::cout << "gameObjectTest passed -> OK" << std::endl;
   if (timeTest())
     std::cout << "timeTest passed -> OK" << std::endl;
-  inputTest();
-  // renderTest();
+  renderAndInputsTest();
   return (0);
 }

@@ -73,6 +73,11 @@ const gu::Rect<int>& SpriteRenderer::getRect() const
     return this->_rect;
 }
 
+void SpriteRenderer::setRect(gu::Rect<int> const& rect)
+{
+	this->_rect = rect;
+}
+
 RTypes::my_uint16_t SpriteRenderer::getMask() const
 {
 	return Mask;

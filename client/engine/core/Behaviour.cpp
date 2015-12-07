@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 26/11/15.
-//
-
 #include "Behaviour.hpp"
 
 Behaviour::Behaviour()
@@ -67,7 +63,7 @@ void Behaviour::setEnabled(bool _enabled)
     Behaviour::_enabled = _enabled;
 }
 
-void Behaviour::update()
+void Behaviour::update(double)
 {
     if (!_enabled)
         return;
