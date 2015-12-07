@@ -1,10 +1,12 @@
 #ifndef REQUEST_HPP_
 # define REQUEST_HPP_
 
+# include <functional>
 # include <vector>
 # include <unordered_map>
 # include "Buffer.hpp"
 # include "IStringable.hpp"
+# include "ValueError.hpp"
 
 namespace RType
 {
@@ -33,7 +35,8 @@ namespace RType
         typedef std::unordered_map<std::string, Buffer>     DataMap;
         typedef std::unordered_map<std::string, size_t>     DataSizeMap;
         typedef std::vector<std::string>                    DataArgs;
-        typedef std::unordered_map<LobbyRequest, DataArgs>  LobbyReqMap;
+        typedef std::unordered_map<LobbyRequest, DataArgs,
+                                    std::hash<uint16_t> >   LobbyReqMap;
 
     public:
         Request();
@@ -55,7 +58,7 @@ namespace RType
             DataMap::const_iterator it = _data.find(key);
 
             if (it == _data.end())
-                throw std::runtime_error("no such data: " + key); // TODO
+                throw Exception::ValueError("No such data: " + key);
             return it->second.get<Type>();
         }
 

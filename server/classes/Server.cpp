@@ -87,7 +87,8 @@ namespace RType
     {
         Component::NetworkTCP*  comp;
         ITcpSocket*             socket = _acceptor.accept();
-        ECS::Entity&            entity = _em.create(Component::MASK_NETWORKTCP);
+        ECS::Entity&            entity =
+            _em.create(Component::MASK_NETWORKTCP | Component::MASK_PLAYER);
 
         comp = entity
             .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);

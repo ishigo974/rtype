@@ -4,11 +4,22 @@
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
 #include "Request.hpp"
+#include "ValueError.hpp"
+#include "ACommand.hpp"
+#include "Server.hpp"
+#include "CommandFactory.hpp"
 
 namespace RType
 {
     namespace System
     {
+        /*
+        ** Static variables
+        */
+        const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
+            { Request::LR_USERNAME, "UsernameCommand" }
+        };
+
         /*
         ** Constructor/Destructor
         */
@@ -30,9 +41,14 @@ namespace RType
 
             while (network->isRequest())
             {
-                Request     request = network->popRequest();
-
-                std::cout << request << std::endl; // todo
+                try {
+                    Lobby::buildCommand(network->popRequest())->execute();
+                } catch (Exception::ValueError const& e) {
+                    Server::display(std::string(e.what()), true);
+                } catch (std::out_of_range const&) {
+                    Server::display("Can't build command from \
+                                    request, ignored", true);
+                }
             }
         }
 
@@ -56,6 +72,24 @@ namespace RType
         */
         void                Lobby::handleRequest()
         {
+        }
+
+        /*
+        ** Static functions
+        */
+        Command::ACommand*  Lobby::buildCommand(Request const& request)
+        {
+            Command::ACommand*       cmd =
+                Command::Factory::getInstance()
+                    .generate(cmdsNames.at(
+                        static_cast<Request::LobbyRequest>(request.getCode())
+                    ));
+
+            if (cmd == nullptr)
+                throw Exception::ValueError("No command corresponding \
+                    to request code " + std::to_string(request.getCode()));
+            cmd->initFromRequest(request);
+            return cmd;
         }
     }
 }

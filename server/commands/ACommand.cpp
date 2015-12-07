@@ -32,5 +32,18 @@ namespace RType
                 _entity = other._entity;
             return *this;
         }
+
+        /*
+        ** Public member functions
+        */
+        void            ACommand::setEntity(ECS::Entity* entity)
+        {
+            _entity = entity;
+        }
+
+        std::string     ACommand::toString() const
+        {
+            return getName();
+        }
     }
 }

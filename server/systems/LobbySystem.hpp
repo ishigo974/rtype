@@ -5,6 +5,7 @@
 # include "Entity.hpp"
 # include "ASystem.hpp"
 # include "ComponentMask.hpp"
+# include "ACommand.hpp"
 
 namespace RType
 {
@@ -12,6 +13,10 @@ namespace RType
     {
         class Lobby : public ECS::ASystem
         {
+        public:
+            typedef std::unordered_map<Request::LobbyRequest,
+                        std::string, std::hash<uint16_t> > RequestCmdMap;
+
         public:
             Lobby();
             virtual ~Lobby();
@@ -28,6 +33,12 @@ namespace RType
 
         protected:
             void                        handleRequest();
+
+        public:
+            static Command::ACommand*   buildCommand(Request const& request);
+
+        protected:
+            static const RequestCmdMap  cmdsNames;
         };
     }
 }

@@ -9,7 +9,8 @@ namespace RType
     {
         enum Masks
         {
-            MASK_NETWORKTCP   = 1
+            MASK_NETWORKTCP     = 1,
+            MASK_PLAYER         = 1 << 1
         };
     }
 }

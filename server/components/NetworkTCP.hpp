@@ -17,7 +17,7 @@ namespace RType
         class NetworkTCP : public ECS::IBehaviour
         {
         public:
-            typedef std::unique_ptr<ITcpSocket>   UniqueITcpSockPtr;
+            typedef std::unique_ptr<ITcpSocket>     UniqueITcpSockPtr;
 
         public:
             NetworkTCP();

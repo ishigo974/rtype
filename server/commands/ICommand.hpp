@@ -1,7 +1,10 @@
 #ifndef ICOMMAND_HPP_
 # define ICOMMAND_HPP_
 
-class ICommand
+# include "IClonable.hpp"
+# include "IStringable.hpp"
+
+class ICommand : public IStringable
 {
 public:
     virtual ~ICommand() {}
