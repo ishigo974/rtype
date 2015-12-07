@@ -27,7 +27,7 @@ include_directories(systems)
 include_directories(classes)
 include_directories(commands)
 include_directories(unit_tests)
-include_directories(misc)
+include_directories(utils)
 
 file(GLOB source_files
         main.cpp
@@ -37,8 +37,8 @@ file(GLOB source_files
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
-        misc/*.hpp
-        misc/*.cpp
+        utils/*.hpp
+        utils/*.cpp
         components/*.hpp
         components/*.cpp
         systems/*.hpp
@@ -57,8 +57,8 @@ file(GLOB net_files
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
-        misc/*.hpp
-        misc/*.cpp
+        utils/*.hpp
+        utils/*.cpp
         components/*.hpp
         components/*.cpp
         systems/*.hpp
@@ -77,8 +77,8 @@ file(GLOB ut_source_files
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
-        misc/*.hpp
-        misc/*.cpp
+        utils/*.hpp
+        utils/*.cpp
         components/*.hpp
         components/*.cpp
         exceptions/*.hpp
