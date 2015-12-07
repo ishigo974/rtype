@@ -19,7 +19,7 @@ endif ()
 
 # Define sources and executable
 include_directories(network)
-include_directories(ecs)
+include_directories(base_ecs)
 include_directories(exceptions)
 include_directories(base_ut)
 include_directories(components)
@@ -27,15 +27,18 @@ include_directories(systems)
 include_directories(classes)
 include_directories(commands)
 include_directories(unit_tests)
+include_directories(misc)
 
 file(GLOB source_files
         main.cpp
-        ecs/*.hpp
-        ecs/*.cpp
+        base_ecs/*.hpp
+        base_ecs/*.cpp
         network/*.hpp
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
+        misc/*.hpp
+        misc/*.cpp
         components/*.hpp
         components/*.cpp
         systems/*.hpp
@@ -48,12 +51,14 @@ file(GLOB source_files
 
 file(GLOB net_files
         main_network.cpp
-        ecs/*.hpp
-        ecs/*.cpp
+        base_ecs/*.hpp
+        base_ecs/*.cpp
         network/*.hpp
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
+        misc/*.hpp
+        misc/*.cpp
         components/*.hpp
         components/*.cpp
         systems/*.hpp
@@ -66,12 +71,14 @@ file(GLOB net_files
 
 file(GLOB ut_source_files
         main_ut.cpp
-        ecs/*.hpp
-        ecs/*.cpp
+        base_ecs/*.hpp
+        base_ecs/*.cpp
         network/*.hpp
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
+        misc/*.hpp
+        misc/*.cpp
         components/*.hpp
         components/*.cpp
         exceptions/*.hpp
