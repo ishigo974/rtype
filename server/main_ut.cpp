@@ -2,6 +2,7 @@
 #include "UTManager.hpp"
 #include "ECSUT.hpp"
 #include "ProtocolUT.hpp"
+#include "BaseFactoryUT.hpp"
 
 int           main(int ac, char **av)
 {
@@ -9,6 +10,7 @@ int           main(int ac, char **av)
 
   utm.add(new ECS::ECSUT());
   utm.add(new RType::ProtocolUT());
+  utm.add(new Utils::BaseFactoryUT());
   utm.run(std::vector<std::string>(av + 1, av + ac));
   return EXIT_SUCCESS;
 }
