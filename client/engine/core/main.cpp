@@ -89,7 +89,7 @@ bool stateMachineTest()
 
     sm.move();
 
-    assert(sm._current.getName() == s2.getName());
+    assert(sm.getCurrent().getName() == s2.getName());
 
     return (true);
 }

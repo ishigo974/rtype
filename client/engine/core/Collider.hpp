@@ -11,7 +11,7 @@
 class Collider : public Component
 {
 public:
-    static const unsigned int Mask = 8;
+    static const RTypes::my_uint16_t Mask = ComponentMask::ColliderMask;
 
 public:
     Collider();

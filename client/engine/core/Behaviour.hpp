@@ -7,11 +7,13 @@
 
 # include "Component.hpp"
 # include "RTypes.hpp"
+# include "REnums.hpp"
 
 class Behaviour : public Component
 {
 public:
-    static const unsigned int Mask = 3;
+    static const RTypes::my_uint16_t Mask = ComponentMask::BehaviourMask;
+
 public:
     Behaviour();
     Behaviour(unsigned int _id, std::string const& _name);

@@ -10,6 +10,11 @@ StateMachine::StateMachine(State const& initialState)
         : _states{{"S0", initialState}}, _current(_states[initialState.getName()])
 { }
 
+StateMachine::~StateMachine()
+{
+
+}
+
 void StateMachine::move()
 {
     std::string tmp;
@@ -37,4 +42,9 @@ void StateMachine::addState(State const& state) throw(std::logic_error)
 
         throw std::logic_error(err.str());
     }
+}
+
+State const& StateMachine::getCurrent() const
+{
+    return (_current);
 }
