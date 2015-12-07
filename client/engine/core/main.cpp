@@ -11,6 +11,8 @@
 #include "Input.hpp"
 #include "Event.hpp"
 #include "BigBen.hpp"
+#include "Sound.hpp"
+#include "Music.hpp"
 
 bool gameObjectTest()
 {
@@ -91,13 +93,67 @@ bool timeTest()
     return (true);
 }
 
+int soundTest()
+{
+	Sound	s;
+	Sound	s1;
+	Sound	s2;
+
+	Music	m;
+	if (!m.setSound("res/music.wav"))
+	{
+		std::cout << "Cant load file music.wav: KO" << std::endl;
+		return 1;
+	}
+	std::cout << "Start to play music..." << std::endl;
+	m.play();
+
+	if (!s.changeSound("res/laser1.wav"))
+	{
+		std::cout << "Cant load file laser1.wav: KO"<< std::endl;
+		return 1;
+	}
+	std::cout << "Playing laser1.wav..." << std::endl;
+	s.play();
+	while (s.isPlaying())
+		sf::sleep(sf::milliseconds(100));
+
+	if (!s.changeSound("res/laser2.wav"))
+	{
+		std::cout << "Cant load file laser2.wav: KO" << std::endl;
+		return 1;
+	}
+	std::cout << "Playing laser2.wav..." << std::endl;
+	s.play();
+	while (s.isPlaying())
+		sf::sleep(sf::milliseconds(100));
+
+	std::cout << "Simultaneous sound..." << std::endl;
+	s1.changeSound("res/laser1.wav");
+	s2.changeSound("res/laser2.wav");
+
+	s1.play();
+	s2.play();
+
+	std::cout << "Sound Effect tests: OK" << std::endl;
+
+	//m.stop();
+	std::cout << "Wait until music stop..."<< std::endl;
+	while (m.isPlaying())
+		sf::sleep(sf::milliseconds(100));
+	std::cout << "Music tests: OK" << std::endl;
+
+	return 0;
+}
+
 int main()
 {
-  if (gameObjectTest())
-    std::cout << "gameObjectTest passed -> OK" << std::endl;
-  if (timeTest())
-    std::cout << "timeTest passed -> OK" << std::endl;
-  inputTest();
+  //if (gameObjectTest())
+  //  std::cout << "gameObjectTest passed -> OK" << std::endl;
+  //if (timeTest())
+  //  std::cout << "timeTest passed -> OK" << std::endl;
+  //inputTest();
   // renderTest();
-  return (0);
+	soundTest();
+	return (0);
 }
