@@ -30,7 +30,7 @@ public:
     virtual bool operator==(GameObject const& other);
     virtual bool operator!=(GameObject const& other);
 
-    virtual Transform& transform() const;
+    virtual Transform     & transform() const;
     virtual SpriteRenderer& renderer() const;
 
     virtual std::string toString();

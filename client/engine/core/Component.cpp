@@ -66,9 +66,10 @@ void Component::swap(Component& other)
     swap(_name, other._name);
 }
 
-namespace std {
+namespace std
+{
     template<>
-    void swap<Component>(Component &a, Component &b)
+    void swap<Component>(Component& a, Component& b)
     {
         a.swap(b);
     }
