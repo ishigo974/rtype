@@ -3,14 +3,16 @@
 
 # include "ACommand.hpp"
 # include "Behaviour.hpp"
+# include "Event.hpp"
 
 class	InputHandler : public Behaviour
 {
 public:
-  virtual ~InputHandler() { }
+  InputHandler();
+  virtual ~InputHandler();
 
-  virtual RTypes::my_uint16_t	getMask() const = 0;
-  virtual void			handleInput(int input) = 0;
+  virtual RTypes::my_uint16_t	getMask() const;
+  virtual void			handleInput();
 
   static RTypes::my_uint16_t const Mask = ComponentMask::InputHandlerMask;
 };
