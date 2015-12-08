@@ -15,33 +15,33 @@
 
 bool gameObjectTest()
 {
-    EntityManager entityManager;
+  EntityManager entityManager;
 
-    GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
-    assert(a->getId() == 1);
-    assert(a->getName() == "Test");
-    assert(a->getLayer() == 1);
+  GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
+  assert(a->getId() == 1);
+  assert(a->getName() == "Test");
+  assert(a->getLayer() == 1);
 
-    GameObject *b = entityManager.createEntity<GameObject>("Test", 2);
-    assert(b->getId() == 2);
-    assert(b->getName() == "Test");
-    assert(b->getLayer() == 2);
+  GameObject *b = entityManager.createEntity<GameObject>("Test", 2);
+  assert(b->getId() == 2);
+  assert(b->getName() == "Test");
+  assert(b->getLayer() == 2);
 
-    entityManager.attachComponent<Behaviour>(a, "Behave");
+  entityManager.attachComponent<Behaviour>(a, "Behave");
 
-    Behaviour *be = a->getComponent<Behaviour>();
-    Transform t = a->transform();
+  Behaviour *be = a->getComponent<Behaviour>();
+  Transform t = a->transform();
 
-    assert(be != nullptr);
-    assert(be->getName() == "Behave");
+  assert(be != nullptr);
+  assert(be->getName() == "Behave");
 
-    assert(t.getPosition().X() == 0);
-    t.getPosition().setX(100);
+  assert(t.getPosition().X() == 0);
+  t.getPosition().setX(100);
 
-    std::cout << a->toString() << std::endl;
-    std::cout << b->toString() << std::endl;
+  std::cout << a->toString() << std::endl;
+  std::cout << b->toString() << std::endl;
 
-    return (true);
+  return (true);
 }
 
 void renderAndInputsTest()
@@ -59,29 +59,29 @@ void renderAndInputsTest()
   e.key = cu::Event::LAST_ACTION;
 
   while (e.key != cu::Event::ESCAPE)
+  {
+    while (i.pollEvent(e))
     {
-      while (i.pollEvent(e))
-	{
-	  std::cout << "Key pressed : " << e.key << std::endl;
-	}
-      r.draw(*a);
-      r.render();
+      std::cout << "Key pressed : " << e.key << std::endl;
     }
+    r.draw(*a);
+    r.render();
+  }
   std::cout << "Escape pressed" << std::endl;
 }
 
 bool timeTest()
 {
-    for (int i = 0 ; i < 5 ; ++i)
-    {
-        std::cout << "i = " << i << " ; elapsed = "
-		  << BigBen::get().getElapsedtime() << std::endl;
-        std::cout << "i = " << i << " ; fixedElapsed = "
-		  << BigBen::get().getFixedElapsedtime() << std::endl;
-        //usleep(5000); // Windows...
-    }
+  for (int i = 0; i < 5; ++i)
+  {
+    std::cout << "i = " << i << " ; elapsed = "
+      << BigBen::get().getElapsedtime() << std::endl;
+    std::cout << "i = " << i << " ; fixedElapsed = "
+      << BigBen::get().getFixedElapsedtime() << std::endl;
+    //usleep(5000); // Windows...
+  }
 
-    return (true);
+  return (true);
 }
 
 void backgroundTest()
@@ -94,23 +94,24 @@ void backgroundTest()
 
   entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
   entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/bg1.jpg",
-						gu::Rect<int>(0, 0, 1280, 720));
-  entityManager.attachComponent<ScrollingBackground>(a, "lal", 50, a);
+                                                gu::Rect<int>(0, 0, 1280, 720));
+  entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
 
   r.init();
   e.key = cu::Event::LAST_ACTION;
+  a->getComponent<ScrollingBackground>()->setEnabled(true);
+  ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
   while (e.key != cu::Event::ESCAPE)
+  {
+    while (i.pollEvent(e))
     {
-      while (i.pollEvent(e))
-	{
-	  std::cout << "Key pressed : " << e.key << std::endl;
-	}
-      a->getComponent<ScrollingBackground>()->setEnabled(true);
-      a->getComponent<ScrollingBackground>()->update(BigBen::get().getElapsedtime());
-      r.draw(*a);
-      r.render();
+      std::cout << "Key pressed : " << e.key << std::endl;
     }
+    bg->update(BigBen::get().getElapsedtime());
+    r.draw(*a);
+    r.render();
+  }
   std::cout << "Escape pressed" << std::endl;
 }
 

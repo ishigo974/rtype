@@ -7,7 +7,7 @@ class		ScrollingBackground : public Behaviour
 {
 public:
   ScrollingBackground();
-  ScrollingBackground(unsigned int _id, std::string const& _name, unsigned int speed,
+  ScrollingBackground(unsigned int _id, std::string const& _name, double speed,
 		      Object *parent);
   ScrollingBackground(ScrollingBackground const& other);
   ScrollingBackground(ScrollingBackground&& other);
@@ -22,7 +22,7 @@ public:
   void swap(ScrollingBackground& other);
 
 private:
-  unsigned int	_speed;
+  double	_speed;
 };
 
 #endif		// !SCROLLINGBACKGROUND_HPP_

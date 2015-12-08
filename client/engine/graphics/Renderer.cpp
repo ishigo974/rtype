@@ -9,6 +9,7 @@
 Renderer::Renderer() :
 	_win(sf::VideoMode(1280, 720), "Hey-Type")
 {
+	_win.setFramerateLimit(60);
 }
 
 void    Renderer::init()
