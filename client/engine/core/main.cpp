@@ -2,6 +2,8 @@
 #include <assert.h>
 #include "GameObject.hpp"
 #include "StateMachine.hpp"
+#include "CommandSystem.hpp"
+#include "Event.hpp"
 
 //bool gameObjectTest()
 //{
@@ -94,6 +96,22 @@ bool stateMachineTest()
     return (true);
 }
 
+bool commandSystemTest()
+{
+  CommandSystem cmds;
+  cu::Event upEvent;
+  cu::Event downEvent;
+
+  upEvent.key = cu::Event::UP;
+  downEvent.key = cu::Event::DOWN;
+
+  cmds.addCommand(upEvent);
+  cmds.addCommand(downEvent);
+  std::cout << cmds.toString() << std::endl;
+  assert(cmds.getSize() == 2);
+  return (true);
+}
+
 int main()
 {
 //    if (gameObjectTest())
@@ -102,5 +120,6 @@ int main()
 //        std::cout << "timeTest passed -> OK" << std::endl;
 //    renderTest();
     stateMachineTest();
+    commandSystemTest();
     return (0);
 }
