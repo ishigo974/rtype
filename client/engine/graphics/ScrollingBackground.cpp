@@ -66,8 +66,10 @@ void ScrollingBackground::update(double elapsedTime)
   if (!_enabled)
     return ;
 
-  SpriteRenderer *sr = static_cast<GameObject *>(this->_parent)
-    ->getComponent<SpriteRenderer>();
+  GameObject *parent = static_cast<GameObject *>(this->_parent);
+  if (parent == nullptr)
+    return;
+  SpriteRenderer *sr = parent->getComponent<SpriteRenderer>();
   if (sr == nullptr)
     return;
 
