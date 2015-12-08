@@ -13,6 +13,11 @@ public:
   virtual void	execute() = 0;
   virtual void	undo() = 0;
 
+  void		setObject(GameObject *obj)
+  {
+    _obj = obj;
+  }
+
   virtual std::chrono::time_point<std::chrono::high_resolution_clock>	getTime()
   {
     return _time;
@@ -20,6 +25,7 @@ public:
 
 protected:
   std::chrono::time_point<std::chrono::high_resolution_clock>	_time;
+  GameObject							*_obj;
 };
 
 #endif /* !RTYPE_ACOMMAND_HPP_ */
