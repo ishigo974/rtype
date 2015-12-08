@@ -34,6 +34,7 @@ namespace RType
             bool                isConnected() const;
             bool                isRequest() const;
             Request             popRequest();
+            std::string const&  repr() const;
 
         public:
             virtual void        update();
@@ -59,6 +60,7 @@ namespace RType
             Buffer                  _toSend;
             Buffer                  _received;
             std::queue<Request>     _requests;
+            std::string             _repr;
         };
     }
 }

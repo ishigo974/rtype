@@ -3,11 +3,7 @@
 
 int   main(int ac, char **av)
 {
-<<<<<<< HEAD
     short int   port = RType::Server::defaultPort;
-=======
-  int port = 6667;
->>>>>>> 056354f9bdb380cf3c67d6aeb87192899ef84362
 
     try {
         if (ac > 1)

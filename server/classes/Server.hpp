@@ -11,6 +11,14 @@ namespace RType
     class Server : public IStringable
     {
     public:
+        enum Response
+        {
+            LOBBY_LISTROOMS = 400,
+            LOBBY_OK        = 601,
+            LOBBY_KO        = 602
+        };
+
+    public:
         Server();
         Server(short int port);
         virtual ~Server();
@@ -30,10 +38,15 @@ namespace RType
         virtual std::string     toString() const;
 
     public:
-        static void   display(std::string const& msg, bool err = false);
+        static void             display(std::string const& msg,
+                                        bool err = false);
+
+    protected:
+        static Buffer           getResponseOK();
 
     public:
-        static const short int    defaultPort;
+        static const short int      defaultPort;
+        static const Buffer         responseOK;
 
     protected:
         bool                    _quit;

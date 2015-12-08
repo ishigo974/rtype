@@ -2,10 +2,11 @@
 # define LOBBYSYSTEM_HPP_
 
 # include <string>
+# include <unordered_map>
 # include "Entity.hpp"
 # include "ASystem.hpp"
 # include "ComponentMask.hpp"
-# include "ACommand.hpp"
+# include "RequestCommand.hpp"
 
 namespace RType
 {
@@ -15,7 +16,8 @@ namespace RType
         {
         public:
             typedef std::unordered_map<Request::LobbyRequest,
-                        std::string, std::hash<uint16_t> > RequestCmdMap;
+                        std::string, std::hash<uint16_t> >      RequestCmdMap;
+            typedef std::unordered_map<uint32_t, ECS::Entity*>  RoomsMap;
 
         public:
             Lobby();
@@ -23,7 +25,10 @@ namespace RType
 
         private:
             Lobby(Lobby const& other) = delete;
-            Lobby&      operator=(Lobby const& other) = delete;
+            Lobby&                      operator=(Lobby const& other) = delete;
+
+        public:
+            void                        addRoom(ECS::Entity& room);
 
         public:
             virtual void                processEntity(ECS::Entity& e);
@@ -32,13 +37,14 @@ namespace RType
             virtual std::string         toString() const;
 
         protected:
-            void                        handleRequest();
-
-        public:
-            static Command::ACommand*   buildCommand(Request const& request);
+            Command::Request*           buildCommand(Request const& request,
+                                                     ECS::Entity& entity);
 
         protected:
             static const RequestCmdMap  cmdsNames;
+
+        protected:
+            RoomsMap    _rooms;
         };
     }
 }

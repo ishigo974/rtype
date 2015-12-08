@@ -2,13 +2,13 @@
 # define COMMANDFACTORY_HPP_
 
 # include "BaseFactory.hpp"
-# include "ACommand.hpp"
+# include "RequestCommand.hpp"
 
 namespace RType
 {
     namespace Command
     {
-        class Factory : public Utils::BaseFactory<ACommand>
+        class Factory : public Utils::BaseFactory<Command::Request>
         {
         protected:
             Factory();

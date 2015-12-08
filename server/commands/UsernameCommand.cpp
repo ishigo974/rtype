@@ -1,6 +1,7 @@
 #include "ComponentsMasks.hpp"
 #include "UsernameCommand.hpp"
 #include "ValueError.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -9,7 +10,7 @@ namespace RType
         /*
         ** Constructors/Destructor
         */
-        Username::Username() : ACommand()
+        Username::Username() : Command::Request()
         {
         }
 
@@ -21,8 +22,9 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Username::Username(Username const& other) :
-            ACommand(other), _usernameToSet(other._usernameToSet),
-            _oldUsername(other._oldUsername), _player(other._player)
+            Command::Request(other), _usernameToSet(other._usernameToSet),
+            _oldUsername(other._oldUsername),
+            _player(other._player), _network(other._network)
         {
         }
 
@@ -30,10 +32,11 @@ namespace RType
         {
             if (this != &other)
             {
-                ACommand::operator=(other);
+                Command::Request::operator=(other);
                 _usernameToSet = other._usernameToSet;
                 _oldUsername = other._oldUsername;
                 _player = other._player;
+                _network = other._network;
             }
             return *this;
         }
@@ -43,14 +46,21 @@ namespace RType
         */
         void    Username::execute()
         {
+            // validation username TODO
             if (_player != nullptr)
                 _player->setUsername(_usernameToSet);
+            if (_network != nullptr)
+                _network->send(Server::responseOK);
+            // broadcast to room TODO
         }
 
         void    Username::undo()
         {
             if (_player != nullptr)
                 _player->setUsername(_oldUsername);
+            if (_network != nullptr)
+                _network->send(Server::responseOK);
+            // broadcast to room TODO
         }
 
         void    Username::setEntity(ECS::Entity* entity)
@@ -59,12 +69,14 @@ namespace RType
             updateData();
         }
 
-        void    Username::initFromRequest(Request const& request)
+        void    Username::initFromRequest(RType::Request const& request,
+                                          ECS::ASystem* sys)
         {
             _usernameToSet = request.get<std::string>("username");
+            _system = sys;
         }
 
-        ACommand*   Username::clone() const
+        Command::Request*   Username::clone() const
         {
             return new Username(*this);
         }
@@ -84,6 +96,10 @@ namespace RType
                         == nullptr)
                 return ;
             _oldUsername = _player->getUsername();
+            if ((_network = _entity
+                    ->getComponent<Component::NetworkTCP>(
+                        Component::MASK_NETWORKTCP)) == nullptr)
+                return ;
         }
     }
 }

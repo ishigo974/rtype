@@ -1,4 +1,4 @@
-#include "ACommand.hpp"
+#include "RequestCommand.hpp"
 
 namespace RType
 {
@@ -7,26 +7,28 @@ namespace RType
         /*
         ** Constructors/Destructor
         */
-        ACommand::ACommand() : _entity(nullptr)
+        Request::Request() : _entity(nullptr), _system(nullptr)
         {
         }
 
-        ACommand::ACommand(ECS::Entity* entity) : _entity(entity)
+        Request::Request(ECS::Entity* entity) :
+            _entity(entity), _system(nullptr)
         {
         }
 
-        ACommand::~ACommand()
+        Request::~Request()
         {
         }
 
         /*
         ** Copy constructor and assign operator
         */
-        ACommand::ACommand(ACommand const& other) : _entity(other._entity)
+        Request::Request(Request const& other) :
+            _entity(other._entity)
         {
         }
 
-        ACommand&       ACommand::operator=(ACommand const& other)
+        Request&        Request::operator=(Request const& other)
         {
             if (this != &other)
                 _entity = other._entity;
@@ -36,12 +38,12 @@ namespace RType
         /*
         ** Public member functions
         */
-        void            ACommand::setEntity(ECS::Entity* entity)
+        void            Request::setEntity(ECS::Entity& entity)
         {
-            _entity = entity;
+            _entity = &entity;
         }
 
-        std::string     ACommand::toString() const
+        std::string     Request::toString() const
         {
             return getName();
         }

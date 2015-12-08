@@ -2,16 +2,18 @@
 # define USERNAMECOMMAND_HPP_
 
 # include <string>
-# include "ACommand.hpp"
 # include "Request.hpp"
+# include "RequestCommand.hpp"
 # include "Player.hpp"
+# include "NetworkTCP.hpp"
 # include "Entity.hpp"
+# include "ASystem.hpp"
 
 namespace RType
 {
     namespace Command
     {
-        class Username : public ACommand
+        class Username : public Command::Request
         {
         public:
             Username();
@@ -22,14 +24,12 @@ namespace RType
             Username&           operator=(Username const& other);
 
         public:
-            void                setUsernameToSet(std::string const& username);
-
-        public:
+            virtual void        initFromRequest(RType::Request const& request,
+                                                ECS::ASystem* system);
             virtual void        execute();
             virtual void        undo();
             virtual void        setEntity(ECS::Entity* entity);
-            virtual void        initFromRequest(Request const& request);
-            virtual ACommand*   clone() const;
+            virtual Request*    clone() const;
 
         public:
             virtual std::string getName() const;
@@ -38,9 +38,10 @@ namespace RType
             void                updateData();
 
         public:
-            std::string         _usernameToSet;
-            std::string         _oldUsername;
-            Component::Player*  _player;
+            std::string             _usernameToSet;
+            std::string             _oldUsername;
+            Component::Player*      _player;
+            Component::NetworkTCP*  _network;
         };
     }
 }
