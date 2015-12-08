@@ -13,7 +13,7 @@ State::State(std::string const& name)
 
 State::State(State const& o)
 {
-    _name = o._name;
+    _name        = o._name;
     _transitions = o._transitions;
 }
 
@@ -51,7 +51,7 @@ namespace std
 
 bool State::canMove(std::string& out)
 {
-    for (auto &&e : _transitions)
+    for (auto&& e : _transitions)
     {
         if (e.second->validate())
         {
