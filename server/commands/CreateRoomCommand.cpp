@@ -1,4 +1,9 @@
 #include "CreateRoomCommand.hpp"
+#include "EntityManager.hpp"
+#include "ComponentsMasks.hpp"
+#include "Room.hpp"
+#include "NetworkTCP.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -7,7 +12,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        CreateRoom::CreateRoom() : _system(nullptr)
+        CreateRoom::CreateRoom() : _lobby(nullptr)
         {
         }
 
@@ -20,7 +25,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         CreateRoom::CreateRoom(CreateRoom const& other) :
-            _roomName(other._roomName), _system(other._system)
+            Command::Request(other),
+            _roomName(other._roomName), _lobby(other._lobby)
         {
         }
 
@@ -28,8 +34,9 @@ namespace RType
         {
             if (this != &other)
             {
+                Command::Request::operator=(other);
                 _roomName = other._roomName;
-                _system = other._system;
+                _lobby = other._lobby;
             }
             return *this;
         }
@@ -49,7 +56,7 @@ expected LobbySystem"); // TODO
 
         void        CreateRoom::execute()
         {
-            Entity&                 e =
+            ECS::Entity&            e =
                 ECS::EntityManager::getInstance().create(Component::MASK_ROOM);
             Component::Room*        room =
                 e.getComponent<Component::Room>(Component::MASK_ROOM);
@@ -61,7 +68,7 @@ expected LobbySystem"); // TODO
                 throw std::runtime_error("Entity does not have a \
 room component");
             // validation name TODO
-            room->addPlayer(_entity);
+            room->addPlayer(*_entity);
             room->setName(_roomName);
             _lobby->addRoom(e);
             network->send(Server::responseOK);

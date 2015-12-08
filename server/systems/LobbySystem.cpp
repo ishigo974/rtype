@@ -66,6 +66,11 @@ request, ignored (" + network->repr() + ")", true);
             return "LobbySystem";
         }
 
+        Lobby::RoomsMap const&     Lobby::getRooms() const
+        {
+            return _rooms;
+        }
+
         std::string         Lobby::toString() const
         {
             return "LobbySystem { mask: " + std::to_string(getMask()) + "}";

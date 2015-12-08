@@ -29,6 +29,7 @@ namespace RType
 
         public:
             void                        addRoom(ECS::Entity& room);
+            RoomsMap const&             getRooms() const;
 
         public:
             virtual void                processEntity(ECS::Entity& e);

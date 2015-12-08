@@ -1,25 +1,25 @@
-#ifndef CREATEROOMCOMMAND_HPP_
-# define CREATEROOMCOMMAND_HPP_
+#ifndef LISTROOMSCOMMAND_HPP_
+# define LISTROOMSCOMMAND_HPP_
 
 # include <string>
 # include "Request.hpp"
 # include "RequestCommand.hpp"
 # include "ASystem.hpp"
-# include "LobbySystem.hpp"
+#include "LobbySystem.hpp"
 
 namespace RType
 {
     namespace Command
     {
-        class CreateRoom : Command::Request
+        class ListRooms : public Command::Request
         {
         public:
-            CreateRoom();
-            virtual ~CreateRoom();
+            ListRooms();
+            virtual ~ListRooms();
 
         public:
-            CreateRoom(CreateRoom const& other);
-            CreateRoom&         operator=(CreateRoom const& other);
+            ListRooms(ListRooms const& other);
+            ListRooms&         operator=(ListRooms const& other);
 
         public:
             virtual void        initFromRequest(RType::Request const& request,
@@ -32,10 +32,9 @@ namespace RType
             virtual std::string getName() const;
 
         protected:
-            std::string         _roomName;
-            System::Lobby*      _lobby;
+            System::Lobby::RoomsMap const*  _rooms;
         };
     }
 }
 
-#endif /* !CREATEROOMCOMMAND_HPP_ */
+#endif /* !LISTROOMSCOMMAND_HPP_ */
