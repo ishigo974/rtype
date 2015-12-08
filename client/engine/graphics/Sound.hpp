@@ -8,7 +8,7 @@ public:
 
 public:
 	bool	isPlaying();
-	bool	changeSound(const std::string &);
+	bool	setSound(const std::string &);
 	void	play();
 
 private:

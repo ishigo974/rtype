@@ -108,7 +108,8 @@ int soundTest()
 	std::cout << "Start to play music..." << std::endl;
 	m.play();
 
-	if (!s.changeSound("res/laser1.wav"))
+	sf::sleep(sf::milliseconds(1000));
+	if (!s.setSound("res/laser1.wav"))
 	{
 		std::cout << "Cant load file laser1.wav: KO"<< std::endl;
 		return 1;
@@ -118,7 +119,7 @@ int soundTest()
 	while (s.isPlaying())
 		sf::sleep(sf::milliseconds(100));
 
-	if (!s.changeSound("res/laser2.wav"))
+	if (!s.setSound("res/laser2.wav"))
 	{
 		std::cout << "Cant load file laser2.wav: KO" << std::endl;
 		return 1;
@@ -129,8 +130,8 @@ int soundTest()
 		sf::sleep(sf::milliseconds(100));
 
 	std::cout << "Simultaneous sound..." << std::endl;
-	s1.changeSound("res/laser1.wav");
-	s2.changeSound("res/laser2.wav");
+	s1.setSound("res/laser1.wav");
+	s2.setSound("res/laser2.wav");
 
 	s1.play();
 	s2.play();
