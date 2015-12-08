@@ -3,6 +3,7 @@
 
 # include <queue>
 # include "ACommand.hpp"
+# include "Event.hpp"
 
 class CommandSystem
 {
@@ -10,7 +11,9 @@ public:
   CommandSystem();
   virtual ~CommandSystem();
 
-  // void	addCommand(cu::Event event);
+  void		addCommand(cu::Event event);
+  std::string	toString();
+  int		getSize() const;
 
 private:
   std::queue<ACommand *>	_commands;

@@ -1,4 +1,6 @@
 #include "CommandSystem.hpp"
+#include "MoveCommand.hpp"
+#include "ShootCommand.hpp"
 
 CommandSystem::CommandSystem()
 {
@@ -8,26 +10,41 @@ CommandSystem::~CommandSystem()
 {
 }
 
-// void	addCommand(cu::Event event)
-// {
-//   switch (event.type)
-//     {
-//     case UP:
-//       _commands.push(new MoveCommand(MoveCommand::Direction.UP));
-//       break;
-//     case DOWN:
-//       _commands.push(new MoveCommand(MoveCommand::Direction.DOWN));
-//       break;
-//     case LEFT:
-//       _commands.push(new MoveCommand(MoveCommand::Direction.LEFT));
-//       break;
-//     case RIGHT:
-//       _commands.push(new MoveCommand(MoveCommand::Direction.RIGHT));
-//       break;
-//     case SHOOT:
-//       _commands.push(new ShootCommand());
-//       break;
-//     default:
-//       break;
-//     }
-// }
+void	CommandSystem::addCommand(cu::Event event)
+{
+  switch (event.key)
+    {
+    case cu::Event::UP:
+      _commands.push(new MoveCommand(MoveCommand::UP));
+      break;
+    case cu::Event::DOWN:
+      _commands.push(new MoveCommand(MoveCommand::DOWN));
+      break;
+    case cu::Event::LEFT:
+      _commands.push(new MoveCommand(MoveCommand::LEFT));
+      break;
+    case cu::Event::RIGHT:
+      _commands.push(new MoveCommand(MoveCommand::RIGHT));
+      break;
+    case cu::Event::SHOOT:
+      _commands.push(new ShootCommand());
+      break;
+    default:
+      break;
+    }
+}
+
+int	CommandSystem::getSize() const
+{
+  return _commands.size();
+}
+
+std::string	CommandSystem::toString()
+{
+  std::stringstream ss;
+
+  ss << "CommandSystem {"
+     << "\n\tqueue size: " << _commands.size()
+     << "\n}" << std::endl;
+  return (ss.str());
+}
