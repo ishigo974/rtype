@@ -13,8 +13,8 @@ Renderer::Renderer() :
 
 void    Renderer::init()
 {
-    this->_res.addTexture("../res/r-typesheet1.gif");
-	this->_res.addTexture("../res/bg1.jpg");
+  this->_res.addTexture("../res/r-typesheet1.gif");
+  this->_res.addTexture("../res/bg1.jpg", true);
 }
 
 void Renderer::render()

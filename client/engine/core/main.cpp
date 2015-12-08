@@ -74,8 +74,10 @@ bool timeTest()
 {
     for (int i = 0 ; i < 5 ; ++i)
     {
-        std::cout << "i = " << i << " ; elapsed = " << BigBen::get().getElapsedtime() << std::endl;
-        std::cout << "i = " << i << " ; fixedElapsed = " << BigBen::get().getFixedElapsedtime() << std::endl;
+        std::cout << "i = " << i << " ; elapsed = "
+		  << BigBen::get().getElapsedtime() << std::endl;
+        std::cout << "i = " << i << " ; fixedElapsed = "
+		  << BigBen::get().getFixedElapsedtime() << std::endl;
         //usleep(5000); // Windows...
     }
 
@@ -92,7 +94,8 @@ void backgroundTest()
 
   entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
   entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/bg1.jpg",
-						gu::Rect<int>(0, 0, 512, 512));
+						gu::Rect<int>(0, 0, 1280, 720));
+  entityManager.attachComponent<ScrollingBackground>(a, "lal", 50, a);
 
   r.init();
   e.key = cu::Event::LAST_ACTION;
@@ -103,6 +106,8 @@ void backgroundTest()
 	{
 	  std::cout << "Key pressed : " << e.key << std::endl;
 	}
+      a->getComponent<ScrollingBackground>()->setEnabled(true);
+      a->getComponent<ScrollingBackground>()->update(BigBen::get().getElapsedtime());
       r.draw(*a);
       r.render();
     }
@@ -115,6 +120,7 @@ int main()
     std::cout << "gameObjectTest passed -> OK" << std::endl;
   if (timeTest())
     std::cout << "timeTest passed -> OK" << std::endl;
-  renderAndInputsTest();
+  // renderAndInputsTest();
+  backgroundTest();
   return (0);
 }

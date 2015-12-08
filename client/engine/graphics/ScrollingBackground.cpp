@@ -1,10 +1,15 @@
 #include "ScrollingBackground.hpp"
+#include "GameObject.hpp"
+#include "SpriteRenderer.hpp"
 
 ScrollingBackground::ScrollingBackground()
 {}
 
-ScrollingBackground::ScrollingBackground(unsigned int _id, std::string const& _name) :
-  Behaviour(_id, _name)
+ScrollingBackground::ScrollingBackground(unsigned int _id,
+					 std::string const& _name,
+					 unsigned int speed,
+					 Object *parent) :
+  Behaviour(_id, _name, parent), _speed(speed)
 {}
 
 ScrollingBackground::ScrollingBackground(ScrollingBackground const& other) :
@@ -55,8 +60,17 @@ void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
 }
 }
 
-void ScrollingBackground::update(double)
+void ScrollingBackground::update(double elapsedTime)
 {
   if (!_enabled)
-    return;
+    return ;
+
+  SpriteRenderer *sr = static_cast<GameObject *>(this->_parent)
+    ->getComponent<SpriteRenderer>(); // !
+
+  auto rect = sr->getRect();
+  rect.x += this->_speed * elapsedTime;
+  // if (rect.x > rect.w)
+  //   rect.x = 0;
+  sr->setRect(rect);
 }

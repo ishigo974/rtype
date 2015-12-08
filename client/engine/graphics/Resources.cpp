@@ -38,14 +38,15 @@ const sf::Texture* Resources::operator[](const std::string& path) const
 	return this->getTexture(path);
 }
 
-bool    Resources::addTexture(const std::string& path, bool)
+bool    Resources::addTexture(const std::string& path, bool repeated)
 {
-    this->_textures[path] = new sf::Texture();
-	if (!this->_textures[path]->loadFromFile(path))
-	{
-		delete this->_textures[path];
-		this->_textures.erase(path);
-		return false;
-	}
-	return true;
+  this->_textures[path] = new sf::Texture();
+  if (!this->_textures[path]->loadFromFile(path))
+    {
+      delete this->_textures[path];
+      this->_textures.erase(path);
+      return false;
+    }
+  this->_textures[path]->setRepeated(repeated);
+  return true;
 }

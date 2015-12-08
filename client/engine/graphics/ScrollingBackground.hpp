@@ -7,7 +7,8 @@ class		ScrollingBackground : public Behaviour
 {
 public:
   ScrollingBackground();
-  ScrollingBackground(unsigned int _id, std::string const& _name);
+  ScrollingBackground(unsigned int _id, std::string const& _name, unsigned int speed,
+		      Object *parent);
   ScrollingBackground(ScrollingBackground const& other);
   ScrollingBackground(ScrollingBackground&& other);
   ScrollingBackground& operator=(ScrollingBackground other);
@@ -18,9 +19,10 @@ public:
 
   virtual void update(double elapsedTime);
 
-  virtual RTypes::my_uint16_t getMask() const;
-
   void swap(ScrollingBackground& other);
+
+private:
+  unsigned int	_speed;
 };
 
 #endif		// !SCROLLINGBACKGROUND_HPP_
