@@ -91,9 +91,11 @@ void backgroundTest()
   EntityManager entityManager;
   GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
   cu::Event e;
+  std::stringstream ss;
+  ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
 
   entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-  entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/bg1.jpg",
+  entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
                                                 gu::Rect<int>(0, 0, 1280, 720));
   entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
 
@@ -117,6 +119,7 @@ void backgroundTest()
 
 int main()
 {
+  srand(static_cast<unsigned>(time(nullptr)));
   if (gameObjectTest())
     std::cout << "gameObjectTest passed -> OK" << std::endl;
   if (timeTest())

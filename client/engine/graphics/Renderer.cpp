@@ -16,6 +16,9 @@ void    Renderer::init()
 {
   this->_res.addTexture("../res/r-typesheet1.gif");
   this->_res.addTexture("../res/bg1.jpg", true);
+  this->_res.addTexture("../res/bg2.jpg", true);
+  this->_res.addTexture("../res/bg3.jpg", true);
+  this->_res.addTexture("../res/bg4.jpg", true);
 }
 
 void Renderer::render()
