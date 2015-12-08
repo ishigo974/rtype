@@ -3,6 +3,7 @@
 
 # include <chrono>
 # include "GameObject.hpp"
+# include "BigBen.hpp"
 
 class ACommand
 {
@@ -11,6 +12,11 @@ public:
 
   virtual void	execute() = 0;
   virtual void	undo() = 0;
+
+  virtual std::chrono::time_point<std::chrono::high_resolution_clock>	getTime()
+  {
+    return _time;
+  }
 
 protected:
   std::chrono::time_point<std::chrono::high_resolution_clock>	_time;

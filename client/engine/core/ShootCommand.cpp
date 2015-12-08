@@ -2,6 +2,7 @@
 
 ShootCommand::ShootCommand()
 {
+  _time = BigBen::getTimeNow();
 }
 
 ShootCommand::~ShootCommand()

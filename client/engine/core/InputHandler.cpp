@@ -16,4 +16,6 @@ RTypes::my_uint16_t	InputHandler::getMask() const
 
 void	InputHandler::handleInput()
 {
+  
+  update();
 }

@@ -3,6 +3,7 @@
 MoveCommand::MoveCommand(Direction direction)
 {
   _direction = direction;
+  _time = BigBen::getTimeNow();
 }
 
 MoveCommand::~MoveCommand()
