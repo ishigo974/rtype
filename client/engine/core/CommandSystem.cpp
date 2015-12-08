@@ -45,7 +45,7 @@ ACommand	*CommandSystem::getByTimestamp(timestamp time)
   for (auto command : _commands)
     {
       diff = command->getTime() - time;
-      if (abs(diff.count()) > DBL_EPSILON)
+      if (abs(diff.count()) <= DBL_EPSILON)
 	return (command);
     }
   return NULL;
