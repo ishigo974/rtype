@@ -76,7 +76,7 @@ void ScrollingBackground::update(double elapsedTime)
   if (deltaPix >= 1)
   {
     rect.x += static_cast<int>(deltaPix);
-    deltaPix = 0;
+    deltaPix = deltaPix - static_cast<int>(deltaPix);
   }
   sr->setRect(rect);
 }
