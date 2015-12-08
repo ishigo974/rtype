@@ -11,7 +11,8 @@
 #include "Input.hpp"
 #include "Event.hpp"
 #include "BigBen.hpp"
-#include "Sound.hpp"
+#include "SoundEffect.hpp"
+#include "SoundEffectPlayer.hpp"
 #include "Music.hpp"
 
 bool gameObjectTest()
@@ -66,19 +67,19 @@ void renderTest()
 
 void inputTest()
 {
-  Renderer r;
-  Input i(r.getWindow());
-  cu::Event e;
+	Renderer r;
+	Input i(r.getWindow());
+	cu::Event e;
 
-  e.key = cu::Event::LAST_ACTION;
-  while (e.key != cu::Event::ESCAPE)
-    {
-      while (i.pollEvent(e))
+	e.key = cu::Event::LAST_ACTION;
+	while (e.key != cu::Event::ESCAPE)
 	{
-	  std::cout << "Key pressed : " << e.key << std::endl;
+		while (i.pollEvent(e))
+		{
+			std::cout << "Key pressed : " << e.key << std::endl;
+		}
+		r.render();
 	}
-      r.render();
-    }
 }
 
 bool timeTest()
@@ -93,68 +94,36 @@ bool timeTest()
     return (true);
 }
 
-int soundTest()
+int SoundEffectPlayerTest()
 {
-	Sound	s;
-	Sound	s1;
-	Sound	s2;
+	EntityManager entityManager;
+	SoundEffectPlayer soundPlayer;
+	GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
+	SoundEffect *sEffect;
 
-	Music	m;
-	if (!m.setSound("res/music.wav"))
+	entityManager.attachComponent<SoundEffect>(gameObj, "toto", "res/laser2.wav");
+
+	soundPlayer.play(*gameObj);
+
+	sEffect = gameObj->getComponent<SoundEffect>();
+	
+	while (sEffect->isPlaying())
 	{
-		std::cout << "Cant load file music.wav: KO" << std::endl;
-		return 1;
+		std::cout << "Playing sound..." << std::endl;
+		std::cout << (sEffect->isPlaying() ? "true" : "false") << std::endl;
+		sf::sleep(sf::milliseconds(500));
 	}
-	std::cout << "Start to play music..." << std::endl;
-	m.play();
-
-	sf::sleep(sf::milliseconds(1000));
-	if (!s.setSound("res/laser1.wav"))
-	{
-		std::cout << "Cant load file laser1.wav: KO"<< std::endl;
-		return 1;
-	}
-	std::cout << "Playing laser1.wav..." << std::endl;
-	s.play();
-	while (s.isPlaying())
-		sf::sleep(sf::milliseconds(100));
-
-	if (!s.setSound("res/laser2.wav"))
-	{
-		std::cout << "Cant load file laser2.wav: KO" << std::endl;
-		return 1;
-	}
-	std::cout << "Playing laser2.wav..." << std::endl;
-	s.play();
-	while (s.isPlaying())
-		sf::sleep(sf::milliseconds(100));
-
-	std::cout << "Simultaneous sound..." << std::endl;
-	s1.setSound("res/laser1.wav");
-	s2.setSound("res/laser2.wav");
-
-	s1.play();
-	s2.play();
-
-	std::cout << "Sound Effect tests: OK" << std::endl;
-
-	//m.stop();
-	std::cout << "Wait until music stop..."<< std::endl;
-	while (m.isPlaying())
-		sf::sleep(sf::milliseconds(100));
-	std::cout << "Music tests: OK" << std::endl;
-
 	return 0;
 }
 
 int main()
 {
-  //if (gameObjectTest())
-  //  std::cout << "gameObjectTest passed -> OK" << std::endl;
-  //if (timeTest())
-  //  std::cout << "timeTest passed -> OK" << std::endl;
-  //inputTest();
-  // renderTest();
-	soundTest();
+	//if (gameObjectTest())
+	//	std::cout << "gameObjectTest passed -> OK" << std::endl;
+	//if (timeTest())
+	//	std::cout << "timeTest passed -> OK" << std::endl;
+	//inputTest();
+	//renderTest();
+	SoundEffectPlayerTest();
 	return (0);
 }
