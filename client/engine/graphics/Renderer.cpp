@@ -7,7 +7,8 @@
 
 
 Renderer::Renderer() :
-	_win(sf::VideoMode(1280, 720), "Hey-Type")
+	_win(sf::VideoMode(1280, 720), "Hey-Type",
+       sf::Style::Titlebar | sf::Style::Close)
 {
 	_win.setFramerateLimit(60);
 }

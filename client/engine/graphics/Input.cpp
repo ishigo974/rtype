@@ -26,13 +26,19 @@ bool Input::pollEvent(cu::Event& event)
 	{
 		case sf::Event::KeyPressed:
 			event.type = cu::Event::KeyPressed;
-			return keyPressed(e, event);
+			return key(e, event);
+    case sf::Event::KeyReleased:
+      event.type = cu::Event::KeyPressed;
+      return key(e, event);
+    case sf::Event::Closed:
+      event.type = cu::Event::Closed;
+      return true;
 		default:
 			return false;
 	}
 }
 
-bool Input::keyPressed(sf::Event const& e, cu::Event& event)
+bool Input::key(sf::Event const& e, cu::Event& event)
 {
 	unsigned int	i;
 

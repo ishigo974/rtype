@@ -20,7 +20,7 @@ public:
 	bool	pollEvent(cu::Event &);
 
 private:
-	bool	keyPressed(sf::Event const&, cu::Event&);
+	bool	key(sf::Event const&, cu::Event&);
 
 private:
 	sf::RenderWindow&				_win;
