@@ -1,9 +1,11 @@
 #include "CommandSystem.hpp"
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
+#include "InputHandler.hpp"
 
-CommandSystem::CommandSystem()
+CommandSystem::CommandSystem(EntityManager *entityManager)
 {
+  _entityManager = entityManager;
 }
 
 CommandSystem::~CommandSystem()
@@ -34,6 +36,14 @@ void	CommandSystem::addCommand(cu::Event event)
     }
 }
 
+void	CommandSystem::process()
+{
+  std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::InputHandlerMask);
+
+  for (auto obj : objs)
+    static_cast<InputHandler *>(obj)->handleInput();
+}
+
 int	CommandSystem::getSize() const
 {
   return _commands.size();
@@ -45,6 +55,6 @@ std::string	CommandSystem::toString()
 
   ss << "CommandSystem {"
      << "\n\tqueue size: " << _commands.size()
-     << "\n}" << std::endl;
+     << "\n}";
   return (ss.str());
 }
