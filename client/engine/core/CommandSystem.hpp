@@ -20,6 +20,7 @@ public:
   void		process();
   int		getSize() const;
   ACommand	*getByTimestamp(timestamp time);
+  void		invalidCommandAtTimestamp(timestamp time);
 
 private:
   std::vector<ACommand *>	_commands;

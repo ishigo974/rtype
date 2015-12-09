@@ -59,6 +59,15 @@ void		CommandSystem::process()
     static_cast<InputHandler *>(obj)->handleInput();
 }
 
+void		CommandSystem::invalidCommandAtTimestamp(timestamp time)
+{
+  for (auto cmd : _commands)
+    {
+      if (cmd->getTime() > time)
+	cmd->undo();
+    }
+}
+
 int	CommandSystem::getSize() const
 {
   return _commands.size();
