@@ -86,7 +86,7 @@ namespace ECS
 
         if ((it = _actives.find(id)) == _actives.end())
         throw Exception::ValueError("Id " + std::to_string(id) +
-        " does not match any entity");
+                                    " does not match any entity");
         return *it->second;
     }
 

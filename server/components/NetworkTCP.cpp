@@ -25,7 +25,8 @@ namespace RType
         }
 
         NetworkTCP::NetworkTCP(UniqueITcpSockPtr socket) :
-            _socket(std::move(socket)), _toSend(), _received()
+            _socket(std::move(socket)), _toSend(), _received(),
+            _repr(_socket->getAddr() + ":" + std::to_string(_socket->getPort()))
         {
         }
 
@@ -37,7 +38,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         NetworkTCP::NetworkTCP(NetworkTCP const& other) :
-            _toSend(other._toSend), _received(other._received)
+            _toSend(other._toSend), _received(other._received),
+            _requests(other._requests), _repr(other._repr)
         {
         }
 
@@ -47,6 +49,8 @@ namespace RType
             {
                 _toSend = other._toSend;
                 _received = other._received;
+                _requests = other._requests;
+                _repr = other._repr;
             }
             return *this;
         }
@@ -101,6 +105,13 @@ namespace RType
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
         {
             _socket = std::move(socket);
+            _repr = _socket->getAddr() + ":" +
+                    std::to_string(_socket->getPort());
+        }
+
+        std::string const&     NetworkTCP::repr() const
+        {
+            return _repr;
         }
 
         std::string     NetworkTCP::getName() const

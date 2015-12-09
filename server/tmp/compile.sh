@@ -1,1 +1,1 @@
-g++ *.cpp -lboost_system -lboost_thread-mt
+g++ *.cpp -lboost_system -lboost_thread -pthread

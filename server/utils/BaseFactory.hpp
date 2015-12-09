@@ -37,10 +37,11 @@ namespace Utils
         {}
 
     public:
-        static BaseFactory&     getInstance()
+        static BaseFactory<Type>&     getInstance()
         {
             if (instance == nullptr)
-                instance = std::unique_ptr<BaseFactory>(new BaseFactory());
+                instance =
+                    std::unique_ptr<BaseFactory>(new BaseFactory<Type>());
             return *instance;
         }
 

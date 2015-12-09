@@ -17,7 +17,8 @@ namespace RType
     /*
     ** Static variables
     */
-    const short int       Server::defaultPort   = 6667;
+    const short int         Server::defaultPort     = 6667;
+    const Buffer            Server::responseOK      = Server::getResponseOK();
 
     /*
     ** Constructors/Destructor
@@ -87,7 +88,8 @@ namespace RType
     {
         Component::NetworkTCP*  comp;
         ITcpSocket*             socket = _acceptor.accept();
-        ECS::Entity&            entity = _em.create(Component::MASK_NETWORKTCP);
+        ECS::Entity&            entity =
+            _em.create(Component::MASK_NETWORKTCP | Component::MASK_PLAYER);
 
         comp = entity
             .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
@@ -102,11 +104,20 @@ namespace RType
     /*
     ** Static functions
     */
-    void          Server::display(std::string const& msg, bool err)
+    void            Server::display(std::string const& msg, bool err)
     {
         if (err)
             std::cout << "| " << msg << std::endl;
         else
             std::cerr << "| " << msg << std::endl;
+    }
+
+    Buffer          Server::getResponseOK()
+    {
+        Buffer      res;
+
+        res.append<uint16_t>(LOBBY_OK);
+        res.append<uint32_t>(0);
+        return res;
     }
 }
