@@ -63,11 +63,11 @@ namespace RType
             // broadcast to room TODO
         }
 
-        void    Username::setEntity(ECS::Entity* entity)
-        {
-            _entity = entity;
-            updateData();
-        }
+//        void    Username::setEntity(ECS::Entity* entity)
+//        {
+//            _entity = entity;
+//            updateData();
+//        }
 
         void    Username::initFromRequest(RType::Request const& request,
                                           ECS::ASystem* sys)

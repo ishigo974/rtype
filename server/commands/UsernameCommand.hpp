@@ -28,7 +28,6 @@ namespace RType
                                                 ECS::ASystem* system);
             virtual void        execute();
             virtual void        undo();
-            virtual void        setEntity(ECS::Entity* entity);
             virtual Request*    clone() const;
 
         public:
