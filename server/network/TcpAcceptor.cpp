@@ -34,9 +34,7 @@ TcpAcceptor::TcpAcceptor(short int port)
     server.sin_addr.s_addr = INADDR_ANY;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
         throw std::runtime_error("WSAStartup failed");
-    }
     if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == SOCKET_ERROR)
         throw std::runtime_error("Socket failed");
     if (::bind(_socket, reinterpret_cast<SOCKADDR *>(&server), sizeof(server)) == SOCKET_ERROR)
@@ -76,7 +74,7 @@ ITcpSocket *TcpAcceptor::accept() const
 
     socklen = sizeof(addr);
     if ((socket = WSAAccept(_socket, reinterpret_cast<sockaddr*>(&addr), &socklen, nullptr, NULL)) == INVALID_SOCKET)
-        return (nullptr);
+           throw std::runtime_error("can't accept");
     inet_ntop(AF_INET, &(addr.sin_addr), address, INET_ADDRSTRLEN);
     auto* ret = new TcpSocket(socket, address, _port);
     return ret;
@@ -89,10 +87,7 @@ ITcpSocket *TcpAcceptor::accept() const
     if ((socket = ::accept(_socket,
                            reinterpret_cast<struct sockaddr *>(&client),
                            &struct_len)) < 0)
-    {
-        std::cerr << "Can't accept on socket." << std::endl;
-        return (nullptr);
-    }
+        throw std::runtime_error("can't accept");
     TcpSocket *ret = new TcpSocket(socket, inet_ntoa(client.sin_addr), _port);
     return (ret);
 #endif

@@ -9,7 +9,7 @@
 # include "IStringable.hpp"
 # include "IMonitorable.hpp"
 
-class ISocket : public IStringable, public IMonitorable
+class ISocket : public IMonitorable
 {
 public:
     virtual ~ISocket()

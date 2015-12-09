@@ -17,7 +17,7 @@ const long			SocketMonitor::defaultUsecVal = 0;
 const time_t        SocketMonitor::defaultSecVal  = 5;
 const suseconds_t   SocketMonitor::defaultUsecVal = 0;
 #endif
-const unsigned int                  SocketMonitor::noFd = -1;
+const unsigned int                  SocketMonitor::noFd = 0;
 SocketMonitor::UniqueMonitorPtr     SocketMonitor::instance;
 
 /*
@@ -71,7 +71,6 @@ void SocketMonitor::deleteSocket(IMonitorable const *socket)
     FD_CLR(socket->getSocket(), &_readFds);
     FD_CLR(socket->getSocket(), &_writeFds);
 #endif
-
     if (socket->getSocket() == _maxFd)
         --_maxFd;
 }
@@ -81,7 +80,7 @@ bool SocketMonitor::isWritable(IMonitorable const *socket)
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     return true;
 #else
-    return FD_ISSET(socket->getSocket(), &_tmpWriteFds);
+    return FD_ISSET(socket->getSocket(), &_tmpWriteFds) > 0;
 #endif
 }
 
@@ -90,7 +89,7 @@ bool SocketMonitor::isReadable(IMonitorable const *socket)
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     return true;
 #else
-    return FD_ISSET(socket->getSocket(), &_tmpReadFds);
+    return FD_ISSET(socket->getSocket(), &_tmpReadFds) > 0;
 #endif
 }
 

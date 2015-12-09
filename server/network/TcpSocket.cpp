@@ -3,10 +3,7 @@
 //
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#pragma comment(lib,"ws2_32")
+
 #else
 
 #include <netdb.h>
@@ -25,14 +22,14 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    { ; //TODO throw
-    }
+        throw std::runtime_error("WSAStartup failed");
     if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
     {
         WSACleanup();
-        //TODO throw
+        throw std::runtime_error("LOBYTE / HIBYTE failed");
     }
-    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
+        throw std::runtime_error("Socket failed");
 #else
     _socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
 #endif
@@ -58,9 +55,7 @@ size_t TcpSocket::send(Buffer const& buffer) const
     toSend.len = buffer.size();
     toSend.buf = str.data();
     if ((ret = WSASend(_socket, &toSend, 1, &SendBytes, 0, nullptr, nullptr)) == SOCKET_ERROR)
-    {
-        ;//TODO throw
-    }
+        throw std::runtime_error("WSASend failed");
     return ret;
 }
 
@@ -83,17 +78,19 @@ size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 {
     WSABUF wsabuf;
     DWORD read_size = 0;
+    DWORD flags = 0;
+
 
     wsabuf.buf = new char[len];
     wsabuf.len = len;
-    if (::WSARecv(_socket, &wsabuf, 1, &read_size, nullptr, nullptr, nullptr)
+    if (::WSARecv(_socket, &wsabuf, 1, &read_size, &flags, nullptr, nullptr)
                   == SOCKET_ERROR)
           {
             delete wsabuf.buf;
             return 0;
           }
         buffer.append(wsabuf.buf, read_size);
-		delete wsabuf.buf;
+        delete wsabuf.buf;
         return (read_size);
 }
 
@@ -102,12 +99,12 @@ size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 {
     ssize_t ret;
-    char *buff = new char[len];
+    char    *buff = new char[len];
 
     if ((ret = ::recv(_socket, buff, len, 0)) == -1)
         throw std::runtime_error("receive failed");
     buffer.setData(buff, static_cast<size_t>(ret));
-	delete buff;
+    delete buff;
     return static_cast<size_t>(ret);
 }
 

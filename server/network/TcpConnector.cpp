@@ -82,10 +82,12 @@ size_t TcpConnector::receive(Buffer& buffer, size_t len) const
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     WSABUF wsabuf;
     DWORD read_size = 0;
+    DWORD flags = 0;
+
 
     wsabuf.buf = new char[len];
     wsabuf.len = len;
-    if (::WSARecv(_socket, &wsabuf, 1, &read_size, nullptr, nullptr, nullptr)
+    if (::WSARecv(_socket, &wsabuf, 1, &read_size, &flags, nullptr, nullptr)
                   == SOCKET_ERROR)
           {
             delete wsabuf.buf;
@@ -136,4 +138,9 @@ bool TcpConnector::connect()
     return (::connect(_socket, reinterpret_cast<struct sockaddr *>(&sin),
                       sizeof(sin)) >= 0);
 #endif
+}
+
+rSocket TcpConnector::getSocket() const
+{
+    return _socket;
 }
