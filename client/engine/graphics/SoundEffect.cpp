@@ -55,14 +55,11 @@ void SoundEffect::swap(SoundEffect &lhs, SoundEffect &rhs)
 
 std::string SoundEffect::toString() const
 {
-	std::stringstream	ss;
-
-	ss	<< "SoundEffect {" << std::endl
-		<< "\tid: " << _id << std::endl
-		<< "\tname: " << _name << std::endl
-		<< "\tpath:" << _path << std::endl
-		<< "}" << std::endl;
-	return ss.str();
+	return (std::string("SoundEffect {") +
+		"\n\tid: " + std::to_string(_id) +
+		"\n\tname: " + _name +
+		"\n\tpath: " + _path +
+		"\n}");
 }
 
 std::string const &SoundEffect::getPath() const

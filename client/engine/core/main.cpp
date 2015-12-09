@@ -101,12 +101,11 @@ int SoundEffectPlayerTest()
 	GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
 	SoundEffect *sEffect;
 
-	entityManager.attachComponent<SoundEffect>(gameObj, "toto", "res/laser2.wav");
+	entityManager.attachComponent<SoundEffect>(gameObj, "testLaser", "res/laser1.wav");
 
 	soundPlayer.play(*gameObj);
 
 	sEffect = gameObj->getComponent<SoundEffect>();
-	
 	while (sEffect->isPlaying())
 	{
 		std::cout << "Playing sound..." << std::endl;
