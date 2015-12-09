@@ -7,8 +7,8 @@
 Component::Component()
 { }
 
-Component::Component(unsigned int _id, std::string const& _name)
-        : Object(_id, _name)
+Component::Component(unsigned int _id, std::string const& _name, Object *parent)
+        : Object(_id, _name), _parent(parent)
 { }
 
 Component::Component(Component const& other) : Object(other)

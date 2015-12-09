@@ -78,11 +78,11 @@ bool stateMachineTest()
     pos1 = cu::Position(5.0f, 5.0f);
     pos2 = cu::Position(5.0f, 5.0f);
 
-    ini.addTransition("S2", [](cu::Position&& a, cu::Position&& b)
+    ini.addTransition("S2", [](cu::Position* a, cu::Position* b)
                       {
-                          return (a == b);
+                          return (*a == *b);
                       },
-                      pos1, pos2);
+                      &pos1, &pos2);
 
     StateMachine sm(ini);
 

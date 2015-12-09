@@ -12,11 +12,11 @@
 class Component : public Object
 {
 public:
-    static RTypes::my_uint16_t const Mask = ComponentMask::DefaultMask ;
+    static RTypes::my_uint16_t const Mask = ComponentMask::DefaultMask;
 
 public:
     Component();
-    Component(unsigned int _id, std::string const& _name);
+    Component(unsigned int _id, std::string const& _name, Object *parent = 0);
     Component(Component const& other);
     Component(Component&& other);
     virtual Component& operator=(Component other);
@@ -30,6 +30,9 @@ public:
     virtual RTypes::my_uint16_t getMask() const;
 
     virtual std::string toString();
+
+private:
+    Object *_parent;
 };
 
 static const Component ErrorComponent = Component(0, "Error");

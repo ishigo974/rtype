@@ -27,9 +27,9 @@ void StateMachine::move()
 
 void StateMachine::addState(State const& state) throw(std::logic_error)
 {
-    auto found = std::find_if(_states.begin(), _states.end(), [state](auto &&e)
+    auto found = std::find_if(_states.begin(), _states.end(), [state](auto&& e)
     {
-       return (e.second.getName() == state.getName());
+        return (e.second.getName() == state.getName());
     });
     if (found == _states.end())
     {
@@ -37,10 +37,10 @@ void StateMachine::addState(State const& state) throw(std::logic_error)
     }
     else
     {
-        std::stringstream err;
-        err << "State names must be unique. Trying to create " << state.getName() << " twice";
+        std::string str;
+        str = std::string("State names must be unique. Trying to create ").append(state.getName());
 
-        throw std::logic_error(err.str());
+        throw std::logic_error(str);
     }
 }
 
