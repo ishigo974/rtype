@@ -11,9 +11,10 @@
 #include "Input.hpp"
 #include "Event.hpp"
 #include "BigBen.hpp"
-#include "SoundEffect.hpp"
+#include "AudioEffect.hpp"
 #include "SoundEffectPlayer.hpp"
 #include "Music.hpp"
+#include "MusicPlayer.hpp"
 
 bool gameObjectTest()
 {
@@ -88,41 +89,52 @@ bool timeTest()
     {
         std::cout << "i = " << i << " ; elapsed = " << BigBen::get().getElapsedtime() << std::endl;
         std::cout << "i = " << i << " ; fixedElapsed = " << BigBen::get().getFixedElapsedtime() << std::endl;
-        //usleep(5000); // Windows...
+		sf::sleep(sf::milliseconds(1000));
+		//usleep(5000); // Windows...
     }
 
     return (true);
 }
 
-int SoundEffectPlayerTest()
+int soundEffectPlayerTest()
 {
 	EntityManager entityManager;
 	SoundEffectPlayer soundPlayer;
 	GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
-	SoundEffect *sEffect;
 
-	entityManager.attachComponent<SoundEffect>(gameObj, "testLaser", "res/laser1.wav");
+	entityManager.attachComponent<AudioEffect>(gameObj, "testLaser");
 
-	soundPlayer.play(*gameObj);
+	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
+	audio->addSound("../res/laser1.wav");
+	audio->addSound("../res/laser2.wav");
 
-	sEffect = gameObj->getComponent<SoundEffect>();
-	while (sEffect->isPlaying())
-	{
-		std::cout << "Playing sound..." << std::endl;
-		std::cout << (sEffect->isPlaying() ? "true" : "false") << std::endl;
-		sf::sleep(sf::milliseconds(500));
-	}
+	std::cout << audio->toString() << std::endl;
+	return 0;
+}
+
+int	musicPlayerTest()
+{
+	EntityManager	entity;
+	MusicPlayer		musicPlayer;
+	GameObject		*gameObj = entity.createEntity<GameObject>("test", 1);
+
+	entity.attachComponent<Music>(gameObj, "Music", "../res/music.wav");
+	musicPlayer.play(*gameObj);
+
+	while(gameObj->getComponent<Music>()->isPlaying());
+
 	return 0;
 }
 
 int main()
 {
+	//musicPlayerTest();
 	//if (gameObjectTest())
 	//	std::cout << "gameObjectTest passed -> OK" << std::endl;
 	//if (timeTest())
 	//	std::cout << "timeTest passed -> OK" << std::endl;
 	//inputTest();
 	//renderTest();
-	SoundEffectPlayerTest();
+	soundEffectPlayerTest();
 	return (0);
 }

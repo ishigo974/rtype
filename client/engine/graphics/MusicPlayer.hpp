@@ -1,11 +1,11 @@
 #include <SFML\Audio.hpp>
 #include "GameObject.hpp"
 
-class SoundEffectPlayer
+class MusicPlayer
 {
 public:
-	SoundEffectPlayer() {};
-	~SoundEffectPlayer() {};
+	MusicPlayer() {};
+	~MusicPlayer() {};
 
 public:
 	void	play(const GameObject&);

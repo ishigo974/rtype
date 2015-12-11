@@ -3,5 +3,16 @@
 
 void	SoundEffectPlayer::play(const GameObject &obj)
 {
-	obj.getComponent<SoundEffect>()->play();
+	SoundEffect *s = obj.getComponent<SoundEffect>();
+
+	std::cout << s->toString() << std::endl;
+	s->play();
+}
+
+void	SoundEffectPlayer::stop(const GameObject &obj)
+{
+	SoundEffect *s = obj.getComponent<SoundEffect>();
+
+	std::cout << s->toString() << std::endl;
+	s->stop();
 }
