@@ -53,16 +53,17 @@ std::string AudioEffect::toString() const
 	return (ret + "}");
 }
 
-sf::SoundBuffer const * AudioEffect::soundToPlay() const
+sf::Sound &AudioEffect::soundToPlay()
 {
-	std::string	selected;
+	std::string	selected = "NoSound";
 
 	for (std::map<std::string, bool>::const_iterator s = _sounds.begin(); s != _sounds.end(); ++s)
 	{
 		if (s->second == true)
 			selected = s->first;
 	}
-	return _res[selected];
+	_playSound.setBuffer(_res[selected]);
+	return 	_playSound;
 }
 
 bool AudioEffect::addSound(std::string const &path)
@@ -85,6 +86,11 @@ void AudioEffect::setSoundToPlay(std::string const &path)
 		std::cerr << exc.what() << std::endl;
 		_sounds["NoSound"] = true;
 	}
+}
+
+RTypes::my_uint16_t AudioEffect::getMask() const
+{
+	return Mask;
 }
 
 void	AudioEffect::clearSounds()

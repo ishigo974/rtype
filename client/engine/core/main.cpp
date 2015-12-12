@@ -12,7 +12,7 @@
 #include "Event.hpp"
 #include "BigBen.hpp"
 #include "AudioEffect.hpp"
-#include "SoundEffectPlayer.hpp"
+#include "AudioEffectPlayer.hpp"
 #include "Music.hpp"
 #include "MusicPlayer.hpp"
 
@@ -96,10 +96,10 @@ bool timeTest()
     return (true);
 }
 
-int soundEffectPlayerTest()
+int audioEffectPlayerTest()
 {
 	EntityManager entityManager;
-	SoundEffectPlayer soundPlayer;
+	AudioEffectPlayer soundPlayer;
 	GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
 
 	entityManager.attachComponent<AudioEffect>(gameObj, "testLaser");
@@ -107,8 +107,15 @@ int soundEffectPlayerTest()
 	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
 	audio->addSound("../res/laser1.wav");
 	audio->addSound("../res/laser2.wav");
+	audio->addSound("../res/laser2.wav");
+	audio->addSound("DELAMERDE");
+	audio->addSound("ENBOITE");
 
 	std::cout << audio->toString() << std::endl;
+
+	audio->setSoundToPlay("../res/laser1.wav");
+
+	soundPlayer.play(*gameObj);
 	return 0;
 }
 
@@ -135,6 +142,7 @@ int main()
 	//	std::cout << "timeTest passed -> OK" << std::endl;
 	//inputTest();
 	//renderTest();
-	soundEffectPlayerTest();
+	audioEffectPlayerTest();
+	sf::sleep(sf::milliseconds(2000));
 	return (0);
 }

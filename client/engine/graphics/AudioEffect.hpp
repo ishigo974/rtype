@@ -21,16 +21,20 @@ public:
 
 	std::string toString() const;
 
-	sf::SoundBuffer const	*soundToPlay() const;
+	sf::Sound				&soundToPlay();
 	bool					addSound(std::string const &);
 	void					setSoundToPlay(std::string const &);
 
+	RTypes::my_uint16_t getMask() const;
+
+	static RTypes::my_uint16_t const Mask = 0b0000000100000000;
 private:
 	void					clearSounds();
 
 protected:
 	std::map<std::string, bool>		_sounds;
 	AudioResources					_res;
+	sf::Sound						_playSound;
 };
 
 #endif // !AUDIOEFFECT_HPP_
