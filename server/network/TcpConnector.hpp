@@ -25,6 +25,9 @@ public:
 public:
     virtual bool connect();
 
+public:
+    virtual rSocket getSocket() const;
+
 private:
     rSocket     _socket;
     std::string _addr;

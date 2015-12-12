@@ -25,7 +25,9 @@ public:
     virtual std::string   toString() const;
 
 public:
-    rSocket   getSocket() const;
+    virtual rSocket   getSocket() const;
+
+public:
     short int getPort() const;
     std::string const& getAddr() const;
 

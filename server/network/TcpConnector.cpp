@@ -4,11 +4,6 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#pragma comment(lib,"ws2_32")
-
 #else
 
 #include <sys/socket.h>
@@ -27,12 +22,11 @@ TcpConnector::TcpConnector(std::string const& addr, short int port)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    { ; //TODO throw
-    }
+         throw std::runtime_error("WSAStartup failed");
     if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
     {
         WSACleanup();
-        //TODO throw
+        throw std::runtime_error("LOBYTE / HIBYTE failed");
     }
     _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 #else
@@ -83,10 +77,12 @@ size_t TcpConnector::receive(Buffer& buffer, size_t len) const
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     WSABUF wsabuf;
     DWORD read_size = 0;
+    DWORD flags = 0;
+
 
     wsabuf.buf = new char[len];
     wsabuf.len = len;
-    if (::WSARecv(_socket, &wsabuf, 1, &read_size, nullptr, nullptr, nullptr)
+    if (::WSARecv(_socket, &wsabuf, 1, &read_size, &flags, nullptr, nullptr)
                   == SOCKET_ERROR)
           {
             delete wsabuf.buf;
@@ -137,4 +133,9 @@ bool TcpConnector::connect()
     return (::connect(_socket, reinterpret_cast<struct sockaddr *>(&sin),
                       sizeof(sin)) >= 0);
 #endif
+}
+
+rSocket TcpConnector::getSocket() const
+{
+    return _socket;
 }

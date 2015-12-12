@@ -3,7 +3,7 @@
 
 # include "NetTypes.hpp"
 
-class IMonitorable
+class IMonitorable : public IStringable
 {
 public:
     virtual ~IMonitorable()
