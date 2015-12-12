@@ -29,10 +29,12 @@ namespace RType
 
     public:
         void            run();
+        void            notifyDisconnected(unsigned int id);
 
     protected:
         void            init();
         void            onClientConnection();
+        void            checkDisconnected();
 
     public:
         virtual std::string     toString() const;
@@ -49,11 +51,12 @@ namespace RType
         static const Buffer         responseOK;
 
     protected:
-        bool                    _quit;
-        TcpAcceptor             _acceptor;
-        SocketMonitor&          _monitor;
-        ECS::EntityManager&     _em;
-        ECS::SystemManager&     _sm;
+        bool                        _quit;
+        TcpAcceptor                 _acceptor;
+        SocketMonitor&              _monitor;
+        ECS::EntityManager&         _em;
+        ECS::SystemManager&         _sm;
+        std::vector<unsigned int>   _disconnected;
     };
 }
 

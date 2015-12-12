@@ -5,6 +5,7 @@
 #include "SocketMonitor.hpp"
 #include "Server.hpp"
 #include "Buffer.hpp"
+#include "EntityManager.hpp"
 #include "IncompleteRequest.hpp"
 
 namespace RType
@@ -20,13 +21,15 @@ namespace RType
         ** Constructor/Destructor
         */
         NetworkTCP::NetworkTCP() :
-            _socket(nullptr), _toSend(), _received()
+            _socket(nullptr), _toSend(), _received(), _onDisconnect(nullptr)
         {
         }
 
         NetworkTCP::NetworkTCP(UniqueITcpSockPtr socket) :
             _socket(std::move(socket)), _toSend(), _received(),
-            _repr(_socket->getAddr() + ":" + std::to_string(_socket->getPort()))
+            _repr(_socket->getAddr() + ":" +
+                  std::to_string(_socket->getPort())),
+            _onDisconnect(nullptr)
         {
         }
 
@@ -38,6 +41,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         NetworkTCP::NetworkTCP(NetworkTCP const& other) :
+            _entityId(other._entityId),
             _toSend(other._toSend), _received(other._received),
             _requests(other._requests), _repr(other._repr)
         {
@@ -47,6 +51,7 @@ namespace RType
         {
             if (this != &other)
             {
+                _entityId = other._entityId;
                 _toSend = other._toSend;
                 _received = other._received;
                 _requests = other._requests;
@@ -105,11 +110,21 @@ namespace RType
             return request;
         }
 
+        void            NetworkTCP::setEntityId(unsigned int id)
+        {
+            _entityId = id;
+        }
+
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
         {
             _socket = std::move(socket);
             _repr = _socket->getAddr() + ":" +
                     std::to_string(_socket->getPort());
+        }
+
+        void            NetworkTCP::setOnDisconnect(ServerCallback const& c)
+        {
+            _onDisconnect = c;
         }
 
         std::string const&     NetworkTCP::repr() const
@@ -159,7 +174,8 @@ namespace RType
                             std::to_string(_socket->getPort()) + ")");
             SocketMonitor::getInstance().deleteSocket(_socket.get());
             _socket = nullptr;
-            // TODO delete entity
+            if (_onDisconnect != nullptr)
+                _onDisconnect(_entityId);
         }
 
         void                    NetworkTCP::buildRequests()
