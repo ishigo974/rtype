@@ -3,12 +3,16 @@
 
 # include "Object.hpp"
 # include "RTypes.hpp"
+# include "REnums.hpp"
 
 class Component : public Object
 {
 public:
+    static RTypes::my_uint16_t const Mask = ComponentMask::DefaultMask;
+
+public:
     Component();
-    Component(unsigned int _id, std::string const& _name);
+    Component(unsigned int _id, std::string const& _name, Object *parent = 0);
     Component(Component const& other);
     Component(Component&& other);
     virtual Component& operator=(Component other);
@@ -23,7 +27,8 @@ public:
 
     virtual std::string toString();
 
-    static RTypes::my_uint16_t const Mask = 0;
+private:
+    Object *_parent;
 };
 
 static const Component ErrorComponent = Component(0, "Error");

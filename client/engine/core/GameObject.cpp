@@ -75,9 +75,10 @@ void GameObject::swap(GameObject& other)
     swap(_layer, other._layer);
 }
 
-namespace std {
+namespace std
+{
     template<>
-    void swap<GameObject>(GameObject &a, GameObject &b)
+    void swap<GameObject>(GameObject& a, GameObject& b)
     {
         a.swap(b);
     }
