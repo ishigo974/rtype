@@ -105,6 +105,8 @@ namespace RType
             throw std::runtime_error("NetworkTCP component not found");
         network->setSocket(std::unique_ptr<ITcpSocket>(socket));
         network->setEntityId(entity.getId());
+        network->setOnDisconnect(std::bind(&Server::notifyDisconnected,
+                                            this, std::placeholders::_1));
         _monitor.registerSocket(socket);
 		display("New connection from " + socket->getAddr() + ":" +
                 std::to_string(socket->getPort()));
@@ -114,6 +116,7 @@ namespace RType
     {
         for (auto& id: _disconnected)
             ECS::EntityManager::getInstance().destroy(id);
+        _disconnected.clear();
     }
 
     /*

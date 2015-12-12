@@ -21,13 +21,15 @@ namespace RType
         ** Constructor/Destructor
         */
         NetworkTCP::NetworkTCP() :
-            _socket(nullptr), _toSend(), _received()
+            _socket(nullptr), _toSend(), _received(), _onDisconnect(nullptr)
         {
         }
 
         NetworkTCP::NetworkTCP(UniqueITcpSockPtr socket) :
             _socket(std::move(socket)), _toSend(), _received(),
-            _repr(_socket->getAddr() + ":" + std::to_string(_socket->getPort()))
+            _repr(_socket->getAddr() + ":" +
+                  std::to_string(_socket->getPort())),
+            _onDisconnect(nullptr)
         {
         }
 
@@ -120,6 +122,11 @@ namespace RType
                     std::to_string(_socket->getPort());
         }
 
+        void            NetworkTCP::setOnDisconnect(ServerCallback const& c)
+        {
+            _onDisconnect = c;
+        }
+
         std::string const&     NetworkTCP::repr() const
         {
             return _repr;
@@ -167,6 +174,8 @@ namespace RType
                             std::to_string(_socket->getPort()) + ")");
             SocketMonitor::getInstance().deleteSocket(_socket.get());
             _socket = nullptr;
+            if (_onDisconnect != nullptr)
+                _onDisconnect(_entityId);
         }
 
         void                    NetworkTCP::buildRequests()

@@ -17,7 +17,8 @@ namespace RType
         class NetworkTCP : public ECS::IBehaviour
         {
         public:
-            typedef std::unique_ptr<ITcpSocket>     UniqueITcpSockPtr;
+            typedef std::unique_ptr<ITcpSocket>         UniqueITcpSockPtr;
+            typedef std::function<void (unsigned int)>  ServerCallback;
 
         public:
             NetworkTCP();
@@ -34,6 +35,7 @@ namespace RType
             void                send(Buffer const& buffer);
             bool                isConnected() const;
             bool                isRequest() const;
+            void                setOnDisconnect(ServerCallback const& c);
             Request             popRequest();
             std::string const&  repr() const;
 
@@ -63,6 +65,7 @@ namespace RType
             Buffer                  _received;
             std::queue<Request>     _requests;
             std::string             _repr;
+            ServerCallback          _onDisconnect;
         };
     }
 }
