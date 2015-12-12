@@ -28,7 +28,6 @@ public:
 	RTypes::my_uint16_t getMask() const;
 
 	static RTypes::my_uint16_t const Mask = 0b0000000100000000;
-private:
 	void					clearSounds();
 
 protected:

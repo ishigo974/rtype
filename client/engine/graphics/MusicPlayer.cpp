@@ -1,18 +1,17 @@
 #include "MusicPlayer.hpp"
 #include "Music.hpp"
 
-void	MusicPlayer::play(const GameObject &obj)
+void	MusicPlayer::play(const GameObject &obj, const std::string &path, bool loop)
 {
-	Music *m = obj.getComponent<Music>();
-	
-	std::cout << m->toString() << std::endl;
-	m->play();
+	obj.getComponent<Music>()->play(path, loop);
+}
+
+bool MusicPlayer::isPlaying(const GameObject &obj)
+{
+	return obj.getComponent<Music>()->isPlaying();
 }
 
 void	MusicPlayer::stop(const GameObject &obj)
 {
-	Music *m = obj.getComponent<Music>();
-
-	std::cout << m->toString() << std::endl;
-	m->stop();
+	obj.getComponent<Music>()->stop();
 }

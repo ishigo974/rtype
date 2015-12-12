@@ -7,8 +7,7 @@
 class Music : public Component
 {
 public:
-	Music(unsigned _id, std::string const& _name,
-		std::string const& path, bool = false);
+	Music(unsigned _id, std::string const& _name);
 	Music& operator=(Music other);
 	Music(Music const& other);
 	Music(Music&& other);
@@ -21,26 +20,19 @@ public:
 
 	std::string toString() const;
 
-	std::string const&	getPath() const;
-	bool				getLoop() const;
 	RTypes::my_uint16_t	getMask() const;
+	std::string getCurMusic() const;
 
+	bool	play(std::string const &, bool = false);
 	bool	isPlaying() const;
-	void	play();
 	void	stop();
 
 public:
-	static RTypes::my_uint16_t const Mask = 0b0000000100000000;
+	static RTypes::my_uint16_t const Mask = 0b000001000000000;
 
 protected:
-	std::string		_path;
-	bool			_loop;
-	sf::Music		_music;
-
-
-private:
-	void init();
-
+	sf::Music					_music;
+	std::string					_curMusic;
 };
 
 #endif // !MUSIC_HPP_

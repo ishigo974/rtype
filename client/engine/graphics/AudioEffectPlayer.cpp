@@ -3,14 +3,24 @@
 
 void	AudioEffectPlayer::play(const GameObject &obj)
 {
-	AudioEffect *s = obj.getComponent<AudioEffect>();
-
-	s->soundToPlay().play();
+	_sounds.push_back(obj.getComponent<AudioEffect>()->soundToPlay());
+	_sounds.back().play();
+	for (std::list<sf::Sound>::iterator it = _sounds.begin(); it != _sounds.end();)
+	{
+		if (it->getStatus() != sf::Sound::Playing)
+			it = _sounds.erase(it);
+		else
+			++it;
+	}
 }
 
-void	AudioEffectPlayer::stop(const GameObject &obj)
+void	AudioEffectPlayer::refreshSoundList()
 {
-	AudioEffect *s = obj.getComponent<AudioEffect>();
-
-	s->soundToPlay().play();
+	for (std::list<sf::Sound>::iterator it = _sounds.begin(); it != _sounds.end();)
+	{
+		if (it->getStatus() != sf::Sound::Playing)
+			it = _sounds.erase(it);
+		else
+			++it;
+	}
 }

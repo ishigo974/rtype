@@ -8,6 +8,7 @@ public:
 	~MusicPlayer() {};
 
 public:
-	void	play(const GameObject&);
+	void	play(const GameObject&, const std::string &, bool = false);
+	bool	isPlaying(const GameObject&);
 	void	stop(const GameObject&);
 };

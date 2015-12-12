@@ -1,36 +1,23 @@
 #include "Music.hpp"
 
-Music::Music(unsigned id, std::string const &name, std::string const & path, bool loop)
-	: Component(id, name), _path(path), _loop(loop)
-{
-	init();
-}
+Music::Music(unsigned id, std::string const &name)
+	: Component(id, name), _curMusic("none")
+{}
 
 Music::Music(Music const &other)
-	: Component(other), _path(other.getPath()), _loop(other.getLoop())
+	: Component(other), _curMusic(other._curMusic)
 {
-	init();
-}
-
-void	Music::init()
-{
-	if (!_music.openFromFile(_path))
-		throw std::runtime_error("Music not found");
-	_music.setLoop(_loop);
 }
 
 Music::Music(Music &&other)
 	: Music(other)
 {
 	swap(*this, other);
-	init();
 }
 
 Music &Music::operator=(Music other)
 {
 	swap(*this, other);
-	init();
-
 	return *this;
 }
 
@@ -40,9 +27,8 @@ Music::~Music()
 
 bool Music::operator==(Music const &other)
 {
-	return Object::operator==(other)
-		&& _path == other.getPath()
-		&& _loop == other.getLoop();
+	return Object::operator==(other) &&
+		this->_curMusic == other._curMusic;
 }
 
 bool Music::operator!=(Music const &other)
@@ -52,7 +38,8 @@ bool Music::operator!=(Music const &other)
 
 void Music::swap(Music &lhs, Music &rhs)
 {
-	std::swap(lhs._path, rhs._path);
+	//std::swap(lhs._music, rhs._music);
+	std::swap(lhs._curMusic, rhs._curMusic);
 }
 
 std::string Music::toString() const
@@ -60,19 +47,8 @@ std::string Music::toString() const
 	return (std::string("Music {") +
 		"\n\tid: " + std::to_string(_id) +
 		"\n\tname: " + _name +
-		"\n\tpath: " + _path +
-		"\n\tloop: " + (_loop ? "true" : "false") +
+		"\n\tcurrent music: " + _curMusic +
 		"\n}");
-}
-
-std::string const &Music::getPath() const
-{
-	return _path;
-}
-
-bool	Music::getLoop() const
-{
-	return _loop;
 }
 
 RTypes::my_uint16_t Music::getMask() const
@@ -80,14 +56,24 @@ RTypes::my_uint16_t Music::getMask() const
 	return Mask;
 }
 
+std::string Music::getCurMusic() const
+{
+	return _curMusic;
+}
+
 bool	Music::isPlaying() const
 {
 	return _music.getStatus() == sf::Sound::Playing;
 }
 
-void	Music::play()
+bool	Music::play(std::string const &path, bool loop)
 {
+	if (!_music.openFromFile(path))
+		return false;
+	_curMusic = path;
+	_music.setLoop(loop);
 	_music.play();
+	return true;
 }
 
 void	Music::stop()

@@ -1,6 +1,7 @@
 #ifndef AUDIOEFFECTPLAYER_HPP_
 # define AUDIOEFFECTPLAYER_HPP_
 
+#include <list>
 #include <SFML\Audio.hpp>
 #include "GameObject.hpp"
 
@@ -12,7 +13,10 @@ public:
 
 public:
 	void	play(const GameObject&);
-	void	stop(const GameObject&);
+	void	refreshSoundList();
+
+private:
+	std::list<sf::Sound>	_sounds;
 };
 
 #endif // !AUDIOEFFECTPLAYER_HPP_
