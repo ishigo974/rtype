@@ -104,7 +104,7 @@ size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
     if ((ret = ::recv(_socket, buff, len, 0)) == -1)
         throw std::runtime_error("receive failed");
     buffer.setData(buff, static_cast<size_t>(ret));
-    delete buff;
+    delete[] buff;
     return static_cast<size_t>(ret);
 }
 

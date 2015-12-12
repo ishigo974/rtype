@@ -68,7 +68,10 @@ namespace RType
 
                 _socket->receive(tmp, bufferSize);
                 if (tmp.empty())
+                {
                     onClientDisconnection();
+                    return ;
+                }
                 _received.append(tmp);
             }
             if (!_toSend.empty())
@@ -156,6 +159,7 @@ namespace RType
                             std::to_string(_socket->getPort()) + ")");
             SocketMonitor::getInstance().deleteSocket(_socket.get());
             _socket = nullptr;
+            // TODO delete entity
         }
 
         void                    NetworkTCP::buildRequests()
