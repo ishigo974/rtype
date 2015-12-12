@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <map>
 #include "ISocketMonitor.hpp"
 
 class SocketMonitor : public ISocketMonitor
@@ -49,6 +50,12 @@ public:
     virtual std::string toString() const;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+private:
+    DWORD                       _eventTotal;
+    std::vector<HANDLE>       _eventArray;
+    std::vector<rSocket>                _socketArray;
+    std::map<rSocket, WSANETWORKEVENTS> _socketEvents;
+
 #else
 private:
     fd_set _readFds;
