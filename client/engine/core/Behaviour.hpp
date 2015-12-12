@@ -22,6 +22,7 @@ class Behaviour : public Component
         bool operator!=(Behaviour const& other);
 
         virtual void update(double elapsedTime);
+        virtual void update();
 
         bool isEnabled() const;
         void setEnabled(bool _enabled);

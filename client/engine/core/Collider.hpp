@@ -5,8 +5,10 @@
 #ifndef RTYPE_COLLIDER_HPP_
 # define RTYPE_COLLIDER_HPP_
 
+# include <string>
+# include <vector>
 # include "Component.hpp"
-#include "Utils.hpp"
+# include "Utils.hpp"
 
 class Collider : public Component
 {
@@ -19,7 +21,7 @@ public:
 
     Collider(Collider const& other);
     Collider(Collider&& other);
-    //virtual Collider& operator=(Collider other);
+    virtual Collider& operator=(Collider other);
 
     virtual ~Collider();
 

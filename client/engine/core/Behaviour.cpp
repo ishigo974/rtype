@@ -69,6 +69,12 @@ void Behaviour::update(double)
         return;
 }
 
+void Behaviour::update()
+{
+    if (!_enabled)
+        return;
+}
+
 RTypes::my_uint16_t Behaviour::getMask() const
 {
     return Mask;
