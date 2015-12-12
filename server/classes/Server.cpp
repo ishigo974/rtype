@@ -61,6 +61,7 @@ namespace RType
                     onClientConnection();
                 _em.updateAll();
                 _sm.processAll();
+                checkDisconnected();
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
@@ -70,7 +71,12 @@ namespace RType
         }
     }
 
-    std::string   Server::toString() const
+    void            Server::notifyDisconnected(unsigned int id)
+    {
+        _disconnected.push_back(id);
+    }
+
+    std::string     Server::toString() const
     {
         return std::to_string(_acceptor.getPort()); // TODO
     }
@@ -88,19 +94,26 @@ namespace RType
 
     void            Server::onClientConnection()
     {
-        Component::NetworkTCP*  comp;
+        Component::NetworkTCP*  network;
         ITcpSocket*             socket = _acceptor.accept();
         ECS::Entity&            entity =
             _em.create(Component::MASK_NETWORKTCP | Component::MASK_PLAYER);
 
-        comp = entity
+        network = entity
             .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
-        if (comp == nullptr)
+        if (network == nullptr)
             throw std::runtime_error("NetworkTCP component not found");
-        comp->setSocket(std::unique_ptr<ITcpSocket>(socket));
+        network->setSocket(std::unique_ptr<ITcpSocket>(socket));
+        network->setEntityId(entity.getId());
         _monitor.registerSocket(socket);
 		display("New connection from " + socket->getAddr() + ":" +
                 std::to_string(socket->getPort()));
+    }
+
+    void            Server::checkDisconnected()
+    {
+        for (auto& id: _disconnected)
+            ECS::EntityManager::getInstance().destroy(id);
     }
 
     /*

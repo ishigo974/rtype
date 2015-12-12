@@ -5,6 +5,7 @@
 #include "SocketMonitor.hpp"
 #include "Server.hpp"
 #include "Buffer.hpp"
+#include "EntityManager.hpp"
 #include "IncompleteRequest.hpp"
 
 namespace RType
@@ -38,6 +39,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         NetworkTCP::NetworkTCP(NetworkTCP const& other) :
+            _entityId(other._entityId),
             _toSend(other._toSend), _received(other._received),
             _requests(other._requests), _repr(other._repr)
         {
@@ -47,6 +49,7 @@ namespace RType
         {
             if (this != &other)
             {
+                _entityId = other._entityId;
                 _toSend = other._toSend;
                 _received = other._received;
                 _requests = other._requests;
@@ -105,6 +108,11 @@ namespace RType
             return request;
         }
 
+        void            NetworkTCP::setEntityId(unsigned int id)
+        {
+            _entityId = id;
+        }
+
         void            NetworkTCP::setSocket(UniqueITcpSockPtr socket)
         {
             _socket = std::move(socket);
@@ -159,7 +167,6 @@ namespace RType
                             std::to_string(_socket->getPort()) + ")");
             SocketMonitor::getInstance().deleteSocket(_socket.get());
             _socket = nullptr;
-            // TODO delete entity
         }
 
         void                    NetworkTCP::buildRequests()

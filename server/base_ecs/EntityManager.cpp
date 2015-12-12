@@ -39,9 +39,10 @@ namespace ECS
     Entity&           EntityManager::create(ComponentMask mask)
     {
         EntityMap::iterator   it =
-        std::find_if(_inactives.begin(), _inactives.end(),
-        [mask](std::pair<const unsigned int, UniqueEntityPtr> const& e)->bool
-        { return e.second->getComponentMask() == mask; });
+            std::find_if(_inactives.begin(), _inactives.end(),
+            [mask](std::pair<const unsigned int,
+                             UniqueEntityPtr> const& e)->bool
+            { return e.second->getComponentMask() == mask; });
 
         if (it != _inactives.end())
         {
@@ -57,8 +58,8 @@ namespace ECS
         for (auto&& pair : _components)
         {
             if ((mask & pair.first) != 0)
-            _actives[_nextId]
-            ->addComponent(UniqueCompPtr(pair.second->clone()));
+                _actives[_nextId]
+                    ->addComponent(UniqueCompPtr(pair.second->clone()));
         }
         ++_nextId;
         return *_actives[_nextId - 1];
@@ -69,8 +70,9 @@ namespace ECS
         EntityMap::iterator it = _actives.find(id);
 
         if (it == _actives.end())
-        return false;
+            return false;
         _inactives[id] = std::unique_ptr<Entity>(std::move(it->second));
+        it->second = nullptr;
         _actives.erase(it);
         return true;
     }
@@ -95,8 +97,8 @@ namespace ECS
         EntityCollection  res;
 
         for (auto& entity : _actives)
-        if ((entity.second->getComponentMask() & mask) == mask)
-        res.push_back(entity.second.get());
+            if ((entity.second->getComponentMask() & mask) == mask)
+                res.push_back(entity.second.get());
         return res;
     }
 

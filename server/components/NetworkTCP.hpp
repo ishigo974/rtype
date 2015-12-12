@@ -29,6 +29,7 @@ namespace RType
             NetworkTCP&         operator=(NetworkTCP const& other);
 
         public:
+            void                setEntityId(unsigned int id);
             void                setSocket(UniqueITcpSockPtr socket);
             void                send(Buffer const& buffer);
             bool                isConnected() const;
@@ -56,6 +57,7 @@ namespace RType
             static const size_t     bufferSize;
 
         protected:
+            unsigned int            _entityId;
             UniqueITcpSockPtr       _socket;
             Buffer                  _toSend;
             Buffer                  _received;
