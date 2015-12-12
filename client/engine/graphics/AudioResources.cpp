@@ -15,15 +15,10 @@ AudioResources::~AudioResources()
 
 const sf::SoundBuffer &AudioResources::getBuffer(const std::string& path) const
 {
-	try
-	{
+	if (_buffs.find(path) != _buffs.end())
 		return _buffs.at(path);
-	}
-	catch (std::out_of_range& e)
-	{
-		std::cerr << e.what() << std::endl;
+	else
 		return _buffs.at("../res/NoSound.wav");
-	}
 }
 
 const sf::SoundBuffer &AudioResources::operator[](const std::string& path) const

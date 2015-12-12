@@ -113,9 +113,10 @@ int audioEffectPlayerTest()
 
 	std::cout << audio->toString() << std::endl;
 
-	audio->setSoundToPlay("../res/laser1.wav");
+	//audio->setSoundToPlay("../res/laser1.wav");
 
 	soundPlayer.play(*gameObj);
+	sf::sleep(sf::milliseconds(2000));
 	return 0;
 }
 
@@ -143,6 +144,5 @@ int main()
 	//inputTest();
 	//renderTest();
 	audioEffectPlayerTest();
-	sf::sleep(sf::milliseconds(2000));
 	return (0);
 }
