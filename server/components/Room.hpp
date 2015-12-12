@@ -6,6 +6,7 @@
 # include <string>
 # include "Entity.hpp"
 # include "IComponent.hpp"
+# include "ComponentMask.hpp"
 
 namespace RType
 {
@@ -16,7 +17,7 @@ namespace RType
         public:
             typedef std::pair<ECS::Entity*, bool>                   PlayerEntry;
             typedef std::unordered_map<unsigned int, PlayerEntry>   PlayersMap;
-            
+
         public:
             Room();
             virtual ~Room();
@@ -35,7 +36,11 @@ namespace RType
             ECS::Entity*                getPlayer(unsigned int id) const;
 
         public:
+            virtual void                clear();
+            virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;
+            virtual std::string         toString() const;
+            virtual ECS::IComponent*    clone() const;
 
         protected:
             unsigned int                getAvailableId() const;

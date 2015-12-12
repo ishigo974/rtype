@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "Room.hpp"
+#include "ComponentsMasks.hpp"
 
 namespace RType
 {
@@ -76,9 +77,33 @@ namespace RType
             return it->second.first;
         }
 
+        void                    Room::clear()
+        {
+            _name.clear();
+            _players.clear();
+        }
+
         std::string             Room::getName() const
         {
             return "Room";
+        }
+
+        std::string             Room::toString() const
+        {
+            return  std::string("Component::Room {")
+                    + std::string("\n\t_name: ") + _name
+                    + std::string("\n\tnb players: ") + std::to_string(_players.size())
+                    + std::string("\n}\n");
+        }
+
+        ECS::ComponentMask      Room::getMask() const
+        {
+            return Component::MASK_ROOM;
+        }
+
+        ECS::IComponent*        Room::clone() const
+        {
+            return new Room(*this);
         }
 
         /*

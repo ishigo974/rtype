@@ -7,6 +7,7 @@
 #include "ValueError.hpp"
 #include "Server.hpp"
 #include "CommandFactory.hpp"
+#include "Request.hpp"
 
 namespace RType
 {
@@ -16,7 +17,9 @@ namespace RType
         ** Static variables
         */
         const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
-            { Request::LR_USERNAME, "UsernameCommand" }
+            { Request::LR_LISTROOMS,    "ListRoomsCommand" },
+            { Request::LR_CREATEROOM,   "CreateRoomCommand" },
+            { Request::LR_USERNAME,     "UsernameCommand" }
         };
 
         /*
@@ -41,7 +44,12 @@ namespace RType
             while (network->isRequest())
             {
                 try {
-                    Lobby::buildCommand(network->popRequest(), e)->execute();
+                    RType::Request  request = network->popRequest();
+
+                    Lobby::buildCommand(request, e)->execute();
+                    Server::display("Received request " +
+                        std::to_string(request.getCode()) + " from " +
+                        network->repr());
                 } catch (Exception::ValueError const& e) {
                     Server::display(std::string(e.what()), true);
                 } catch (std::out_of_range const&) {
@@ -82,9 +90,7 @@ request, ignored (" + network->repr() + ")", true);
         Command::Request*   Lobby::buildCommand(Request const& request,
                                                 ECS::Entity& entity)
         {
-            Command::Request*       cmd =
-                Command::Factory::getInstance()
-                    .generate(cmdsNames.at(
+            Command::Request*       cmd = _factory.generate(cmdsNames.at(
                         static_cast<Request::LobbyRequest>(request.getCode())
                     ));
 

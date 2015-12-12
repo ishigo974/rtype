@@ -10,11 +10,11 @@ namespace RType
     {
         class Factory : public Utils::BaseFactory<Command::Request>
         {
-        protected:
+        public:
             Factory();
             virtual ~Factory();
 
-        protected:
+        private:
             Factory(Factory const& other) = delete;
             Factory&     operator=(Factory const& other) = delete;
         };

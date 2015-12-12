@@ -11,7 +11,7 @@ namespace RType
 {
     namespace Command
     {
-        class CreateRoom : Command::Request
+        class CreateRoom : public Command::Request
         {
         public:
             CreateRoom();

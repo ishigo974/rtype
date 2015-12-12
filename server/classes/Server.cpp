@@ -7,6 +7,7 @@
 #include "ITcpSocket.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
+#include "Room.hpp"
 #include "IComponent.hpp"
 #include "LobbySystem.hpp"
 #include "NotImplemented.hpp"
@@ -81,6 +82,7 @@ namespace RType
     {
         _monitor.registerSocket(&_acceptor);
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
+        _em.registerComponent(std::make_unique<Component::Room>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
     }
 

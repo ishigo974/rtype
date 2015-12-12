@@ -1,5 +1,5 @@
+#include <iostream>
 #include "ListRoomsCommand.hpp"
-// #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
 #include "Room.hpp"
 #include "NetworkTCP.hpp"

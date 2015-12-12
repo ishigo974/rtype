@@ -7,6 +7,7 @@
 # include "ASystem.hpp"
 # include "ComponentMask.hpp"
 # include "RequestCommand.hpp"
+# include "CommandFactory.hpp"
 
 namespace RType
 {
@@ -45,7 +46,8 @@ namespace RType
             static const RequestCmdMap  cmdsNames;
 
         protected:
-            RoomsMap    _rooms;
+            RoomsMap            _rooms;
+            Command::Factory    _factory;
         };
     }
 }

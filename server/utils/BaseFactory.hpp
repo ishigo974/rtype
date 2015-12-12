@@ -13,7 +13,6 @@ namespace Utils
 {
     /*
     ** BaseFactory
-    ** Singleton design pattern
     ** Factory that can learn/unlearn types and then generates them
     ** Be careful, Type has to be able to use the clone member function /!\
     */
@@ -21,29 +20,18 @@ namespace Utils
     class BaseFactory : public IStringable
     {
     public:
-        typedef std::unique_ptr<BaseFactory>        UniqueFactoryPtr;
         typedef std::unique_ptr<Type>               UniqueTypePtr;
         typedef std::unordered_map<std::string,
                                     UniqueTypePtr>  TypeBook;
         typedef std::pair<std::string,
                             UniqueTypePtr>          TypeEntry;
 
-    protected:
+    public:
         BaseFactory()
         {}
 
-    public:
         virtual ~BaseFactory()
         {}
-
-    public:
-        static BaseFactory<Type>&     getInstance()
-        {
-            if (instance == nullptr)
-                instance =
-                    std::unique_ptr<BaseFactory>(new BaseFactory<Type>());
-            return *instance;
-        }
 
     public:
         bool                    learn(UniqueTypePtr type)
@@ -98,11 +86,7 @@ namespace Utils
 
     protected:
         TypeBook                    _book;
-        static UniqueFactoryPtr     instance;
     };
-
-    template <typename Type>
-    std::unique_ptr<BaseFactory<Type> >     BaseFactory<Type>::instance = nullptr;
 }
 
 

@@ -41,7 +41,6 @@ namespace RType
             return *this;
         }
 
-
         /*
         ** Public member functions
         */
