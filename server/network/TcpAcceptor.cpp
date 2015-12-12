@@ -84,8 +84,7 @@ ITcpSocket *TcpAcceptor::accept() const
     unsigned int       struct_len;
 
     struct_len  = sizeof(client);
-    if ((socket = ::accept(_socket,
-                           reinterpret_cast<struct sockaddr *>(&client),
+    if ((socket = ::accept(_socket, reinterpret_cast<struct sockaddr *>(&client),
                            &struct_len)) < 0)
         throw std::runtime_error("can't accept");
     TcpSocket *ret = new TcpSocket(socket, inet_ntoa(client.sin_addr), _port);

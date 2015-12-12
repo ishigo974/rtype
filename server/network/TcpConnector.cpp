@@ -4,11 +4,6 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
-#pragma comment(lib,"ws2_32")
-
 #else
 
 #include <sys/socket.h>
@@ -27,12 +22,11 @@ TcpConnector::TcpConnector(std::string const& addr, short int port)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    { ; //TODO throw
-    }
+         throw std::runtime_error("WSAStartup failed");
     if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
     {
         WSACleanup();
-        //TODO throw
+        throw std::runtime_error("LOBYTE / HIBYTE failed");
     }
     _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 #else
