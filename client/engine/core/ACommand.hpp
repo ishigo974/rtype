@@ -18,16 +18,12 @@ public:
 public:
     enum Action
     {
-        DEFAULT = -1,
-        UP,
-        UP_RIGHT,
-        UP_LEFT,
-        DOWN,
-        DOWN_RIGHT,
-        DOWN_LEFT,
-        LEFT,
-        RIGHT,
-        SHOOT
+      DEFAULT = -1,
+      UP,
+      DOWN,
+      LEFT,
+      RIGHT,
+      SHOOT
     };
 
     void setObject(GameObject *obj)

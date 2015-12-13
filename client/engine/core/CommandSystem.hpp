@@ -23,9 +23,10 @@ public:
     void        invalidateCommandAtTimestamp(timestamp time);
 
 private:
-    std::vector<ACommand *>             _commands;
-    EntityManager                       *_entityManager;
-    std::map<cu::Event::KeyEvent, bool> _statuses;
+    std::vector<ACommand *>                         _commands;
+    EntityManager                                   *_entityManager;
+    std::map<cu::Event::KeyEvent, bool>             _statuses;
+    std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

@@ -1,6 +1,7 @@
 #ifndef PLAYER_HPP_
 # define PLAYER_HPP_
 
+# include <queue>
 # include "Behaviour.hpp"
 # include "ACommand.hpp"
 
@@ -32,9 +33,9 @@ public:
   virtual RTypes::my_uint16_t	getMask() const;
 
 protected:
-  int			_hp;
-  int			_damage;
-  ACommand::Action	_action;
+  int				_hp;
+  int				_damage;
+  std::queue<ACommand::Action>	_action;
 };
 
 #endif /* !PLAYER_HPP_ */
