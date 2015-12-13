@@ -85,8 +85,11 @@ void	Player::setAction(ACommand::Action action)
   _action = action;
 }
 
-void		Player::move()
+void		Player::move(double elapsedTime)
 {
+  (void)elapsedTime;
+  // static double	deltaPix = 0;
+  // float		speed = 0.75f;
   GameObject	*parent;
   Transform	*transform;
 
@@ -120,6 +123,7 @@ void		Player::move()
     default:
       break;
     }
+  // std::cout << transform->getPosition().toString() << std::endl;
 }
 
 void	Player::update(double elapsedTime)
@@ -127,7 +131,7 @@ void	Player::update(double elapsedTime)
   (void)elapsedTime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
+  this->move(elapsedTime);
   if (_action == ACommand::SHOOT)
     std::cout << "SHOOT" << std::endl;
 }

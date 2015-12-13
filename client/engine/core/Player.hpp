@@ -23,7 +23,7 @@ public:
   int	getDirection() const;
   void	setAction(ACommand::Action action);
 
-  void		move();
+  void		move(double elapsedTime);
   virtual void	update(double elapsedTime);
 
   void swap(Player& other);

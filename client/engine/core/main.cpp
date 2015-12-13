@@ -136,9 +136,9 @@ void backgroundTest()
             }
             if (e.type == cu::Event::KeyPressed)
 	      {
-		cmds.addCommand(e);
                 std::cout << "Key pressed : " << e.key << std::endl;
 	      }
+		cmds.addCommand(e);
         }
         bg->update(BigBen::get().getElapsedtime());
 	mob->update(BigBen::get().getElapsedtime());
@@ -281,7 +281,7 @@ int main()
   // if (commandSystemTest(&entityManager))
   //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-  //backgroundTest();
+  backgroundTest();
   menuTest();
 
   return 0;
