@@ -3,8 +3,8 @@
 Component::Component()
 { }
 
-Component::Component(unsigned int _id, std::string const& _name)
-        : Object(_id, _name)
+Component::Component(unsigned int _id, std::string const& _name, Object *parent)
+        : Object(_id, _name), _parent(parent)
 { }
 
 Component::Component(Component const& other) : Object(other)
@@ -62,9 +62,10 @@ void Component::swap(Component& other)
     swap(_name, other._name);
 }
 
-namespace std {
+namespace std
+{
     template<>
-    void swap<Component>(Component &a, Component &b)
+    void swap<Component>(Component& a, Component& b)
     {
         a.swap(b);
     }
