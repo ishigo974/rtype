@@ -9,7 +9,8 @@ namespace cu
         {
             KeyPressed,
             KeyReleased,
-            Closed
+            Closed,
+            None
         };
 
         enum KeyEvent
