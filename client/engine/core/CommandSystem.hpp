@@ -14,7 +14,7 @@ class CommandSystem
 {
 public:
 
-  CommandSystem(EntityManager *entityManager, Input *i);
+    CommandSystem(EntityManager *entityManager, Input *i);
     virtual ~CommandSystem();
 
     void        addCommand();
@@ -26,9 +26,8 @@ public:
 private:
     std::vector<ACommand *>                         _commands;
     EntityManager                                   *_entityManager;
-    std::map<cu::Event::KeyEvent, bool>             _statuses;
     std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
-  Input						*_input;
+    Input                                           *_input;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

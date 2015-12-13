@@ -139,7 +139,7 @@ void backgroundTest()
                 std::cout << "Key pressed : " << e.key << std::endl;
             }
         }
-	cmds.addCommand();
+        cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
         mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
@@ -228,27 +228,27 @@ void menuTest()
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-						  gu::Rect<int>(0, 0, 1280, 720));
+                                                  gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
 
     State initialState("Aeris");
     State mainMenu("Main Menu");
 
-    initialState.addTransition("MainMenu", [](cu::Event const* e)
-            {
-	      return e->type == cu::Event::KeyReleased;
-            },
-            &e);
+    initialState.addTransition("MainMenu", [](cu::Event const *e)
+                               {
+                                   return e->type == cu::Event::KeyReleased;
+                               },
+                               &e);
 
     entityManager.attachComponent<StateMachine>(menu, initialState);
 
     r.init();
     e.type = cu::Event::None;
-    e.key = cu::Event::LAST_ACTION;
+    e.key  = cu::Event::LAST_ACTION;
 
     menu->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
-    StateMachine *sm = menu->getComponent<StateMachine>();
+    StateMachine        *sm = menu->getComponent<StateMachine>();
     sm->addState(mainMenu);
     std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
@@ -265,10 +265,10 @@ void menuTest()
                 std::cout << "Key pressed : " << e.key << std::endl;
             if (e.type == cu::Event::KeyReleased)
                 std::cout << "Key released : " << e.key << std::endl;
-	    sm->move();
+            sm->move();
         }
         bg->update(BigBen::get().getElapsedtime());
-	std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+        std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(*menu);
         r.render();
     }
@@ -277,20 +277,20 @@ void menuTest()
 
 int main()
 {
-  EntityManager entityManager;
+    EntityManager entityManager;
 
-  srand(static_cast<unsigned>(time(nullptr)));
-  if (gameObjectTest(entityManager))
-    std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
-  if (timeTest())
-    std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
-  if (stateMachineTest())
-    std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-  // if (commandSystemTest(&entityManager))
-  //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
+    srand(static_cast<unsigned>(time(nullptr)));
+    if (gameObjectTest(entityManager))
+        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+    if (timeTest())
+        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+    if (stateMachineTest())
+        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+    // if (commandSystemTest(&entityManager))
+    //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-  backgroundTest();
-  menuTest();
+    backgroundTest();
+    menuTest();
 
-  return 0;
+    return 0;
 }

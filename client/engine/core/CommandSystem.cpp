@@ -6,13 +6,8 @@
 
 CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
 {
-    _input = i;
+    _input         = i;
     _entityManager = entityManager;
-    _statuses[cu::Event::UP]    = false;
-    _statuses[cu::Event::DOWN]  = false;
-    _statuses[cu::Event::LEFT]  = false;
-    _statuses[cu::Event::RIGHT] = false;
-    _statuses[cu::Event::SHOOT] = false;
 
     _actions[cu::Event::UP]    = ACommand::UP;
     _actions[cu::Event::DOWN]  = ACommand::DOWN;
@@ -27,10 +22,10 @@ CommandSystem::~CommandSystem()
 
 void    CommandSystem::addCommand()
 {
-    for (auto it = _statuses.begin(); it != _statuses.end(); ++it)
+    for (auto& a : _actions)
     {
-      if (_input->isKeyPressed(it->first))
-  	_commands.push_back(new MoveCommand(_entityManager, _actions[it->first]));
+        if (_input->isKeyPressed(a.first))
+            _commands.push_back(new MoveCommand(_entityManager, _actions[a.first]));
     }
 }
 
@@ -41,7 +36,7 @@ ACommand *CommandSystem::getByTimestamp(timestamp time)
     for (auto command : _commands)
     {
         diff = command->getTime() - time;
-        if (abs(diff.count()) <= DBL_EPSILON)
+        if (fabs(diff.count()) <= DBL_EPSILON)
             return (command);
     }
     return NULL;
