@@ -1,8 +1,8 @@
 #include "CreateRoomCommand.hpp"
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
-#include "Room.hpp"
-#include "Player.hpp"
+#include "RoomComponent.hpp"
+#include "PlayerComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "Server.hpp"
 

@@ -1,10 +1,10 @@
-#ifndef PLAYER_HPP_
-# define PLAYER_HPP_
+#ifndef PLAYERCOMPONENT_HPP_
+# define PLAYERCOMPONENT_HPP_
 
 # include <string>
 # include "IComponent.hpp"
 # include "Entity.hpp"
-# include "Room.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {
@@ -43,4 +43,4 @@ namespace RType
     }
 }
 
-#endif /* !PLAYER_HPP_ */
+#endif /* !PLAYERCOMPONENT_HPP_ */

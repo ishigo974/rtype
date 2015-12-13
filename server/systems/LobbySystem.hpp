@@ -8,7 +8,7 @@
 # include "ComponentMask.hpp"
 # include "RequestCommand.hpp"
 # include "CommandFactory.hpp"
-# include "Room.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {

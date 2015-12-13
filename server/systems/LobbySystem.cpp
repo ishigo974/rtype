@@ -8,7 +8,7 @@
 #include "Server.hpp"
 #include "CommandFactory.hpp"
 #include "Request.hpp"
-#include "Room.hpp"
+#include "RoomComponent.hpp"
 
 namespace RType
 {

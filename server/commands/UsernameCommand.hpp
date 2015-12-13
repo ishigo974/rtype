@@ -4,7 +4,7 @@
 # include <string>
 # include "Request.hpp"
 # include "RequestCommand.hpp"
-# include "Player.hpp"
+# include "PlayerComponent.hpp"
 # include "NetworkTCP.hpp"
 # include "Entity.hpp"
 # include "ASystem.hpp"

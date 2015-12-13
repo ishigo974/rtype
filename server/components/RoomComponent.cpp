@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <string>
-#include "Room.hpp"
-#include "Player.hpp"
+#include "RoomComponent.hpp"
+#include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "ValueError.hpp"
 #include "EntityManager.hpp"

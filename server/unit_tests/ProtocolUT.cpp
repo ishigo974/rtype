@@ -7,10 +7,18 @@
 namespace RType
 {
     /*
+    ** Static variables
+    */
+    std::string     ProtocolUT::ip      = "0";
+    short int       ProtocolUT::port    = 6667;
+
+    /*
     ** Constructor/Destructor
     */
-    ProtocolUT::ProtocolUT()
+    ProtocolUT::ProtocolUT(std::string const& ip, short int port)
     {
+        ProtocolUT::ip = ip;
+        ProtocolUT::port = port;
     }
 
     ProtocolUT::~ProtocolUT()
@@ -26,6 +34,8 @@ namespace RType
                     &ProtocolUT::lobbyRequestParsingWithoutData);
         registerTest("LobbyRequestParsingWithData",
                     &ProtocolUT::lobbyRequestParsingWithData);
+        registerTest("CreateSingleRoomAndList",
+                    &ProtocolUT::createSingleRoomAndList);
     }
 
     std::string     ProtocolUT::getName() const
@@ -105,5 +115,41 @@ namespace RType
             UT_ASSERT(request.size() == Request::headerSize + dataSize);
             UT_ASSERT(request.get<uint32_t>("room_id") == test);
         }
+    }
+
+    void            ProtocolUT::createSingleRoomAndList()
+    {
+        TcpConnector    client(ip, port);
+        Buffer          tmp;
+        Request         request;
+
+        client.connect();
+        client.send(formatRequest(Request::LR_LISTROOMS));
+        tmp = receiveAll(client);
+        request = Request(Request::PROTOCOL_LOBBY, tmp);
+        tmp.consume(request.size());
+        UT_ASSERT(request.getCode() == Request::LR_ROOMS);
+    }
+
+    /*
+    ** Static functions
+    */
+    Buffer          ProtocolUT::receiveAll(TcpConnector& client)
+    {
+        Buffer      b;
+
+        client.receive(b, 4096);
+        return b;
+    }
+
+    Buffer          ProtocolUT::formatRequest(Request::LobbyRequest code,
+                                              Buffer const& data)
+    {
+        Buffer      request;
+
+        request.append<uint16_t>(code);
+        request.append<uint32_t>(data.size());
+        request.append(data);
+        return request;
     }
 }

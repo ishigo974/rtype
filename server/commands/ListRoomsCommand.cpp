@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ListRoomsCommand.hpp"
 #include "ComponentsMasks.hpp"
-#include "Room.hpp"
+#include "RoomComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "Server.hpp"
 
@@ -72,6 +72,7 @@ entity does not have a room component");
                 data.append<uint32_t>(entry.first);
                 data.append<uint32_t>(room->getRoomName().size());
                 data.append<std::string>(room->getRoomName());
+                data.append<uint8_t>(room->size());
             }
             response.append<uint32_t>(data.size());
             response.append(data);

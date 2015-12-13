@@ -1,6 +1,6 @@
 #include "NotReadyCommand.hpp"
-#include "Player.hpp"
-#include "Room.hpp"
+#include "PlayerComponent.hpp"
+#include "RoomComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "ComponentsMasks.hpp"
 #include "Server.hpp"

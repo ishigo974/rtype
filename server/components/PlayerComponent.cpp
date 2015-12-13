@@ -1,5 +1,5 @@
 #include <sstream>
-#include "Player.hpp"
+#include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
 
 namespace RType

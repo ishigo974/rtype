@@ -1,5 +1,5 @@
-#ifndef ROOM_HPP_
-# define ROOM_HPP_
+#ifndef ROOMCOMPONENT_HPP_
+# define ROOMCOMPONENT_HPP_
 
 # include <unordered_map>
 # include <vector>
@@ -65,4 +65,4 @@ namespace RType
     }
 }
 
-#endif /* !ROOM_HPP_ */
+#endif /* !ROOMCOMPONENT_HPP_ */

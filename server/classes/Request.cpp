@@ -21,13 +21,15 @@ namespace RType
         { LR_QUITROOM,      {} },
         { LR_READY,         {} },
         { LR_NOTREADY,      {} },
-        { LR_USERNAME,      { "username"} }
+        { LR_USERNAME,      { "username"} },
+        { LR_ROOMS,         { "rooms" } }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
         { "size",       sizeof(uint32_t) },
         { "room_name",  Request::variableSize },
         { "room_id",    sizeof(uint32_t) },
-        { "username",   Request::variableSize }
+        { "username",   Request::variableSize },
+        { "rooms",      Request::variableSize }
     };
 
     /*
@@ -150,6 +152,11 @@ namespace RType
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
+            if (arg == "rooms")
+            {
+                _data.insert(std::make_pair(it->first, tmp));
+                return ;
+            }
             if (it->second == variableSize)
             {
                 size = tmp.get<uint32_t>();
@@ -157,9 +164,7 @@ namespace RType
                 left -= sizeof(uint32_t);
             }
             else
-            {
                 size = it->second;
-            }
             if (size > left)
                 throw Exception::InvalidRequest("Request can't fit argument");
             if (size > tmp.size())

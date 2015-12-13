@@ -28,7 +28,8 @@ namespace RType
             LR_QUITROOM     = 103,
             LR_READY        = 201,
             LR_NOTREADY     = 202,
-            LR_USERNAME     = 301
+            LR_USERNAME     = 301,
+            LR_ROOMS        = 400
         };
 
     public:

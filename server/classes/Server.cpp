@@ -19,8 +19,8 @@
 #include "IComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
-#include "Room.hpp"
-#include "Player.hpp"
+#include "RoomComponent.hpp"
+#include "PlayerComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"

@@ -5,7 +5,7 @@
 # include "Request.hpp"
 # include "RequestCommand.hpp"
 # include "ASystem.hpp"
-# include "Room.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {
