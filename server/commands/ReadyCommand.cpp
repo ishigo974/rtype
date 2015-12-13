@@ -56,7 +56,16 @@ player/network component");
             if ((room = player->getRoom()) == nullptr
                 || !room->setPlayerReadiness(*_entity, true))
                 network->send(Server::responseKO);
-            network->send(Server::responseOK);
+            else
+            {
+                Buffer      buffer;
+
+                buffer.append<uint16_t>(Server::LOBBY_CLIENTRDY);
+                buffer.append<uint32_t>(sizeof(uint8_t));
+                buffer.append<uint8_t>(room->getPlayerId(*_entity));
+                network->send(Server::responseOK);
+                room->broadcast(buffer, _entity);
+            }
         }
 
         void        Ready::undo()

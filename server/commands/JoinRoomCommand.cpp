@@ -72,9 +72,15 @@ player/network component");
                 network->send(Server::responseKO);
             else
             {
+                Buffer      buffer;
+
+                buffer.append<uint16_t>(Server::LOBBY_JOINROOM);
+                buffer.append<uint32_t>(sizeof(uint8_t));
+                buffer.append<uint8_t>(_room->getPlayerId(*_entity));
                 _room->addPlayer(*_entity);
                 player->setRoom(_room);
                 network->send(Server::responseOK);
+                _room->broadcast(buffer, _entity);
             }
         }
 

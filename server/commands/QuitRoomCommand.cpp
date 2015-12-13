@@ -54,12 +54,18 @@ namespace RType
                 throw std::runtime_error("Entity does not have a \
 player/network component");
             if ((room = player->getRoom()) == nullptr)
-            network->send(Server::responseKO);
+                network->send(Server::responseKO);
             else
             {
+                Buffer      buffer;
+
+                buffer.append<uint16_t>(Server::LOBBY_QUITROOM);
+                buffer.append<uint32_t>(sizeof(uint8_t));
+                buffer.append<uint8_t>(room->getPlayerId(*_entity));
                 room->removePlayer(*_entity);
                 player->setRoom(nullptr);
                 network->send(Server::responseOK);
+                room->broadcast(buffer, _entity);
             }
         }
 

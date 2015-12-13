@@ -7,6 +7,7 @@
 # include "Entity.hpp"
 # include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
+# include "Buffer.hpp"
 
 namespace RType
 {
@@ -33,10 +34,13 @@ namespace RType
             bool                        setPlayerReadiness(ECS::Entity& player,
                                                            bool isReady);
             void                        setName(std::string const& name);
+            void                        broadcast(Buffer const& buffer,
+                                          ECS::Entity const* except = nullptr);
 
         public:
             std::string const&          getRoomName() const;
             ECS::Entity*                getPlayer(unsigned int id) const;
+            unsigned int                getPlayerId(ECS::Entity& entity) const;
             std::string                 getPlayersNames() const;
             unsigned int                size() const;
 

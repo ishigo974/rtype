@@ -5,6 +5,7 @@
 #include "ComponentsMasks.hpp"
 #include "ValueError.hpp"
 #include "EntityManager.hpp"
+#include "NetworkTCP.hpp"
 
 namespace RType
 {
@@ -89,6 +90,33 @@ namespace RType
                 return false;
             _players.erase(it);
             return true;
+        }
+
+        void        Room::broadcast(Buffer const& buffer,
+                                    ECS::Entity const* except)
+        {
+            for (auto& entry: _players)
+            {
+                Component::NetworkTCP*  network = entry.second.first
+                    ->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+
+                if (network == nullptr)
+                    throw std::runtime_error("Player entity is missing his \
+Network component"); // TODO except
+                if (except == nullptr || except != entry.second.first)
+                    network->send(buffer);
+            }
+        }
+
+        unsigned int    Room::getPlayerId(ECS::Entity& player) const
+        {
+            auto it = std::find_if(_players.begin(), _players.end(),
+                [&player](std::pair<unsigned int, PlayerEntry> const& entry)
+                { return entry.second.first->getId() == player.getId(); });
+
+            if (it == _players.end())
+                throw Exception::ValueError("Player not found");
+            return it->first;
         }
 
         bool        Room::setPlayerReadiness(ECS::Entity& player, bool isReady)
