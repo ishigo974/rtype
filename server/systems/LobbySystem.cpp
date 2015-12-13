@@ -8,6 +8,7 @@
 #include "Server.hpp"
 #include "CommandFactory.hpp"
 #include "Request.hpp"
+#include "Room.hpp"
 
 namespace RType
 {
@@ -36,6 +37,26 @@ namespace RType
         /*
         ** Public member functions
         */
+        void                Lobby::update()
+        {
+            auto it = _rooms.begin();
+
+            while (it != _rooms.end())
+            {
+                Component::Room* room = it->second
+                    ->getComponent<Component::Room>(Component::MASK_ROOM);
+
+                if (room->size() == 0)
+                {
+                    ECS::EntityManager::getInstance().destroy(*it->second);
+                    _rooms.erase(it);
+                    it = _rooms.begin();
+                }
+                else
+                    ++it;
+            }
+        }
+
         void                Lobby::processEntity(ECS::Entity& e)
         {
             Component::NetworkTCP*  network = e

@@ -7,9 +7,14 @@ namespace RType
     namespace Component
     {
         /*
+        ** Static variables
+        */
+        const std::string   Player::defaultUsername = "Player";
+        
+        /*
         ** Constructor/Destructor
         */
-        Player::Player()
+        Player::Player() : _username(Player::defaultUsername)
         {
         }
 

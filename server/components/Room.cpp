@@ -3,6 +3,8 @@
 #include "Room.hpp"
 #include "Player.hpp"
 #include "ComponentsMasks.hpp"
+#include "ValueError.hpp"
+#include "EntityManager.hpp"
 
 namespace RType
 {
@@ -45,6 +47,23 @@ namespace RType
         /*
         ** Public member functions
         */
+        void        Room::update()
+        {
+            auto it = _players.begin();
+
+            while (it != _players.end())
+            {
+                try {
+                    ECS::EntityManager::getInstance()
+                        .get(it->second.first->getId());
+                    ++it;
+                } catch (Exception::ValueError const&) {
+                    _players.erase(it);
+                    it = _players.begin();
+                }
+            }
+        }
+
         bool        Room::addPlayer(ECS::Entity& player)
         {
             unsigned int    id = getAvailableId();
@@ -120,7 +139,7 @@ namespace RType
             for (auto& player: _players)
             {
                 Component::Player*  infos = player.second.first
-                    ->getComponent<Component::Player>(Component::MASK_ROOM);
+                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
 
                 if (infos == nullptr)
                     res += "?";

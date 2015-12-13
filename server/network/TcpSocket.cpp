@@ -148,11 +148,11 @@ std::string TcpSocket::toString() const
 {
     std::ostringstream ss;
 
-    ss << "TcpSocket {"
-    << "\n\tAddress " << this->_addr
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
+    ss  << "TcpSocket {"
+        << "\n\tAddress " << this->_addr
+        << "\n\tSocket " << this->_socket
+        << "\n\tPort " << this->_port
+        << "\n}" << std::endl;
 
     return ss.str();
 }

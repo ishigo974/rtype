@@ -33,6 +33,7 @@ namespace RType
             RoomsMap const&             getRooms() const;
 
         public:
+            virtual void                update();
             virtual void                processEntity(ECS::Entity& e);
             virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;
