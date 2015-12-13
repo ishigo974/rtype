@@ -12,6 +12,7 @@
 #include "Event.hpp"
 #include "BigBen.hpp"
 #include "ScrollingBackground.hpp"
+#include "Mob.hpp"
 
 bool gameObjectTest()
 {
@@ -123,6 +124,21 @@ void backgroundTest()
   std::cout << "Escape pressed" << std::endl;
 }
 
+bool	mobTest()
+{
+  EntityManager entityManager;
+  GameObject *obj = entityManager.createEntity<GameObject>("Test", 1);
+
+  entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
+  entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+  obj->getComponent<Mob>()->setEnabled(true);
+  Mob *mob = obj->getComponent<Mob>();
+  std::cout << mob->getName() << std::endl;
+  mob->update(BigBen::get().getElapsedtime());
+  assert(obj->getComponent<Transform>()->getPosition().Y() == 200);
+  return (true);
+}
+
 int main()
 {
   srand(static_cast<unsigned>(time(nullptr)));
@@ -131,6 +147,8 @@ int main()
   if (timeTest())
     std::cout << "timeTest passed -> OK" << std::endl;
   // renderAndInputsTest();
+  if (mobTest())
+    std::cout << "\e[32mMob passed -> OK\e[0m" << std::endl;
   backgroundTest();
   return (0);
 }
