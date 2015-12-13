@@ -6,6 +6,7 @@
 #include "QuitRoomCommand.hpp"
 #include "ReadyCommand.hpp"
 #include "NotReadyCommand.hpp"
+#include "JoinRoomCommand.hpp"
 
 namespace RType
 {
@@ -19,6 +20,7 @@ namespace RType
             learn(std::make_unique<Command::QuitRoom>());
             learn(std::make_unique<Command::Ready>());
             learn(std::make_unique<Command::NotReady>());
+            learn(std::make_unique<Command::JoinRoom>());
         }
 
         Factory::~Factory()
