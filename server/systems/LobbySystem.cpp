@@ -21,7 +21,9 @@ namespace RType
             { Request::LR_LISTROOMS,    "ListRoomsCommand" },
             { Request::LR_CREATEROOM,   "CreateRoomCommand" },
             { Request::LR_QUITROOM,     "QuitRoomCommand" },
-            { Request::LR_USERNAME,     "UsernameCommand" }
+            { Request::LR_USERNAME,     "UsernameCommand" },
+            { Request::LR_READY,        "ReadyCommand" },
+            { Request::LR_NOTREADY,     "NotReadyCommand" }
         };
 
         /*

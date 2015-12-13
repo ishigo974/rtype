@@ -58,6 +58,16 @@ int main(int argc, char* argv[])
       socket.send(boost::asio::buffer(&size, sizeof(size)));
       socket.send(boost::asio::buffer("hello", 5));
 
+      code = 201;
+      size = 0;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+
+      code = 202;
+      size = 0;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+
       sleep(3);
 
       code = 103;
@@ -66,6 +76,7 @@ int main(int argc, char* argv[])
       socket.send(boost::asio::buffer(&size, sizeof(size)));
 
       sleep(5);
+
     }
   catch (std::exception& e)
     {

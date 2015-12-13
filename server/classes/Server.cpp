@@ -184,7 +184,7 @@ use \"help\" to get all available events");
     {
         Server::display("Command Line Interface (CLI) usage :");
         for (auto& cmd: cliCmdHandlers)
-            Server::display(cmd.first + "\t-- " + cmd.second.first);
+            Server::display(cmd.first + "\t\t-- " + cmd.second.first);
     }
 
     void            Server::handleCLIRooms(ArgsTab const&)
@@ -194,7 +194,8 @@ use \"help\" to get all available events");
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name\t| Slots\t| Players");
+            Server::display("Name\t| Slots\t| Players - r: \
+ready, n: not ready");
         for (auto& entry: rooms)
         {
             Component::Room* room =
@@ -230,9 +231,8 @@ use \"help\" to get all available events");
                 throw std::runtime_error("EntityManager: Retrieving entities by\
  mask failed");
             Server::display(player->getUsername() + "\t| " + network->repr() +
-                            "\t| " +
-                            (player->getRoom() != nullptr ?
-                                player->getRoom()->getRoomName() : ""));
+                            "\t| " + (player->getRoom() != nullptr ?
+                                      player->getRoom()->getRoomName() : ""));
         }
     }
 

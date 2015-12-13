@@ -91,6 +91,18 @@ namespace RType
             return true;
         }
 
+        bool        Room::setPlayerReadiness(ECS::Entity& player, bool isReady)
+        {
+            auto it = std::find_if(_players.begin(), _players.end(),
+                [&player](std::pair<unsigned int, PlayerEntry> const& entry)
+                { return entry.second.first->getId() == player.getId(); });
+
+            if (it == _players.end())
+                return false;
+            it->second.second = isReady;
+            return true;
+        }
+
         void        Room::setName(std::string const& name)
         {
             _name = name;
@@ -159,6 +171,8 @@ namespace RType
                     res += "?";
                 else
                     res +=  std::string("(") + std::to_string(player.first) +
+                            std::string(":") +
+                            (player.second.second ? "r" : "n") +
                             std::string(")") + infos->getUsername();
                 res += ", ";
             }

@@ -30,6 +30,8 @@ namespace RType
             bool                        addPlayer(ECS::Entity& player);
             bool                        removePlayer(unsigned int id);
             bool                        removePlayer(ECS::Entity& player);
+            bool                        setPlayerReadiness(ECS::Entity& player,
+                                                           bool isReady);
             void                        setName(std::string const& name);
 
         public:
