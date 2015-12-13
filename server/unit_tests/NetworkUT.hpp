@@ -29,6 +29,7 @@ protected:
     static void multipleServerConnect();
     static void simpleUpdate();
     static void sendMonitor();
+    static void multipleConnectMonitor();
 };
 
 

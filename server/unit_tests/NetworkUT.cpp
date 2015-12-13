@@ -17,6 +17,9 @@ std::string     NetworkUT::getName() const
     return "Network";
 }
 
+void NetworkUT::multipleConnectMonitor()
+{ }
+
 void NetworkUT::sendMonitor()
 {
     TcpAcceptor   acceptor(7777);
