@@ -4,6 +4,12 @@
 
 #include "NetworkUT.hpp"
 
+NetworkUT::NetworkUT()
+{}
+
+NetworkUT::~NetworkUT()
+{}
+
 void            NetworkUT::registerTests()
 {
     registerTest("Connect 1 client", &NetworkUT::simpleServerConnect);
@@ -77,28 +83,28 @@ void NetworkUT::multipleServerConnect()
     client.connect();
     sock = acceptor.accept();
     sock->send(msg);
-    client.receive(rcv, 17);
+    client.receive(rcv, msg.size());
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
     rcv.clear();
     client1.connect();
     sock1 = acceptor.accept();
     sock1->send(msg);
-    client1.receive(rcv, 17);
+    client1.receive(rcv, msg.size());
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
     rcv.clear();
     client2.connect();
     sock2 = acceptor.accept();
     sock2->send(msg);
-    client2.receive(rcv, 17);
+    client2.receive(rcv, msg.size());
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
     rcv.clear();
     client3.connect();
     sock3 = acceptor.accept();
     sock3->send(msg);
-    client3.receive(rcv, 17);
+    client3.receive(rcv, msg.size());
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
     rcv.clear();

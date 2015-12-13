@@ -252,6 +252,8 @@ namespace ECS
 
         System1::~System1() {}
 
+        void          System1::update() {}
+
         void          System1::processEntity(Entity& e)
         {
             Component1* c1 = e.getComponent<Component1>(Component1::mask);
