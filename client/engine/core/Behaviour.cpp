@@ -47,7 +47,7 @@ void Behaviour::swap(Behaviour& other)
 namespace std
 {
     template<>
-    void swap<Behaviour>(Behaviour& a, Behaviour& b)
+    inline void swap<Behaviour>(Behaviour& a, Behaviour& b)
     {
         a.swap(b);
     }

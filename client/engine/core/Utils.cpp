@@ -14,13 +14,13 @@ namespace std
     using cu::Point2D;
 
     template<>
-    void swap<Vector2D>(Vector2D& a, Vector2D& b)
+    inline void swap<Vector2D>(Vector2D& a, Vector2D& b)
     {
         a.swap(b);
     }
 
     template<>
-    void swap<Point2D>(Point2D& a, Point2D& b)
+    inline void swap<Point2D>(Point2D& a, Point2D& b)
     {
         a.swap(b);
     }

@@ -15,8 +15,6 @@ std::vector<Object *> EntityManager::getByMask(unsigned int mask)
     {
         if (e.second->findMask(mask))
             tmp.push_back(e.second.get());
-	// std::cout << e.second->getName() << std::endl;
-	// std::cout << e.second->getMask() << std::endl;
     }
     return (tmp);
 }
