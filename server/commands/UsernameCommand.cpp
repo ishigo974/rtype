@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ComponentsMasks.hpp"
 #include "UsernameCommand.hpp"
 #include "ValueError.hpp"
@@ -63,12 +64,6 @@ namespace RType
             // broadcast to room TODO
         }
 
-//        void    Username::setEntity(ECS::Entity* entity)
-//        {
-//            _entity = entity;
-//            updateData();
-//        }
-
         void    Username::initFromRequest(RType::Request const& request,
                                           ECS::ASystem* sys)
         {
@@ -84,6 +79,12 @@ namespace RType
         std::string Username::getName() const
         {
             return "UsernameCommand";
+        }
+
+        void                Username::setEntity(ECS::Entity& entity)
+        {
+            Request::setEntity(entity);
+            updateData();
         }
 
         /*

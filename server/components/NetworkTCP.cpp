@@ -7,6 +7,7 @@
 #include "Buffer.hpp"
 #include "EntityManager.hpp"
 #include "IncompleteRequest.hpp"
+#include "NotImplemented.hpp"
 
 namespace RType
 {
@@ -201,6 +202,9 @@ namespace RType
                     _requests.push(request);
                 }
             } catch (Exception::IncompleteRequest const& /*e*/) {
+            } catch (Exception::NotImplemented const&) {
+                _received.clear();
+                throw ;
             }
         }
     }

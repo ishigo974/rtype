@@ -97,8 +97,8 @@ size_t        TcpSocket::receive(Buffer& buffer, size_t len) const
 
 size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 {
-    ssize_t ret;
-    char    *buff = new char[len];
+    ssize_t     ret;
+    char        *buff = new char[len]();
 
     if ((ret = ::recv(_socket, buff, len, 0)) == -1)
         throw std::runtime_error("receive failed");
@@ -112,7 +112,6 @@ size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 void TcpSocket::close() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    std::cout << "___>" << (int)_socket << std::endl;
     closesocket(_socket);
 #else
     ::close(_socket);

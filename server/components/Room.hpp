@@ -29,6 +29,7 @@ namespace RType
         public:
             bool                        addPlayer(ECS::Entity& player);
             bool                        removePlayer(unsigned int id);
+            bool                        removePlayer(ECS::Entity& player);
             void                        setName(std::string const& name);
 
         public:

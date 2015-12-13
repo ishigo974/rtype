@@ -2,6 +2,7 @@
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
 #include "Room.hpp"
+#include "Player.hpp"
 #include "NetworkTCP.hpp"
 #include "Server.hpp"
 
@@ -59,17 +60,20 @@ expected LobbySystem"); // TODO
                 ECS::EntityManager::getInstance().create(Component::MASK_ROOM);
             Component::Room*        room =
                 e.getComponent<Component::Room>(Component::MASK_ROOM);
+            Component::Player*      player =
+                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
             Component::NetworkTCP*  network =
                 _entity->getComponent<Component::NetworkTCP>(
                     Component::MASK_NETWORKTCP);
 
-            if (room == nullptr)
+            if (room == nullptr || player == nullptr || network == nullptr)
                 throw std::runtime_error("Entity does not have a \
-room component");
+room/player/network component");
             // validation name TODO
             room->addPlayer(*_entity);
             room->setName(_roomName);
             _lobby->addRoom(e);
+            player->setRoom(room);
             network->send(Server::responseOK);
         }
 

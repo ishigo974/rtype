@@ -33,13 +33,15 @@ namespace RType
     */
     const short int     Server::defaultPort     = 6667;
     const Buffer        Server::responseOK      = Server::getResponseOK();
+    const Buffer        Server::responseKO      = Server::getResponseKO();
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
-        { "help",   { "displays infos about how to use the server's CLI",
-                      &Server::handleCLIHelp } },
-        { "rooms",  { "list rooms", &Server::handleCLIRooms } },
+        { "clients",    { "list clients",   &Server::handleCLIClients } },
+        { "rooms",      { "list rooms",     &Server::handleCLIRooms } },
+        { "help",       { "displays infos about how to use the server's CLI",
+                          &Server::handleCLIHelp } },
     };
 
     /*
@@ -204,6 +206,32 @@ use \"help\" to get all available events");
         }
     }
 
+    void            Server::handleCLIClients(ArgsTab const&)
+    {
+        ECS::EntityCollection   clients =
+            _em.getByMask(Component::MASK_NETWORKTCP);
+
+        if (clients.empty())
+            Server::display("No clients yet");
+        else
+            Server::display("Username | ip:port | Room");
+        for (auto& entry: clients)
+        {
+            Component::Player*      player =
+                entry->getComponent<Component::Player>(Component::MASK_PLAYER);
+            Component::NetworkTCP*  network =
+                entry->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+
+            if (player == nullptr || network == nullptr)
+                throw std::runtime_error("EntityManager: Retrieving entities by\
+ mask failed");
+            Server::display(player->getUsername() + " | " + network->repr() +
+                            " | " +
+                            (player->getRoom() != nullptr ?
+                                player->getRoom()->getRoomName() : ""));
+        }
+    }
+
     /*
     ** Static functions
     */
@@ -220,6 +248,15 @@ use \"help\" to get all available events");
         Buffer      res;
 
         res.append<uint16_t>(LOBBY_OK);
+        res.append<uint32_t>(0);
+        return res;
+    }
+
+    Buffer          Server::getResponseKO()
+    {
+        Buffer      res;
+
+        res.append<uint16_t>(LOBBY_KO);
         res.append<uint32_t>(0);
         return res;
     }

@@ -20,6 +20,7 @@ namespace RType
         const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
             { Request::LR_LISTROOMS,    "ListRoomsCommand" },
             { Request::LR_CREATEROOM,   "CreateRoomCommand" },
+            { Request::LR_QUITROOM,     "QuitRoomCommand" },
             { Request::LR_USERNAME,     "UsernameCommand" }
         };
 

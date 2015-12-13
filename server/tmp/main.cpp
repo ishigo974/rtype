@@ -28,13 +28,40 @@ int main(int argc, char* argv[])
       uint32_t size = 0;
       socket.send(boost::asio::buffer(&code, sizeof(code)));
       socket.send(boost::asio::buffer(&size, sizeof(size)));
+
+      code = 301;
+      size = sizeof(uint32_t) + 6;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+      size = 6;
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+      std::cout << socket.send(boost::asio::buffer("teatea", 6)) << std::endl;
+
+      code = 301;
+      size = sizeof(uint32_t) + 6;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+      size = 6;
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+      socket.send(boost::asio::buffer("tototo", 6));
+
+      code = 100;
+      size = 0;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
+      
       code = 101;
       size = sizeof(uint32_t) + 5;
       socket.send(boost::asio::buffer(&code, sizeof(code)));
       socket.send(boost::asio::buffer(&size, sizeof(size)));
       size = 5;
       socket.send(boost::asio::buffer(&size, sizeof(size)));
-      socket.send(boost::asio::buffer("hello"));
+      socket.send(boost::asio::buffer("hello", 5));
+
+      code = 103;
+      size = 0;
+      socket.send(boost::asio::buffer(&code, sizeof(code)));
+      socket.send(boost::asio::buffer(&size, sizeof(size)));
 
       sleep(5);
     }

@@ -29,6 +29,7 @@ namespace RType
             virtual void        execute();
             virtual void        undo();
             virtual Request*    clone() const;
+            virtual void        setEntity(ECS::Entity& entity);
 
         public:
             virtual std::string getName() const;

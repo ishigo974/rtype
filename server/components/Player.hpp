@@ -3,6 +3,8 @@
 
 # include <string>
 # include "IComponent.hpp"
+# include "Entity.hpp"
+# include "Room.hpp"
 
 namespace RType
 {
@@ -16,11 +18,13 @@ namespace RType
 
         public:
             Player(Player const& other);
-            Player&             operator=(Player const& other);
+            Player&                 operator=(Player const& other);
 
         public:
             std::string const&      getUsername() const;
             void                    setUsername(std::string const& username);
+            Component::Room*        getRoom() const;
+            void                    setRoom(Component::Room* room);
 
         public:
             virtual std::string         getName() const;
@@ -33,7 +37,8 @@ namespace RType
             static const std::string    defaultUsername;
 
         protected:
-            std::string     _username;
+            std::string         _username;
+            Component::Room*    _room;
         };
     }
 }

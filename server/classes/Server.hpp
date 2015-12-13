@@ -50,6 +50,7 @@ namespace RType
     protected:
         void            handleCLIHelp(ArgsTab const& args);
         void            handleCLIRooms(ArgsTab const& args);
+        void            handleCLIClients(ArgsTab const& args);
 
     public:
         virtual std::string     toString() const;
@@ -60,10 +61,12 @@ namespace RType
 
     protected:
         static Buffer           getResponseOK();
+        static Buffer           getResponseKO();
 
     public:
         static const short int      defaultPort;
         static const Buffer         responseOK;
+        static const Buffer         responseKO;
         static const unsigned int   stdinFileNo;
         static const CLICMDHandlers cliCmdHandlers;
 

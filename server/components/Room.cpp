@@ -79,6 +79,18 @@ namespace RType
             return _players.erase(id) > 0;
         }
 
+        bool        Room::removePlayer(ECS::Entity& player)
+        {
+            auto it = std::find_if(_players.begin(), _players.end(),
+                [&player](std::pair<unsigned int, PlayerEntry> const& entry)
+                { return entry.second.first->getId() == player.getId(); });
+
+            if (it == _players.end())
+                return false;
+            _players.erase(it);
+            return true;
+        }
+
         void        Room::setName(std::string const& name)
         {
             _name = name;
