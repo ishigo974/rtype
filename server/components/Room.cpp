@@ -1,5 +1,7 @@
 #include <algorithm>
+#include <string>
 #include "Room.hpp"
+#include "Player.hpp"
 #include "ComponentsMasks.hpp"
 
 namespace RType
@@ -104,6 +106,30 @@ namespace RType
         ECS::IComponent*        Room::clone() const
         {
             return new Room(*this);
+        }
+
+        unsigned int            Room::size() const
+        {
+            return _players.size();
+        }
+
+        std::string             Room::getPlayersNames() const
+        {
+            std::string         res;
+
+            for (auto& player: _players)
+            {
+                Component::Player*  infos = player.second.first
+                    ->getComponent<Component::Player>(Component::MASK_ROOM);
+
+                if (infos == nullptr)
+                    res += "?";
+                else
+                    res +=  std::string("(") + std::to_string(player.first) +
+                            std::string(")") + infos->getUsername();
+                res += " ;";
+            }
+            return res;
         }
 
         /*

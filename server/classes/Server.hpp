@@ -1,6 +1,10 @@
 #ifndef SERVER_HPP_
 # define SERVER_HPP_
 
+# include <string>
+# include <vector>
+# include <unordered_map>
+# include <utility>
 # include "EntityManager.hpp"
 # include "SystemManager.hpp"
 # include "SocketMonitor.hpp"
@@ -10,6 +14,12 @@ namespace RType
 {
     class Server : public IStringable
     {
+    public:
+        typedef std::vector<std::string>    ArgsTab;
+        typedef void    (Server::*CLICMDHandler)(ArgsTab const& args);
+        typedef std::unordered_map<std::string,
+                    std::pair<std::string, CLICMDHandler> >  CLICMDHandlers;
+
     public:
         enum Response
         {
@@ -34,7 +44,12 @@ namespace RType
     protected:
         void            init();
         void            onClientConnection();
+        void            onCLICommand();
         void            checkDisconnected();
+
+    protected:
+        void            handleCLIHelp(ArgsTab const& args);
+        void            handleCLIRooms(ArgsTab const& args);
 
     public:
         virtual std::string     toString() const;
@@ -49,6 +64,8 @@ namespace RType
     public:
         static const short int      defaultPort;
         static const Buffer         responseOK;
+        static const unsigned int   stdinFileNo;
+        static const CLICMDHandlers cliCmdHandlers;
 
     protected:
         bool                        _quit;

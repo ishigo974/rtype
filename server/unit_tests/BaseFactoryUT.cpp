@@ -38,7 +38,7 @@ namespace Utils
     */
     void            BaseFactoryUT::learnType()
     {
-        BaseFactory<IClonable>& factory = BaseFactory<IClonable>::getInstance();
+        BaseFactory<IClonable>  factory;
 
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable2>()) == true);
@@ -46,12 +46,11 @@ namespace Utils
         UT_ASSERT(factory.getType("Clonable1") != nullptr);
         UT_ASSERT(factory.getType("Clonable2") != nullptr);
         UT_ASSERT(factory.getType("Clonable3") != nullptr);
-        factory.clear();
     }
 
     void            BaseFactoryUT::unlearnType()
     {
-        BaseFactory<IClonable>& factory = BaseFactory<IClonable>::getInstance();
+        BaseFactory<IClonable>  factory;
 
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable2>()) == true);
@@ -65,12 +64,11 @@ namespace Utils
         UT_ASSERT(factory.getType("Clonable1") == nullptr);
         UT_ASSERT(factory.getType("Clonable2") == nullptr);
         UT_ASSERT(factory.getType("Clonable3") == nullptr);
-        factory.clear();
     }
 
     void            BaseFactoryUT::generateType()
     {
-        BaseFactory<IClonable>& factory = BaseFactory<IClonable>::getInstance();
+        BaseFactory<IClonable>  factory;
         IClonable*              t;
 
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
@@ -88,12 +86,11 @@ namespace Utils
         UT_ASSERT(t->getName() == "Clonable3");
         UT_ASSERT(t != factory.getType("Clonable3"));
         delete t;
-        factory.clear();
     }
 
     void            BaseFactoryUT::errors()
     {
-        BaseFactory<IClonable>& factory = BaseFactory<IClonable>::getInstance();
+        BaseFactory<IClonable>  factory;
 
         UT_ASSERT(factory.learn(nullptr) == false);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
@@ -105,7 +102,6 @@ namespace Utils
         UT_ASSERT(factory.getType("Clonable3") == nullptr);
         UT_ASSERT(factory.unlearn("Clonable2") == false);
         UT_ASSERT(factory.unlearn("Clonable3") == false);
-        factory.clear();
     }
 
     namespace Sample

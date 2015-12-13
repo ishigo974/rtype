@@ -15,8 +15,10 @@ int   main(int ac, char **av)
     } catch (std::invalid_argument const& e) {
         std::cout << "Usage: " << std::string(av[0]) << " PORT" << std::endl;
     } catch (std::exception const& e) {
-
         std::cerr << "Fatal error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    } catch (...) {
+        std::cerr << "Unexpected internal error" << std::endl;
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

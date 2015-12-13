@@ -34,6 +34,8 @@ namespace RType
         public:
             std::string const&          getRoomName() const;
             ECS::Entity*                getPlayer(unsigned int id) const;
+            std::string                 getPlayersNames() const;
+            unsigned int                size() const;
 
         public:
             virtual void                clear();

@@ -22,9 +22,9 @@ namespace ECS
     void          ECSUT::registerTests()
     {
         registerTest("EntityLifeRecyclingSimple",
-        &ECSUT::entityLifeRecyclingSimple);
+                     &ECSUT::entityLifeRecyclingSimple);
         registerTest("EntityLifeRecyclingWithComponent",
-        &ECSUT::entityLifeRecyclingWithComponent);
+                     &ECSUT::entityLifeRecyclingWithComponent);
         registerTest("SystemProcess", &ECSUT::systemProcess);
         registerTest("SystemManager", &ECSUT::systemManager);
     }

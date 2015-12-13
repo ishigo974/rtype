@@ -77,6 +77,8 @@ file(GLOB ut_source_files
         network/*.cpp
         classes/*.hpp
         classes/*.cpp
+        commands/*.hpp
+        commands/*.cpp
         utils/*.hpp
         utils/*.cpp
         components/*.hpp

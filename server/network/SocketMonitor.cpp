@@ -53,6 +53,14 @@ SocketMonitor& SocketMonitor::getInstance()
 /*
 ** Public member functions
 */
+void SocketMonitor::registerRaw(unsigned int id)
+{
+    FD_SET(id, &_readFds);
+    FD_SET(id, &_writeFds);
+    if (static_cast<int>(id) > _maxFd)
+        _maxFd = id;
+}
+
 void SocketMonitor::registerSocket(IMonitorable const *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -61,7 +69,7 @@ void SocketMonitor::registerSocket(IMonitorable const *socket)
     FD_SET(socket->getSocket(), &_writeFds);
 #endif
 if (socket->getSocket() > _maxFd)
-        _maxFd = socket->getSocket();
+    _maxFd = socket->getSocket();
 }
 
 void SocketMonitor::deleteSocket(IMonitorable const *socket)
@@ -100,12 +108,12 @@ bool SocketMonitor::isWritable(IMonitorable const *socket)
 #endif
 }
 
-bool SocketMonitor::isReadable(IMonitorable const *socket)
+bool SocketMonitor::isReadable(unsigned int id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     WSANETWORKEVENTS NetworkEvents;
     HANDLE NewEvent = 0;
-    rSocket tmp = socket->getSocket();
+    rSocket tmp = id;
     DWORD index;
 
     NewEvent = WSACreateEvent();
@@ -123,8 +131,13 @@ bool SocketMonitor::isReadable(IMonitorable const *socket)
      }
     return false;
 #else
-    return FD_ISSET(socket->getSocket(), &_tmpReadFds) > 0;
+    return FD_ISSET(id, &_tmpReadFds) > 0;
 #endif
+}
+
+bool SocketMonitor::isReadable(IMonitorable const *socket)
+{
+    return isReadable(socket->getSocket());
 }
 
 void SocketMonitor::clearFds()

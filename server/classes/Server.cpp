@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <unistd.h>
 #include "Server.hpp"
 #include "Entity.hpp"
 #include "EntityManager.hpp"
@@ -12,14 +13,23 @@
 #include "LobbySystem.hpp"
 #include "NotImplemented.hpp"
 #include "InvalidRequest.hpp"
+#include "Room.hpp"
 
 namespace RType
 {
     /*
     ** Static variables
     */
-    const short int         Server::defaultPort     = 6667;
-    const Buffer            Server::responseOK      = Server::getResponseOK();
+    const short int     Server::defaultPort     = 6667;
+    const Buffer        Server::responseOK      = Server::getResponseOK();
+    const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
+
+    const Server::CLICMDHandlers    Server::cliCmdHandlers =
+    {
+        { "help",   { "displays infos about how to use the server's CLI",
+                      &Server::handleCLIHelp } },
+        { "rooms",  { "list rooms", &Server::handleCLIRooms } },
+    };
 
     /*
     ** Constructors/Destructor
@@ -57,6 +67,8 @@ namespace RType
         {
             try {
                 _monitor.update();
+                if (_monitor.isReadable(stdinFileNo))
+                    onCLICommand();
                 if (_monitor.isReadable(&_acceptor))
                     onClientConnection();
                 _em.updateAll();
@@ -87,11 +99,22 @@ namespace RType
     void            Server::init()
     {
         _monitor.registerSocket(&_acceptor);
+        _monitor.registerRaw(stdinFileNo);
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
         _em.registerComponent(std::make_unique<Component::Room>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
     }
 
+    void            Server::checkDisconnected()
+    {
+        for (auto& id: _disconnected)
+            ECS::EntityManager::getInstance().destroy(id);
+        _disconnected.clear();
+    }
+
+    /*
+    ** Events callbacks
+    */
     void            Server::onClientConnection()
     {
         Component::NetworkTCP*  network;
@@ -112,11 +135,56 @@ namespace RType
                 std::to_string(socket->getPort()));
     }
 
-    void            Server::checkDisconnected()
+    void            Server::onCLICommand()
     {
-        for (auto& id: _disconnected)
-            ECS::EntityManager::getInstance().destroy(id);
-        _disconnected.clear();
+        std::string                     cmd;
+        std::string                     tmp;
+        ArgsTab                         args;
+        std::stringstream               stream;
+        CLICMDHandlers::const_iterator  it;
+
+        getline(std::cin, tmp);
+        stream.str(tmp);
+        std::getline(stream, cmd, ' ');
+        if ((it = cliCmdHandlers.find(cmd)) != cliCmdHandlers.end())
+        {
+            while (getline(stream, tmp, ' '))
+                args.push_back(tmp);
+            (this->*it->second.second)(args);
+        }
+        else
+            Server::display("No command '" + cmd + "' ; \
+use \"help\" to get all available events");
+    }
+
+    /*
+    ** CLI handlers
+    */
+    void            Server::handleCLIHelp(ArgsTab const&)
+    {
+        Server::display("Command Line Interface (CLI) usage :");
+        for (auto& cmd: cliCmdHandlers)
+            Server::display(cmd.first + "\t\t-- " + cmd.second.first);
+    }
+
+    void            Server::handleCLIRooms(ArgsTab const&)
+    {
+        ECS::EntityCollection   rooms = _em.getByMask(Component::MASK_ROOM);
+
+        for (auto& entry: rooms)
+        {
+            Component::Room* room =
+                entry->getComponent<Component::Room>(Component::MASK_ROOM);
+
+            if (room == nullptr)
+                throw std::runtime_error("EntityManager: Retrieving entities by\
+ mask failed");
+            Server::display("Name | Size | Players");
+            Server::display(room->getName() + " | " +
+                            std::to_string(room->size()) + "/" +
+                            std::to_string(Component::Room::nbMaxPlayers) +
+                            " | " + room->getPlayersNames());
+        }
     }
 
     /*

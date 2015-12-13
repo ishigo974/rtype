@@ -29,8 +29,10 @@ public:
     static SocketMonitor& getInstance();
 
 public:
+    virtual void registerRaw(unsigned int id);
     virtual void registerSocket(IMonitorable const *socket);
     virtual void deleteSocket(IMonitorable const *socket);
+    virtual bool isReadable(unsigned int id);
     virtual bool isReadable(IMonitorable const *socket);
     virtual bool isWritable(IMonitorable const *socket);
     virtual void clearFds();
