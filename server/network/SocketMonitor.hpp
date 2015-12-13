@@ -16,7 +16,6 @@ class SocketMonitor : public ISocketMonitor
 public:
     typedef std::unique_ptr<SocketMonitor> UniqueMonitorPtr;
 
-protected:
     SocketMonitor();
 
 public:

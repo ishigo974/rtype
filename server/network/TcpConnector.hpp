@@ -23,6 +23,9 @@ public:
     virtual std::string const& getAddr() const;
 
 public:
+    virtual std::string toString() const;
+
+public:
     virtual bool connect();
 
 public:
