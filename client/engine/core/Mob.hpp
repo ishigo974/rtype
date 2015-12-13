@@ -28,6 +28,7 @@ public:
 protected:
   int	_hp;
   int	_damage;
+  int	_direction;
 };
 
 #endif /* !MOB_HPP_ */

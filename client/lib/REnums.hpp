@@ -13,7 +13,7 @@ enum ComponentMask : RTypes::my_uint16_t
     BehaviourMask    = 2,
     ColliderMask     = 4,
     StateMachineMask = 8,
-    InputHandlerMask = 256,
+    PlayerMask       = 16,
 };
 
 #endif //RTYPE_RENUMS_HPP

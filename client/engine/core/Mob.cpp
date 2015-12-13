@@ -10,6 +10,7 @@ Mob::Mob()
 Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
   : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
 {
+  _direction = 1;
 }
 
 Mob::Mob(Mob const& other) : Behaviour(other)
@@ -49,6 +50,8 @@ void Mob::swap(Mob& other)
     using std::swap;
 
     swap(_enabled, other._enabled);
+    swap(_hp, other._hp);
+    swap(_damage, other._damage);
 }
 
 namespace std
@@ -83,11 +86,12 @@ void		Mob::move()
   transform = parent->getComponent<Transform>();
   if (transform == nullptr)
     return ;
-  if (transform->getPosition().Y() == 0)
-    transform->getPosition().setY(200);
-  else if (transform->getPosition().Y() == 200)
-    transform->getPosition().setY(0);
-  std::cout << "Mob " << transform->getPosition().toString() << std::endl;
+
+  if (transform->getPosition().Y() <= 0)
+    _direction = 1;
+  else if (transform->getPosition().Y() >= 690)
+    _direction = -1;
+  transform->getPosition().setY((transform->getPosition().Y() + _direction));
 }
 
 void	Mob::update(double elapsedTime)

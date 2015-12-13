@@ -84,9 +84,14 @@ namespace std
     }
 }
 
-unsigned int GameObject::getMask()
+bool GameObject::findMask(RTypes::my_uint16_t mask)
 {
-    return 0;
+  for (auto comp : _components)
+    {
+      if ((comp->getMask() & mask) == mask)
+	return true;
+    }
+  return false;
 }
 
 void GameObject::addComponent(Component *const newComp)

@@ -33,7 +33,7 @@ class GameObject : public Object
         int  getLayer() const;
         void setLayer(unsigned int _layer);
 
-        virtual unsigned int getMask();
+        virtual bool findMask(RTypes::my_uint16_t mask);
 
         void addComponent(Component *const newComp);
 

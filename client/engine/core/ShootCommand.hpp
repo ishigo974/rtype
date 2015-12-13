@@ -6,7 +6,7 @@
 class	ShootCommand : public ACommand
 {
 public:
-  ShootCommand();
+  ShootCommand(EntityManager *entityManager);
   virtual ~ShootCommand();
 
   virtual void	execute();
