@@ -17,7 +17,6 @@ public:
 
   void		addCommand(cu::Event event);
   std::string	toString();
-  void		process();
   int		getSize() const;
   ACommand	*getByTimestamp(timestamp time);
   void		invalidCommandAtTimestamp(timestamp time);

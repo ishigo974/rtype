@@ -6,23 +6,14 @@
 class	MoveCommand : public ACommand
 {
 public:
-  enum Direction
-    {
-      UP = 0,
-      DOWN,
-      LEFT,
-      RIGHT
-    };
-
-public:
-  MoveCommand(Direction direction);
+  MoveCommand(EntityManager *entityManager, ACommand::Action direction);
   virtual ~MoveCommand();
 
   virtual void	execute();
   virtual void	undo();
 
 private:
-  Direction	_direction;
+  ACommand::Action	_direction;
 };
 
 #endif /* !RTYPE_MOVECOMMAND_HPP_ */

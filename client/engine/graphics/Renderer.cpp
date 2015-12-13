@@ -26,6 +26,8 @@ void    Renderer::init()
   this->_res.addTexture("../res/menu4.jpg");
   this->_res.addTexture("../res/menu5.jpg");
   this->_res.addTexture("../res/menu6.jpg");
+  this->_res.addTexture("../res/mob.gif", true);
+  this->_res.addTexture("../res/player.gif", true);
 }
 
 void Renderer::render()
@@ -44,7 +46,7 @@ void Renderer::draw(const GameObject& object)
     Transform      tr = object.transform();
     sf::Sprite     sprite;
 
-	this->_win.clear(sf::Color::White);
+	// this->_win.clear(sf::Color::White);
     sprite.setTexture(*this->_res[sr.getPath()]);
     sprite.setTextureRect(sf::IntRect(sr.getRect().x,
                                       sr.getRect().y,

@@ -8,12 +8,13 @@ std::vector<Object *> EntityManager::getByMask(unsigned int mask)
 {
     std::vector<Object *> tmp;
 
-    for (auto &&e : _entities)
+    for (auto &e : _entities)
     {
-        if ((e.second->getMask() & mask) == mask)
+        if (e.second->findMask(mask))
             tmp.push_back(e.second.get());
+	// std::cout << e.second->getName() << std::endl;
+	// std::cout << e.second->getMask() << std::endl;
     }
-
     return (tmp);
 }
 

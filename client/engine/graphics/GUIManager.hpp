@@ -1,7 +1,7 @@
 #ifndef GUIMANAGER_HPP_
 # define GUIMANAGER_HPP_
 
-# include "Component.hpp"
+# include "Behaviour.hpp"
 
 class GUIManager : public Behaviour
 {

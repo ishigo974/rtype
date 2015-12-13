@@ -1,7 +1,3 @@
-//
-// Created by naliwe on 07/12/15.
-//
-
 #ifndef RTYPE_RENUMS_HPP
 # define RTYPE_RENUMS_HPP
 
@@ -13,6 +9,7 @@ enum ComponentMask : RTypes::my_uint16_t
     BehaviourMask    = 2,
     ColliderMask     = 4,
     StateMachineMask = 8,
+    PlayerMask       = 16,
     DrawableMask     = 128,
     InputHandlerMask = 256
 };

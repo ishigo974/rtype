@@ -7,6 +7,7 @@
 
 # include <string>
 # include <sstream>
+# include "RTypes.hpp"
 
 class Object
 {
@@ -25,7 +26,7 @@ public:
     virtual bool operator==(Object const& other);
     virtual bool operator!=(Object const& other);
 
-    virtual unsigned int getMask();
+    virtual bool findMask(RTypes::my_uint16_t mask);
 
     unsigned int getId() const;
     void         setId(unsigned int _id);

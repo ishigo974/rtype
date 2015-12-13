@@ -93,7 +93,7 @@ bool Object::operator!=(Object const& other)
     return (!Object::operator==(other));
 }
 
-unsigned int Object::getMask()
+bool Object::findMask(RTypes::my_uint16_t)
 {
-    return 0;
+    return false;
 }

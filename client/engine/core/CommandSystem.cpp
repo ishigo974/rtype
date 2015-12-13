@@ -3,7 +3,6 @@
 #include "CommandSystem.hpp"
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
-#include "InputHandler.hpp"
 
 CommandSystem::CommandSystem(EntityManager *entityManager)
 {
@@ -19,23 +18,24 @@ void	CommandSystem::addCommand(cu::Event event)
   switch (event.key)
     {
     case cu::Event::UP:
-      _commands.push_back(new MoveCommand(MoveCommand::UP));
+      _commands.push_back(new MoveCommand(_entityManager, ACommand::UP));
       break;
     case cu::Event::DOWN:
-      _commands.push_back(new MoveCommand(MoveCommand::DOWN));
+      _commands.push_back(new MoveCommand(_entityManager, ACommand::DOWN));
       break;
     case cu::Event::LEFT:
-      _commands.push_back(new MoveCommand(MoveCommand::LEFT));
+      _commands.push_back(new MoveCommand(_entityManager, ACommand::LEFT));
       break;
     case cu::Event::RIGHT:
-      _commands.push_back(new MoveCommand(MoveCommand::RIGHT));
+      _commands.push_back(new MoveCommand(_entityManager, ACommand::RIGHT));
       break;
     case cu::Event::SHOOT:
-      _commands.push_back(new ShootCommand());
+      _commands.push_back(new ShootCommand(_entityManager));
       break;
     default:
       break;
     }
+  // std::cout << _commands.size() << std::endl;
 }
 
 ACommand	*CommandSystem::getByTimestamp(timestamp time)
@@ -49,14 +49,6 @@ ACommand	*CommandSystem::getByTimestamp(timestamp time)
 	return (command);
     }
   return NULL;
-}
-
-void		CommandSystem::process()
-{
-  std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::InputHandlerMask);
-
-  for (auto obj : objs)
-    static_cast<InputHandler *>(obj)->handleInput();
 }
 
 void		CommandSystem::invalidCommandAtTimestamp(timestamp time)
