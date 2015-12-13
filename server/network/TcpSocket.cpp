@@ -25,7 +25,6 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
         throw std::runtime_error("WSAStartup failed");
     if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
     {
-        WSACleanup();
         throw std::runtime_error("LOBYTE / HIBYTE failed");
     }
     if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
@@ -113,6 +112,7 @@ size_t          TcpSocket::receive(Buffer& buffer, size_t len) const
 void TcpSocket::close() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    std::cout << "___>" << (int)_socket << std::endl;
     closesocket(_socket);
 #else
     ::close(_socket);
@@ -159,8 +159,5 @@ std::string TcpSocket::toString() const
 
 TcpSocket::~TcpSocket()
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    WSACleanup();
-#endif
     this->close();
 }

@@ -12,7 +12,7 @@ int   main(int ac, char **av)
         RType::Server   server(port);
 
         server.run();
-    } catch (std::invalid_argument const& e) {
+    } catch (std::invalid_argument const&) {
         std::cout << "Usage: " << std::string(av[0]) << " PORT" << std::endl;
     } catch (std::exception const& e) {
         std::cerr << "Fatal error: " << e.what() << std::endl;

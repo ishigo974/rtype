@@ -27,6 +27,7 @@ SocketMonitor::SocketMonitor() :
         _secValue(defaultSecVal), _usecValue(defaultUsecVal), _maxFd(noFd)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    _eventTotal = 0;
 #else
     FD_ZERO(&_writeFds);
     FD_ZERO(&_readFds);
@@ -64,6 +65,14 @@ void SocketMonitor::registerRaw(unsigned int id)
 void SocketMonitor::registerSocket(IMonitorable const *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    HANDLE NewEvent = 0;
+
+   NewEvent = WSACreateEvent();
+    _socketArray.push_back(socket->getSocket());
+        WSAEventSelect(_socketArray[_eventTotal], NewEvent, FD_ACCEPT |
+        FD_CLOSE | FD_READ);
+    _eventArray.push_back(NewEvent);
+    ++_eventTotal;
 #else
     FD_SET(socket->getSocket(), &_readFds);
     FD_SET(socket->getSocket(), &_writeFds);
@@ -75,6 +84,16 @@ if (socket->getSocket() > _maxFd)
 void SocketMonitor::deleteSocket(IMonitorable const *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    for (DWORD i = 0; i < _eventTotal; i++)
+    {
+        if (_socketArray[i] == socket->getSocket())
+        {
+            _socketArray.erase(_socketArray.begin() + i);
+            _eventArray.erase(_eventArray.begin() + i);
+            --_eventTotal;
+            break ;
+        }
+    }
 #else
     FD_CLR(socket->getSocket(), &_readFds);
     FD_CLR(socket->getSocket(), &_writeFds);
@@ -86,22 +105,6 @@ void SocketMonitor::deleteSocket(IMonitorable const *socket)
 bool SocketMonitor::isWritable(IMonitorable const *socket)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    WSANETWORKEVENTS NetworkEvents;
-    HANDLE NewEvent = 0;
-    rSocket tmp = socket->getSocket();
-    DWORD index;
-
-    NewEvent = WSACreateEvent();
-    WSAEventSelect(tmp, NewEvent, FD_WRITE | FD_CLOSE);
-    index = WSAWaitForMultipleEvents(1, &NewEvent, TRUE, 1000, FALSE);
-    if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
-     {
-	    WSAEnumNetworkEvents(tmp, NewEvent, &NetworkEvents);
-        if(NetworkEvents.lNetworkEvents & FD_CLOSE)
-            return false;
-        if(NetworkEvents.lNetworkEvents & FD_WRITE)
-            return true;
-     }
     return true;
 #else
     return FD_ISSET(socket->getSocket(), &_tmpWriteFds) > 0;
@@ -111,24 +114,13 @@ bool SocketMonitor::isWritable(IMonitorable const *socket)
 bool SocketMonitor::isReadable(unsigned int id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    WSANETWORKEVENTS NetworkEvents;
-    HANDLE NewEvent = 0;
-    rSocket tmp = id;
-    DWORD index;
 
-    NewEvent = WSACreateEvent();
-    WSAEventSelect(tmp, NewEvent, FD_ACCEPT | FD_READ | FD_CLOSE);
-    index = WSAWaitForMultipleEvents(1, &NewEvent, TRUE, 1000, FALSE);
-    if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
-     {
-	    WSAEnumNetworkEvents(tmp, NewEvent, &NetworkEvents);
-        if(NetworkEvents.lNetworkEvents & FD_CLOSE)
-            return true;
-        if(NetworkEvents.lNetworkEvents & FD_READ)
-            return true;
-        if(NetworkEvents.lNetworkEvents & FD_ACCEPT)
-			return true;
-     }
+    if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_READ))
+        return true;
+   if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_CLOSE))
+        return true;
+   if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_ACCEPT))
+        return true;
     return false;
 #else
     return FD_ISSET(id, &_tmpReadFds) > 0;
@@ -154,6 +146,25 @@ void SocketMonitor::clearFds()
 void SocketMonitor::update()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    DWORD index;
+    WSANETWORKEVENTS NetworkEvents;
+
+    _socketEvents.clear();
+    index = WSAWaitForMultipleEvents(_eventTotal, _eventArray.data(), FALSE,
+    SocketMonitor::defaultSecVal, FALSE);
+    index = index - WSA_WAIT_EVENT_0;
+  if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
+   for (DWORD i = 0; i < _eventTotal; i++)
+   {
+	    index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, 1000, FALSE);
+        if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
+        {
+            if (WSAEnumNetworkEvents(_socketArray[i], _eventArray[i],
+            &NetworkEvents) == SOCKET_ERROR)
+            _socketEvents.insert(std::pair<rSocket, WSANETWORKEVENTS>
+            (_socketArray[i], NetworkEvents));
+        }
+   }
 #else
     struct timeval tv;
 
