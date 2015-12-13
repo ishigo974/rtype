@@ -38,10 +38,11 @@ namespace RType
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
-        { "clients",    { "list clients",   &Server::handleCLIClients } },
-        { "rooms",      { "list rooms",     &Server::handleCLIRooms } },
-        { "help",       { "displays infos about how to use the server's CLI",
-                          &Server::handleCLIHelp } },
+        { "users",  { "list connected users",   &Server::handleCLIClients } },
+        { "rooms",  { "list rooms",             &Server::handleCLIRooms } },
+        { "quit",   { "shutdown server",        &Server::handleCLIQuit } },
+        { "help",   { "displays infos about how to use the server's CLI",
+                      &Server::handleCLIHelp } },
     };
 
     /*
@@ -94,6 +95,7 @@ namespace RType
             }
             // TODO add exceptions
         }
+        display("Server is shutting down");
     }
 
     void            Server::notifyDisconnected(unsigned int id)
@@ -158,7 +160,9 @@ namespace RType
         CLICMDHandlers::const_iterator  it;
 
         getline(std::cin, tmp);
-        if (tmp.empty())
+        if (!std::cin)
+            _quit = true;
+        if (!std::cin || tmp.empty())
             return ;
         stream.str(tmp);
         std::getline(stream, cmd, ' ');
@@ -180,7 +184,7 @@ use \"help\" to get all available events");
     {
         Server::display("Command Line Interface (CLI) usage :");
         for (auto& cmd: cliCmdHandlers)
-            Server::display(cmd.first + "\t\t-- " + cmd.second.first);
+            Server::display(cmd.first + "\t-- " + cmd.second.first);
     }
 
     void            Server::handleCLIRooms(ArgsTab const&)
@@ -190,7 +194,7 @@ use \"help\" to get all available events");
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name | Slots | Players");
+            Server::display("Name\t| Slots\t| Players");
         for (auto& entry: rooms)
         {
             Component::Room* room =
@@ -199,10 +203,10 @@ use \"help\" to get all available events");
             if (room == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\
  mask failed");
-            Server::display(room->getRoomName() + " | " +
+            Server::display(room->getRoomName() + "\t| " +
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
-                            " | " + room->getPlayersNames());
+                            "\t| " + room->getPlayersNames());
         }
     }
 
@@ -214,7 +218,7 @@ use \"help\" to get all available events");
         if (clients.empty())
             Server::display("No clients yet");
         else
-            Server::display("Username | ip:port | Room");
+            Server::display("Username\t| ip:port\t\t| Room");
         for (auto& entry: clients)
         {
             Component::Player*      player =
@@ -225,11 +229,16 @@ use \"help\" to get all available events");
             if (player == nullptr || network == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\
  mask failed");
-            Server::display(player->getUsername() + " | " + network->repr() +
-                            " | " +
+            Server::display(player->getUsername() + "\t| " + network->repr() +
+                            "\t| " +
                             (player->getRoom() != nullptr ?
                                 player->getRoom()->getRoomName() : ""));
         }
+    }
+
+    void            Server::handleCLIQuit(ArgsTab const&)
+    {
+        _quit = true;
     }
 
     /*

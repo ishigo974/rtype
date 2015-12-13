@@ -148,6 +148,8 @@ namespace RType
         {
             std::string         res;
 
+            if (_players.empty())
+                return "";
             for (auto& player: _players)
             {
                 Component::Player*  infos = player.second.first
@@ -158,9 +160,9 @@ namespace RType
                 else
                     res +=  std::string("(") + std::to_string(player.first) +
                             std::string(")") + infos->getUsername();
-                res += " ;";
+                res += ", ";
             }
-            return res;
+            return res.substr(0, res.size() - 2);
         }
 
         /*

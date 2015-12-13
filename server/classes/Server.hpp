@@ -51,6 +51,7 @@ namespace RType
         void            handleCLIHelp(ArgsTab const& args);
         void            handleCLIRooms(ArgsTab const& args);
         void            handleCLIClients(ArgsTab const& args);
+        void            handleCLIQuit(ArgsTab const& args);
 
     public:
         virtual std::string     toString() const;

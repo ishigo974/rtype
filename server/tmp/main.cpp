@@ -58,6 +58,8 @@ int main(int argc, char* argv[])
       socket.send(boost::asio::buffer(&size, sizeof(size)));
       socket.send(boost::asio::buffer("hello", 5));
 
+      sleep(3);
+
       code = 103;
       size = 0;
       socket.send(boost::asio::buffer(&code, sizeof(code)));
