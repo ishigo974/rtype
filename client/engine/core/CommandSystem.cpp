@@ -134,7 +134,7 @@ ACommand	*CommandSystem::getByTimestamp(timestamp time)
   return NULL;
 }
 
-void		CommandSystem::invalidCommandAtTimestamp(timestamp time)
+void		CommandSystem::invalidateCommandAtTimestamp(timestamp time)
 {
   for (auto cmd : _commands)
     {

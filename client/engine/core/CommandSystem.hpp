@@ -13,25 +13,25 @@ class CommandSystem
 {
 public:
 
-  CommandSystem(EntityManager *entityManager);
-  virtual ~CommandSystem();
+    CommandSystem(EntityManager *entityManager);
+    virtual ~CommandSystem();
 
-  void		addCommand(cu::Event event);
-  std::string	toString();
-  int		getSize() const;
-  ACommand	*getByTimestamp(timestamp time);
-  void		invalidCommandAtTimestamp(timestamp time);
+    void        addCommand(cu::Event event);
+    std::string toString();
+    int         getSize() const;
+    ACommand    *getByTimestamp(timestamp time);
+    void        invalidateCommandAtTimestamp(timestamp time);
 
 private:
-  std::vector<ACommand *>	_commands;
-  EntityManager			*_entityManager;
-  std::map<cu::Event::KeyEvent, bool>	_statuses;
+    std::vector<ACommand *>             _commands;
+    EntityManager                       *_entityManager;
+    std::map<cu::Event::KeyEvent, bool> _statuses;
 
 
-  bool _up;
-  bool _down;
-  bool _left;
-  bool _right;
+    bool _up;
+    bool _down;
+    bool _left;
+    bool _right;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

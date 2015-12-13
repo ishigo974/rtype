@@ -25,17 +25,17 @@ namespace std
         a.swap(b);
     }
 
-    //template<>
-    //void swap<Position>(Position& a, Position& b)
-    //{
-    //    a.swap(b);
-    //}
+    template<>
+    void swap<Position>(Position& a, Position& b)
+    {
+        a.swap(b);
+    }
 
-    //template<>
-    //void swap<Rotation>(Rotation& a, Rotation& b)
-    //{
-    //    a.swap(b);
-    //}
+    template<>
+    void swap<Rotation>(Rotation& a, Rotation& b)
+    {
+        a.swap(b);
+    }
 }
 
 
@@ -196,23 +196,6 @@ namespace cu
 
         swap(_angle, other._angle);
     }
-
-//namespace std {
-//    using cu::Position;
-//    using cu::Rotation;
-//
-//    template<>
-//    void swap<Position>(Position &a, Position &b)
-//    {
-//        a.swap(b);
-//    }
-//
-//    template<>
-//    void swap<Rotation>(Rotation&a, Rotation &b)
-//    {
-//        a.swap(b);
-//    }
-//}
 
     _Origin2D_ Origin2D;
 
