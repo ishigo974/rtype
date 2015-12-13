@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
       socket.send(boost::asio::buffer(&size, sizeof(size)));
       socket.send(boost::asio::buffer("hello"));
 
-      //      sleep(1);
+      sleep(5);
     }
   catch (std::exception& e)
     {

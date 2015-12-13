@@ -71,7 +71,12 @@ namespace RType
             {
                 Buffer        tmp;
 
-                _socket->receive(tmp, bufferSize);
+                try {
+                    _socket->receive(tmp, bufferSize);
+                } catch (std::runtime_error const& e) {
+                    onClientDisconnection();
+                    return ;
+                }
                 if (tmp.empty())
                 {
                     onClientDisconnection();
@@ -149,7 +154,13 @@ namespace RType
 
         void                NetworkTCP::clear()
         {
+            _entityId = 0;
             _socket = nullptr;
+            _toSend.clear();
+            _received.clear();
+            while (!_requests.empty())
+                _requests.pop();
+            _repr.clear();
         }
 
         std::string           NetworkTCP::toString() const

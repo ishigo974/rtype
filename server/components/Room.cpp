@@ -120,7 +120,7 @@ namespace RType
             for (auto& player: _players)
             {
                 Component::Player*  infos = player.second.first
-                    ->getComponent<Component::Player>(Component::MASK_ROOM);
+                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
 
                 if (infos == nullptr)
                     res += "?";

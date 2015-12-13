@@ -1,19 +1,30 @@
+// Standards includes
 #include <memory>
 #include <iostream>
 #include <unistd.h>
+
+// Server/Misc includes
 #include "Server.hpp"
+#include "ITcpSocket.hpp"
+
+// Entities related includes
 #include "Entity.hpp"
 #include "EntityManager.hpp"
+
+// Systems related includes
 #include "SystemManager.hpp"
-#include "ITcpSocket.hpp"
+#include "LobbySystem.hpp"
+
+// Components related includes
+#include "IComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
 #include "Room.hpp"
-#include "IComponent.hpp"
-#include "LobbySystem.hpp"
+#include "Player.hpp"
+
+// Exceptions includes
 #include "NotImplemented.hpp"
 #include "InvalidRequest.hpp"
-#include "Room.hpp"
 
 namespace RType
 {
@@ -102,6 +113,7 @@ namespace RType
         _monitor.registerRaw(stdinFileNo);
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
         _em.registerComponent(std::make_unique<Component::Room>());
+        _em.registerComponent(std::make_unique<Component::Player>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
     }
 
@@ -144,6 +156,8 @@ namespace RType
         CLICMDHandlers::const_iterator  it;
 
         getline(std::cin, tmp);
+        if (tmp.empty())
+            return ;
         stream.str(tmp);
         std::getline(stream, cmd, ' ');
         if ((it = cliCmdHandlers.find(cmd)) != cliCmdHandlers.end())
@@ -171,6 +185,10 @@ use \"help\" to get all available events");
     {
         ECS::EntityCollection   rooms = _em.getByMask(Component::MASK_ROOM);
 
+        if (rooms.empty())
+            Server::display("No rooms yet");
+        else
+            Server::display("Name | Slots | Players");
         for (auto& entry: rooms)
         {
             Component::Room* room =
@@ -179,8 +197,7 @@ use \"help\" to get all available events");
             if (room == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\
  mask failed");
-            Server::display("Name | Size | Players");
-            Server::display(room->getName() + " | " +
+            Server::display(room->getRoomName() + " | " +
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
                             " | " + room->getPlayersNames());
