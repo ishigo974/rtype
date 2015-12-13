@@ -1,13 +1,11 @@
-//
-// Created by fourdr_b on 07/12/15.
-//
-
 #include <algorithm>
 #include <sstream>
 #include "StateMachine.hpp"
 
-StateMachine::StateMachine(State const& initialState)
-        : _states{{"S0", initialState}}, _current(_states[initialState.getName()])
+StateMachine::StateMachine(unsigned int id, State const& initialState) :
+    _states{{"S0", initialState}},
+    _id(id),
+    _current(_states[initialState.getName()])
 { }
 
 StateMachine::~StateMachine()

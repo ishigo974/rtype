@@ -133,7 +133,7 @@ bool stateMachineTest()
             },
             &pos1, &pos2);
 
-    StateMachine sm(ini);
+    StateMachine sm(0, ini);
 
     State s1("S1");
     State s2("S2");
@@ -165,6 +165,60 @@ bool commandSystemTest(EntityManager *entityManager)
     return (true);
 }
 
+//TODO: !!!
+void menuTest()
+{
+    Renderer r;
+    Input i(r.getWindow());
+    EntityManager entityManager;
+    cu::Event e;
+
+    GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
+
+    std::stringstream ss;
+    ss << "../res/menu" << rand() % 4 + 1 << ".jpg";
+
+    entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
+    entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
+            gu::Rect<int>(0, 0, 1280, 720));
+    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
+
+    State initialState("Aeris");
+    State mainMenu("Main Menu");
+
+    initialState.addTransition("Aeris", [](cu::Event const& e)
+            {
+            return e.type == cu::Event::None;
+            },
+            e);
+
+    entityManager.attachComponent<StateMachine>(menu, initialState);
+
+    r.init();
+    e.type = cu::Event::KeyPressed;
+    e.key = cu::Event::LAST_ACTION;
+    menu->getComponent<ScrollingBackground>()->setEnabled(true);
+    ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
+
+    while (e.key != cu::Event::ESCAPE)
+    {
+        while (i.pollEvent(e))
+        {
+            if (e.type == cu::Event::Closed)
+            {
+                std::cout << "Close button pressed" << std::endl;
+                return ;
+            }
+            if (e.type == cu::Event::KeyPressed)
+                std::cout << "Key pressed : " << e.key << std::endl;
+        }
+        bg->update(BigBen::get().getElapsedtime());
+        r.draw(*menu);
+        r.render();
+    }
+    std::cout << "Escape pressed" << std::endl;
+}
+
 int main()
 {
     EntityManager entityManager;
@@ -179,7 +233,8 @@ int main()
     if (commandSystemTest(&entityManager))
         std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-    backgroundTest();
+    //backgroundTest();
+    menuTest();
 
     return 0;
 }

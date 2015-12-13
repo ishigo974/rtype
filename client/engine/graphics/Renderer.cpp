@@ -20,6 +20,12 @@ void    Renderer::init()
   this->_res.addTexture("../res/bg2.jpg", true);
   this->_res.addTexture("../res/bg3.jpg", true);
   this->_res.addTexture("../res/bg4.jpg", true);
+  this->_res.addTexture("../res/menu1.jpg");
+  this->_res.addTexture("../res/menu2.jpg");
+  this->_res.addTexture("../res/menu3.jpg");
+  this->_res.addTexture("../res/menu4.jpg");
+  this->_res.addTexture("../res/menu5.jpg");
+  this->_res.addTexture("../res/menu6.jpg");
 }
 
 void Renderer::render()

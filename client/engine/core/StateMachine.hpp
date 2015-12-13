@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 07/12/15.
-//
-
 #ifndef RTYPE_STATEMACHINE_HPP
 # define RTYPE_STATEMACHINE_HPP
 
@@ -14,7 +10,7 @@ public:
     static const RTypes::my_uint16_t Mask = ComponentMask::StateMachineMask;
 
 public:
-    StateMachine(State const& initialState);
+    StateMachine(unsigned int id, State const& initialState);
     virtual ~StateMachine();
 
     void move();
@@ -24,6 +20,7 @@ public:
 
 private:
     std::map<std::string, State> _states;
+    unsigned int _id;
     State& _current;
 };
 
