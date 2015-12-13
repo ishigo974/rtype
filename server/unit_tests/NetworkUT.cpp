@@ -23,6 +23,9 @@ std::string     NetworkUT::getName() const
     return "Network";
 }
 
+void NetworkUT::multipleConnectMonitor()
+{ }
+
 void NetworkUT::sendMonitor()
 {
     TcpAcceptor   acceptor(7777);
@@ -34,18 +37,16 @@ void NetworkUT::sendMonitor()
 
     msg.setData("A simple message", 17);
     monitor.registerSocket(&acceptor);
-    monitor.registerSocket(&connector);
     connector.connect();
     monitor.update();
     UT_ASSERT(monitor.isReadable(&acceptor) == true);
     socket = acceptor.accept();
     monitor.registerSocket(socket);
     monitor.update();
-    UT_ASSERT(monitor.isWritable(socket) == true);
-    socket->send(msg);
+    connector.send(msg);
     monitor.update();
-    UT_ASSERT(monitor.isReadable(&connector) == true);
-    connector.receive(rcv, 17);
+    UT_ASSERT(monitor.isReadable(socket) == true);
+    socket->receive(rcv, 17);
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
 }
