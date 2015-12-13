@@ -60,7 +60,7 @@ player/network component");
             {
                 Buffer      buffer;
 
-                buffer.append<uint16_t>(Server::LOBBY_CLIENTRDY);
+                buffer.append<uint16_t>(RType::Request::SE_CLIENTRDY);
                 buffer.append<uint32_t>(sizeof(uint8_t));
                 buffer.append<uint8_t>(room->getPlayerId(*_entity));
                 network->send(Server::responseOK);

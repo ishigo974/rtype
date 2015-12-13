@@ -59,7 +59,7 @@ player/network component");
             {
                 Buffer      buffer;
 
-                buffer.append<uint16_t>(Server::LOBBY_CLIUSRNM);
+                buffer.append<uint16_t>(RType::Request::SE_CLIUSRNM);
                 buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
                                         _usernameToSet.size());
                 buffer.append<uint8_t>(room->getPlayerId(*_entity));

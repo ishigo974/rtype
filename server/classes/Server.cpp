@@ -5,6 +5,7 @@
 
 // Server/Misc includes
 #include "Server.hpp"
+#include "Request.hpp"
 #include "ITcpSocket.hpp"
 
 // Entities related includes
@@ -256,7 +257,7 @@ ready, n: not ready");
     {
         Buffer      res;
 
-        res.append<uint16_t>(LOBBY_OK);
+        res.append<uint16_t>(Request::SE_OK);
         res.append<uint32_t>(0);
         return res;
     }
@@ -265,7 +266,7 @@ ready, n: not ready");
     {
         Buffer      res;
 
-        res.append<uint16_t>(LOBBY_KO);
+        res.append<uint16_t>(Request::SE_KO);
         res.append<uint32_t>(0);
         return res;
     }

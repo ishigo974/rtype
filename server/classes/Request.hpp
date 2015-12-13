@@ -7,6 +7,7 @@
 # include "Buffer.hpp"
 # include "IStringable.hpp"
 # include "ValueError.hpp"
+# include "Room.hpp"
 
 namespace RType
 {
@@ -29,7 +30,15 @@ namespace RType
             LR_READY        = 201,
             LR_NOTREADY     = 202,
             LR_USERNAME     = 301,
-            LR_ROOMS        = 400
+            SE_LISTROOMS    = 400,
+            SE_JOINROOM     = 401,
+            SE_QUITROOM     = 402,
+            SE_CLIENTRDY    = 403,
+            SE_CLINOTRDY    = 404,
+            SE_CLIUSRNM     = 405,
+            SE_OK           = 601,
+            SE_KO           = 602
+
         };
 
     public:
@@ -87,6 +96,9 @@ namespace RType
 
     template <>
     std::string     Request::get(std::string const& key) const;
+
+    template <>
+    RoomsCollection Request::get(std::string const& key) const;
 }
 
 #endif /* !REQUEST_HPP_ */

@@ -22,7 +22,8 @@ namespace RType
         { LR_READY,         {} },
         { LR_NOTREADY,      {} },
         { LR_USERNAME,      { "username"} },
-        { LR_ROOMS,         { "rooms" } }
+        { SE_LISTROOMS,     { "rooms" } },
+        { SE_OK,            {} }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
         { "size",       sizeof(uint32_t) },
@@ -81,6 +82,36 @@ namespace RType
         if (it == _data.end())
             throw std::runtime_error("no such data: " + key); // TODO
         return it->second.getString();
+    }
+
+    template <>
+    RoomsCollection     Request::get(std::string const& key) const
+    {
+        DataMap::const_iterator it = _data.find(key);
+        RoomsCollection         res;
+        Buffer                  buffer;
+
+        if (_code != SE_LISTROOMS)
+            throw Exception::ValueError("Trying to retrieve rooms collection");
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        buffer = it->second;
+        while (!buffer.empty())
+        {
+            Room            room;
+            uint32_t        size;
+
+            room.setId(buffer.get<uint32_t>());
+            buffer.consume(sizeof(uint32_t));
+            size = buffer.get<uint32_t>();
+            buffer.consume(sizeof(uint32_t));
+            room.setName(buffer.getString(size));
+            buffer.consume(size);
+            room.setNbPlayers(buffer.get<uint8_t>());
+            buffer.consume(sizeof(uint8_t));
+            res.push_back(room);
+        }
+        return res;
     }
 
     Request::Protocol   Request::getProtocol() const

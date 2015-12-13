@@ -6,6 +6,7 @@
 #include "LobbySystem.hpp"
 #include "NetworkTCP.hpp"
 #include "Server.hpp"
+#include "Request.hpp"
 
 namespace RType
 {
@@ -74,7 +75,7 @@ player/network component");
             {
                 Buffer      buffer;
 
-                buffer.append<uint16_t>(Server::LOBBY_JOINROOM);
+                buffer.append<uint16_t>(RType::Request::SE_JOINROOM);
                 buffer.append<uint32_t>(sizeof(uint8_t));
                 buffer.append<uint8_t>(_room->getPlayerId(*_entity));
                 _room->addPlayer(*_entity);

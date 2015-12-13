@@ -59,7 +59,7 @@ expected LobbySystem"); // TODO
             Buffer                  response;
             Buffer                  data;
 
-            response.append<uint16_t>(Server::LOBBY_LISTROOMS);
+            response.append<uint16_t>(RType::Request::SE_LISTROOMS);
             for (auto& entry: *_rooms)
             {
                 Component::Room*  room =

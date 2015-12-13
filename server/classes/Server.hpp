@@ -21,19 +21,6 @@ namespace RType
                     std::pair<std::string, CLICMDHandler> >  CLICMDHandlers;
 
     public:
-        enum Response
-        {
-            LOBBY_LISTROOMS = 400,
-            LOBBY_JOINROOM  = 401,
-            LOBBY_QUITROOM  = 402,
-            LOBBY_CLIENTRDY = 403,
-            LOBBY_CLINOTRDY = 404,
-            LOBBY_CLIUSRNM  = 405,
-            LOBBY_OK        = 601,
-            LOBBY_KO        = 602
-        };
-
-    public:
         Server();
         Server(short int port);
         virtual ~Server();

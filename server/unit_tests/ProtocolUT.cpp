@@ -3,6 +3,7 @@
 #include <string>
 #include "ProtocolUT.hpp"
 #include "Request.hpp"
+#include "Room.hpp"
 
 namespace RType
 {
@@ -122,13 +123,36 @@ namespace RType
         TcpConnector    client(ip, port);
         Buffer          tmp;
         Request         request;
+        RoomsCollection rooms;
+        std::string     str;
 
         client.connect();
         client.send(formatRequest(Request::LR_LISTROOMS));
-        tmp = receiveAll(client);
-        request = Request(Request::PROTOCOL_LOBBY, tmp);
-        tmp.consume(request.size());
-        UT_ASSERT(request.getCode() == Request::LR_ROOMS);
+        request = Request(Request::PROTOCOL_LOBBY, receiveAll(client));
+        UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
+        rooms = request.get<RoomsCollection>("rooms");
+        UT_ASSERT(rooms.size() == 0);
+        str = "Room2BoGoss";
+        tmp.append<uint32_t>(str.size());
+        tmp.append<std::string>(str);
+        client.send(formatRequest(Request::LR_CREATEROOM, tmp));
+        request = Request(Request::PROTOCOL_LOBBY, receiveAll(client));
+        UT_ASSERT(request.getCode() == Request::SE_OK);
+        client.send(formatRequest(Request::LR_LISTROOMS));
+        request = Request(Request::PROTOCOL_LOBBY, receiveAll(client));
+        UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
+        rooms = request.get<RoomsCollection>("rooms");
+        UT_ASSERT(rooms.size() == 1);
+        UT_ASSERT(rooms[0].getName() == str);
+        UT_ASSERT(rooms[0].getNbPlayers() == 1);
+        client.send(formatRequest(Request::LR_QUITROOM));
+        request = Request(Request::PROTOCOL_LOBBY, receiveAll(client));
+        UT_ASSERT(request.getCode() == Request::SE_OK);
+        client.send(formatRequest(Request::LR_LISTROOMS));
+        request = Request(Request::PROTOCOL_LOBBY, receiveAll(client));
+        UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
+        rooms = request.get<RoomsCollection>("rooms");
+        UT_ASSERT(rooms.size() == 0);
     }
 
     /*
