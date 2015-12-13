@@ -84,12 +84,11 @@ void	Player::setAction(ACommand::Action action)
   _action.push(action);
 }
 
-void		Player::move(double elapsedTime)
+void		Player::move(double)
 {
-  (void)elapsedTime;
   GameObject	*parent;
   Transform	*transform;
-  float		speed = (float) (10 + elapsedTime);
+  float		speed = static_cast<float>(10.0);
 
   if (!_enabled)
     return ;
@@ -127,7 +126,6 @@ void		Player::move(double elapsedTime)
 
 void	Player::update(double elapsedTime)
 {
-  (void)elapsedTime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   this->move(elapsedTime);

@@ -14,7 +14,7 @@ public:
     virtual ~StateMachine();
 
     void move();
-    void addState(State const& state) throw(std::logic_error);
+	void addState(State const& state);
 
     virtual RTypes::my_uint16_t getMask() const;
 

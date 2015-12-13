@@ -102,14 +102,14 @@ void backgroundTest()
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(0, 0, 30, 30));
+    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
 
     entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(600);
     t->getPosition().setY(680);
-    entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(0, 0, 30, 30));
+    entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
     entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
 
 
@@ -281,16 +281,16 @@ int main()
 
     srand(static_cast<unsigned>(time(nullptr)));
     if (gameObjectTest(entityManager))
-        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "gameObjectTest passed -> OK" << std::endl << std::endl;
     if (timeTest())
-        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "timeTest passed -> OK" << std::endl << std::endl;
     if (stateMachineTest())
-        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "stateMachineTest passed -> OK" << std::endl << std::endl;
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-    backgroundTest();
     menuTest();
+    backgroundTest();
 
     return 0;
 }
