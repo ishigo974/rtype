@@ -88,8 +88,6 @@ void	Player::setAction(ACommand::Action action)
 void		Player::move(double elapsedTime)
 {
   (void)elapsedTime;
-  // static double	deltaPix = 0;
-  // float		speed = 0.75f;
   GameObject	*parent;
   Transform	*transform;
 
@@ -101,7 +99,6 @@ void		Player::move(double elapsedTime)
   transform = parent->getComponent<Transform>();
   if (transform == nullptr)
     return ;
-
   switch (_action)
     {
     case ACommand::UP:
@@ -120,10 +117,29 @@ void		Player::move(double elapsedTime)
       transform->getPosition().setX((transform->getPosition().X() + 1));
       _action = ACommand::DEFAULT;
       break;
+    case ACommand::UP_RIGHT:
+      transform->getPosition().setX((transform->getPosition().X() + 0.5));
+      transform->getPosition().setY((transform->getPosition().Y() - 0.5));
+      _action = ACommand::DEFAULT;
+      break;
+    case ACommand::UP_LEFT:
+      transform->getPosition().setX((transform->getPosition().X() - 0.5));
+      transform->getPosition().setY((transform->getPosition().Y() - 0.5));
+      _action = ACommand::DEFAULT;
+      break;
+    case ACommand::DOWN_RIGHT:
+      transform->getPosition().setX((transform->getPosition().X() + 0.5));
+      transform->getPosition().setY((transform->getPosition().Y() + 0.5));
+      _action = ACommand::DEFAULT;
+      break;
+    case ACommand::DOWN_LEFT:
+      transform->getPosition().setX((transform->getPosition().X() - 0.5));
+      transform->getPosition().setY((transform->getPosition().Y() + 0.5));
+      _action = ACommand::DEFAULT;
+      break;
     default:
       break;
     }
-  // std::cout << transform->getPosition().toString() << std::endl;
 }
 
 void	Player::update(double elapsedTime)
@@ -133,5 +149,8 @@ void	Player::update(double elapsedTime)
     std::cout << "Mort" << std::endl;
   this->move(elapsedTime);
   if (_action == ACommand::SHOOT)
-    std::cout << "SHOOT" << std::endl;
+    {
+      std::cout << "SHOOT" << std::endl;
+      _action = ACommand::DEFAULT;
+    }
 }
