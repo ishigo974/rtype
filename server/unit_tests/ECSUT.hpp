@@ -117,6 +117,7 @@ namespace ECS
             virtual ~System1();
 
         public:
+            virtual void            update();
             virtual void            processEntity(Entity& e);
             virtual ComponentMask   getMask() const;
             virtual std::string     getName() const;

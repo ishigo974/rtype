@@ -4,6 +4,12 @@
 
 #include "NetworkUT.hpp"
 
+NetworkUT::NetworkUT()
+{}
+
+NetworkUT::~NetworkUT()
+{}
+
 void            NetworkUT::registerTests()
 {
     registerTest("Connect 1 client", &NetworkUT::simpleServerConnect);

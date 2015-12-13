@@ -14,11 +14,8 @@
 class NetworkUT : public UnitTesting::ABaseUT
 {
 public:
-    NetworkUT()
-    { }
-
-    virtual ~NetworkUT()
-    { }
+    NetworkUT();
+    virtual ~NetworkUT();
 
 public:
     virtual void        registerTests();
