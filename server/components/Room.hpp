@@ -5,14 +5,14 @@
 # include <vector>
 # include <string>
 # include "Entity.hpp"
-# include "IComponent.hpp"
+# include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
 
 namespace RType
 {
     namespace Component
     {
-        class Room : public ECS::IComponent
+        class Room : public ECS::IBehaviour
         {
         public:
             typedef std::pair<ECS::Entity*, bool>                   PlayerEntry;
@@ -38,6 +38,7 @@ namespace RType
             unsigned int                size() const;
 
         public:
+            virtual void                update();
             virtual void                clear();
             virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;

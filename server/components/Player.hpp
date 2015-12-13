@@ -29,6 +29,9 @@ namespace RType
             virtual void                clear();
             virtual std::string         toString() const;
 
+        public:
+            static const std::string    defaultUsername;
+
         protected:
             std::string     _username;
         };

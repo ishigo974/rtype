@@ -22,6 +22,7 @@ namespace ECS
         void                    process();
 
     public:
+        virtual void            update() = 0;
         virtual void            processEntity(Entity& e) = 0;
         virtual ComponentMask   getMask() const = 0;
         virtual std::string     getName() const = 0;
