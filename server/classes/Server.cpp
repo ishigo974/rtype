@@ -5,6 +5,7 @@
 
 // Server/Misc includes
 #include "Server.hpp"
+#include "Request.hpp"
 #include "ITcpSocket.hpp"
 
 // Entities related includes
@@ -19,8 +20,8 @@
 #include "IComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
-#include "Room.hpp"
-#include "Player.hpp"
+#include "RoomComponent.hpp"
+#include "PlayerComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"
@@ -33,13 +34,16 @@ namespace RType
     */
     const short int     Server::defaultPort     = 6667;
     const Buffer        Server::responseOK      = Server::getResponseOK();
+    const Buffer        Server::responseKO      = Server::getResponseKO();
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
+        { "users",  { "list connected users",   &Server::handleCLIClients } },
+        { "rooms",  { "list rooms",             &Server::handleCLIRooms } },
+        { "quit",   { "shutdown server",        &Server::handleCLIQuit } },
         { "help",   { "displays infos about how to use the server's CLI",
                       &Server::handleCLIHelp } },
-        { "rooms",  { "list rooms", &Server::handleCLIRooms } },
     };
 
     /*
@@ -92,6 +96,7 @@ namespace RType
             }
             // TODO add exceptions
         }
+        display("Server is shutting down");
     }
 
     void            Server::notifyDisconnected(unsigned int id)
@@ -156,7 +161,9 @@ namespace RType
         CLICMDHandlers::const_iterator  it;
 
         getline(std::cin, tmp);
-        if (tmp.empty())
+        if (!std::cin)
+            _quit = true;
+        if (!std::cin || tmp.empty())
             return ;
         stream.str(tmp);
         std::getline(stream, cmd, ' ');
@@ -188,7 +195,8 @@ use \"help\" to get all available events");
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name | Slots | Players");
+            Server::display("Name\t| Slots\t| Players - r: \
+ready, n: not ready");
         for (auto& entry: rooms)
         {
             Component::Room* room =
@@ -197,11 +205,41 @@ use \"help\" to get all available events");
             if (room == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\
  mask failed");
-            Server::display(room->getRoomName() + " | " +
+            Server::display(room->getRoomName() + "\t| " +
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
-                            " | " + room->getPlayersNames());
+                            "\t| " + room->getPlayersNames());
         }
+    }
+
+    void            Server::handleCLIClients(ArgsTab const&)
+    {
+        ECS::EntityCollection   clients =
+            _em.getByMask(Component::MASK_NETWORKTCP);
+
+        if (clients.empty())
+            Server::display("No clients yet");
+        else
+            Server::display("Username\t| ip:port\t\t| Room");
+        for (auto& entry: clients)
+        {
+            Component::Player*      player =
+                entry->getComponent<Component::Player>(Component::MASK_PLAYER);
+            Component::NetworkTCP*  network =
+                entry->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+
+            if (player == nullptr || network == nullptr)
+                throw std::runtime_error("EntityManager: Retrieving entities by\
+ mask failed");
+            Server::display(player->getUsername() + "\t| " + network->repr() +
+                            "\t| " + (player->getRoom() != nullptr ?
+                                      player->getRoom()->getRoomName() : ""));
+        }
+    }
+
+    void            Server::handleCLIQuit(ArgsTab const&)
+    {
+        _quit = true;
     }
 
     /*
@@ -219,7 +257,16 @@ use \"help\" to get all available events");
     {
         Buffer      res;
 
-        res.append<uint16_t>(LOBBY_OK);
+        res.append<uint16_t>(Request::SE_OK);
+        res.append<uint32_t>(0);
+        return res;
+    }
+
+    Buffer          Server::getResponseKO()
+    {
+        Buffer      res;
+
+        res.append<uint16_t>(Request::SE_KO);
         res.append<uint32_t>(0);
         return res;
     }

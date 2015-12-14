@@ -1,5 +1,5 @@
 #include <sstream>
-#include "Player.hpp"
+#include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
 
 namespace RType
@@ -10,11 +10,11 @@ namespace RType
         ** Static variables
         */
         const std::string   Player::defaultUsername = "Player";
-        
+
         /*
         ** Constructor/Destructor
         */
-        Player::Player() : _username(Player::defaultUsername)
+        Player::Player() : _username(Player::defaultUsername), _room(nullptr)
         {
         }
 
@@ -47,6 +47,16 @@ namespace RType
         void                Player::setUsername(std::string const& username)
         {
             _username = username;
+        }
+
+        Component::Room*    Player::getRoom() const
+        {
+            return _room;
+        }
+
+        void                Player::setRoom(Component::Room* room)
+        {
+            _room = room;
         }
 
         std::string         Player::getName() const

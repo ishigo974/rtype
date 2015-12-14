@@ -8,7 +8,7 @@
 #include "Server.hpp"
 #include "CommandFactory.hpp"
 #include "Request.hpp"
-#include "Room.hpp"
+#include "RoomComponent.hpp"
 
 namespace RType
 {
@@ -18,9 +18,13 @@ namespace RType
         ** Static variables
         */
         const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
-            { Request::LR_LISTROOMS,    "ListRoomsCommand" },
+            { Request::LR_LISTROOMS,    "ListRoomsCommand"  },
             { Request::LR_CREATEROOM,   "CreateRoomCommand" },
-            { Request::LR_USERNAME,     "UsernameCommand" }
+            { Request::LR_QUITROOM,     "QuitRoomCommand"   },
+            { Request::LR_USERNAME,     "UsernameCommand"   },
+            { Request::LR_READY,        "ReadyCommand"      },
+            { Request::LR_NOTREADY,     "NotReadyCommand"   },
+            { Request::LR_JOINROOM,     "JoinRoomCommand"   }
         };
 
         /*
@@ -83,6 +87,16 @@ request, ignored (" + network->repr() + ")", true);
         void                Lobby::addRoom(ECS::Entity& room)
         {
             _rooms.insert(std::make_pair(room.getId(), &room));
+        }
+
+        Component::Room*    Lobby::getRoom(unsigned int id) const
+        {
+            auto it = _rooms.find(id);
+
+            if (it == _rooms.end())
+                return nullptr;
+            return it->second
+                        ->getComponent<Component::Room>(Component::MASK_ROOM);
         }
 
         ECS::ComponentMask  Lobby::getMask() const

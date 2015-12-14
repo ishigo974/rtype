@@ -1,8 +1,10 @@
-#ifndef PLAYER_HPP_
-# define PLAYER_HPP_
+#ifndef PLAYERCOMPONENT_HPP_
+# define PLAYERCOMPONENT_HPP_
 
 # include <string>
 # include "IComponent.hpp"
+# include "Entity.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {
@@ -16,11 +18,13 @@ namespace RType
 
         public:
             Player(Player const& other);
-            Player&             operator=(Player const& other);
+            Player&                 operator=(Player const& other);
 
         public:
             std::string const&      getUsername() const;
             void                    setUsername(std::string const& username);
+            Component::Room*        getRoom() const;
+            void                    setRoom(Component::Room* room);
 
         public:
             virtual std::string         getName() const;
@@ -33,9 +37,10 @@ namespace RType
             static const std::string    defaultUsername;
 
         protected:
-            std::string     _username;
+            std::string         _username;
+            Component::Room*    _room;
         };
     }
 }
 
-#endif /* !PLAYER_HPP_ */
+#endif /* !PLAYERCOMPONENT_HPP_ */

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ComponentsMasks.hpp"
 #include "UsernameCommand.hpp"
 #include "ValueError.hpp"
@@ -46,28 +47,31 @@ namespace RType
         */
         void    Username::execute()
         {
+            Component::Room*    room;
+
             // validation username TODO
-            if (_player != nullptr)
-                _player->setUsername(_usernameToSet);
-            if (_network != nullptr)
-                _network->send(Server::responseOK);
-            // broadcast to room TODO
+            if (_player == nullptr || _network == nullptr)
+                throw std::runtime_error("Entity does not have a \
+player/network component");
+            _player->setUsername(_usernameToSet);
+            _network->send(Server::responseOK);
+            if ((room = _player->getRoom()) != nullptr)
+            {
+                Buffer      buffer;
+
+                buffer.append<uint16_t>(RType::Request::SE_CLIUSRNM);
+                buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
+                                        _usernameToSet.size());
+                buffer.append<uint8_t>(room->getPlayerId(*_entity));
+                buffer.append<uint32_t>(_usernameToSet.size());
+                buffer.append<std::string>(_usernameToSet);
+                room->broadcast(buffer, _entity);
+            }
         }
 
         void    Username::undo()
         {
-            if (_player != nullptr)
-                _player->setUsername(_oldUsername);
-            if (_network != nullptr)
-                _network->send(Server::responseOK);
-            // broadcast to room TODO
         }
-
-//        void    Username::setEntity(ECS::Entity* entity)
-//        {
-//            _entity = entity;
-//            updateData();
-//        }
 
         void    Username::initFromRequest(RType::Request const& request,
                                           ECS::ASystem* sys)
@@ -84,6 +88,12 @@ namespace RType
         std::string Username::getName() const
         {
             return "UsernameCommand";
+        }
+
+        void                Username::setEntity(ECS::Entity& entity)
+        {
+            Request::setEntity(entity);
+            updateData();
         }
 
         /*

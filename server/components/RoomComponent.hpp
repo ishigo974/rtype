@@ -1,5 +1,5 @@
-#ifndef ROOM_HPP_
-# define ROOM_HPP_
+#ifndef ROOMCOMPONENT_HPP_
+# define ROOMCOMPONENT_HPP_
 
 # include <unordered_map>
 # include <vector>
@@ -7,6 +7,7 @@
 # include "Entity.hpp"
 # include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
+# include "Buffer.hpp"
 
 namespace RType
 {
@@ -29,11 +30,17 @@ namespace RType
         public:
             bool                        addPlayer(ECS::Entity& player);
             bool                        removePlayer(unsigned int id);
+            bool                        removePlayer(ECS::Entity& player);
+            bool                        setPlayerReadiness(ECS::Entity& player,
+                                                           bool isReady);
             void                        setName(std::string const& name);
+            void                        broadcast(Buffer const& buffer,
+                                          ECS::Entity const* except = nullptr);
 
         public:
             std::string const&          getRoomName() const;
             ECS::Entity*                getPlayer(unsigned int id) const;
+            unsigned int                getPlayerId(ECS::Entity& entity) const;
             std::string                 getPlayersNames() const;
             unsigned int                size() const;
 
@@ -58,4 +65,4 @@ namespace RType
     }
 }
 
-#endif /* !ROOM_HPP_ */
+#endif /* !ROOMCOMPONENT_HPP_ */

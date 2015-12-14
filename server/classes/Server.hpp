@@ -21,14 +21,6 @@ namespace RType
                     std::pair<std::string, CLICMDHandler> >  CLICMDHandlers;
 
     public:
-        enum Response
-        {
-            LOBBY_LISTROOMS = 400,
-            LOBBY_OK        = 601,
-            LOBBY_KO        = 602
-        };
-
-    public:
         Server();
         Server(short int port);
         virtual ~Server();
@@ -50,6 +42,8 @@ namespace RType
     protected:
         void            handleCLIHelp(ArgsTab const& args);
         void            handleCLIRooms(ArgsTab const& args);
+        void            handleCLIClients(ArgsTab const& args);
+        void            handleCLIQuit(ArgsTab const& args);
 
     public:
         virtual std::string     toString() const;
@@ -60,10 +54,12 @@ namespace RType
 
     protected:
         static Buffer           getResponseOK();
+        static Buffer           getResponseKO();
 
     public:
         static const short int      defaultPort;
         static const Buffer         responseOK;
+        static const Buffer         responseKO;
         static const unsigned int   stdinFileNo;
         static const CLICMDHandlers cliCmdHandlers;
 

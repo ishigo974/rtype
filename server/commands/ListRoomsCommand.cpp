@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ListRoomsCommand.hpp"
 #include "ComponentsMasks.hpp"
-#include "Room.hpp"
+#include "RoomComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "Server.hpp"
 
@@ -59,7 +59,7 @@ expected LobbySystem"); // TODO
             Buffer                  response;
             Buffer                  data;
 
-            response.append<uint16_t>(Server::LOBBY_LISTROOMS);
+            response.append<uint16_t>(RType::Request::SE_LISTROOMS);
             for (auto& entry: *_rooms)
             {
                 Component::Room*  room =
@@ -72,6 +72,7 @@ entity does not have a room component");
                 data.append<uint32_t>(entry.first);
                 data.append<uint32_t>(room->getRoomName().size());
                 data.append<std::string>(room->getRoomName());
+                data.append<uint8_t>(room->size());
             }
             response.append<uint32_t>(data.size());
             response.append(data);

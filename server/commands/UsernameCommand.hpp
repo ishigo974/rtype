@@ -4,7 +4,7 @@
 # include <string>
 # include "Request.hpp"
 # include "RequestCommand.hpp"
-# include "Player.hpp"
+# include "PlayerComponent.hpp"
 # include "NetworkTCP.hpp"
 # include "Entity.hpp"
 # include "ASystem.hpp"
@@ -29,6 +29,7 @@ namespace RType
             virtual void        execute();
             virtual void        undo();
             virtual Request*    clone() const;
+            virtual void        setEntity(ECS::Entity& entity);
 
         public:
             virtual std::string getName() const;

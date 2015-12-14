@@ -8,6 +8,7 @@
 # include "ComponentMask.hpp"
 # include "RequestCommand.hpp"
 # include "CommandFactory.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {
@@ -31,6 +32,7 @@ namespace RType
         public:
             void                        addRoom(ECS::Entity& room);
             RoomsMap const&             getRooms() const;
+            Component::Room*            getRoom(unsigned int id) const;
 
         public:
             virtual void                update();
