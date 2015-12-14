@@ -6,6 +6,10 @@
 .idea/
 a.out
 Makefile
-
 server_rtype
 server_ut
+*.exe
+*.ilk
+*.pdb
+build/
+.idea/
