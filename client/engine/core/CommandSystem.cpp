@@ -25,7 +25,12 @@ void    CommandSystem::addCommand()
     for (auto& a : _actions)
     {
         if (_input->isKeyPressed(a.first))
-            _commands.push_back(new MoveCommand(_entityManager, _actions[a.first]));
+	  {
+	    if (a.first == cu::Event::SHOOT)
+	      _commands.push_back(new ShootCommand(_entityManager));
+	    else
+	      _commands.push_back(new MoveCommand(_entityManager, _actions[a.first]));
+	  }
     }
 }
 
