@@ -88,7 +88,7 @@ void		Player::move(double elapsedTime)
 {
   GameObject	*parent;
   Transform	*transform;
-  double	speed = static_cast<double>(10.0) + elapsedTime;
+  float		speed = static_cast<float>(10.0) + elapsedTime;
 
   if (!_enabled)
     return ;
