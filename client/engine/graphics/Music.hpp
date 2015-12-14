@@ -1,7 +1,7 @@
 #ifndef MUSIC_HPP_
 # define MUSIC_HPP_
 
-# include <SFML\Audio.hpp>
+# include <SFML/Audio.hpp>
 # include "Component.hpp"
 
 class Music : public Component
