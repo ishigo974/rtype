@@ -12,6 +12,12 @@ CommandSystem::CommandSystem(EntityManager *entityManager)
   _statuses[cu::Event::LEFT] = false;
   _statuses[cu::Event::RIGHT] = false;
   _statuses[cu::Event::SHOOT] = false;
+
+  _actions[cu::Event::UP] = ACommand::UP;
+  _actions[cu::Event::DOWN] = ACommand::DOWN;
+  _actions[cu::Event::LEFT] = ACommand::LEFT;
+  _actions[cu::Event::RIGHT] = ACommand::RIGHT;
+  _actions[cu::Event::SHOOT] = ACommand::SHOOT;
 }
 
 CommandSystem::~CommandSystem()
@@ -31,24 +37,11 @@ void	CommandSystem::addCommand(cu::Event event)
     default:
       break;
     }
-  if (_statuses[cu::Event::UP] && _statuses[cu::Event::RIGHT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::UP_RIGHT));
-  else if (_statuses[cu::Event::UP] && _statuses[cu::Event::LEFT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::UP_LEFT));
-  else if (_statuses[cu::Event::DOWN] && _statuses[cu::Event::RIGHT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::DOWN_RIGHT));
-  else if (_statuses[cu::Event::DOWN] && _statuses[cu::Event::LEFT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::DOWN_LEFT));
-  else if (_statuses[cu::Event::UP])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::UP));
-  else if (_statuses[cu::Event::DOWN])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::DOWN));
-  else if (_statuses[cu::Event::RIGHT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::RIGHT));
-  else if (_statuses[cu::Event::LEFT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::LEFT));
-  if (_statuses[cu::Event::SHOOT])
-    _commands.push_back(new MoveCommand(_entityManager, ACommand::SHOOT));
+  for (auto it = _actions.begin(); it != _actions.end(); ++it)
+    {
+      if (_statuses[it->first])
+	_commands.push_back(new MoveCommand(_entityManager, _actions[it->first]));
+    }
 }
 
 ACommand	*CommandSystem::getByTimestamp(timestamp time)
