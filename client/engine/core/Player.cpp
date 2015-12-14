@@ -86,10 +86,9 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(double elapsedTime)
 {
-  (void)elapsedTime;
   GameObject	*parent;
   Transform	*transform;
-  float		speed = (float) (10 + elapsedTime);
+  double	speed = 10.0d + elapsedTime;
 
   if (!_enabled)
     return ;

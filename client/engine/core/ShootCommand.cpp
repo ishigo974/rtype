@@ -18,7 +18,7 @@ void	ShootCommand::execute()
   std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::PlayerMask);
 
   for (auto obj : objs)
-    static_cast<Player *>(obj)->setAction(ACommand::SHOOT);
+    static_cast<GameObject *>(obj)->getComponent<Player>()->setAction(ACommand::SHOOT);
 }
 
 void	ShootCommand::undo()
