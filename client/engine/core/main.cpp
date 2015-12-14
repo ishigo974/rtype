@@ -213,7 +213,6 @@ bool	mobTest()
   return (true);
 }
 
-//TODO: !!!
 void menuTest()
 {
     Renderer r;
@@ -228,25 +227,28 @@ void menuTest()
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-            gu::Rect<int>(0, 0, 1280, 720));
+						  gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
 
     State initialState("Aeris");
     State mainMenu("Main Menu");
 
-    initialState.addTransition("Aeris", [](cu::Event const& e)
+    initialState.addTransition("MainMenu", [](cu::Event const* e)
             {
-            return e.type == cu::Event::None;
+	      return e->type == cu::Event::KeyReleased;
             },
-            e);
+            &e);
 
     entityManager.attachComponent<StateMachine>(menu, initialState);
 
     r.init();
-    e.type = cu::Event::KeyPressed;
+    e.type = cu::Event::None;
     e.key = cu::Event::LAST_ACTION;
     menu->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
+    StateMachine *sm = menu->getComponent<StateMachine>();
+    sm->addState(mainMenu);
+    std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -259,8 +261,12 @@ void menuTest()
             }
             if (e.type == cu::Event::KeyPressed)
                 std::cout << "Key pressed : " << e.key << std::endl;
+            if (e.type == cu::Event::KeyReleased)
+                std::cout << "Key released : " << e.key << std::endl;
+	    sm->move();
         }
         bg->update(BigBen::get().getElapsedtime());
+	std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(*menu);
         r.render();
     }
@@ -281,7 +287,7 @@ int main()
   // if (commandSystemTest(&entityManager))
   //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-  //backgroundTest();
+  // backgroundTest();
   menuTest();
 
   return 0;

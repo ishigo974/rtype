@@ -3,9 +3,9 @@
 #include "StateMachine.hpp"
 
 StateMachine::StateMachine(unsigned int id, State const& initialState) :
-    _states{{"S0", initialState}},
-    _id(id),
-    _current(_states[initialState.getName()])
+  _states{{initialState.getName(), initialState}},
+  _id(id),
+  _current(_states[initialState.getName()])
 { }
 
 StateMachine::~StateMachine()
@@ -45,4 +45,9 @@ void StateMachine::addState(State const& state) throw(std::logic_error)
 State const& StateMachine::getCurrent() const
 {
     return (_current);
+}
+
+RTypes::my_uint16_t StateMachine::getMask() const
+{
+  return Mask;
 }

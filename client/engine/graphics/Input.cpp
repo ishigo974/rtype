@@ -16,10 +16,15 @@ Input::~Input()
 {
 }
 
+bool Input::isKeyPressed(cu::Event::KeyEvent key)
+{
+  return sf::Keyboard::isKeyPressed(_bindings[key]);
+}
+
 bool Input::pollEvent(cu::Event& event)
 {
   sf::Event		e;
-  
+
   if (!_win.pollEvent(e))
     return false;
   switch (e.type)
@@ -30,6 +35,12 @@ bool Input::pollEvent(cu::Event& event)
     case sf::Event::KeyReleased:
       event.type = cu::Event::KeyReleased;
       return key(e, event);
+    case sf::Event::MouseButtonPressed:
+      event.type = cu::Event::MouseButtonPressed;
+      return mouse(e, event);
+    case sf::Event::MouseButtonReleased:
+      event.type = cu::Event::MouseButtonReleased;
+      return mouse(e, event);
     case sf::Event::Closed:
       event.type = cu::Event::Closed;
       return true;
@@ -49,6 +60,19 @@ bool Input::key(sf::Event const& e, cu::Event& event)
 	  event.key = static_cast<cu::Event::KeyEvent>(i);
 	  return true;
 	}
+    }
+  return false;
+}
+
+bool Input::mouse(sf::Event const& e, cu::Event& event)
+{
+  if (e.mouseButton.button >= sf::Mouse::Button::Left
+      && e.mouseButton.button <= sf::Mouse::Button::Middle)
+    {
+      event.mouse.button = static_cast<cu::Event::MouseButton>(e.mouseButton.button);
+      event.mouse.x = e.mouseButton.x;
+      event.mouse.y = e.mouseButton.y;
+      return true;
     }
   return false;
 }

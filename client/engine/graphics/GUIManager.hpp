@@ -1,9 +1,9 @@
 #ifndef GUIMANAGER_HPP_
 # define GUIMANAGER_HPP_
 
-# include "Behaviour.hpp"
+# include "Component.hpp"
 
-class GUIManager : public Behaviour
+class GUIManager : public Component
 {
 public:
   GUIManager(unsigned int id);
