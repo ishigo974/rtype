@@ -17,6 +17,7 @@ Input::~Input()
 {
 }
 
+#include <iostream>
 bool Input::isKeyPressed(cu::Event::KeyEvent key)
 {
   if (!_focus)
@@ -51,7 +52,7 @@ bool Input::pollEvent(cu::Event& event)
       _focus = true;
       return true;
     case sf::Event::LostFocus:
-      _focus = true;
+      _focus = false;
       return true;
     default:
       return false;
