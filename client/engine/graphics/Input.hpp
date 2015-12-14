@@ -27,6 +27,7 @@ private:
 private:
   sf::RenderWindow&				_win;
   std::vector<sf::Keyboard::Key>	_bindings;
+  bool					_focus;
 };
 
 #endif		// !INPUT_HPP_
