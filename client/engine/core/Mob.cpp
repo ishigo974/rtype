@@ -94,9 +94,8 @@ void		Mob::move()
   transform->getPosition().setY((transform->getPosition().Y() + _direction));
 }
 
-void	Mob::update(double elapsedTime)
+void	Mob::update(double)
 {
-  (void)elapsedTime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   this->move();
