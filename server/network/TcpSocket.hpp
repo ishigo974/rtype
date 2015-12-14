@@ -40,7 +40,6 @@ private:
     TcpSocket& operator=(TcpSocket const& sock) = delete;
 
 protected:
-    short int   _port;
     std::string _addr;
 };
 

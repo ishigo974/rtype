@@ -54,15 +54,27 @@ SocketMonitor& SocketMonitor::getInstance()
 /*
 ** Public member functions
 */
-void SocketMonitor::registerRaw(unsigned int id)
+void SocketMonitor::registerRaw(rSocket id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     HANDLE NewEvent = 0;
 
-    NewEvent = WSACreateEvent();
     _socketArray.push_back(id);
-    WSAEventSelect(_socketArray[_eventTotal], NewEvent, FD_ACCEPT |
-                   FD_CLOSE | FD_READ);
+    if (id == 0)
+    {
+     if ((NewEvent = GetStdHandle(STD_INPUT_HANDLE)) == INVALID_HANDLE_VALUE)
+        throw std::runtime_error("Can't create event.");
+     if (NewEvent == NULL)
+          throw std::runtime_error("NULL Event.");
+    }
+    else
+    {
+        if ((NewEvent = WSACreateEvent()) == WSA_INVALID_EVENT)
+         throw std::runtime_error("Can't create event.");
+        if (WSAEventSelect(_socketArray[_eventTotal], NewEvent, FD_ACCEPT |
+                   FD_CLOSE | FD_READ) == SOCKET_ERROR)
+         throw std::runtime_error("Event Select failed.");
+    }
     _eventArray.push_back(NewEvent);
     ++_eventTotal;
 #else
@@ -78,7 +90,7 @@ void SocketMonitor::registerSocket(IMonitorable const *socket)
     registerRaw(socket->getSocket());
 }
 
-void SocketMonitor::deleteRaw(unsigned int id)
+void SocketMonitor::deleteRaw(rSocket id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     for (DWORD i = 0; i < _eventTotal; i++)
@@ -104,7 +116,7 @@ void SocketMonitor::deleteSocket(IMonitorable const *socket)
     deleteRaw(socket->getSocket());
 }
 
-bool SocketMonitor::isWritable(unsigned int id)
+bool SocketMonitor::isWritable(rSocket id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     return true;
@@ -118,13 +130,14 @@ bool SocketMonitor::isWritable(IMonitorable const *socket)
     return isWritable(socket->getSocket());
 }
 
-bool SocketMonitor::isReadable(unsigned int id)
+bool SocketMonitor::isReadable(rSocket id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
-    return (_socketEvents[id].lNetworkEvents & FD_READ)
+    if ((_socketEvents[id].lNetworkEvents & FD_READ)
             || (_socketEvents[id].lNetworkEvents & FD_CLOSE)
-            || (_socketEvents[id].lNetworkEvents & FD_ACCEPT);
+            || (_socketEvents[id].lNetworkEvents & FD_ACCEPT))
+        return true;
+    return false;
 #else
     return FD_ISSET(id, &_tmpReadFds) > 0;
 #endif

@@ -28,8 +28,8 @@ void NetworkUT::multipleConnectMonitor()
 
 void NetworkUT::sendMonitor()
 {
-    TcpAcceptor   acceptor(7777);
-    TcpConnector  connector("127.0.0.1", 7777);
+    TcpAcceptor   acceptor(5555);
+    TcpConnector  connector("127.0.0.1", 5555);
     SocketMonitor monitor;
     ISocket       *socket;
     Buffer        msg;
@@ -43,10 +43,9 @@ void NetworkUT::sendMonitor()
     socket = acceptor.accept();
     monitor.registerSocket(socket);
     monitor.update();
-    connector.send(msg);
-    monitor.update();
-    UT_ASSERT(monitor.isReadable(socket) == true);
-    socket->receive(rcv, 17);
+    UT_ASSERT(monitor.isWritable(socket) == true);
+    socket->send(msg);
+    connector.receive(rcv, msg.size());
     UT_ASSERT(rcv.size() == msg.size());
     UT_ASSERT(msg.getString() == rcv.getString());
 }

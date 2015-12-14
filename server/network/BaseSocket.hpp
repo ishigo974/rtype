@@ -24,6 +24,7 @@ public:
 
 protected:
     rSocket _socket;
+    short int _port;
 };
 
 

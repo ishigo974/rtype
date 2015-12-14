@@ -18,7 +18,7 @@ BaseSocket::~BaseSocket()
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-size_t    UdpSocket::send(Buffer const& buffer) const
+size_t    BaseSocket::send(Buffer const& buffer) const
 {
     struct sockaddr_in client;
     WSABUF toSend;
@@ -29,7 +29,7 @@ size_t    UdpSocket::send(Buffer const& buffer) const
     toSend.len = buffer.size();
     toSend.buf = str.data();
     client.sin_family = AF_INET;
-    client.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &client.sin_addr); //TODO GET IPADDR
+    client.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &client.sin_addr);
     client.sin_port = _port;
 
     if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
@@ -39,7 +39,7 @@ size_t    UdpSocket::send(Buffer const& buffer) const
     return ret;
     }
 
-size_t    UdpSocket::receive(Buffer& buffer, size_t len) const
+size_t    BaseSocket::receive(Buffer& buffer, size_t len) const
 {
     WSABUF wsabuf;
     DWORD read_size = 0;
@@ -58,7 +58,6 @@ size_t    UdpSocket::receive(Buffer& buffer, size_t len) const
           }
     buffer.append(wsabuf.buf, read_size);
     delete wsabuf.buf;
-    //TODO do something with client addr
     return (read_size);
 }
 #else

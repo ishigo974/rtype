@@ -37,9 +37,6 @@ public:
 private:
     UdpSocket(UdpSocket const& sock) = delete;
     UdpSocket& operator=(UdpSocket const& sock) = delete;
-
-private:
-    short int _port;
 };
 
 #endif //RTYPE_UDPSOCKET_HPP
