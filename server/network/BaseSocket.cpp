@@ -2,7 +2,11 @@
 // Created by Denis Le Borgne on 13/12/2015.
 //
 
-#include <sys/socket.h>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#else
+# include <sys/socket.h>
+# include <unistd.h>
+#endif
 #include "BaseSocket.hpp"
 
 BaseSocket::BaseSocket()
