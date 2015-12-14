@@ -4,3 +4,8 @@
 .DS_Store
 *.so
 .idea/
+a.out
+Makefile
+
+server_rtype
+server_ut
