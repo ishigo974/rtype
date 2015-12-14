@@ -6,17 +6,13 @@
 #define RTYPE_SERVER_TCPCONNECTOR_HPP
 
 #include "ITcpConnector.hpp"
+#include "TcpSocket.hpp"
 
-class TcpConnector : public ITcpConnector
+class TcpConnector : public TcpSocket, public ITcpConnector
 {
 public:
     TcpConnector(std::string const& addr, short int port);
     virtual ~TcpConnector();
-
-public:
-    virtual void   close() const;
-    virtual size_t send(Buffer const& buffer) const;
-    virtual size_t receive(Buffer& buffer, size_t len) const;
 
 public:
     virtual short int getPort() const;
@@ -30,11 +26,6 @@ public:
 
 public:
     virtual rSocket getSocket() const;
-
-private:
-    rSocket     _socket;
-    std::string _addr;
-    short int   _port;
 };
 
 

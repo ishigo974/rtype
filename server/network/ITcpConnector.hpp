@@ -5,12 +5,12 @@
 #ifndef RTYPE_SERVER_ITCPCONNECTOR_HPP
 #define RTYPE_SERVER_ITCPCONNECTOR_HPP
 
-#include "ISocket.hpp"
+#include "ITcpSocket.hpp"
 
-class ITcpConnector : public ISocket
+class ITcpConnector
 {
 public:
-    ~ITcpConnector() {}
+    virtual ~ITcpConnector() {}
 
 public:
     virtual bool    connect() = 0;

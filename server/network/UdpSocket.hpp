@@ -7,8 +7,9 @@
 
 # include <string>
 # include "IUdpSocket.hpp"
+#include "BaseSocket.hpp"
 
-class UdpSocket : public IUdpSocket
+class UdpSocket : public IUdpSocket, public BaseSocket
 {
 public:
     UdpSocket(short int port);
@@ -17,9 +18,9 @@ public:
     { }
 
 public:
-    virtual size_t    send(Buffer const& buffer) const;
-    virtual size_t    receive(Buffer& buffer, size_t len) const;
-    virtual void      close() const;
+    virtual size_t send(Buffer const& buffer) const;
+    virtual size_t receive(Buffer& buffer, size_t len) const;
+    virtual void   close() const;
 
 public:
     virtual bool bind() const;
@@ -39,7 +40,6 @@ private:
 
 private:
     short int _port;
-    rSocket   _socket;
 };
 
 #endif //RTYPE_UDPSOCKET_HPP

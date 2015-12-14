@@ -7,8 +7,9 @@
 
 # include "Buffer.hpp"
 # include "ITcpSocket.hpp"
+#include "BaseSocket.hpp"
 
-class TcpSocket : public ITcpSocket
+class TcpSocket : public ITcpSocket, public BaseSocket
 {
 public:
     TcpSocket(std::string const& addr, short int port);
@@ -17,15 +18,15 @@ public:
     virtual ~TcpSocket();
 
 public:
-    virtual size_t        send(Buffer const& buffer) const;
-    virtual size_t        receive(Buffer& buffer, size_t len) const;
-    virtual void          close() const;
+    virtual size_t send(Buffer const& buffer) const;
+    virtual size_t receive(Buffer& buffer, size_t len) const;
+    virtual void   close() const;
 
 public:
-    virtual std::string   toString() const;
+    virtual std::string toString() const;
 
 public:
-    virtual rSocket   getSocket() const;
+    virtual rSocket getSocket() const;
 
 public:
     short int getPort() const;
@@ -38,10 +39,9 @@ private:
     TcpSocket(TcpSocket const& sock) = delete;
     TcpSocket& operator=(TcpSocket const& sock) = delete;
 
-private:
+protected:
     short int   _port;
     std::string _addr;
-    rSocket     _socket;
 };
 
 #endif //RTYPE_TCPSOCKET_HPP
