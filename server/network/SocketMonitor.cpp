@@ -59,7 +59,7 @@ void SocketMonitor::registerRaw(rSocket id)
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     HANDLE NewEvent = 0;
 
-    _socketArray.push_back(id);
+      _socketArray.push_back(id);
     if (id == 0)
     {
      if ((NewEvent = GetStdHandle(STD_INPUT_HANDLE)) == INVALID_HANDLE_VALUE)
@@ -75,8 +75,8 @@ void SocketMonitor::registerRaw(rSocket id)
                    FD_CLOSE | FD_READ) == SOCKET_ERROR)
          throw std::runtime_error("Event Select failed.");
     }
-    _eventArray.push_back(NewEvent);
-    ++_eventTotal;
+       _eventArray.push_back(NewEvent);
+       ++_eventTotal;
 #else
     FD_SET(id, &_readFds);
     FD_SET(id, &_writeFds);
@@ -167,18 +167,18 @@ void SocketMonitor::update()
 
     _socketEvents.clear();
     index = WSAWaitForMultipleEvents(_eventTotal, _eventArray.data(), FALSE,
-    SocketMonitor::defaultSecVal, FALSE);
+    _secValue, FALSE);
     index = index - WSA_WAIT_EVENT_0;
   if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
    for (DWORD i = 0; i < _eventTotal; i++)
    {
-	    index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, 1000, FALSE);
+	    index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, 1000,
+	    FALSE);
         if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
         {
             if (WSAEnumNetworkEvents(_socketArray[i], _eventArray[i],
-            &NetworkEvents) == SOCKET_ERROR)
-            _socketEvents.insert(std::pair<rSocket, WSANETWORKEVENTS>
-            (_socketArray[i], NetworkEvents));
+            &NetworkEvents) != SOCKET_ERROR)
+               _socketEvents.insert(std::pair<rSocket, WSANETWORKEVENTS>(_socketArray[i], NetworkEvents));
         }
    }
 #else
