@@ -281,11 +281,11 @@ int main()
 
     srand(static_cast<unsigned>(time(nullptr)));
     if (gameObjectTest(entityManager))
-        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "gameObjectTest passed -> OK" << std::endl << std::endl;
     if (timeTest())
-        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "timeTest passed -> OK" << std::endl << std::endl;
     if (stateMachineTest())
-        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+        std::cout << "stateMachineTest passed -> OK" << std::endl << std::endl;
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
