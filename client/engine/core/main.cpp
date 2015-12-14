@@ -90,7 +90,7 @@ void backgroundTest()
     GameObject        *a = entityManager.createEntity<GameObject>("Background", 1);
     cu::Event         e;
     std::stringstream ss;
-    CommandSystem     cmds(&entityManager);
+    CommandSystem     cmds(&entityManager, &i);
     ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
 
     GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
@@ -138,8 +138,8 @@ void backgroundTest()
             {
                 std::cout << "Key pressed : " << e.key << std::endl;
             }
-            cmds.addCommand(e);
         }
+	cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
         mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
@@ -289,7 +289,7 @@ int main()
   // if (commandSystemTest(&entityManager))
   //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-  // backgroundTest();
+  backgroundTest();
   menuTest();
 
   return 0;

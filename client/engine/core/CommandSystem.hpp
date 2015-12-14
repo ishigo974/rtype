@@ -6,6 +6,7 @@
 # include "ACommand.hpp"
 # include "Event.hpp"
 # include "EntityManager.hpp"
+# include "Input.hpp"
 
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> timestamp;
 
@@ -13,10 +14,10 @@ class CommandSystem
 {
 public:
 
-    CommandSystem(EntityManager *entityManager);
+  CommandSystem(EntityManager *entityManager, Input *i);
     virtual ~CommandSystem();
 
-    void        addCommand(cu::Event event);
+    void        addCommand();
     std::string toString();
     int         getSize() const;
     ACommand    *getByTimestamp(timestamp time);
@@ -27,6 +28,7 @@ private:
     EntityManager                                   *_entityManager;
     std::map<cu::Event::KeyEvent, bool>             _statuses;
     std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
+  Input						*_input;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

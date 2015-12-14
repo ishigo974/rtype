@@ -4,8 +4,9 @@
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
 
-CommandSystem::CommandSystem(EntityManager *entityManager)
+CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
 {
+    _input = i;
     _entityManager = entityManager;
     _statuses[cu::Event::UP]    = false;
     _statuses[cu::Event::DOWN]  = false;
@@ -24,23 +25,12 @@ CommandSystem::~CommandSystem()
 {
 }
 
-void    CommandSystem::addCommand(cu::Event event)
+void    CommandSystem::addCommand()
 {
-    switch (event.type)
+    for (auto it = _statuses.begin(); it != _statuses.end(); ++it)
     {
-        case cu::Event::KeyPressed:
-            _statuses[event.key] = true;
-            break;
-        case cu::Event::KeyReleased:
-            _statuses[event.key] = false;
-            break;
-        default:
-            break;
-    }
-    for (auto it = _actions.begin(); it != _actions.end(); ++it)
-    {
-        if (_statuses[it->first])
-            _commands.push_back(new MoveCommand(_entityManager, _actions[it->first]));
+      if (_input->isKeyPressed(it->first))
+  	_commands.push_back(new MoveCommand(_entityManager, _actions[it->first]));
     }
 }
 
