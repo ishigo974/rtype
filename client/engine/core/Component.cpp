@@ -1,10 +1,11 @@
 #include "Component.hpp"
+#include "EntityManager.hpp"
 
 Component::Component()
 { }
 
-Component::Component(unsigned int _id, std::string const& _name, Object *parent)
-        : Object(_id, _name), _parent(parent)
+Component::Component(unsigned int _id, std::string const& _name)
+        : Object(_id, _name)
 { }
 
 Component::Component(Component const& other) : Object(other)
@@ -69,4 +70,9 @@ namespace std
     {
         a.swap(b);
     }
+}
+
+Object *Component::parent()
+{
+    return (EntityManager::getParentOf(this));
 }

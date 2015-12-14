@@ -2,6 +2,7 @@
 # define COMMAND_SYSTEM_HPP_
 
 # include <vector>
+# include <map>
 # include "ACommand.hpp"
 # include "Event.hpp"
 # include "EntityManager.hpp"
@@ -12,18 +13,20 @@ class CommandSystem
 {
 public:
 
-  CommandSystem(EntityManager *entityManager);
-  virtual ~CommandSystem();
+    CommandSystem(EntityManager *entityManager);
+    virtual ~CommandSystem();
 
-  void		addCommand(cu::Event event);
-  std::string	toString();
-  int		getSize() const;
-  ACommand	*getByTimestamp(timestamp time);
-  void		invalidCommandAtTimestamp(timestamp time);
+    void        addCommand(cu::Event event);
+    std::string toString();
+    int         getSize() const;
+    ACommand    *getByTimestamp(timestamp time);
+    void        invalidateCommandAtTimestamp(timestamp time);
 
 private:
-  std::vector<ACommand *>	_commands;
-  EntityManager			*_entityManager;
+    std::vector<ACommand *>                         _commands;
+    EntityManager                                   *_entityManager;
+    std::map<cu::Event::KeyEvent, bool>             _statuses;
+    std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

@@ -10,7 +10,6 @@ Player::Player()
 Player::Player(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
   : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
 {
-  _action = ACommand::DEFAULT;
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -82,13 +81,15 @@ int	Player::getDamage() const
 
 void	Player::setAction(ACommand::Action action)
 {
-  _action = action;
+  _action.push(action);
 }
 
-void		Player::move()
+void		Player::move(double elapsedTime)
 {
+  (void)elapsedTime;
   GameObject	*parent;
   Transform	*transform;
+  float		speed = 10 + elapsedTime;
 
   if (!_enabled)
     return ;
@@ -98,27 +99,29 @@ void		Player::move()
   transform = parent->getComponent<Transform>();
   if (transform == nullptr)
     return ;
-
-  switch (_action)
+  while (_action.size() > 0)
     {
-    case ACommand::UP:
-      transform->getPosition().setY((transform->getPosition().Y() - 1));
-      _action = ACommand::DEFAULT;
-      break;
-    case ACommand::DOWN:
-      transform->getPosition().setY((transform->getPosition().Y() + 1));
-      _action = ACommand::DEFAULT;
-      break;
-    case ACommand::LEFT:
-      transform->getPosition().setX((transform->getPosition().X() - 1));
-      _action = ACommand::DEFAULT;
-      break;
-    case ACommand::RIGHT:
-      transform->getPosition().setX((transform->getPosition().X() + 1));
-      _action = ACommand::DEFAULT;
-      break;
-    default:
-      break;
+      switch (_action.front())
+	{
+	case ACommand::UP:
+	  transform->getPosition().setY((transform->getPosition().Y() - speed));
+	  break;
+	case ACommand::DOWN:
+	  transform->getPosition().setY((transform->getPosition().Y() + speed));
+	  break;
+	case ACommand::LEFT:
+	  transform->getPosition().setX((transform->getPosition().X() - speed));
+	  break;
+	case ACommand::RIGHT:
+	  transform->getPosition().setX((transform->getPosition().X() + speed));
+	  break;
+	case ACommand::SHOOT:
+	  std::cout << "SHOOT" << std::endl;
+	  break;
+	default:
+	  break;
+	}
+      _action.pop();
     }
 }
 
@@ -127,7 +130,5 @@ void	Player::update(double elapsedTime)
   (void)elapsedTime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
-  if (_action == ACommand::SHOOT)
-    std::cout << "SHOOT" << std::endl;
+  this->move(elapsedTime);
 }

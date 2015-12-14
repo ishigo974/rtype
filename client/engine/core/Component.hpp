@@ -12,7 +12,7 @@ public:
 
 public:
     Component();
-    Component(unsigned int _id, std::string const& _name, Object *parent = 0);
+    Component(unsigned int _id, std::string const& _name);
     Component(Component const& other);
     Component(Component&& other);
     virtual Component& operator=(Component other);
@@ -21,14 +21,13 @@ public:
     virtual bool operator==(Component const& other);
     virtual bool operator!=(Component const& other);
 
-    virtual void swap(Component &other);
+    virtual void swap(Component& other);
 
     virtual RTypes::my_uint16_t getMask() const;
 
     virtual std::string toString();
 
-private:
-    Object *_parent;
+    virtual Object *parent();
 };
 
 static const Component ErrorComponent = Component(0, "Error");

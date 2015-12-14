@@ -14,7 +14,7 @@
 #include "Mob.hpp"
 #include "Player.hpp"
 
-bool gameObjectTest(EntityManager & entityManager)
+bool gameObjectTest(EntityManager& entityManager)
 {
     GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
     assert(a->getId() == 1);
@@ -45,11 +45,11 @@ bool gameObjectTest(EntityManager & entityManager)
 
 void renderAndInputsTest()
 {
-    Renderer r;
-    Input i(r.getWindow());
+    Renderer      r;
+    Input         i(r.getWindow());
     EntityManager entityManager;
-    GameObject *a = entityManager.createEntity<GameObject>("Test", 1);
-    cu::Event e;
+    GameObject    *a = entityManager.createEntity<GameObject>("Test", 1);
+    cu::Event     e;
 
     entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
     entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
@@ -74,9 +74,9 @@ bool timeTest()
     for (int i = 0; i < 5; ++i)
     {
         std::cout << "i = " << i << " ; elapsed = "
-            << BigBen::get().getElapsedtime() << std::endl;
+        << BigBen::get().getElapsedtime() << std::endl;
         std::cout << "i = " << i << " ; fixedElapsed = "
-            << BigBen::get().getFixedElapsedtime() << std::endl;
+        << BigBen::get().getFixedElapsedtime() << std::endl;
     }
 
     return (true);
@@ -84,21 +84,21 @@ bool timeTest()
 
 void backgroundTest()
 {
-    Renderer r;
-    Input i(r.getWindow());
-    EntityManager entityManager;
-    GameObject *a = entityManager.createEntity<GameObject>("Background", 1);
-    cu::Event e;
+    Renderer          r;
+    Input             i(r.getWindow());
+    EntityManager     entityManager;
+    GameObject        *a = entityManager.createEntity<GameObject>("Background", 1);
+    cu::Event         e;
     std::stringstream ss;
-    CommandSystem	cmds(&entityManager);
+    CommandSystem     cmds(&entityManager);
     ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
 
     GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
-    GameObject *p = entityManager.createEntity<GameObject>("Player", 3);
+    GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
 
     entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-            gu::Rect<int>(0, 0, 1280, 720));
+                                                  gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
@@ -132,18 +132,18 @@ void backgroundTest()
             if (e.type == cu::Event::Closed)
             {
                 std::cout << "Close button pressed" << std::endl;
-                return ;
+                return;
             }
             if (e.type == cu::Event::KeyPressed)
-	      {
-		cmds.addCommand(e);
+            {
                 std::cout << "Key pressed : " << e.key << std::endl;
-	      }
+            }
+            cmds.addCommand(e);
         }
         bg->update(BigBen::get().getElapsedtime());
-	mob->update(BigBen::get().getElapsedtime());
+        mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
-	r.draw(*a);
+        r.draw(*a);
         r.draw(*obj);
         r.draw(*p);
         r.render();
@@ -159,11 +159,11 @@ bool stateMachineTest()
     pos1 = cu::Position(5.0f, 5.0f);
     pos2 = cu::Position(5.0f, 5.0f);
 
-    ini.addTransition("S2", [](cu::Position* a, cu::Position* b)
-            {
-            return (*a == *b);
-            },
-            &pos1, &pos2);
+    ini.addTransition("S2", [](cu::Position *a, cu::Position *b)
+                      {
+                          return (*a == *b);
+                      },
+                      &pos1, &pos2);
 
     StateMachine sm(0, ini);
 
@@ -197,28 +197,29 @@ bool stateMachineTest()
 //     return (true);
 // }
 
-bool	mobTest()
+bool mobTest()
 {
-  EntityManager entityManager;
-  GameObject *obj = entityManager.createEntity<GameObject>("Test", 1);
+    EntityManager entityManager;
+    GameObject    *obj = entityManager.createEntity<GameObject>("Test", 1);
 
-  entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-  entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
-  entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/r-typesheet19.gif", gu::Rect<int>(100, 0, 100, 300));
-  obj->getComponent<Mob>()->setEnabled(true);
-  Mob *mob = obj->getComponent<Mob>();
-  std::cout << mob->getName() << std::endl;
-  mob->update(BigBen::get().getElapsedtime());
-  // assert(obj->getComponent<Transform>()->getPosition().Y() == 200);
-  return (true);
+    entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
+    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    entityManager
+            .attachComponent<SpriteRenderer>(obj, "Mob", "../res/r-typesheet19.gif", gu::Rect<int>(100, 0, 100, 300));
+    obj->getComponent<Mob>()->setEnabled(true);
+    Mob *mob = obj->getComponent<Mob>();
+    std::cout << mob->getName() << std::endl;
+    mob->update(BigBen::get().getElapsedtime());
+    // assert(obj->getComponent<Transform>()->getPosition().Y() == 200);
+    return (true);
 }
 
 void menuTest()
 {
-    Renderer r;
-    Input i(r.getWindow());
+    Renderer      r;
+    Input         i(r.getWindow());
     EntityManager entityManager;
-    cu::Event e;
+    cu::Event     e;
 
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
 
@@ -244,6 +245,7 @@ void menuTest()
     r.init();
     e.type = cu::Event::None;
     e.key = cu::Event::LAST_ACTION;
+
     menu->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
     StateMachine *sm = menu->getComponent<StateMachine>();
@@ -257,7 +259,7 @@ void menuTest()
             if (e.type == cu::Event::Closed)
             {
                 std::cout << "Close button pressed" << std::endl;
-                return ;
+                return;
             }
             if (e.type == cu::Event::KeyPressed)
                 std::cout << "Key pressed : " << e.key << std::endl;

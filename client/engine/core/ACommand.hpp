@@ -9,36 +9,37 @@
 class ACommand
 {
 public:
-  virtual ~ACommand() {}
+    virtual ~ACommand()
+    { }
 
-  virtual void	execute() = 0;
-  virtual void	undo() = 0;
+    virtual void execute() = 0;
+    virtual void undo()    = 0;
 
 public:
-  enum Action
+    enum Action
     {
-      DEFAULT = -1,
-      UP,
-      DOWN,
-      LEFT,
-      RIGHT,
-      SHOOT
+        DEFAULT = -1,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        SHOOT
     };
 
-  void		setObject(GameObject *obj)
-  {
-    _obj = obj;
-  }
+    void setObject(GameObject *obj)
+    {
+        _obj = obj;
+    }
 
-  virtual std::chrono::time_point<std::chrono::high_resolution_clock>	getTime()
-  {
-    return _time;
-  }
+    virtual std::chrono::time_point<std::chrono::high_resolution_clock> getTime()
+    {
+        return _time;
+    }
 
 protected:
-  std::chrono::time_point<std::chrono::high_resolution_clock>	_time;
-  GameObject							*_obj;
-  EntityManager							*_entityManager;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _time;
+    GameObject                                                  *_obj;
+    EntityManager                                               *_entityManager;
 };
 
 #endif /* !RTYPE_ACOMMAND_HPP_ */

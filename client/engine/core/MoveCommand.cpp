@@ -18,10 +18,7 @@ void	MoveCommand::execute()
   std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::PlayerMask);
 
   for (auto obj : objs)
-    {
-      static_cast<GameObject *>(obj)->getComponent<Player>()->setAction(_direction);
-      // static_cast<Player *>(obj)->update(BigBen::getElapsedtime());
-    }
+    static_cast<GameObject *>(obj)->getComponent<Player>()->setAction(_direction);
 }
 
 void	MoveCommand::undo()

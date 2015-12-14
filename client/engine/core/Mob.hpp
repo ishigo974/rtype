@@ -3,32 +3,32 @@
 
 # include "Behaviour.hpp"
 
-class	Mob : public Behaviour
+class Mob : public Behaviour
 {
 public:
-  Mob();
-  Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1, Object* parent = nullptr);
-  virtual ~Mob();
+    Mob();
+    Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1, Object *parent = nullptr);
+    virtual ~Mob();
 
-  Mob(Mob const& other);
-  Mob(Mob&& other);
-  Mob& operator=(Mob other);
+    Mob(Mob const& other);
+    Mob(Mob&& other);
+    Mob& operator=(Mob other);
 
-  bool operator==(Mob const& other);
-  bool operator!=(Mob const& other);
+    bool operator==(Mob const& other);
+    bool operator!=(Mob const& other);
 
-  int	getHp() const;
-  int	getDamage() const;
+    int getHp() const;
+    int getDamage() const;
 
-  void		move();
-  virtual void	update(double elapsedTime);
+    void         move();
+    virtual void update(double elapsedTime);
 
-  void swap(Mob& other);
+    void swap(Mob& other);
 
 protected:
-  int	_hp;
-  int	_damage;
-  int	_direction;
+    int _hp;
+    int _damage;
+    int _direction;
 };
 
 #endif /* !MOB_HPP_ */
