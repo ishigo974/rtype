@@ -26,12 +26,6 @@ private:
   std::vector<ACommand *>	_commands;
   EntityManager			*_entityManager;
   std::map<cu::Event::KeyEvent, bool>	_statuses;
-
-
-  bool _up;
-  bool _down;
-  bool _left;
-  bool _right;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */
