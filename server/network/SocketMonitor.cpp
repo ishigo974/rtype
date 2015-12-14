@@ -133,11 +133,9 @@ bool SocketMonitor::isWritable(IMonitorable const *socket)
 bool SocketMonitor::isReadable(rSocket id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    if ((_socketEvents[id].lNetworkEvents & FD_READ)
+    return ((_socketEvents[id].lNetworkEvents & FD_READ)
             || (_socketEvents[id].lNetworkEvents & FD_CLOSE)
-            || (_socketEvents[id].lNetworkEvents & FD_ACCEPT))
-        return true;
-    return false;
+            || (_socketEvents[id].lNetworkEvents & FD_ACCEPT));
 #else
     return FD_ISSET(id, &_tmpReadFds) > 0;
 #endif
