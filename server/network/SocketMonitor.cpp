@@ -11,11 +11,11 @@
 ** Static variables
 */
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-const long			SocketMonitor::defaultSecVal = 5;
-const long			SocketMonitor::defaultUsecVal = 0;
+    const long			SocketMonitor::defaultSecVal   = 5;
+    const long			SocketMonitor::defaultUsecVal  = 0;
 #else
-const time_t        SocketMonitor::defaultSecVal  = 5;
-const suseconds_t   SocketMonitor::defaultUsecVal = 0;
+    const time_t        SocketMonitor::defaultSecVal    = 5;
+    const suseconds_t   SocketMonitor::defaultUsecVal   = 0;
 #endif
 const unsigned int                  SocketMonitor::noFd = 0;
 SocketMonitor::UniqueMonitorPtr     SocketMonitor::instance;
@@ -56,37 +56,34 @@ SocketMonitor& SocketMonitor::getInstance()
 */
 void SocketMonitor::registerRaw(unsigned int id)
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    HANDLE NewEvent = 0;
+
+    NewEvent = WSACreateEvent();
+    _socketArray.push_back(id);
+    WSAEventSelect(_socketArray[_eventTotal], NewEvent, FD_ACCEPT |
+                   FD_CLOSE | FD_READ);
+    _eventArray.push_back(NewEvent);
+    ++_eventTotal;
+#else
     FD_SET(id, &_readFds);
     FD_SET(id, &_writeFds);
+#endif
     if (static_cast<int>(id) > _maxFd)
         _maxFd = id;
 }
 
 void SocketMonitor::registerSocket(IMonitorable const *socket)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    HANDLE NewEvent = 0;
-
-   NewEvent = WSACreateEvent();
-    _socketArray.push_back(socket->getSocket());
-        WSAEventSelect(_socketArray[_eventTotal], NewEvent, FD_ACCEPT |
-        FD_CLOSE | FD_READ);
-    _eventArray.push_back(NewEvent);
-    ++_eventTotal;
-#else
-    FD_SET(socket->getSocket(), &_readFds);
-    FD_SET(socket->getSocket(), &_writeFds);
-#endif
-if (socket->getSocket() > _maxFd)
-    _maxFd = socket->getSocket();
+    registerRaw(socket->getSocket());
 }
 
-void SocketMonitor::deleteSocket(IMonitorable const *socket)
+void SocketMonitor::deleteRaw(unsigned int id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     for (DWORD i = 0; i < _eventTotal; i++)
     {
-        if (_socketArray[i] == socket->getSocket())
+        if (_socketArray[i] == id)
         {
             _socketArray.erase(_socketArray.begin() + i);
             _eventArray.erase(_eventArray.begin() + i);
@@ -95,33 +92,39 @@ void SocketMonitor::deleteSocket(IMonitorable const *socket)
         }
     }
 #else
-    FD_CLR(socket->getSocket(), &_readFds);
-    FD_CLR(socket->getSocket(), &_writeFds);
+    FD_CLR(id, &_readFds);
+    FD_CLR(id, &_writeFds);
 #endif
-    if (socket->getSocket() == _maxFd)
+    if (static_cast<int>(id) == _maxFd)
         --_maxFd;
 }
 
-bool SocketMonitor::isWritable(IMonitorable const *socket)
+void SocketMonitor::deleteSocket(IMonitorable const *socket)
+{
+    deleteRaw(socket->getSocket());
+}
+
+bool SocketMonitor::isWritable(unsigned int id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     return true;
 #else
-    return FD_ISSET(socket->getSocket(), &_tmpWriteFds) > 0;
+    return FD_ISSET(id, &_tmpWriteFds) > 0;
 #endif
+}
+
+bool SocketMonitor::isWritable(IMonitorable const *socket)
+{
+    return isWritable(socket->getSocket());
 }
 
 bool SocketMonitor::isReadable(unsigned int id)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
-    if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_READ))
-        return true;
-   if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_CLOSE))
-        return true;
-   if ((_socketEvents[socket->getSocket()].lNetworkEvents & FD_ACCEPT))
-        return true;
-    return false;
+    return (_socketEvents[id].lNetworkEvents & FD_READ)
+            || (_socketEvents[id].lNetworkEvents & FD_CLOSE)
+            || (_socketEvents[id].lNetworkEvents & FD_ACCEPT);
 #else
     return FD_ISSET(id, &_tmpReadFds) > 0;
 #endif

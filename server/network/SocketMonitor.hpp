@@ -31,10 +31,12 @@ public:
 public:
     virtual void registerRaw(unsigned int id);
     virtual void registerSocket(IMonitorable const *socket);
+    virtual void deleteRaw(unsigned int id);
     virtual void deleteSocket(IMonitorable const *socket);
     virtual bool isReadable(unsigned int id);
     virtual bool isReadable(IMonitorable const *socket);
     virtual bool isWritable(IMonitorable const *socket);
+    virtual bool isWritable(unsigned int id);
     virtual void clearFds();
     virtual void update();
 

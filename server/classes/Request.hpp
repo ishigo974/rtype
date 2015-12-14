@@ -38,7 +38,6 @@ namespace RType
             SE_CLIUSRNM     = 405,
             SE_OK           = 601,
             SE_KO           = 602
-
         };
 
     public:

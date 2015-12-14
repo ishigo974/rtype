@@ -74,7 +74,7 @@ namespace RType
 
                 try {
                     _socket->receive(tmp, bufferSize);
-                } catch (std::runtime_error const& e) {
+                } catch (std::runtime_error const&) {
                     onClientDisconnection();
                     return ;
                 }

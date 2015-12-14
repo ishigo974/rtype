@@ -3,19 +3,16 @@
 //
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
 #else
-
-#include <sstream>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <sstream>
-
+# include <sys/socket.h>
+# include <netdb.h>
+# include <arpa/inet.h>
+# include <unistd.h>
 #endif
 
+#include <sstream>
 #include "TcpConnector.hpp"
+
 
 TcpConnector::TcpConnector(std::string const& addr, short int port)
         : _addr(addr), _port(port)

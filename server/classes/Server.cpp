@@ -1,7 +1,14 @@
 // Standards includes
 #include <memory>
 #include <iostream>
-#include <unistd.h>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+# ifndef STDIN_FILENO
+#  define STDIN_FILENO 0
+# endif
+#else
+# include <unistd.h>
+#endif
 
 // Server/Misc includes
 #include "Server.hpp"
