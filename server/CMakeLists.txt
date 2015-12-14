@@ -18,6 +18,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
 endif ()
 
 # Define sources and executable
+if (WIN32)
+    include_directories(network/Windows)
+endif ()
+if (UNIX)
+include_directories(network/Unix)
+endif ()
 include_directories(network)
 include_directories(base_ecs)
 include_directories(exceptions)
@@ -28,6 +34,16 @@ include_directories(classes)
 include_directories(commands)
 include_directories(unit_tests)
 include_directories(utils)
+
+if (WIN32)
+    file(GLOB network_files
+    network/Windows/*.cpp)
+endif ()
+if (UNIX)
+    file(GLOB network_files
+            network/Unix/*.cpp)
+endif ()
+
 
 file(GLOB source_files
         main.cpp
@@ -93,6 +109,6 @@ file(GLOB ut_source_files
         unit_tests/*.cpp
         )
 
-add_executable(${EXECUTABLE_NAME} ${source_files})
-add_executable(network_test ${net_files})
-add_executable(${UT_NAME} ${ut_source_files})
+add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files})
+add_executable(network_test ${net_files} ${network_files})
+add_executable(${UT_NAME} ${ut_source_files} ${network_files})
