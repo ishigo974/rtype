@@ -106,11 +106,13 @@ void backgroundTest()
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    Transform *tmob = obj->getComponent<Transform>();
+    tmob->getPosition().setX(1250);
 
     entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
     Transform *t = p->getComponent<Transform>();
-    t->getPosition().setX(600);
-    t->getPosition().setY(680);
+    t->getPosition().setX(100);
+    t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
     entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
 
@@ -136,10 +138,10 @@ void backgroundTest()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
-            if (e.type == cu::Event::KeyPressed)
-            {
-                std::cout << "Key pressed : " << e.key << std::endl;
-            }
+            // if (e.type == cu::Event::KeyPressed)
+            // {
+            //     std::cout << "Key pressed : " << e.key << std::endl;
+            // }
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());

@@ -1,85 +1,82 @@
 #include <iostream>
-#include "Mob.hpp"
+#include "Ball.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
 
-Mob::Mob()
+Ball::Ball()
 {
 }
 
-Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
+Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
   : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
 {
-  _direction = 1;
 }
 
-Mob::Mob(Mob const& other) : Behaviour(other)
+Ball::Ball(Ball const& other) : Behaviour(other)
 {
     _hp = other._hp;
     _damage = other._damage;
-    _direction = other._direction;
 }
 
-Mob::Mob(Mob&& other) : Mob(other)
+Ball::Ball(Ball&& other) : Ball(other)
 {
     swap(other);
 }
 
-Mob& Mob::operator=(Mob other)
+Ball& Ball::operator=(Ball other)
 {
     swap(other);
 
     return (*this);
 }
 
-Mob::~Mob()
+Ball::~Ball()
 {
 }
 
-bool Mob::operator==(Mob const& other)
+bool Ball::operator==(Ball const& other)
 {
     return (Behaviour::operator==(other));
 }
 
-bool Mob::operator!=(Mob const& other)
+bool Ball::operator!=(Ball const& other)
 {
-    return (!Mob::operator==(other));
+    return (!Ball::operator==(other));
 }
 
-void Mob::swap(Mob& other)
+void Ball::swap(Ball& other)
 {
     using std::swap;
 
     swap(_enabled, other._enabled);
     swap(_hp, other._hp);
     swap(_damage, other._damage);
-    swap(_direction, other._direction);
 }
 
 namespace std
 {
     template<>
-    void swap<Mob>(Mob& a, Mob& b)
+    inline void swap<Ball>(Ball& a, Ball& b)
     {
         a.swap(b);
     }
 }
 
-int	Mob::getHp() const
+int	Ball::getHp() const
 {
   return _hp;
 }
 
-int	Mob::getDamage() const
+int	Ball::getDamage() const
 {
   return _damage;
 }
 
-void		Mob::move()
+void		Ball::move()
 {
   GameObject	*parent;
   Transform	*transform;
-  float		speed = static_cast<float>(2.0);
+  float		speed = static_cast<float>(1.0);
 
   if (!_enabled)
     return ;
@@ -89,15 +86,10 @@ void		Mob::move()
   transform = parent->getComponent<Transform>();
   if (transform == nullptr)
     return ;
-
-  if (transform->getPosition().Y() <= 0)
-    _direction = 1;
-  else if (transform->getPosition().Y() >= 690)
-    _direction = -1;
-  transform->getPosition().setY((transform->getPosition().Y() + _direction * speed));
+  transform->getPosition().setX((transform->getPosition().X() + speed));
 }
 
-void	Mob::update(double)
+void	Ball::update(double)
 {
   if (_hp == 0)
     std::cout << "Mort" << std::endl;

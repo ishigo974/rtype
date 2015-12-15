@@ -84,7 +84,7 @@ void	Player::setAction(ACommand::Action action)
   _action.push(action);
 }
 
-void		Player::move(double)
+void		Player::move()
 {
   GameObject	*parent;
   Transform	*transform;
@@ -115,7 +115,7 @@ void		Player::move(double)
 	  transform->getPosition().setX((transform->getPosition().X() + speed));
 	  break;
 	case ACommand::SHOOT:
-	  std::cout << "SHOOT" << std::endl;
+	  // std::cout << "SHOOT" << std::endl;
 	  break;
 	default:
 	  break;
@@ -124,9 +124,9 @@ void		Player::move(double)
     }
 }
 
-void	Player::update(double elapsedTime)
+void	Player::update(double)
 {
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move(elapsedTime);
+  this->move();
 }
