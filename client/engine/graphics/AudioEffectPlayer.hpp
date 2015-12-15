@@ -2,7 +2,7 @@
 # define AUDIOEFFECTPLAYER_HPP_
 
 #include <list>
-#include <SFML\Audio.hpp>
+#include <SFML/Audio.hpp>
 #include "GameObject.hpp"
 
 class AudioEffectPlayer
