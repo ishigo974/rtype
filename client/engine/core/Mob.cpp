@@ -15,8 +15,9 @@ Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, Object*
 
 Mob::Mob(Mob const& other) : Behaviour(other)
 {
-    _hp = other.getHp();
-    _damage = other.getDamage();
+    _hp = other._hp;
+    _damage = other._damage;
+    _direction = other._direction;
 }
 
 Mob::Mob(Mob&& other) : Mob(other)
@@ -52,6 +53,7 @@ void Mob::swap(Mob& other)
     swap(_enabled, other._enabled);
     swap(_hp, other._hp);
     swap(_damage, other._damage);
+    swap(_direction, other._direction);
 }
 
 namespace std
@@ -77,6 +79,7 @@ void		Mob::move()
 {
   GameObject	*parent;
   Transform	*transform;
+  float		speed = static_cast<float>(2.0);
 
   if (!_enabled)
     return ;
@@ -91,7 +94,7 @@ void		Mob::move()
     _direction = 1;
   else if (transform->getPosition().Y() >= 690)
     _direction = -1;
-  transform->getPosition().setY((transform->getPosition().Y() + _direction));
+  transform->getPosition().setY((transform->getPosition().Y() + _direction * speed));
 }
 
 void	Mob::update(double)
