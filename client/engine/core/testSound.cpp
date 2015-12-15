@@ -8,14 +8,10 @@
 #include "Music.hpp"
 #include "MusicPlayer.hpp"
 
-MusicPlayer		musicPlayer; 
-AudioEffectPlayer soundPlayer;
-EntityManager	entity;
-
 // Les sf::sleep sont la pour ne pas lancer les sons en meme temps car la sfml joue les sons
 // dans un thread a part; Ils seraient lancés en même temps sinon...
 
-int audioEffectPlayerTest(GameObject *gameObj)
+int audioEffectPlayerTest(GameObject *gameObj, AudioEffectPlayer &soundPlayer)
 {
 	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
 	audio->setSoundToPlay("../res/laser1.wav");
@@ -39,7 +35,7 @@ int audioEffectPlayerTest(GameObject *gameObj)
 	return 0;
 }
 
-int	musicPlayerTest(GameObject *gameObj)
+int	musicPlayerTest(GameObject *gameObj, MusicPlayer &musicPlayer)
 {
 	Music *music = gameObj->getComponent<Music>();
 
@@ -50,8 +46,11 @@ int	musicPlayerTest(GameObject *gameObj)
 	return 0;
 }
 
-int main()
+int testSound()
 {
+	EntityManager	entity;
+	MusicPlayer		musicPlayer; 
+	AudioEffectPlayer soundPlayer;
 	GameObject		*gameObj = entity.createEntity<GameObject>("test", 1);
 
 	entity.attachComponent<Music>(gameObj, "Music");
@@ -64,10 +63,10 @@ int main()
 	audio->addSound("DELAMERDE");
 	audio->addSound("ENBOITE");
 
-	musicPlayerTest(gameObj);
+	musicPlayerTest(gameObj, musicPlayer);
 	sf::sleep(sf::milliseconds(1000));
 
-	audioEffectPlayerTest(gameObj);
+	audioEffectPlayerTest(gameObj, soundPlayer);
 	while (gameObj->getComponent<Music>()->isPlaying());
 
 	return (0);
