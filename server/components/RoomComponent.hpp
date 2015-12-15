@@ -43,6 +43,7 @@ namespace RType
             unsigned int                getPlayerId(ECS::Entity& entity) const;
             std::string                 getPlayersNames() const;
             unsigned int                size() const;
+            PlayersMap const&           getPlayersMap() const;
 
         public:
             virtual void                update();

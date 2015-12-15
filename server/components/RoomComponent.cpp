@@ -207,6 +207,11 @@ Network component"); // TODO except
             return res.substr(0, res.size() - 2);
         }
 
+        Room::PlayersMap const&       Room::getPlayersMap() const
+        {
+            return _players;
+        }
+
         /*
         ** Protected member functions
         */

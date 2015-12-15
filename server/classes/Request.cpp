@@ -85,10 +85,10 @@ namespace RType
     }
 
     template <>
-    RoomsCollection     Request::get(std::string const& key) const
+    Request::RoomsTab   Request::get(std::string const& key) const
     {
         DataMap::const_iterator it = _data.find(key);
-        RoomsCollection         res;
+        RoomsTab                res;
         Buffer                  buffer;
 
         if (_code != SE_LISTROOMS)
@@ -101,17 +101,46 @@ namespace RType
             Room            room;
             uint32_t        size;
 
-            room.setId(buffer.get<uint32_t>());
+            room.id = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
             size = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
-            room.setName(buffer.getString(size));
+            room.name = buffer.getString(size);
             buffer.consume(size);
-            room.setNbPlayers(buffer.get<uint8_t>());
+            room.nbPlayers = buffer.get<uint8_t>();
             buffer.consume(sizeof(uint8_t));
             res.push_back(room);
         }
         return res;
+    }
+
+    template <>
+    Request::PlayersTab Request::get(std::string const& key) const
+    {
+        DataMap::const_iterator it = _data.find(key);
+        PlayersTab              players;
+        Buffer                  buffer;
+
+        if (_code != SE_ROOMINFO)
+            throw Exception::ValueError("Trying to retrieve players infos");
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        buffer = it->second;
+        while (!buffer.empty())
+        {
+            Player      player;
+            uint32_t    size;
+
+            player.id = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
+            size = buffer.get<uint32_t>();
+            buffer.consume(sizeof(uint32_t));
+            player.username = buffer.getString(size);
+            buffer.consume(size);
+            player.isReady = buffer.get<uint8_t>();
+            players.push_back(player);
+        }
+        return players;
     }
 
     Request::Protocol   Request::getProtocol() const
