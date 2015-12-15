@@ -21,7 +21,7 @@ public:
     int getDamage() const;
 
     void         move();
-    virtual void update(double elapsedTime);
+    virtual void update(double);
 
     void swap(Mob& other);
 

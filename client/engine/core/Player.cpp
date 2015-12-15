@@ -115,7 +115,7 @@ void		Player::move()
 	  transform->getPosition().setX((transform->getPosition().X() + speed));
 	  break;
 	case ACommand::SHOOT:
-	  std::cout << "SHOOT" << std::endl;
+	  // std::cout << "SHOOT" << std::endl;
 	  break;
 	default:
 	  break;

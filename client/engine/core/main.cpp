@@ -136,10 +136,10 @@ void backgroundTest()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
-            if (e.type == cu::Event::KeyPressed)
-            {
-                std::cout << "Key pressed : " << e.key << std::endl;
-            }
+            // if (e.type == cu::Event::KeyPressed)
+            // {
+            //     std::cout << "Key pressed : " << e.key << std::endl;
+            // }
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());

@@ -25,7 +25,7 @@ public:
   void	setAction(ACommand::Action action);
 
   void		move();
-  virtual void	update(double elapsedTime);
+  virtual void	update(double);
 
   void swap(Player& other);
 
