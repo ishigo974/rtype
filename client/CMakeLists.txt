@@ -51,11 +51,12 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-    set(SFML_ROOT "/usr/local")
+  set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+  set(CMAKE_MODULE_PATH "/usr/local/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+  set(SFML_ROOT "/usr/local")
 endif ()
 
-find_package(SFML 2 REQUIRED system window graphics network audio)
+find_package(SFML 2 REQUIRED audio graphics window system)
 #find_package(Boost 1.59 REQUIRED)
 
 if (SFML_FOUND)
