@@ -13,6 +13,8 @@
 #include "ScrollingBackground.hpp"
 #include "Mob.hpp"
 #include "Player.hpp"
+#include "Label.hpp"
+#include "Button.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -275,6 +277,47 @@ void menuTest()
     std::cout << "Escape pressed" << std::endl;
 }
 
+void	buttonAndLabelsTest()
+{
+  Renderer r;
+  Input i(r.getWindow());
+  Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+  cu::Event     e;
+  
+
+  r.getWindow().clear();
+  e.key = cu::Event::LAST_ACTION;
+  while (e.key != cu::Event::ESCAPE)
+    {
+      while (i.pollEvent(e))
+        {
+	  if (e.type == cu::Event::Closed)
+            {
+	      std::cout << "Close button pressed" << std::endl;
+	      return;
+            }
+	  if (e.type == cu::Event::MouseButtonReleased)
+	    {
+	      std::cout << "Button "
+			<< e.mouse.button
+			<< " released : ["
+			<< e.mouse.x
+			<< ";"
+			<< e.mouse.y
+			<< "]"
+			<< std::endl;
+	    }
+	  if (l.intersect(e.mouse.x, e.mouse.y))
+	    {
+	      std::cout << "Click on button" << std::endl;
+	    }
+        }
+      l.draw(r.getWindow());
+      r.render();
+    }
+  std::cout << "Escape pressed" << std::endl;
+}
+
 int main()
 {
     EntityManager entityManager;
@@ -289,6 +332,7 @@ int main()
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
+    buttonAndLabelsTest();
     menuTest();
     backgroundTest();
 
