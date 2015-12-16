@@ -18,30 +18,9 @@ UdpSocket::UdpSocket(short int port)
     _port = port;
 }
 
-//size_t        UdpSocket::send(Buffer const& buffer) const
-//{
-//    ssize_t ret;
-//    //TODO CHANGE TO SENDTO
-//
-//    if ((ret = ::send(_socket, buffer.data(), buffer.size(), 0)) == -1)
-//        throw std::runtime_error("send failed");
-//    return (static_cast<size_t>(ret));
-//}
-//
-//size_t        UdpSocket::receive(Buffer& buffer, size_t len) const
-//{
-//    ssize_t ret;
-//    char    *buff = new char[len];
-//
-//    //TODO CHANGE TO RECEVFROM
-//    if ((ret = ::recv(_socket, buff, len, 0)) == -1)
-//        throw std::runtime_error("receive failed");
-//    buffer.setData(buff, static_cast<size_t>(ret));
-//    return static_cast<size_t>(ret);
-//
-//}
-//
-
+UdpSocket::~UdpSocket()
+{
+}
 
 bool UdpSocket::bind() const
 {
