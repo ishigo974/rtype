@@ -27,6 +27,8 @@ namespace RType
         static void             fullTestRoom();
 
     protected:
+        static Request          recvRequest(TcpConnector& client,
+                                            Buffer& buffer);
         static void             receiveAll(TcpConnector& client,
                                             Buffer& buffer);
         static Buffer           formatRequest(Request::LobbyRequest code,

@@ -130,39 +130,39 @@ namespace RType
         std::string         str;
 
         client.connect();
+
+        // list rooms
         client.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client, received);
-        request = Request(Request::PROTOCOL_LOBBY, received);
-        received.consume(request.size());
+        request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 0);
+
+        // create room
         str = "Room2BoGoss";
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client.send(formatRequest(Request::LR_CREATEROOM, tmp));
-        receiveAll(client, received);
-        request = Request(Request::PROTOCOL_LOBBY, received);
-        received.consume(request.size());
+        request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_OK);
+
+        // list rooms
         client.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client, received);
-        request = Request(Request::PROTOCOL_LOBBY, received);
-        received.consume(request.size());
+        request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 1);
         UT_ASSERT(rooms[0].name == str);
         UT_ASSERT(rooms[0].nbPlayers == 1);
+
+        // quit room
         client.send(formatRequest(Request::LR_QUITROOM));
-        receiveAll(client, received);
-        request = Request(Request::PROTOCOL_LOBBY, received);
-        received.consume(request.size());
+        request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_OK);
+
+        // list rooms
         client.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client, received);
-        request = Request(Request::PROTOCOL_LOBBY, received);
-        received.consume(request.size());
+        request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 0);
@@ -184,9 +184,7 @@ namespace RType
 
         // client1 list rooms
         client1.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 0);
@@ -196,17 +194,13 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client2.send(formatRequest(Request::LR_CREATEROOM, tmp));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
         // client1 list rooms
         client1.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 1);
@@ -218,17 +212,13 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client1.send(formatRequest(Request::LR_CREATEROOM, tmp));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
         // client2 list rooms
         client2.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 2);
@@ -239,14 +229,10 @@ namespace RType
 
         // client1/client2 quits rooms
         client1.send(formatRequest(Request::LR_QUITROOM));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         client2.send(formatRequest(Request::LR_QUITROOM));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
     }
 
@@ -271,9 +257,7 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client1.send(formatRequest(Request::LR_USERNAME, tmp));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
@@ -282,9 +266,7 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client2.send(formatRequest(Request::LR_USERNAME, tmp));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
@@ -293,17 +275,13 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client2.send(formatRequest(Request::LR_CREATEROOM, tmp));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
         // client1 list rooms
         client1.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 1);
@@ -313,9 +291,7 @@ namespace RType
         // client1 joins room
         tmp.append<uint32_t>(rooms[0].id);
         client1.send(formatRequest(Request::LR_JOINROOM, tmp));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_ROOMINFO);
         id = request.get<uint8_t>("player_id");
         UT_ASSERT(id == 2);
@@ -326,18 +302,14 @@ namespace RType
         tmp.clear();
 
         // client2 is notified of client1 joining his room
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_JOINROOM);
         UT_ASSERT(request.get<uint8_t>("player_id") == 2);
         UT_ASSERT(request.get<std::string>("username") == "Toto");
 
         // client1 list rooms
         client1.send(formatRequest(Request::LR_LISTROOMS));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
         UT_ASSERT(rooms.size() == 1);
@@ -349,64 +321,59 @@ namespace RType
         tmp.append<uint32_t>(str.size());
         tmp.append<std::string>(str);
         client2.send(formatRequest(Request::LR_USERNAME, tmp));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
         tmp.clear();
 
         // client1 is notified of client2 changing his nickname
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_CLIUSRNM);
         UT_ASSERT(request.get<uint8_t>("player_id") == players[0].id);
         UT_ASSERT(request.get<std::string>("username") == "Titi");
 
         // client1 is ready
         client1.send(formatRequest(Request::LR_READY));
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // client2 is notified of client1 getting ready
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_CLIENTRDY);
         UT_ASSERT(request.get<uint8_t>("player_id") == id);
 
         // client2 is ready
         client2.send(formatRequest(Request::LR_READY));
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // client1 is notified of client2 getting ready
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_CLIENTRDY);
         UT_ASSERT(request.get<uint8_t>("player_id") == players[0].id);
 
         // client1 is notified that the game starts
-        receiveAll(client1, received1);
-        request = Request(Request::PROTOCOL_LOBBY, received1);
-        received1.consume(request.size());
+        request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_GAMESTART);
 
         // client2 is notified that the game starts
-        receiveAll(client2, received2);
-        request = Request(Request::PROTOCOL_LOBBY, received2);
-        received2.consume(request.size());
+        request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_GAMESTART);
     }
 
     /*
     ** Static functions
     */
+    Request         ProtocolUT::recvRequest(TcpConnector& client,
+                                            Buffer& buffer)
+    {
+        Request     request;
+
+        receiveAll(client, buffer);
+        request = Request(Request::PROTOCOL_LOBBY, buffer);
+        buffer.consume(request.size());
+        return request;
+    }
+
     void            ProtocolUT::receiveAll(TcpConnector& client,
                                            Buffer& buffer)
     {
