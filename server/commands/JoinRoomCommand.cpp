@@ -1,3 +1,4 @@
+#include <iostream>
 #include "JoinRoomCommand.hpp"
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
@@ -67,21 +68,19 @@ expected LobbySystem"); // TODO
             if (player == nullptr || network == nullptr)
                 throw std::runtime_error("Entity does not have a \
 player/network component");
-            // validation name TODO
             if (_room == nullptr || player->getRoom() != nullptr
-                || _room->size() >= Component::Room::nbMaxPlayers)
+                || !_room->addPlayer(*_entity))
                 network->send(Server::responseKO);
             else
             {
-                Buffer      buffer;
+                Buffer          buffer;
+                unsigned int    id;
 
-                buffer.append<uint16_t>(RType::Request::SE_JOINROOM);
-                buffer.append<uint32_t>(sizeof(uint8_t));
-                buffer.append<uint8_t>(_room->getPlayerId(*_entity));
-                _room->addPlayer(*_entity);
                 player->setRoom(_room);
-                network->send(Server::responseOK);
-                _room->broadcast(buffer, _entity);
+                id = _room->getPlayerId(*_entity);
+                _room->broadcast(buildJoinRoomAlert(id, player->getUsername()),
+                                _entity);
+                network->send(buildRoomInfos(_room->getPlayersMap(), id));
             }
         }
 
@@ -97,6 +96,48 @@ player/network component");
         std::string JoinRoom::getName() const
         {
             return "JoinRoomCommand";
+        }
+
+        /*
+        ** Protected member functions
+        */
+        Buffer      JoinRoom::buildJoinRoomAlert(uint8_t id,
+                                                 std::string const& username)
+        {
+            Buffer  buffer;
+
+            buffer.append<uint16_t>(RType::Request::SE_JOINROOM);
+            buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
+                                    username.size());
+            buffer.append<uint8_t>(id);
+            buffer.append<uint32_t>(username.size());
+            buffer.append<std::string>(username);
+            return buffer;
+        }
+
+        Buffer      JoinRoom::buildRoomInfos(Component::Room::PlayersMap const&
+                                             players, unsigned int id)
+        {
+            Buffer  res;
+            Buffer  buffer;
+
+            buffer.append<uint8_t>(id);
+            for (auto& player: players)
+            {
+                if (player.first == id)
+                    continue ;
+                Component::Player*  c = player.second.first
+                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
+
+                buffer.append<uint8_t>(player.first);
+                buffer.append<uint32_t>(c->getUsername().size());
+                buffer.append<std::string>(c->getUsername());
+                buffer.append<uint8_t>(player.second.second);
+            }
+            res.append<uint16_t>(RType::Request::SE_ROOMINFO);
+            res.append<uint32_t>(buffer.size());
+            res.append(buffer);
+            return res;
         }
     }
 }
