@@ -5,6 +5,7 @@
 # include "Request.hpp"
 # include "RequestCommand.hpp"
 # include "ASystem.hpp"
+# include "RoomComponent.hpp"
 
 namespace RType
 {
@@ -29,6 +30,9 @@ namespace RType
 
         public:
             virtual std::string getName() const;
+
+        protected:
+            void                startGame(Component::Room* room) const;
         };
     }
 }

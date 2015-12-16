@@ -36,6 +36,7 @@ namespace RType
             void                        setName(std::string const& name);
             void                        broadcast(Buffer const& buffer,
                                           ECS::Entity const* except = nullptr);
+            bool                        allReady() const;
 
         public:
             std::string const&          getRoomName() const;

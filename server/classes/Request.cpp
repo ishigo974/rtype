@@ -15,22 +15,30 @@ namespace RType
     const size_t                    Request::headerSize     = sizeof(uint16_t) +
                                                               sizeof(uint32_t);
     const Request::LobbyReqMap      Request::lobbyRequests  = {
-        { LR_LISTROOMS,     {} },
-        { LR_CREATEROOM,    { "room_name" } },
-        { LR_JOINROOM,      { "room_id" } },
-        { LR_QUITROOM,      {} },
-        { LR_READY,         {} },
-        { LR_NOTREADY,      {} },
-        { LR_USERNAME,      { "username"} },
-        { SE_LISTROOMS,     { "rooms" } },
-        { SE_OK,            {} }
+        { LR_LISTROOMS,     {}                          },
+        { LR_CREATEROOM,    { "room_name" }             },
+        { LR_JOINROOM,      { "room_id" }               },
+        { LR_QUITROOM,      {}                          },
+        { LR_READY,         {}                          },
+        { LR_NOTREADY,      {}                          },
+        { LR_USERNAME,      { "username"}               },
+        { SE_LISTROOMS,     { "rooms" }                 },
+        { SE_JOINROOM,      { "player_id", "username" } },
+        { SE_CLIUSRNM,      { "player_id", "username" } },
+        { SE_CLIENTRDY,     { "player_id" }             },
+        { SE_CLINOTRDY,     { "player_id" }             },
+        { SE_GAMESTART,     {}                          },
+        { SE_ROOMINFO,      { "player_id", "players" }  },
+        { SE_OK,            {}                          }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
-        { "size",       sizeof(uint32_t) },
-        { "room_name",  Request::variableSize },
-        { "room_id",    sizeof(uint32_t) },
-        { "username",   Request::variableSize },
-        { "rooms",      Request::variableSize }
+        { "size",       sizeof(uint32_t)        },
+        { "room_name",  Request::variableSize   },
+        { "room_id",    sizeof(uint32_t)        },
+        { "username",   Request::variableSize   },
+        { "rooms",      Request::variableSize   },
+        { "player_id",  sizeof(uint8_t)         },
+        { "players",    Request::variableSize   }
     };
 
     /*
@@ -138,6 +146,7 @@ namespace RType
             player.username = buffer.getString(size);
             buffer.consume(size);
             player.isReady = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
             players.push_back(player);
         }
         return players;
@@ -212,7 +221,7 @@ namespace RType
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
-            if (arg == "rooms")
+            if (arg == "rooms" || arg == "players")
             {
                 _data.insert(std::make_pair(it->first, tmp));
                 return ;

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "JoinRoomCommand.hpp"
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
@@ -68,16 +69,14 @@ expected LobbySystem"); // TODO
                 throw std::runtime_error("Entity does not have a \
 player/network component");
             if (_room == nullptr || player->getRoom() != nullptr
-                || _room->size() >= Component::Room::nbMaxPlayers)
+                || !_room->addPlayer(*_entity))
                 network->send(Server::responseKO);
             else
             {
                 Buffer          buffer;
                 unsigned int    id;
 
-                _room->addPlayer(*_entity);
                 player->setRoom(_room);
-                network->send(Server::responseOK);
                 id = _room->getPlayerId(*_entity);
                 _room->broadcast(buildJoinRoomAlert(id, player->getUsername()),
                                 _entity);

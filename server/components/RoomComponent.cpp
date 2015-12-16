@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <string>
+#include <iostream>
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
@@ -207,9 +208,16 @@ Network component"); // TODO except
             return res.substr(0, res.size() - 2);
         }
 
-        Room::PlayersMap const&       Room::getPlayersMap() const
+        Room::PlayersMap const&         Room::getPlayersMap() const
         {
             return _players;
+        }
+
+        bool                            Room::allReady() const
+        {
+            return std::find_if(_players.begin(), _players.end(),
+                   [](std::pair<unsigned int, PlayerEntry> const& entry)
+                   { return entry.second.second == false; }) == _players.end();
         }
 
         /*
