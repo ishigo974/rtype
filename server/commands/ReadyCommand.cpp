@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
@@ -66,6 +67,8 @@ player/network component");
                 network->send(Server::responseOK);
                 room->broadcast(buffer, _entity);
             }
+            if (room->allReady())
+                startGame(room);
         }
 
         void        Ready::undo()
@@ -81,6 +84,18 @@ player/network component");
         std::string Ready::getName() const
         {
             return "ReadyCommand";
+        }
+
+        /*
+        ** Protected member functions
+        */
+        void        Ready::startGame(Component::Room* room) const
+        {
+            Buffer  start;
+
+            start.append<uint16_t>(RType::Request::SE_GAMESTART);
+            start.append<uint32_t>(0);
+            room->broadcast(start);
         }
     }
 }

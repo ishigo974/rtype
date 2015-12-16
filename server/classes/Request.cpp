@@ -15,22 +15,30 @@ namespace RType
     const size_t                    Request::headerSize     = sizeof(uint16_t) +
                                                               sizeof(uint32_t);
     const Request::LobbyReqMap      Request::lobbyRequests  = {
-        { LR_LISTROOMS,     {} },
-        { LR_CREATEROOM,    { "room_name" } },
-        { LR_JOINROOM,      { "room_id" } },
-        { LR_QUITROOM,      {} },
-        { LR_READY,         {} },
-        { LR_NOTREADY,      {} },
-        { LR_USERNAME,      { "username"} },
-        { SE_LISTROOMS,     { "rooms" } },
-        { SE_OK,            {} }
+        { LR_LISTROOMS,     {}                          },
+        { LR_CREATEROOM,    { "room_name" }             },
+        { LR_JOINROOM,      { "room_id" }               },
+        { LR_QUITROOM,      {}                          },
+        { LR_READY,         {}                          },
+        { LR_NOTREADY,      {}                          },
+        { LR_USERNAME,      { "username"}               },
+        { SE_LISTROOMS,     { "rooms" }                 },
+        { SE_JOINROOM,      { "player_id", "username" } },
+        { SE_CLIUSRNM,      { "player_id", "username" } },
+        { SE_CLIENTRDY,     { "player_id" }             },
+        { SE_CLINOTRDY,     { "player_id" }             },
+        { SE_GAMESTART,     {}                          },
+        { SE_ROOMINFO,      { "player_id", "players" }  },
+        { SE_OK,            {}                          }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
-        { "size",       sizeof(uint32_t) },
-        { "room_name",  Request::variableSize },
-        { "room_id",    sizeof(uint32_t) },
-        { "username",   Request::variableSize },
-        { "rooms",      Request::variableSize }
+        { "size",       sizeof(uint32_t)        },
+        { "room_name",  Request::variableSize   },
+        { "room_id",    sizeof(uint32_t)        },
+        { "username",   Request::variableSize   },
+        { "rooms",      Request::variableSize   },
+        { "player_id",  sizeof(uint8_t)         },
+        { "players",    Request::variableSize   }
     };
 
     /*
@@ -85,10 +93,10 @@ namespace RType
     }
 
     template <>
-    RoomsCollection     Request::get(std::string const& key) const
+    Request::RoomsTab   Request::get(std::string const& key) const
     {
         DataMap::const_iterator it = _data.find(key);
-        RoomsCollection         res;
+        RoomsTab                res;
         Buffer                  buffer;
 
         if (_code != SE_LISTROOMS)
@@ -101,17 +109,47 @@ namespace RType
             Room            room;
             uint32_t        size;
 
-            room.setId(buffer.get<uint32_t>());
+            room.id = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
             size = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
-            room.setName(buffer.getString(size));
+            room.name = buffer.getString(size);
             buffer.consume(size);
-            room.setNbPlayers(buffer.get<uint8_t>());
+            room.nbPlayers = buffer.get<uint8_t>();
             buffer.consume(sizeof(uint8_t));
             res.push_back(room);
         }
         return res;
+    }
+
+    template <>
+    Request::PlayersTab Request::get(std::string const& key) const
+    {
+        DataMap::const_iterator it = _data.find(key);
+        PlayersTab              players;
+        Buffer                  buffer;
+
+        if (_code != SE_ROOMINFO)
+            throw Exception::ValueError("Trying to retrieve players infos");
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        buffer = it->second;
+        while (!buffer.empty())
+        {
+            Player      player;
+            uint32_t    size;
+
+            player.id = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
+            size = buffer.get<uint32_t>();
+            buffer.consume(sizeof(uint32_t));
+            player.username = buffer.getString(size);
+            buffer.consume(size);
+            player.isReady = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
+            players.push_back(player);
+        }
+        return players;
     }
 
     Request::Protocol   Request::getProtocol() const
@@ -183,7 +221,7 @@ namespace RType
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
-            if (arg == "rooms")
+            if (arg == "rooms" || arg == "players")
             {
                 _data.insert(std::make_pair(it->first, tmp));
                 return ;

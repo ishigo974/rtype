@@ -7,7 +7,6 @@
 # include "Buffer.hpp"
 # include "IStringable.hpp"
 # include "ValueError.hpp"
-# include "Room.hpp"
 
 namespace RType
 {
@@ -36,8 +35,25 @@ namespace RType
             SE_CLIENTRDY    = 403,
             SE_CLINOTRDY    = 404,
             SE_CLIUSRNM     = 405,
+            SE_ROOMINFO     = 406,
+            SE_GAMESTART    = 500,
             SE_OK           = 601,
             SE_KO           = 602
+        };
+
+    public:
+        struct Room
+        {
+            unsigned int    id;
+            std::string     name;
+            unsigned int    nbPlayers;
+        };
+
+        struct Player
+        {
+            unsigned int    id;
+            std::string     username;
+            bool            isReady;
         };
 
     public:
@@ -46,6 +62,8 @@ namespace RType
         typedef std::vector<std::string>                    DataArgs;
         typedef std::unordered_map<LobbyRequest, DataArgs,
                                     std::hash<uint16_t> >   LobbyReqMap;
+        typedef std::vector<Room>                           RoomsTab;
+        typedef std::vector<Player>                         PlayersTab;
 
     public:
         Request();
@@ -94,10 +112,13 @@ namespace RType
     };
 
     template <>
-    std::string     Request::get(std::string const& key) const;
+    std::string             Request::get(std::string const& key) const;
 
     template <>
-    RoomsCollection Request::get(std::string const& key) const;
+    Request::RoomsTab       Request::get(std::string const& key) const;
+
+    template <>
+    Request::PlayersTab     Request::get(std::string const& key) const;
 }
 
 #endif /* !REQUEST_HPP_ */

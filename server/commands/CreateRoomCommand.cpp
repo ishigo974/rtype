@@ -1,3 +1,4 @@
+#include <iostream>
 #include "CreateRoomCommand.hpp"
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
