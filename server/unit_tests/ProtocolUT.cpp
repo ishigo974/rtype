@@ -341,6 +341,26 @@ namespace RType
         UT_ASSERT(request.getCode() == Request::SE_CLIENTRDY);
         UT_ASSERT(request.get<uint8_t>("player_id") == id);
 
+        // client1 is not ready
+        client1.send(formatRequest(Request::LR_NOTREADY));
+        request = recvRequest(client1, received1);
+        UT_ASSERT(request.getCode() == Request::SE_OK);
+
+        // client2 is notified of client1 not ready
+        request = recvRequest(client2, received2);
+        UT_ASSERT(request.getCode() == Request::SE_CLINOTRDY);
+        UT_ASSERT(request.get<uint8_t>("player_id") == id);
+
+        // client1 is ready
+        client1.send(formatRequest(Request::LR_READY));
+        request = recvRequest(client1, received1);
+        UT_ASSERT(request.getCode() == Request::SE_OK);
+
+        // client2 is notified of client1 getting ready
+        request = recvRequest(client2, received2);
+        UT_ASSERT(request.getCode() == Request::SE_CLIENTRDY);
+        UT_ASSERT(request.get<uint8_t>("player_id") == id);
+
         // client2 is ready
         client2.send(formatRequest(Request::LR_READY));
         request = recvRequest(client2, received2);
