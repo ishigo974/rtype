@@ -38,9 +38,6 @@ public:
 private:
     TcpSocket(TcpSocket const& sock) = delete;
     TcpSocket& operator=(TcpSocket const& sock) = delete;
-
-protected:
-    std::string _addr;
 };
 
 #endif //RTYPE_SERVER_TCPSOCKET_HPP

@@ -95,7 +95,7 @@ std::string         Buffer::toString() const
     std::ostringstream ss;
 
     ss << "Buffer {"
-    << "\n\t Data" << this->data();
+    << "\n\t Data : " << this->data();
     ss << "\n}" << std::endl;
 
     return ss.str();

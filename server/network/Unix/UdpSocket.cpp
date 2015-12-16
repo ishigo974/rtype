@@ -3,52 +3,61 @@
 //
 
 #include <netdb.h>
-#include <unistd.h>
 #include <cstring>
 #include <iostream>
 #include <sstream>
+#include <arpa/inet.h>
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port)
         : BaseSocket()
 {
-    if ((_socket = socket(AF_INET, SOCK_DGRAM, getprotobyname("UDP")
-            ->p_proto)) == -1)
+    if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         throw std::runtime_error("socket failed");
-    _port = port;
+    _port        = port;
 }
 
-//size_t        UdpSocket::send(Buffer const& buffer) const
-//{
-//    ssize_t ret;
-//    //TODO CHANGE TO SENDTO
-//
-//    if ((ret = ::send(_socket, buffer.data(), buffer.size(), 0)) == -1)
-//        throw std::runtime_error("send failed");
-//    return (static_cast<size_t>(ret));
-//}
-//
-//size_t        UdpSocket::receive(Buffer& buffer, size_t len) const
-//{
-//    ssize_t ret;
-//    char    *buff = new char[len];
-//
-//    //TODO CHANGE TO RECEVFROM
-//    if ((ret = ::recv(_socket, buff, len, 0)) == -1)
-//        throw std::runtime_error("receive failed");
-//    buffer.setData(buff, static_cast<size_t>(ret));
-//    return static_cast<size_t>(ret);
-//
-//}
-//
+size_t        UdpSocket::sendTo(Buffer const& buffer, std::string const& addr)
+const
+{
+    ssize_t            ret;
+    struct sockaddr_in dest;
 
+    dest.sin_addr.s_addr = inet_addr(addr.c_str());
+    dest.sin_port        = htons(_port);
+    dest.sin_family      = AF_INET;
+
+    if ((ret = ::sendto(_socket, buffer.data(), buffer.size(), 0,
+                        reinterpret_cast<struct sockaddr *>(&dest),
+                        sizeof(dest))) == -1)
+        throw std::runtime_error("send failed");
+    return (static_cast<size_t>(ret));
+}
+
+size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
+                                     std::string& addr) const
+{
+    ssize_t            ret;
+    char               *buff      = new char[len];
+    struct sockaddr_in client;
+    socklen_t          clientsize = sizeof(client);
+
+    if ((ret = ::recvfrom(_socket, buff, len, 0,
+                          reinterpret_cast<struct sockaddr *>(&client),
+                          &clientsize)) == -1)
+        throw std::runtime_error("receive failed");
+    addr.assign(inet_ntoa(client.sin_addr));
+    buffer.setData(buff, static_cast<size_t>(ret));
+    return static_cast<size_t>(ret);
+
+}
 
 bool UdpSocket::bind() const
 {
     struct sockaddr_in addr;
 
     addr.sin_family      = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port        = htons(_port);
 
     return (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
@@ -95,4 +104,9 @@ size_t UdpSocket::receive(Buffer& buffer, size_t len) const
 void UdpSocket::close() const
 {
     BaseSocket::close();
+}
+
+std::string const& UdpSocket::getAddr() const
+{
+    return this->_addr;
 }

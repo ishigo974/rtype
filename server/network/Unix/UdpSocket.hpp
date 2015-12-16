@@ -22,12 +22,17 @@ public:
     virtual size_t send(Buffer const& buffer) const;
     virtual size_t receive(Buffer& buffer, size_t len) const;
     virtual void   close() const;
+    virtual std::string const& getAddr() const;
 
 public:
     virtual bool bind() const;
 
 public:
     virtual std::string toString() const;
+
+public:
+    virtual size_t sendTo(Buffer const& buffer, std::string const& addr) const;
+    virtual size_t receiveFrom(Buffer& buffer, size_t len, std::string& addr) const;
 
 public:
     rSocket   getSocket() const;
