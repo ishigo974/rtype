@@ -60,10 +60,9 @@ expected LobbySystem"); // TODO
         void        JoinRoom::execute()
         {
             Component::Player*      player =
-                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
+                _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                _entity->getComponent<Component::NetworkTCP>(
-                    Component::MASK_NETWORKTCP);
+                _entity->getComponent<Component::NetworkTCP>();
 
             if (player == nullptr || network == nullptr)
                 throw std::runtime_error("Entity does not have a \
@@ -127,7 +126,7 @@ player/network component");
                 if (player.first == id)
                     continue ;
                 Component::Player*  c = player.second.first
-                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
+                    ->getComponent<Component::Player>();
 
                 buffer.append<uint8_t>(player.first);
                 buffer.append<uint32_t>(c->getUsername().size());

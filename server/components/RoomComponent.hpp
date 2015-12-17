@@ -60,7 +60,8 @@ namespace RType
             unsigned int                getAvailableId() const;
 
         public:
-            static const unsigned int   nbMaxPlayers;
+            static const unsigned int       nbMaxPlayers;
+            static const ECS::ComponentMask mask;
 
         protected:
             std::string                 _name;

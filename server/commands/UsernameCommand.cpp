@@ -102,13 +102,11 @@ player/network component");
         void        Username::updateData()
         {
             if ((_player = _entity
-                    ->getComponent<Component::Player>(Component::MASK_PLAYER))
-                        == nullptr)
+                    ->getComponent<Component::Player>()) == nullptr)
                 return ;
             _oldUsername = _player->getUsername();
             if ((_network = _entity
-                    ->getComponent<Component::NetworkTCP>(
-                        Component::MASK_NETWORKTCP)) == nullptr)
+                    ->getComponent<Component::NetworkTCP>()) == nullptr)
                 return ;
         }
     }

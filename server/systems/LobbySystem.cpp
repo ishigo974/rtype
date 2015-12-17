@@ -48,7 +48,7 @@ namespace RType
             while (it != _rooms.end())
             {
                 Component::Room* room = it->second
-                    ->getComponent<Component::Room>(Component::MASK_ROOM);
+                    ->getComponent<Component::Room>();
 
                 if (room->size() == 0)
                 {
@@ -64,7 +64,7 @@ namespace RType
         void                Lobby::processEntity(ECS::Entity& e)
         {
             Component::NetworkTCP*  network = e
-                .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                .getComponent<Component::NetworkTCP>();
 
             while (network->isRequest())
             {
@@ -96,7 +96,7 @@ request, ignored (" + network->repr() + ")", true);
             if (it == _rooms.end())
                 return nullptr;
             return it->second
-                        ->getComponent<Component::Room>(Component::MASK_ROOM);
+                        ->getComponent<Component::Room>();
         }
 
         ECS::ComponentMask  Lobby::getMask() const

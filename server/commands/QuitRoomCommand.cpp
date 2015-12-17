@@ -45,9 +45,9 @@ namespace RType
         void        QuitRoom::execute()
         {
             Component::Player*      player =
-                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
+                _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                _entity->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                _entity->getComponent<Component::NetworkTCP>();
             Component::Room*        room;
 
             if (player == nullptr || network == nullptr)

@@ -64,7 +64,7 @@ expected LobbySystem"); // TODO
             {
                 Component::Room*  room =
                     entry.second
-                        ->getComponent<Component::Room>(Component::MASK_ROOM);
+                        ->getComponent<Component::Room>();
 
                 if (room == nullptr)
                     throw std::runtime_error("Can't execute command: \
@@ -78,8 +78,8 @@ entity does not have a room component");
             }
             response.append<uint32_t>(data.size());
             response.append(data);
-            if ((network = _entity->getComponent<Component::NetworkTCP>(
-                Component::MASK_NETWORKTCP)) == nullptr)
+            if ((network = _entity->getComponent<Component::NetworkTCP>())
+                    == nullptr)
                 throw std::runtime_error("Can't execute command: \
 entity does not have a NetworkTCP component");
             network->send(response);

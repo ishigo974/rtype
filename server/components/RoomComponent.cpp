@@ -15,7 +15,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const unsigned int      Room::nbMaxPlayers  = 4;
+        const unsigned int          Room::nbMaxPlayers  = 4;
+        const ECS::ComponentMask    Room::mask          = MASK_ROOM;
 
         /*
         ** Constructor/Destructor
@@ -101,7 +102,7 @@ namespace RType
             for (auto& entry: _players)
             {
                 Component::NetworkTCP*  network = entry.second.first
-                    ->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                    ->getComponent<Component::NetworkTCP>();
 
                 if (network == nullptr)
                     throw std::runtime_error("Player entity is missing his \
@@ -175,7 +176,7 @@ Network component"); // TODO except
 
         ECS::ComponentMask      Room::getMask() const
         {
-            return Component::MASK_ROOM;
+            return mask;
         }
 
         ECS::IComponent*        Room::clone() const
@@ -197,7 +198,7 @@ Network component"); // TODO except
             for (auto& player: _players)
             {
                 Component::Player*  infos = player.second.first
-                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
+                    ->getComponent<Component::Player>();
 
                 if (infos == nullptr)
                     res += "?";
