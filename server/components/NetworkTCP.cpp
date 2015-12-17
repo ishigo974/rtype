@@ -199,7 +199,7 @@ namespace RType
                 {
                     Request     request(_received);
 
-                    _received.consume(request.size());
+                    _received.consume(request.toBuffer().size());
                     _requests.push(request);
                 }
             } catch (Exception::IncompleteRequest const& /*e*/) {

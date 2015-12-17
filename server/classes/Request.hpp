@@ -5,12 +5,12 @@
 # include <vector>
 # include <unordered_map>
 # include "Buffer.hpp"
-# include "IStringable.hpp"
 # include "ValueError.hpp"
+# include "ABasePacket.hpp"
 
 namespace RType
 {
-    class Request : public IStringable
+    class Request : public ABasePacket
     {
     public:
         enum LobbyRequest
@@ -50,7 +50,6 @@ namespace RType
         };
 
     public:
-        typedef std::unordered_map<std::string, Buffer>     DataMap;
         typedef std::unordered_map<std::string, size_t>     DataSizeMap;
         typedef std::vector<std::string>                    DataArgs;
         typedef std::unordered_map<LobbyRequest, DataArgs,
@@ -67,25 +66,19 @@ namespace RType
         Request(Request const& other);
         Request&        operator=(Request const& other);
 
-    public:
-        uint16_t        getCode() const;
-        size_t          size() const;
+    protected:
+        void            parse(Buffer const& raw);
+        void            parseData(Buffer const& raw, size_t dataSize);
 
+    public:
         template <typename Type>
         Type            get(std::string const& key) const
         {
-            DataMap::const_iterator it = _data.find(key);
-
-            if (it == _data.end())
-                throw Exception::ValueError("No such data: " + key);
-            return it->second.get<Type>();
+            return ABasePacket::get<Type>(key);
         }
 
-    protected:
-        void            parse(Buffer const& raw);
-        void            parseData(Buffer const& raw);
-
     public:
+        virtual Buffer          toBuffer() const;
         virtual std::string     toString() const;
 
     public:
@@ -94,15 +87,7 @@ namespace RType
         static const uint16_t       unsetCode;
         static const size_t         variableSize;
         static const size_t         headerSize;
-
-    protected:
-        uint16_t        _code;
-        size_t          _size;
-        DataMap         _data;
     };
-
-    template <>
-    std::string             Request::get(std::string const& key) const;
 
     template <>
     Request::RoomsTab       Request::get(std::string const& key) const;

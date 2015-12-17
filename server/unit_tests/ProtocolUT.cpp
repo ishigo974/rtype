@@ -65,7 +65,7 @@ namespace RType
             UT_ASSERT(buffer.size() == Request::headerSize);
             request = Request(buffer);
             UT_ASSERT(request.getCode() == code);
-            UT_ASSERT(request.size() == Request::headerSize);
+            UT_ASSERT(request.toBuffer().size() == Request::headerSize);
         }
     }
 
@@ -95,7 +95,7 @@ namespace RType
             UT_ASSERT(buffer.size() == Request::headerSize + dataSize);
             request = Request(buffer);
             UT_ASSERT(request.getCode() == test.second);
-            UT_ASSERT(request.size() == Request::headerSize + dataSize);
+            UT_ASSERT(request.toBuffer().size() == Request::headerSize + dataSize);
             UT_ASSERT(request.get<std::string>(Request::lobbyRequests
                 .at(test.second).at(0)) == test.first);
         }
@@ -112,7 +112,8 @@ namespace RType
             UT_ASSERT(buffer.size() == Request::headerSize + dataSize);
             request = Request(buffer);
             UT_ASSERT(request.getCode() == Request::LR_JOINROOM);
-            UT_ASSERT(request.size() == Request::headerSize + dataSize);
+            UT_ASSERT(request.toBuffer().size() == Request::headerSize +
+                      dataSize);
             UT_ASSERT(request.get<uint32_t>("room_id") == test);
         }
     }
@@ -387,7 +388,7 @@ namespace RType
 
         receiveAll(client, buffer);
         request = Request(buffer);
-        buffer.consume(request.size());
+        buffer.consume(request.toBuffer().size());
         return request;
     }
 

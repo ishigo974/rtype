@@ -44,12 +44,11 @@ namespace RType
     /*
     ** Constructor/Destructor
     */
-    Request::Request() : _code(unsetCode), _size(0)
+    Request::Request() : ABasePacket()
     {
     }
 
-    Request::Request(Buffer const& raw) :
-        _code(unsetCode), _size(0)
+    Request::Request(Buffer const& raw) : ABasePacket()
     {
         parse(raw);
     }
@@ -61,36 +60,20 @@ namespace RType
     /*
     ** Copy constructor and assign operator
     */
-    Request::Request(Request const& other) :
-        _code(other._code),
-        _size(other._size), _data(other._data)
+    Request::Request(Request const& other) : ABasePacket(other)
     {
     }
 
     Request&        Request::operator=(Request const& other)
     {
         if (this != &other)
-        {
-            _code = other._code;
-            _size = other._size;
-            _data = other._data;
-        }
+            ABasePacket::operator=(other);
         return *this;
     }
 
     /*
     ** Public member functions
     */
-    template <>
-    std::string         Request::get(std::string const& key) const
-    {
-        DataMap::const_iterator it = _data.find(key);
-
-        if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
-        return it->second.getString();
-    }
-
     template <>
     Request::RoomsTab   Request::get(std::string const& key) const
     {
@@ -151,26 +134,37 @@ namespace RType
         return players;
     }
 
-    uint16_t            Request::getCode() const
-    {
-        return _code;
-    }
-
-    size_t              Request::size() const
-    {
-        return _size;
-    }
-
     std::string         Request::toString() const
     {
         std::ostringstream  ss;
 
         ss << "Request {"
             << "\n\t_code: " << _code
-            << "\n\t_size: " << _size
             << "\n\tnb data: " << _data.size()
             << "\n}\n";
         return ss.str();
+    }
+
+    Buffer          Request::toBuffer() const
+    {
+        Buffer      res;
+        Buffer      data;
+        auto        it = lobbyRequests.find(static_cast<LobbyRequest>(_code));
+
+        if (it == lobbyRequests.end())
+            throw Exception::IncompleteRequest("Code " + std::to_string(_code) +
+                                               "does not match any requests");
+        res.append<uint16_t>(_code);
+        for (auto& arg: it->second)
+        {
+            if (dataSizes.at(arg) == Request::variableSize
+                && arg != "players" && arg != "rooms")
+                data.append<uint32_t>(_data.at(arg).size());
+            data.append<Buffer>(_data.at(arg));
+        }
+        res.append<uint32_t>(data.size());
+        res.append(data);
+        return res;
     }
 
     /*
@@ -185,17 +179,16 @@ namespace RType
                                                 request header");
         _code = raw.get<uint16_t>();
         dataSize = raw.get<uint32_t>(sizeof(uint16_t));
-        _size = headerSize + dataSize;
         if (raw.size() - headerSize < dataSize)
             throw Exception::IncompleteRequest("Buffer can't contain \
                                                 request's data");
-        parseData(raw);
+        parseData(raw, dataSize);
     }
 
-    void            Request::parseData(Buffer const& raw)
+    void            Request::parseData(Buffer const& raw, size_t dataSize)
     {
         Buffer                          tmp = raw;
-        size_t                          left = _size - headerSize;
+        size_t                          left = dataSize;
         LobbyReqMap::const_iterator     it =
             lobbyRequests.find(static_cast<LobbyRequest>(_code));
 
