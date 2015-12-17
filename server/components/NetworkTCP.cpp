@@ -197,8 +197,7 @@ namespace RType
             try {
                 while (!_received.empty())
                 {
-                    Request     request =
-                        Request(Request::PROTOCOL_LOBBY, _received);
+                    Request     request(_received);
 
                     _received.consume(request.size());
                     _requests.push(request);

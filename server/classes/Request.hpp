@@ -13,13 +13,6 @@ namespace RType
     class Request : public IStringable
     {
     public:
-        enum Protocol
-        {
-            PROTOCOL_UNSET,
-            PROTOCOL_LOBBY,
-            PROTOCOL_INGAME
-        };
-
         enum LobbyRequest
         {
             LR_LISTROOMS    = 100,
@@ -67,7 +60,7 @@ namespace RType
 
     public:
         Request();
-        Request(Protocol protocol, Buffer const& raw);
+        Request(Buffer const& raw);
         virtual ~Request();
 
     public:
@@ -75,7 +68,6 @@ namespace RType
         Request&        operator=(Request const& other);
 
     public:
-        Protocol        getProtocol() const;
         uint16_t        getCode() const;
         size_t          size() const;
 
@@ -91,8 +83,7 @@ namespace RType
 
     protected:
         void            parse(Buffer const& raw);
-        void            parseLobby(Buffer const& raw);
-        void            parseInGame(Buffer const& raw);
+        void            parseData(Buffer const& raw);
 
     public:
         virtual std::string     toString() const;
@@ -105,7 +96,6 @@ namespace RType
         static const size_t         headerSize;
 
     protected:
-        Protocol        _protocol;
         uint16_t        _code;
         size_t          _size;
         DataMap         _data;

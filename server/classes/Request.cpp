@@ -44,12 +44,12 @@ namespace RType
     /*
     ** Constructor/Destructor
     */
-    Request::Request() : _protocol(PROTOCOL_UNSET), _code(unsetCode), _size(0)
+    Request::Request() : _code(unsetCode), _size(0)
     {
     }
 
-    Request::Request(Protocol protocol, Buffer const& raw) :
-        _protocol(protocol), _code(unsetCode), _size(0)
+    Request::Request(Buffer const& raw) :
+        _code(unsetCode), _size(0)
     {
         parse(raw);
     }
@@ -62,7 +62,7 @@ namespace RType
     ** Copy constructor and assign operator
     */
     Request::Request(Request const& other) :
-        _protocol(other._protocol), _code(other._code),
+        _code(other._code),
         _size(other._size), _data(other._data)
     {
     }
@@ -71,7 +71,6 @@ namespace RType
     {
         if (this != &other)
         {
-            _protocol = other._protocol;
             _code = other._code;
             _size = other._size;
             _data = other._data;
@@ -152,11 +151,6 @@ namespace RType
         return players;
     }
 
-    Request::Protocol   Request::getProtocol() const
-    {
-        return _protocol;
-    }
-
     uint16_t            Request::getCode() const
     {
         return _code;
@@ -172,7 +166,6 @@ namespace RType
         std::ostringstream  ss;
 
         ss << "Request {"
-            << "\n\t_protocol: " << _protocol
             << "\n\t_code: " << _code
             << "\n\t_size: " << _size
             << "\n\tnb data: " << _data.size()
@@ -196,13 +189,10 @@ namespace RType
         if (raw.size() - headerSize < dataSize)
             throw Exception::IncompleteRequest("Buffer can't contain \
                                                 request's data");
-        if (_protocol == PROTOCOL_LOBBY)
-            parseLobby(raw);
-        else if (_protocol == PROTOCOL_INGAME)
-            parseInGame(raw);
+        parseData(raw);
     }
 
-    void            Request::parseLobby(Buffer const& raw)
+    void            Request::parseData(Buffer const& raw)
     {
         Buffer                          tmp = raw;
         size_t                          left = _size - headerSize;
@@ -244,10 +234,5 @@ namespace RType
             _data.insert(std::make_pair(it->first, res));
             left -= size;
         }
-    }
-
-    void            Request::parseInGame(Buffer const& /*raw*/)
-    {
-        // TODO
     }
 }

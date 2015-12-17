@@ -63,8 +63,7 @@ namespace RType
             buffer.append<uint16_t>(code);
             buffer.append<uint32_t>(0);
             UT_ASSERT(buffer.size() == Request::headerSize);
-            request = Request(Request::PROTOCOL_LOBBY, buffer);
-            UT_ASSERT(request.getProtocol() == Request::PROTOCOL_LOBBY);
+            request = Request(buffer);
             UT_ASSERT(request.getCode() == code);
             UT_ASSERT(request.size() == Request::headerSize);
         }
@@ -94,8 +93,7 @@ namespace RType
             buffer.append<uint32_t>(test.first.size());
             buffer.append(test.first);
             UT_ASSERT(buffer.size() == Request::headerSize + dataSize);
-            request = Request(Request::PROTOCOL_LOBBY, buffer);
-            UT_ASSERT(request.getProtocol() == Request::PROTOCOL_LOBBY);
+            request = Request(buffer);
             UT_ASSERT(request.getCode() == test.second);
             UT_ASSERT(request.size() == Request::headerSize + dataSize);
             UT_ASSERT(request.get<std::string>(Request::lobbyRequests
@@ -112,8 +110,7 @@ namespace RType
             buffer.append<uint32_t>(dataSize);
             buffer.append<uint32_t>(test);
             UT_ASSERT(buffer.size() == Request::headerSize + dataSize);
-            request = Request(Request::PROTOCOL_LOBBY, buffer);
-            UT_ASSERT(request.getProtocol() == Request::PROTOCOL_LOBBY);
+            request = Request(buffer);
             UT_ASSERT(request.getCode() == Request::LR_JOINROOM);
             UT_ASSERT(request.size() == Request::headerSize + dataSize);
             UT_ASSERT(request.get<uint32_t>("room_id") == test);
@@ -389,7 +386,7 @@ namespace RType
         Request     request;
 
         receiveAll(client, buffer);
-        request = Request(Request::PROTOCOL_LOBBY, buffer);
+        request = Request(buffer);
         buffer.consume(request.size());
         return request;
     }
