@@ -30,7 +30,8 @@ namespace RType
         { SE_GAMESTART,     {}                          },
         { SE_ROOMINFO,      { "player_id", "players" }  },
         { SE_QUITROOM,      { "player_id" }             },
-        { SE_OK,            {}                          }
+        { SE_OK,            {}                          },
+        { SE_KO,            {}                          }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
         { "size",       sizeof(uint32_t)        },
