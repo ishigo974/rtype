@@ -58,7 +58,7 @@ namespace RType
         typedef std::vector<Player>                         PlayersTab;
 
     public:
-        Request();
+        Request(uint16_t code = 0);
         Request(Buffer const& raw);
         virtual ~Request();
 

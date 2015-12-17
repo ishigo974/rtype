@@ -44,7 +44,7 @@ namespace RType
     /*
     ** Constructor/Destructor
     */
-    Request::Request() : ABasePacket()
+    Request::Request(uint16_t code) : ABasePacket(code)
     {
     }
 

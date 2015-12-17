@@ -39,6 +39,12 @@ namespace RType
         _code = code;
     }
 
+    void            ABasePacket::clear()
+    {
+        _code = 0;
+        _data.clear();
+    }
+
     uint16_t        ABasePacket::getCode() const
     {
         return _code;

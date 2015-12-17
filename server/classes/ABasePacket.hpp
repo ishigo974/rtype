@@ -48,6 +48,7 @@ namespace RType
 
     public:
         void                setCode(uint16_t code);
+        void                clear();
 
     public:
         uint16_t            getCode() const;
