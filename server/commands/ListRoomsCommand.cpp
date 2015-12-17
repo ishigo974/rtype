@@ -56,10 +56,9 @@ expected LobbySystem"); // TODO
         void        ListRooms::execute()
         {
             Component::NetworkTCP*  network;
-            Buffer                  response;
+            RType::Request          request(RType::Request::SE_LISTROOMS);
             Buffer                  data;
 
-            response.append<uint16_t>(RType::Request::SE_LISTROOMS);
             for (auto& entry: *_rooms)
             {
                 Component::Room*  room =
@@ -76,13 +75,12 @@ entity does not have a room component");
                 data.append<std::string>(room->getRoomName());
                 data.append<uint8_t>(room->size());
             }
-            response.append<uint32_t>(data.size());
-            response.append(data);
+            request.push<Buffer>("rooms", data);
             if ((network = _entity->getComponent<Component::NetworkTCP>())
                     == nullptr)
                 throw std::runtime_error("Can't execute command: \
 entity does not have a NetworkTCP component");
-            network->send(response);
+            network->send(request.toBuffer());
         }
 
         void        ListRooms::undo()

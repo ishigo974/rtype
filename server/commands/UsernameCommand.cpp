@@ -3,6 +3,7 @@
 #include "UsernameCommand.hpp"
 #include "ValueError.hpp"
 #include "Server.hpp"
+#include "Request.hpp"
 
 namespace RType
 {
@@ -57,15 +58,11 @@ player/network component");
             _network->send(Server::responseOK);
             if ((room = _player->getRoom()) != nullptr)
             {
-                Buffer      buffer;
+                RType::Request     request(RType::Request::SE_CLIUSRNM);
 
-                buffer.append<uint16_t>(RType::Request::SE_CLIUSRNM);
-                buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
-                                        _usernameToSet.size());
-                buffer.append<uint8_t>(room->getPlayerId(*_entity));
-                buffer.append<uint32_t>(_usernameToSet.size());
-                buffer.append<std::string>(_usernameToSet);
-                room->broadcast(buffer, _entity);
+                request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
+                request.push<std::string>("username", _usernameToSet);
+                room->broadcast(request.toBuffer(), _entity);
             }
         }
 
@@ -101,8 +98,8 @@ player/network component");
         */
         void        Username::updateData()
         {
-            if ((_player = _entity
-                    ->getComponent<Component::Player>()) == nullptr)
+            if ((_player = _entity->getComponent<Component::Player>())
+                    == nullptr)
                 return ;
             _oldUsername = _player->getUsername();
             if ((_network = _entity

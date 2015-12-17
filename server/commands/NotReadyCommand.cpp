@@ -51,20 +51,18 @@ namespace RType
             Component::Room*        room;
 
             if (player == nullptr || network == nullptr)
-                throw std::runtime_error("Entity does not have a \
-player/network component");
+                throw std::runtime_error("Entity does not have a "
+                                         "player/network component");
             if ((room = player->getRoom()) == nullptr
                 || !room->setPlayerReadiness(*_entity, false))
                 network->send(Server::responseKO);
             else
             {
-                Buffer      buffer;
+                RType::Request  request(RType::Request::SE_CLINOTRDY);
 
-                buffer.append<uint16_t>(RType::Request::SE_CLINOTRDY);
-                buffer.append<uint32_t>(sizeof(uint8_t));
-                buffer.append<uint8_t>(room->getPlayerId(*_entity));
+                request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
-                room->broadcast(buffer, _entity);
+                room->broadcast(request.toBuffer(), _entity);
             }
         }
 

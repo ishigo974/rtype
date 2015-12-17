@@ -29,6 +29,7 @@ namespace RType
         { SE_CLINOTRDY,     { "player_id" }             },
         { SE_GAMESTART,     {}                          },
         { SE_ROOMINFO,      { "player_id", "players" }  },
+        { SE_QUITROOM,      { "player_id" }             },
         { SE_OK,            {}                          }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
@@ -153,7 +154,7 @@ namespace RType
 
         if (it == lobbyRequests.end())
             throw Exception::IncompleteRequest("Code " + std::to_string(_code) +
-                                               "does not match any requests");
+                                               " does not match any requests");
         res.append<uint16_t>(_code);
         for (auto& arg: it->second)
         {

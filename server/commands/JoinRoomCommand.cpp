@@ -52,8 +52,8 @@ namespace RType
             System::Lobby*  lobby;
 
             if ((lobby = dynamic_cast<System::Lobby*>(sys)) == nullptr)
-                throw std::runtime_error("Can't initialize command: \
-expected LobbySystem"); // TODO
+                throw std::runtime_error("Can't initialize command: "
+                                         "expected LobbySystem"); // TODO
             _room = lobby->getRoom(request.get<uint32_t>("room_id"));
         }
 
@@ -65,21 +65,22 @@ expected LobbySystem"); // TODO
                 _entity->getComponent<Component::NetworkTCP>();
 
             if (player == nullptr || network == nullptr)
-                throw std::runtime_error("Entity does not have a \
-player/network component");
+                throw std::runtime_error("Entity does not have a "
+                                         "player/network component");
             if (_room == nullptr || player->getRoom() != nullptr
                 || !_room->addPlayer(*_entity))
                 network->send(Server::responseKO);
             else
             {
-                Buffer          buffer;
-                unsigned int    id;
+                RType::Request         request(RType::Request::SE_JOINROOM);
 
                 player->setRoom(_room);
-                id = _room->getPlayerId(*_entity);
-                _room->broadcast(buildJoinRoomAlert(id, player->getUsername()),
-                                _entity);
-                network->send(buildRoomInfos(_room->getPlayersMap(), id));
+                request.push<uint8_t>("player_id",
+                                      _room->getPlayerId(*_entity));
+                request.push<std::string>("username", player->getUsername());
+                _room->broadcast(request.toBuffer(), _entity);
+                network->send(buildRoomInfos(_room->getPlayersMap(),
+                                             _room->getPlayerId(*_entity)));
             }
         }
 
@@ -100,27 +101,13 @@ player/network component");
         /*
         ** Protected member functions
         */
-        Buffer      JoinRoom::buildJoinRoomAlert(uint8_t id,
-                                                 std::string const& username)
-        {
-            Buffer  buffer;
-
-            buffer.append<uint16_t>(RType::Request::SE_JOINROOM);
-            buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
-                                    username.size());
-            buffer.append<uint8_t>(id);
-            buffer.append<uint32_t>(username.size());
-            buffer.append<std::string>(username);
-            return buffer;
-        }
-
         Buffer      JoinRoom::buildRoomInfos(Component::Room::PlayersMap const&
                                              players, unsigned int id)
         {
-            Buffer  res;
-            Buffer  buffer;
+            RType::Request  request(RType::Request::SE_ROOMINFO);
+            Buffer          buffer;
 
-            buffer.append<uint8_t>(id);
+            request.push<uint8_t>("player_id", id);
             for (auto& player: players)
             {
                 if (player.first == id)
@@ -133,10 +120,8 @@ player/network component");
                 buffer.append<std::string>(c->getUsername());
                 buffer.append<uint8_t>(player.second.second);
             }
-            res.append<uint16_t>(RType::Request::SE_ROOMINFO);
-            res.append<uint32_t>(buffer.size());
-            res.append(buffer);
-            return res;
+            request.push<Buffer>("players", buffer);
+            return request.toBuffer();
         }
     }
 }
