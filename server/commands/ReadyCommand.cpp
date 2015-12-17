@@ -85,7 +85,7 @@ player/network component");
         {
             return "ReadyCommand";
         }
-
+        
         /*
         ** Protected member functions
         */
@@ -95,6 +95,7 @@ player/network component");
 
             start.append<uint16_t>(RType::Request::SE_GAMESTART);
             start.append<uint32_t>(0);
+            room->setIsPlaying(true);
             room->broadcast(start);
         }
     }

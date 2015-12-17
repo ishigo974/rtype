@@ -29,6 +29,12 @@ public:
     virtual std::string toString() const;
 
 public:
+    virtual size_t sendTo(Buffer const& buffer, std::string const& addr) const;
+    virtual size_t receiveFrom(Buffer& buffer, size_t len, std::string&
+    addr)
+                           const;
+
+public:
     rSocket   getSocket() const;
     short int getPort() const;
 

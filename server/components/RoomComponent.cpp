@@ -20,7 +20,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Room::Room()
+        Room::Room() : _isPlaying(false)
         {
         }
 
@@ -32,7 +32,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Room::Room(Room const& other) :
-            _name(other._name), _players(other._players)
+            _name(other._name), _players(other._players),
+            _isPlaying(other._isPlaying)
         {
         }
 
@@ -42,6 +43,7 @@ namespace RType
             {
                 _name = other._name;
                 _players = other._players;
+                _isPlaying = other._isPlaying;
             }
             return *this;
         }
@@ -155,6 +157,7 @@ Network component"); // TODO except
         {
             _name.clear();
             _players.clear();
+            _isPlaying = false;
         }
 
         std::string             Room::getName() const
@@ -218,6 +221,16 @@ Network component"); // TODO except
             return std::find_if(_players.begin(), _players.end(),
                    [](std::pair<unsigned int, PlayerEntry> const& entry)
                    { return entry.second.second == false; }) == _players.end();
+        }
+
+        void                    Room::setIsPlaying(bool isPlaying)
+        {
+            _isPlaying = isPlaying;
+        }
+
+        bool                    Room::isPlaying() const
+        {
+            return _isPlaying;
         }
 
         /*

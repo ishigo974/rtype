@@ -69,6 +69,8 @@ expected LobbySystem"); // TODO
                 if (room == nullptr)
                     throw std::runtime_error("Can't execute command: \
 entity does not have a room component");
+                if (room->isPlaying())
+                    continue ;
                 data.append<uint32_t>(entry.first);
                 data.append<uint32_t>(room->getRoomName().size());
                 data.append<std::string>(room->getRoomName());

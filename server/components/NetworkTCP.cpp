@@ -16,7 +16,7 @@ namespace RType
         /*
         ** Static variables
         */
-        const size_t      NetworkTCP::bufferSize    = 20;
+        const size_t      NetworkTCP::bufferSize    = 200;
 
         /*
         ** Constructor/Destructor

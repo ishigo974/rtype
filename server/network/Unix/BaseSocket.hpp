@@ -22,8 +22,9 @@ public:
     virtual void   close() const;
 
 protected:
-    rSocket   _socket;
-    short int _port;
+    rSocket     _socket;
+    short int   _port;
+    std::string _addr;
 };
 
 
