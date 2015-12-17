@@ -146,8 +146,7 @@ namespace RType
         ECS::Entity&            entity =
             _em.create(Component::MASK_NETWORKTCP | Component::MASK_PLAYER);
 
-        network = entity
-            .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+        network = entity.getComponent<Component::NetworkTCP>();
         if (network == nullptr)
             throw std::runtime_error("NetworkTCP component not found");
         network->setSocket(std::unique_ptr<ITcpSocket>(socket));
@@ -207,7 +206,7 @@ ready, n: not ready");
         for (auto& entry: rooms)
         {
             Component::Room* room =
-                entry->getComponent<Component::Room>(Component::MASK_ROOM);
+                entry->getComponent<Component::Room>();
 
             if (room == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\
@@ -231,9 +230,9 @@ ready, n: not ready");
         for (auto& entry: clients)
         {
             Component::Player*      player =
-                entry->getComponent<Component::Player>(Component::MASK_PLAYER);
+                entry->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                entry->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                entry->getComponent<Component::NetworkTCP>();
 
             if (player == nullptr || network == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by\

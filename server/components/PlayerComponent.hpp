@@ -34,7 +34,8 @@ namespace RType
             virtual std::string         toString() const;
 
         public:
-            static const std::string    defaultUsername;
+            static const std::string        defaultUsername;
+            static const ECS::ComponentMask mask;
 
         protected:
             std::string         _username;

@@ -7,6 +7,7 @@
 
 # include <vector>
 # include <string>
+// # include <stdint.h>
 # include "IStringable.hpp"
 
 class Buffer : public IStringable

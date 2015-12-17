@@ -8,6 +8,7 @@
 #include "EntityManager.hpp"
 #include "IncompleteRequest.hpp"
 #include "NotImplemented.hpp"
+#include "ComponentsMasks.hpp"
 
 namespace RType
 {
@@ -16,7 +17,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const size_t      NetworkTCP::bufferSize    = 20;
+        const size_t                NetworkTCP::bufferSize  = 200;
+        const ECS::ComponentMask    NetworkTCP::mask        = MASK_NETWORKTCP;
 
         /*
         ** Constructor/Destructor
@@ -145,7 +147,7 @@ namespace RType
 
         ECS::ComponentMask   NetworkTCP::getMask() const
         {
-            return MASK_NETWORKTCP;
+            return mask;
         }
 
         ECS::IComponent*     NetworkTCP::clone() const
@@ -195,10 +197,9 @@ namespace RType
             try {
                 while (!_received.empty())
                 {
-                    Request     request =
-                        Request(Request::PROTOCOL_LOBBY, _received);
+                    Request     request(_received);
 
-                    _received.consume(request.size());
+                    _received.consume(request.toBuffer().size());
                     _requests.push(request);
                 }
             } catch (Exception::IncompleteRequest const& /*e*/) {

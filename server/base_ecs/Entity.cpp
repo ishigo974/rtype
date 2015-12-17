@@ -91,15 +91,15 @@ namespace ECS
 
     std::string     Entity::toString() const
     {
-        std::ostringstream  ss;
+        std::string res;
 
-        ss << "Entity {"
-        << "\n\t _id " << _id
-        << "\n\t _mask " << _mask
-        << "\n\t _components";
+        res = "Entity {";
+        res += "\n\t _id " + std::to_string(_id);
+        res += "\n\t _mask " + std::to_string(_mask);
+        res += "\n\t _components";
         for (auto&& i : _components)
-        ss << " " << i.second->getName();
-        ss << std::endl;
-        return ss.str();
+            res += std::string(" ") + i.second->getName();
+        res += "\n";
+        return res;
     }
 }

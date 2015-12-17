@@ -46,9 +46,9 @@ namespace RType
         void        Ready::execute()
         {
             Component::Player*      player =
-                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
+                _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                _entity->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                _entity->getComponent<Component::NetworkTCP>();
             Component::Room*        room;
 
             if (player == nullptr || network == nullptr)
@@ -59,13 +59,11 @@ player/network component");
                 network->send(Server::responseKO);
             else
             {
-                Buffer      buffer;
+                RType::Request         request(RType::Request::SE_CLIENTRDY);
 
-                buffer.append<uint16_t>(RType::Request::SE_CLIENTRDY);
-                buffer.append<uint32_t>(sizeof(uint8_t));
-                buffer.append<uint8_t>(room->getPlayerId(*_entity));
+                request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
-                room->broadcast(buffer, _entity);
+                room->broadcast(request.toBuffer(), _entity);
             }
             if (room->allReady())
                 startGame(room);
@@ -91,11 +89,9 @@ player/network component");
         */
         void        Ready::startGame(Component::Room* room) const
         {
-            Buffer  start;
-
-            start.append<uint16_t>(RType::Request::SE_GAMESTART);
-            start.append<uint32_t>(0);
-            room->broadcast(start);
+            room->setIsPlaying(true);
+            room->broadcast(RType::Request(RType::Request::SE_GAMESTART)
+                            .toBuffer());
         }
     }
 }
