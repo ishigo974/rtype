@@ -114,6 +114,16 @@ request, ignored (" + network->repr() + ")", true);
             return _rooms;
         }
 
+        bool                Lobby::shouldAutoUpdate() const
+        {
+            return true;
+        }
+
+        bool                Lobby::shouldAutoProcess() const
+        {
+            return true;
+        }
+
         std::string         Lobby::toString() const
         {
             return "LobbySystem { mask: " + std::to_string(getMask()) + "}";
@@ -130,8 +140,8 @@ request, ignored (" + network->repr() + ")", true);
                     ));
 
             if (cmd == nullptr)
-                throw Exception::ValueError("No command corresponding \
-to request code " + std::to_string(request.getCode()));
+                throw Exception::ValueError("No command corresponding "
+                    "to request code " + std::to_string(request.getCode()));
             cmd->setEntity(entity);
             cmd->initFromRequest(request, this);
             return cmd;

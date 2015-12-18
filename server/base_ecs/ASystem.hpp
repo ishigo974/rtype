@@ -26,6 +26,8 @@ namespace ECS
         virtual void            processEntity(Entity& e) = 0;
         virtual ComponentMask   getMask() const = 0;
         virtual std::string     getName() const = 0;
+        virtual bool            shouldAutoUpdate() const = 0;
+        virtual bool            shouldAutoProcess() const = 0;
     };
 }
 

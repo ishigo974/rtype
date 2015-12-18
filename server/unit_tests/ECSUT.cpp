@@ -273,5 +273,11 @@ namespace ECS
 
         std::string   System1::toString() const
         { return "System1"; }
+
+        bool          System1::shouldAutoUpdate() const
+        { return true; }
+
+        bool          System1::shouldAutoProcess() const
+        { return true; }
     }
 }

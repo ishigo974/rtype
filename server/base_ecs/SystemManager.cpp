@@ -37,8 +37,10 @@ namespace ECS
     {
         for (auto& sys : _systems)
         {
-            sys.second->update();
-            sys.second->process();
+            if (sys.second->shouldAutoUpdate())
+                sys.second->update();
+            if (sys.second->shouldAutoProcess())
+                sys.second->process();
         }
     }
 
@@ -56,7 +58,16 @@ namespace ECS
         for (auto& sys : _systems)
         {
             if ((sys.second->getMask() & mask) == mask)
-            sys.second->process();
+                sys.second->process();
+        }
+    }
+
+    void      SystemManager::update(ComponentMask mask) const
+    {
+        for (auto& sys : _systems)
+        {
+            if ((sys.second->getMask() & mask) == mask)
+                sys.second->update();
         }
     }
 

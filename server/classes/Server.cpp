@@ -1,5 +1,7 @@
 // Standards includes
+#include <thread>
 #include <memory>
+#include <functional>
 #include <iostream>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -22,6 +24,7 @@
 // Systems related includes
 #include "SystemManager.hpp"
 #include "LobbySystem.hpp"
+#include "InGameSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
@@ -56,16 +59,8 @@ namespace RType
     /*
     ** Constructors/Destructor
     */
-    Server::Server() :
-        _quit(false), _acceptor(Server::defaultPort),
-        _monitor(SocketMonitor::getInstance()),
-        _em(ECS::EntityManager::getInstance()),
-        _sm(ECS::SystemManager::getInstance())
-    {
-        init();
-    }
-
     Server::Server(short int port) :
+        _port(port),
         _quit(false), _acceptor(port),
         _monitor(SocketMonitor::getInstance()),
         _em(ECS::EntityManager::getInstance()),
@@ -83,8 +78,9 @@ namespace RType
     */
     void          Server::run()
     {
-        display("Server is now running on port " +
-                std::to_string(_acceptor.getPort()));
+        std::thread     inGameHandler(std::bind(&Server::readInGameEvents,
+                                                this));
+
         while (!_quit)
         {
             try {
@@ -103,12 +99,20 @@ namespace RType
             }
             // TODO add exceptions
         }
+        display("Waiting for InGameHandler thread");
+        inGameHandler.join();
         display("Server is shutting down");
     }
 
     void            Server::notifyDisconnected(unsigned int id)
     {
         _disconnected.push_back(id);
+    }
+
+    void            Server::readInGameEvents()
+    {
+        while (!_quit)
+            _sm.update(Component::MASK_NETWORKUDP);
     }
 
     std::string     Server::toString() const
@@ -127,6 +131,9 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Room>());
         _em.registerComponent(std::make_unique<Component::Player>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
+        _sm.registerSystem(std::make_unique<System::InGame>(_port));
+        display("Server is now running on port " +
+                std::to_string(_acceptor.getPort()));
     }
 
     void            Server::checkDisconnected()
@@ -180,8 +187,8 @@ namespace RType
             (this->*it->second.second)(args);
         }
         else
-            Server::display("No command '" + cmd + "' ; \
-use \"help\" to get all available events");
+            Server::display("No command '" + cmd + "' ; "
+                            "use \"help\" to get all available events");
     }
 
     /*
