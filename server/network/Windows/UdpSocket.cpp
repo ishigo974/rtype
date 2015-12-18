@@ -5,13 +5,15 @@
 #include <cstring>
 #include <iostream>
 #include <sstream>
+#include "SocketMonitor.hpp"
 #include "UdpSocket.hpp"
+
+const int UdpSocket::defaultTimeout = 500;
 
 UdpSocket::UdpSocket(short int port)
         : BaseSocket()
 {
     WSADATA wsa;
-    u_long  iMode;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         throw std::runtime_error("WSAStartup failed");
@@ -34,19 +36,11 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     client.sin_family = AF_INET;
     client.sin_addr.s_addr =
             inet_pton(AF_INET, address.data(), &client.sin_addr);
-    client.sin_port        = _port;
+    client.sin_port = _port;
 
-    struct timeval tv;
-    tv.tv_sec  = SocketMonitor::defaultSecVal;
-    tv.tv_usec = SocketMonitor::defaultUsecVal;
-
-
-    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
-        throw std::runtime_error("SetSockOpt failed");
     if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
                          reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
-                         nullptr, nullptr))
-        == SOCKET_ERROR)
+                         nullptr, nullptr)) == SOCKET_ERROR)
         throw std::runtime_error("WSASend failed");
     return ret;
 }
@@ -60,22 +54,35 @@ const
     struct sockaddr_in client;
     int                clientSize = sizeof(client);
     char               *address   = new char[16];
+    int                timeout;
 
+    timeout = UdpSocket::defaultTimeout;
+
+    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO,
+                   reinterpret_cast<char *>(&timeout), sizeof(timeout))
+        == SOCKET_ERROR)
+        throw std::runtime_error("SetSockOpt failed");
     wsabuf.buf = new char[len];
     wsabuf.len = len;
     if (::WSARecvFrom(_socket, &wsabuf, 1, &read_size, &flags,
                       reinterpret_cast<SOCKADDR *>(&client), &clientSize,
-                      nullptr, nullptr)
-        == SOCKET_ERROR)
+                      nullptr, nullptr) == SOCKET_ERROR)
     {
-        delete wsabuf.buf;
-        throw std::runtime_error("WSARecv failed");
+        if (WSAGetLastError() == WSAETIMEDOUT)
+            read_size = 0;
+        else
+        {
+            delete wsabuf.buf;
+            throw std::runtime_error("WSARecv failed");
+        }
     }
-
-    buffer.append(wsabuf.buf, read_size);
-    delete wsabuf.buf;
-    inet_ntop(AF_INET, &(client.sin_addr), address, INET_ADDRSTRLEN);
-    addr.assign(address);
+    if (read_size > 0)
+    {
+        buffer.append(wsabuf.buf, read_size);
+        delete wsabuf.buf;
+        inet_ntop(AF_INET, &(client.sin_addr), address, INET_ADDRSTRLEN);
+        addr.assign(address);
+    }
     return (read_size);
 }
 
