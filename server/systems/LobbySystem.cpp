@@ -126,7 +126,7 @@ request, ignored (" + network->repr() + ")", true);
                                                 ECS::Entity& entity)
         {
             Command::Request*       cmd = _factory.generate(cmdsNames.at(
-                        static_cast<Request::LobbyRequest>(request.getCode())
+                        static_cast<Request::Code>(request.getCode())
                     ));
 
             if (cmd == nullptr)

@@ -51,7 +51,7 @@ namespace RType
     */
     void            ProtocolUT::lobbyRequestParsingWithoutData()
     {
-        static const std::vector<Request::LobbyRequest> tests =
+        static const std::vector<Request::Code> tests =
         {   Request::LR_LISTROOMS,  Request::LR_QUITROOM,
             Request::LR_READY,      Request::LR_NOTREADY };
 
@@ -71,7 +71,7 @@ namespace RType
 
     void            ProtocolUT::lobbyRequestParsingWithData()
     {
-        static const std::map<std::string, Request::LobbyRequest> stringTests =
+        static const std::map<std::string, Request::Code> stringTests =
         {
             { "Room2Bogoss",                        Request::LR_CREATEROOM },
             { "  13624!@#)$!*%(#@) ///\\\\fsiodj",  Request::LR_CREATEROOM },

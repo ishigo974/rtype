@@ -151,7 +151,7 @@ namespace RType
     {
         Buffer      res;
         Buffer      data;
-        auto        it = lobbyRequests.find(static_cast<LobbyRequest>(_code));
+        auto        it = lobbyRequests.find(static_cast<Code>(_code));
 
         if (it == lobbyRequests.end())
             throw Exception::IncompleteRequest("Code " + std::to_string(_code) +
@@ -192,7 +192,7 @@ namespace RType
         Buffer                          tmp = raw;
         size_t                          left = dataSize;
         LobbyReqMap::const_iterator     it =
-            lobbyRequests.find(static_cast<LobbyRequest>(_code));
+            lobbyRequests.find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);
         if (it == lobbyRequests.end())

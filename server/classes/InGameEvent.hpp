@@ -10,6 +10,11 @@ namespace RType
     class InGameEvent : public ABasePacket
     {
     public:
+        enum Code
+        {
+        };
+
+    public:
         InGameEvent(uint16_t code = 0);
         virtual ~InGameEvent();
 
