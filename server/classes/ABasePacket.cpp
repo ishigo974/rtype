@@ -32,6 +32,15 @@ namespace RType
     }
 
     /*
+    ** Overloaded operators
+    */
+    bool            ABasePacket::operator==(ABasePacket const& other) const
+    {
+        return _code == other._code && _data == other._data;
+    }
+
+
+    /*
     ** Public member functions
     */
     void            ABasePacket::setCode(uint16_t code)

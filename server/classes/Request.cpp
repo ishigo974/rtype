@@ -176,6 +176,7 @@ namespace RType
     {
         size_t      dataSize;
 
+        clear();
         if (raw.size() < headerSize)
             throw Exception::IncompleteRequest("Buffer can't contain a \
                                                 request header");
@@ -189,9 +190,9 @@ namespace RType
 
     void            Request::parseData(Buffer const& raw, size_t dataSize)
     {
-        Buffer                          tmp = raw;
-        size_t                          left = dataSize;
-        LobbyReqMap::const_iterator     it =
+        Buffer                          tmp     = raw;
+        size_t                          left    = dataSize;
+        LobbyReqMap::const_iterator     it      =
             lobbyRequests.find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);

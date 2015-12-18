@@ -3,6 +3,7 @@
 #include <string>
 #include "ProtocolUT.hpp"
 #include "Request.hpp"
+#include "InGameEvent.hpp"
 
 namespace RType
 {
@@ -370,6 +371,52 @@ namespace RType
 
     void            ProtocolUT::inGameEventParsingWithData()
     {
+        InGameEvent event;
+        Buffer      buffer;
+
+        // player up test
+        buffer.append<uint32_t>(42);
+        buffer.append<uint16_t>(InGameEvent::SE_PLAYERUP);
+        buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t));
+        buffer.append<uint8_t>(2);
+        buffer.append<uint32_t>(4442);
+        event = InGameEvent(buffer);
+        UT_ASSERT(event.getId() == 42);
+        UT_ASSERT(event.getCode() == InGameEvent::SE_PLAYERUP);
+        UT_ASSERT(event.get<uint8_t>("player_id") == 2);
+        UT_ASSERT(event.get<uint32_t>("time") == 4442);
+        UT_ASSERT(event.toBuffer() == buffer);
+
+        // mob spawned test
+        buffer.clear();
+        buffer.append<uint32_t>(0);
+        buffer.append<uint16_t>(InGameEvent::SE_MOBSPAWNED);
+        buffer.append<uint32_t>(sizeof(uint8_t) + sizeof(uint32_t) +
+                                sizeof(uint32_t) + sizeof(uint32_t));
+        buffer.append<uint8_t>(3);
+        buffer.append<uint32_t>(52);
+        buffer.append<uint32_t>(128);
+        buffer.append<uint32_t>(123123);
+        event = InGameEvent(buffer);
+        UT_ASSERT(event.getId() == 0);
+        UT_ASSERT(event.getCode() == InGameEvent::SE_MOBSPAWNED);
+        UT_ASSERT(event.get<uint8_t>("mob_id") == 3);
+        UT_ASSERT(event.get<uint32_t>("x") == 52);
+        UT_ASSERT(event.get<uint32_t>("y") == 128);
+        UT_ASSERT(event.get<uint32_t>("time") == 123123);
+        UT_ASSERT(event.toBuffer() == buffer);
+        event.clear();
+        event.setId(0);
+        event.setCode(InGameEvent::SE_MOBSPAWNED);
+        event.push<uint8_t>("mob_id", 3);
+        event.push<uint32_t>("x", 52);
+        event.push<uint32_t>("y", 128);
+        event.push<uint32_t>("time", 123123);
+        UT_ASSERT(event.get<uint8_t>("mob_id") == 3);
+        UT_ASSERT(event.get<uint32_t>("x") == 52);
+        UT_ASSERT(event.get<uint32_t>("y") == 128);
+        UT_ASSERT(event.get<uint32_t>("time") == 123123);
+        UT_ASSERT(event.toBuffer() == buffer);
     }
 
     /*

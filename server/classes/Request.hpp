@@ -54,8 +54,6 @@ namespace RType
         };
 
     public:
-        typedef std::unordered_map<std::string, size_t>     DataSizeMap;
-        typedef std::vector<std::string>                    DataArgs;
         typedef std::unordered_map<Code, DataArgs,
                                     std::hash<uint16_t> >   LobbyReqMap;
         typedef std::vector<Room>                           RoomsTab;

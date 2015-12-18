@@ -13,6 +13,8 @@ namespace RType
     {
     public:
         typedef std::unordered_map<std::string, Buffer>     DataMap;
+        typedef std::unordered_map<std::string, size_t>     DataSizeMap;
+        typedef std::vector<std::string>                    DataArgs;
 
     public:
         ABasePacket(uint16_t code = 0);
@@ -21,6 +23,9 @@ namespace RType
     public:
         ABasePacket(ABasePacket const& other);
         ABasePacket&    operator=(ABasePacket const& other);
+
+    public:
+        bool            operator==(ABasePacket const& other) const;
 
     public:
         template <typename Type>
@@ -48,7 +53,7 @@ namespace RType
 
     public:
         void                setCode(uint16_t code);
-        void                clear();
+        virtual void        clear();
 
     public:
         uint16_t            getCode() const;
