@@ -11,6 +11,7 @@ UdpSocket::UdpSocket(short int port)
         : BaseSocket()
 {
     WSADATA wsa;
+    u_long  iMode;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         throw std::runtime_error("WSAStartup failed");
@@ -26,16 +27,22 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     DWORD              SendBytes;
     size_t             ret;
     std::vector<char>  buff(buffer.data(), buffer.data() + buffer.size());
-    std::vector<char> address(buffer.data(), buffer.data() + buffer.size());
+    std::vector<char>  address(buffer.data(), buffer.data() + buffer.size());
 
-    toSend.len             = buffer.size();
-    toSend.buf             = buff.data();
-    client.sin_family      = AF_INET;
-
-    client.sin_addr.s_addr = inet_pton(AF_INET, address.data(), &client
-            .sin_addr);
+    toSend.len        = buffer.size();
+    toSend.buf        = buff.data();
+    client.sin_family = AF_INET;
+    client.sin_addr.s_addr =
+            inet_pton(AF_INET, address.data(), &client.sin_addr);
     client.sin_port        = _port;
 
+    struct timeval tv;
+    tv.tv_sec  = SocketMonitor::defaultSecVal;
+    tv.tv_usec = SocketMonitor::defaultUsecVal;
+
+
+    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+        throw std::runtime_error("SetSockOpt failed");
     if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
                          reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
                          nullptr, nullptr))
@@ -52,7 +59,7 @@ const
     DWORD              flags      = 0;
     struct sockaddr_in client;
     int                clientSize = sizeof(client);
-    char *address = new char[16];
+    char               *address   = new char[16];
 
     wsabuf.buf = new char[len];
     wsabuf.len = len;

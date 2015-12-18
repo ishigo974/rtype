@@ -7,11 +7,12 @@
 #include <iostream>
 #include <sstream>
 #include <arpa/inet.h>
+#include "SocketMonitor.hpp"
 #include "UdpSocket.hpp"
 
 UdpSocket::UdpSocket(short int port) : BaseSocket()
 {
-    _port = port;
+    _port        = port;
     if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         throw std::runtime_error("socket failed");
 }
@@ -36,19 +37,34 @@ size_t  UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     return (static_cast<size_t>(ret));
 }
 
-size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len, std::string& addr) const
+size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
+                                     std::string& addr) const
 {
     ssize_t            ret;
     struct sockaddr_in client;
     char               *buff      = new char[len];
     socklen_t          clientsize = sizeof(client);
+    struct timeval     tv;
+    
+    tv.tv_sec  = SocketMonitor::defaultSecVal;
+    tv.tv_usec = SocketMonitor::defaultUsecVal;
 
+
+    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+        throw std::runtime_error("SetSockOpt failed");
     if ((ret = ::recvfrom(_socket, buff, len, 0,
                           reinterpret_cast<struct sockaddr *>(&client),
-                          &clientsize)) == -1)
+                          &clientsize) == -1) && errno != EAGAIN)
         throw std::runtime_error("receive failed");
-    addr.assign(inet_ntoa(client.sin_addr));
-    buffer.setData(buff, static_cast<size_t>(ret));
+    if (errno == EAGAIN && ret == -1)
+    {
+        ret = 0;
+    }
+    else
+    {
+        addr.assign(inet_ntoa(client.sin_addr));
+        buffer.setData(buff, static_cast<size_t>(ret));
+    }
     return static_cast<size_t>(ret);
 }
 
@@ -60,7 +76,7 @@ bool UdpSocket::bind() const
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port        = htons(_port);
     return (::bind(_socket, reinterpret_cast<struct sockaddr *>(&addr),
-                    sizeof(addr)) >= 0);
+                   sizeof(addr)) >= 0);
 }
 
 short int UdpSocket::getPort() const

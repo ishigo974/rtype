@@ -11,8 +11,8 @@
 TcpSocket::TcpSocket(std::string const& addr, short int port)
 {
     _socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
-    _port = port;
-    _addr = addr;
+    _port   = port;
+    _addr   = addr;
 }
 
 TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
@@ -51,7 +51,7 @@ std::string TcpSocket::toString() const
 {
     std::ostringstream ss;
 
-    ss  << "TcpSocket {"
+    ss << "TcpSocket {"
     << "\n\tAddress " << this->_addr
     << "\n\tSocket " << this->_socket
     << "\n\tPort " << this->_port

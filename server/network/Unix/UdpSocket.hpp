@@ -20,23 +20,23 @@ private:
     UdpSocket& operator=(UdpSocket const& other) = delete;
 
 public:
-    virtual size_t  send(Buffer const& buffer) const;
-    virtual size_t  receive(Buffer& buffer, size_t len) const;
-    virtual void    close() const;
+    virtual size_t send(Buffer const& buffer) const;
+    virtual size_t receive(Buffer& buffer, size_t len) const;
+    virtual void   close() const;
 
 public:
-    virtual bool    bind() const;
+    virtual bool   bind() const;
     virtual size_t sendTo(Buffer const& buffer, std::string const& addr) const;
     virtual size_t receiveFrom(Buffer& buffer, size_t len,
-                                std::string& addr) const;
+                               std::string& addr) const;
 
 public:
     virtual std::string toString() const;
 
 public:
-    rSocket                     getSocket() const;
-    short int                   getPort() const;
-    void                        setPort(short int port);
+    rSocket   getSocket() const;
+    short int getPort() const;
+    void      setPort(short int port);
 };
 
 #endif //RTYPE_SERVER_UDPSOCKET_HPP
