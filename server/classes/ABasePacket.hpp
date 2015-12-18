@@ -25,6 +25,9 @@ namespace RType
         ABasePacket&    operator=(ABasePacket const& other);
 
     public:
+        bool            operator==(ABasePacket const& other) const;
+
+    public:
         template <typename Type>
         Type                get(std::string const& key) const
         {

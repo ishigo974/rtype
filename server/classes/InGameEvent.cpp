@@ -74,6 +74,34 @@ namespace RType
     }
 
     /*
+    ** Overloaded operators
+    */
+    bool        InGameEvent::operator<(InGameEvent const& other) const
+    {
+        return _id < other._id;
+    }
+
+    bool        InGameEvent::operator>(InGameEvent const& other) const
+    {
+        return _id > other._id;
+    }
+
+    bool        InGameEvent::operator<=(InGameEvent const& other) const
+    {
+        return _id <= other._id;
+    }
+
+    bool        InGameEvent::operator>=(InGameEvent const& other) const
+    {
+        return _id >= other._id;
+    }
+
+    bool        InGameEvent::operator==(InGameEvent const& other) const
+    {
+        return ABasePacket::operator==(other) && _id == other._id;
+    }
+
+    /*
     ** Public member functions
     */
     void        InGameEvent::parse(Buffer const& raw)

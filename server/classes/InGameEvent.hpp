@@ -48,6 +48,13 @@ namespace RType
         InGameEvent&    operator=(InGameEvent const& other);
 
     public:
+        bool            operator<(InGameEvent const& other) const;
+        bool            operator>(InGameEvent const& other) const;
+        bool            operator<=(InGameEvent const& other) const;
+        bool            operator>=(InGameEvent const& other) const;
+        bool            operator==(InGameEvent const& other) const;
+
+    public:
         virtual void    parse(Buffer const& raw);
         virtual void    clear();
         virtual Buffer  toBuffer() const;
