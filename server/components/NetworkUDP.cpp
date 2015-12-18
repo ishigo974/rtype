@@ -64,6 +64,8 @@ namespace RType
 
         void                NetworkUDP::update()
         {
+            std::lock_guard<std::mutex> lock(_mutex);
+
             try {
                 while (!_received.empty())
                 {
@@ -81,11 +83,15 @@ namespace RType
 
         void                NetworkUDP::send(Buffer const& buffer)
         {
+            std::lock_guard<std::mutex> lock(_mutex);
+
             _toSend.append(buffer);
         }
 
         void                NetworkUDP::pushReceived(Buffer const& buffer)
         {
+            std::lock_guard<std::mutex> lock(_mutex);
+
             _received.append(buffer);
         }
 

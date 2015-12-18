@@ -4,6 +4,7 @@
 # include <string>
 # include <queue>
 # include <functional>
+# include <mutex>
 # include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
 # include "InGameEvent.hpp"
@@ -50,6 +51,7 @@ namespace RType
             Buffer          _toSend;
             Buffer          _received;
             EventQueue      _events;
+            std::mutex      _mutex;
         };
     }
 }
