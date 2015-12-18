@@ -19,10 +19,10 @@ size_t    BaseSocket::send(Buffer const& buffer) const
     WSABUF toSend;
     DWORD SendBytes;
     size_t ret;
-    std::vector<char> str(buffer.data(), buffer.data() + buffer.size());
+    std::vector<char> buff(buffer.data(), buffer.data() + buffer.size());
 
     toSend.len = buffer.size();
-    toSend.buf = str.data();
+    toSend.buf = buff.data();
     client.sin_family = AF_INET;
     client.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &client.sin_addr);
     client.sin_port = _port;

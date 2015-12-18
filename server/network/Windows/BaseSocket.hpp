@@ -24,6 +24,7 @@ public:
 protected:
     rSocket _socket;
     short int _port;
+    std::string _addr;
 };
 
 #endif //RTYPE_SERVER_BASESOCKET_HPP
