@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InGameSystem.hpp"
 #include "ComponentsMasks.hpp"
+#include "NetworkUDP.hpp"
 
 namespace RType
 {
@@ -34,8 +35,22 @@ namespace RType
             _book[addr].append(buffer);
         }
 
-        void            InGame::processEntity(ECS::Entity& /*e*/)
+        void            InGame::processEntity(ECS::Entity& e)
         {
+            IpBufferBook::iterator  it;
+            Component::NetworkUDP*  udp =
+                e.getComponent<Component::NetworkUDP>();
+
+            if (udp == nullptr)
+                throw std::runtime_error("InGameSystem: Entity has no "
+                                         "NetworkUDP component");
+            if ((it = _book.find(udp->getIpAddr())) != _book.end())
+            {
+                udp->pushReceived(it->second);
+                _book.erase(it);
+            }
+            if (udp->isToSend())
+                _socket.sendTo(udp->popToSend(), udp->getIpAddr());
         }
 
         ECS::ComponentMask   InGame::getMask() const
