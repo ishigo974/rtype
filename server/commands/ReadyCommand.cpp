@@ -3,6 +3,7 @@
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
 #include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 #include "ComponentsMasks.hpp"
 #include "Server.hpp"
 
@@ -39,7 +40,7 @@ namespace RType
         ** Public member functions
         */
         void        Ready::initFromRequest(RType::Request const&,
-                                            ECS::ASystem*)
+                                           ECS::ASystem*)
         {
         }
 
@@ -92,6 +93,16 @@ player/network component");
             room->setIsPlaying(true);
             room->broadcast(RType::Request(RType::Request::SE_GAMESTART)
                             .toBuffer());
+            for (auto& test: *room)
+            {
+                Component::NetworkTCP*  tcp = test.second.first
+                    ->getComponent<Component::NetworkTCP>();
+
+                test.second.first
+                    ->addComponent(std::make_unique<Component::NetworkUDP>(
+                        tcp->getIpAddr())
+                    );
+            }
         }
     }
 }

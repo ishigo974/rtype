@@ -47,6 +47,8 @@ namespace RType
             unsigned int                size() const;
             PlayersMap const&           getPlayersMap() const;
             bool                        isPlaying() const;
+            PlayersMap::const_iterator  begin() const;
+            PlayersMap::const_iterator  end() const;
 
         public:
             virtual void                update();

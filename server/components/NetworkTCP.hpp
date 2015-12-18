@@ -38,6 +38,7 @@ namespace RType
             void                setOnDisconnect(ServerCallback const& c);
             Request             popRequest();
             std::string const&  repr() const;
+            std::string         getIpAddr() const;
 
         public:
             virtual void        update();

@@ -30,6 +30,7 @@
 #include "IComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
 
@@ -128,6 +129,7 @@ namespace RType
         _monitor.registerSocket(&_acceptor);
         _monitor.registerRaw(stdinFileNo);
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
+        _em.registerComponent(std::make_unique<Component::NetworkUDP>());
         _em.registerComponent(std::make_unique<Component::Room>());
         _em.registerComponent(std::make_unique<Component::Player>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
@@ -187,7 +189,7 @@ namespace RType
             (this->*it->second.second)(args);
         }
         else
-            Server::display("No command '" + cmd + "' ; "
+            Server::display("No command \"" + cmd + "\" ; "
                             "use \"help\" to get all available events");
     }
 
@@ -208,16 +210,16 @@ namespace RType
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name\t| Slots\t| Players - r: \
-ready, n: not ready");
+            Server::display("Name\t| Slots\t| Players - r: "
+                            "ready, n: not ready");
         for (auto& entry: rooms)
         {
             Component::Room* room =
                 entry->getComponent<Component::Room>();
 
             if (room == nullptr)
-                throw std::runtime_error("EntityManager: Retrieving entities by\
- mask failed");
+                throw std::runtime_error("EntityManager: Retrieving entities by"
+                                         " mask failed");
             Server::display(room->getRoomName() + "\t| " +
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
@@ -242,8 +244,8 @@ ready, n: not ready");
                 entry->getComponent<Component::NetworkTCP>();
 
             if (player == nullptr || network == nullptr)
-                throw std::runtime_error("EntityManager: Retrieving entities by\
- mask failed");
+                throw std::runtime_error("EntityManager: Retrieving entities by"
+                                         " mask failed");
             Server::display(player->getUsername() + "\t| " + network->repr() +
                             "\t| " + (player->getRoom() != nullptr ?
                                       player->getRoom()->getRoomName() : ""));

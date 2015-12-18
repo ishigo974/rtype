@@ -20,7 +20,7 @@ namespace RType
                                         std::greater<InGameEvent> > EventQueue;
 
         public:
-            NetworkUDP();
+            NetworkUDP(std::string const& ipAddr = "0");
             virtual ~NetworkUDP();
 
         public:

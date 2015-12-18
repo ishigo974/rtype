@@ -17,7 +17,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        NetworkUDP::NetworkUDP()
+        NetworkUDP::NetworkUDP(std::string const& ipAddr) : _ip(ipAddr)
         {
         }
 

@@ -234,6 +234,16 @@ Network component"); // TODO except
             return _isPlaying;
         }
 
+        Room::PlayersMap::const_iterator  Room::begin() const
+        {
+            return _players.begin();
+        }
+
+        Room::PlayersMap::const_iterator  Room::end() const
+        {
+            return _players.end();
+        }
+
         /*
         ** Protected member functions
         */
