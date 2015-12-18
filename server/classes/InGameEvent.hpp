@@ -35,12 +35,12 @@ namespace RType
         };
 
     public:
-        typedef std::vector<std::string>                    DataArgs;
         typedef std::unordered_map<Code, DataArgs,
                                     std::hash<uint16_t> >   EventMap;
 
     public:
         InGameEvent(uint16_t code = 0);
+        InGameEvent(Buffer const& raw);
         virtual ~InGameEvent();
 
     public:
@@ -49,12 +49,20 @@ namespace RType
 
     public:
         virtual void    parse(Buffer const& raw);
+        virtual void    clear();
+        virtual Buffer  toBuffer() const;
 
     public:
+        void            setId(uint32_t id);
         uint32_t        getId() const;
 
+    protected:
+        void            parseData(Buffer const& raw);
+
     public:
-        static const EventMap   inGameEvents;
+        static const EventMap       inGameEvents;
+        static const DataSizeMap    dataSizes;
+        static const size_t         headerSize;
 
     protected:
         uint32_t        _id;
