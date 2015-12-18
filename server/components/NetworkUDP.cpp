@@ -51,7 +51,8 @@ namespace RType
         */
         InGameEvent         NetworkUDP::popEvent()
         {
-            InGameEvent     event = _events.top();
+            std::lock_guard<std::mutex> lock(_mutex);
+            InGameEvent                 event(_events.top());
 
             _events.pop();
             return event;
@@ -83,8 +84,6 @@ namespace RType
 
         void                NetworkUDP::send(Buffer const& buffer)
         {
-            std::lock_guard<std::mutex> lock(_mutex);
-
             _toSend.append(buffer);
         }
 
@@ -93,6 +92,19 @@ namespace RType
             std::lock_guard<std::mutex> lock(_mutex);
 
             _received.append(buffer);
+        }
+
+        bool                NetworkUDP::isToSend() const
+        {
+            return !_toSend.empty();
+        }
+
+        Buffer              NetworkUDP::popToSend()
+        {
+            Buffer          b = _toSend;
+
+            _toSend.clear();
+            return b;
         }
 
         std::string const&  NetworkUDP::getIpAddr() const

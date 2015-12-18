@@ -31,6 +31,8 @@ namespace RType
         public:
             InGameEvent                 popEvent();
             bool                        isEvent() const;
+            bool                        isToSend() const;
+            Buffer                      popToSend();
             void                        send(Buffer const& buffer);
             void                        pushReceived(Buffer const& buffer);
             std::string const&          getIpAddr() const;
