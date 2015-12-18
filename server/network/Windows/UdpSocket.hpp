@@ -40,6 +40,9 @@ public:
 
     void setPort(short int port);
 
+protected:
+    static const int defaultTimeout;
+
 private:
     UdpSocket(UdpSocket const& sock) = delete;
     UdpSocket& operator=(UdpSocket const& sock) = delete;

@@ -45,10 +45,10 @@ size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
     char               *buff      = new char[len];
     socklen_t          clientsize = sizeof(client);
     struct timeval     tv;
-    
+
+
     tv.tv_sec  = SocketMonitor::defaultSecVal;
     tv.tv_usec = SocketMonitor::defaultUsecVal;
-
 
     if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
         throw std::runtime_error("SetSockOpt failed");
