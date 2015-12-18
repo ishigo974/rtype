@@ -44,6 +44,8 @@ if (UNIX)
             network/Unix/*.cpp)
 endif ()
 
+file(GLOB tmp
+        client_protocol/*)
 
 file(GLOB source_files
         main.cpp
@@ -109,6 +111,6 @@ file(GLOB ut_source_files
         unit_tests/*.cpp
         )
 
-add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files})
-add_executable(network_test ${net_files} ${network_files})
-add_executable(${UT_NAME} ${ut_source_files} ${network_files})
+add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files} ${tmp})
+add_executable(network_test ${net_files} ${network_files} ${tmp})
+add_executable(${UT_NAME} ${ut_source_files} ${network_files} ${tmp})
