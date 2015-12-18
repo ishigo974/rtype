@@ -13,15 +13,19 @@ namespace RType
     class Request : public ABasePacket
     {
     public:
-        enum LobbyRequest
+        /*
+        ** Server to client codes are prefixed by SE_
+        ** Client to server codes are prefixed by CL_
+        */
+        enum Code
         {
-            LR_LISTROOMS    = 100,
-            LR_CREATEROOM   = 101,
-            LR_JOINROOM     = 102,
-            LR_QUITROOM     = 103,
-            LR_READY        = 201,
-            LR_NOTREADY     = 202,
-            LR_USERNAME     = 301,
+            CL_LISTROOMS    = 100,
+            CL_CREATEROOM   = 101,
+            CL_JOINROOM     = 102,
+            CL_QUITROOM     = 103,
+            CL_READY        = 201,
+            CL_NOTREADY     = 202,
+            CL_USERNAME     = 301,
             SE_LISTROOMS    = 400,
             SE_JOINROOM     = 401,
             SE_QUITROOM     = 402,
@@ -52,7 +56,7 @@ namespace RType
     public:
         typedef std::unordered_map<std::string, size_t>     DataSizeMap;
         typedef std::vector<std::string>                    DataArgs;
-        typedef std::unordered_map<LobbyRequest, DataArgs,
+        typedef std::unordered_map<Code, DataArgs,
                                     std::hash<uint16_t> >   LobbyReqMap;
         typedef std::vector<Room>                           RoomsTab;
         typedef std::vector<Player>                         PlayersTab;

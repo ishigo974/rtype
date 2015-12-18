@@ -18,13 +18,13 @@ namespace RType
         ** Static variables
         */
         const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
-            { Request::LR_LISTROOMS,    "ListRoomsCommand"  },
-            { Request::LR_CREATEROOM,   "CreateRoomCommand" },
-            { Request::LR_QUITROOM,     "QuitRoomCommand"   },
-            { Request::LR_USERNAME,     "UsernameCommand"   },
-            { Request::LR_READY,        "ReadyCommand"      },
-            { Request::LR_NOTREADY,     "NotReadyCommand"   },
-            { Request::LR_JOINROOM,     "JoinRoomCommand"   }
+            { Request::CL_LISTROOMS,    "ListRoomsCommand"  },
+            { Request::CL_CREATEROOM,   "CreateRoomCommand" },
+            { Request::CL_QUITROOM,     "QuitRoomCommand"   },
+            { Request::CL_USERNAME,     "UsernameCommand"   },
+            { Request::CL_READY,        "ReadyCommand"      },
+            { Request::CL_NOTREADY,     "NotReadyCommand"   },
+            { Request::CL_JOINROOM,     "JoinRoomCommand"   }
         };
 
         /*
@@ -126,7 +126,7 @@ request, ignored (" + network->repr() + ")", true);
                                                 ECS::Entity& entity)
         {
             Command::Request*       cmd = _factory.generate(cmdsNames.at(
-                        static_cast<Request::LobbyRequest>(request.getCode())
+                        static_cast<Request::Code>(request.getCode())
                     ));
 
             if (cmd == nullptr)

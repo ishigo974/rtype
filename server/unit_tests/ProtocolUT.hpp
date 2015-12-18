@@ -31,7 +31,7 @@ namespace RType
                                             Buffer& buffer);
         static void             receiveAll(TcpConnector& client,
                                             Buffer& buffer);
-        static Buffer           formatRequest(Request::LobbyRequest code,
+        static Buffer           formatRequest(Request::Code code,
                                               Buffer const& data = Buffer());
 
     public:

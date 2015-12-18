@@ -17,8 +17,8 @@ namespace RType
         class Lobby : public ECS::ASystem
         {
         public:
-            typedef std::unordered_map<Request::LobbyRequest,
-                        std::string, std::hash<uint16_t> >      RequestCmdMap;
+            typedef std::unordered_map<Request::Code, std::string,
+                                       std::hash<uint16_t> >    RequestCmdMap;
             typedef std::unordered_map<uint32_t, ECS::Entity*>  RoomsMap;
 
         public:
