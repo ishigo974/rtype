@@ -49,6 +49,12 @@ namespace RType
                 udp->pushReceived(it->second);
                 _book.erase(it);
             }
+            while (udp->isEvent())
+            {
+                InGameEvent event = udp->popEvent();
+
+                // TODO build and execute command
+            }
             if (udp->isToSend())
                 _socket.sendTo(udp->popToSend(), udp->getIpAddr());
         }

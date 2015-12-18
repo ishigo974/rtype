@@ -112,8 +112,13 @@ namespace RType
 
     void            Server::readInGameEvents()
     {
-        while (!_quit)
-            _sm.update(Component::MASK_NETWORKUDP);
+        try {
+            while (!_quit)
+                _sm.update(Component::MASK_NETWORKUDP);
+        } catch (std::exception const& e) {
+            display("Fatal error: " + std::string(e.what()), true);
+            _quit = true;
+        }
     }
 
     std::string     Server::toString() const
