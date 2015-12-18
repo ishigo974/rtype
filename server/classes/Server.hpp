@@ -21,8 +21,7 @@ namespace RType
                     std::pair<std::string, CLICMDHandler> >  CLICMDHandlers;
 
     public:
-        Server();
-        Server(short int port);
+        Server(short int port = defaultPort);
         virtual ~Server();
 
     private:
@@ -32,6 +31,7 @@ namespace RType
     public:
         void            run();
         void            notifyDisconnected(unsigned int id);
+        void            readInGameEvents();
 
     protected:
         void            init();
@@ -53,8 +53,8 @@ namespace RType
                                         bool err = false);
 
     protected:
-        static Buffer           getResponseOK();
-        static Buffer           getResponseKO();
+        static Buffer               getResponseOK();
+        static Buffer               getResponseKO();
 
     public:
         static const short int      defaultPort;
@@ -64,6 +64,7 @@ namespace RType
         static const CLICMDHandlers cliCmdHandlers;
 
     protected:
+        short int                   _port;
         bool                        _quit;
         TcpAcceptor                 _acceptor;
         SocketMonitor&              _monitor;

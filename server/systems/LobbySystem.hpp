@@ -40,6 +40,8 @@ namespace RType
             virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;
             virtual std::string         toString() const;
+            virtual bool                shouldAutoUpdate() const;
+            virtual bool                shouldAutoProcess() const;
 
         protected:
             Command::Request*           buildCommand(Request const& request,

@@ -163,6 +163,11 @@ namespace RType
             _repr.clear();
         }
 
+        std::string         NetworkTCP::getIpAddr() const
+        {
+            return _socket->getAddr();
+        }
+
         std::string           NetworkTCP::toString() const
         {
             std::ostringstream  ss;

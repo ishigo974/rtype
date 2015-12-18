@@ -121,6 +121,8 @@ namespace ECS
             virtual void            processEntity(Entity& e);
             virtual ComponentMask   getMask() const;
             virtual std::string     getName() const;
+            virtual bool            shouldAutoUpdate() const;
+            virtual bool            shouldAutoProcess() const;
 
         public:
             virtual std::string     toString() const;
