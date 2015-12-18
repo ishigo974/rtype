@@ -52,8 +52,8 @@ namespace RType
     void            ProtocolUT::lobbyRequestParsingWithoutData()
     {
         static const std::vector<Request::Code> tests =
-        {   Request::LR_LISTROOMS,  Request::LR_QUITROOM,
-            Request::LR_READY,      Request::LR_NOTREADY };
+        {   Request::CL_LISTROOMS,  Request::CL_QUITROOM,
+            Request::CL_READY,      Request::CL_NOTREADY };
 
         for (auto& code: tests)
         {
@@ -73,10 +73,10 @@ namespace RType
     {
         static const std::map<std::string, Request::Code> stringTests =
         {
-            { "Room2Bogoss",                        Request::LR_CREATEROOM },
-            { "  13624!@#)$!*%(#@) ///\\\\fsiodj",  Request::LR_CREATEROOM },
-            { "Username2Bogoss",                    Request::LR_USERNAME },
-            { "   ,./AS>D/><<<§±`~`1j{}[||]",       Request::LR_USERNAME }
+            { "Room2Bogoss",                        Request::CL_CREATEROOM },
+            { "  13624!@#)$!*%(#@) ///\\\\fsiodj",  Request::CL_CREATEROOM },
+            { "Username2Bogoss",                    Request::CL_USERNAME },
+            { "   ,./AS>D/><<<§±`~`1j{}[||]",       Request::CL_USERNAME }
         };
         static const std::vector<uint32_t>  idTests =
         { 0, 1, 42, 99, 999, 9999, 99999 };
@@ -106,12 +106,12 @@ namespace RType
             Request     request;
 
             dataSize = Request::dataSizes.at("room_id");
-            buffer.append<uint16_t>(Request::LR_JOINROOM);
+            buffer.append<uint16_t>(Request::CL_JOINROOM);
             buffer.append<uint32_t>(dataSize);
             buffer.append<uint32_t>(test);
             UT_ASSERT(buffer.size() == Request::headerSize + dataSize);
             request = Request(buffer);
-            UT_ASSERT(request.getCode() == Request::LR_JOINROOM);
+            UT_ASSERT(request.getCode() == Request::CL_JOINROOM);
             UT_ASSERT(request.toBuffer().size() == Request::headerSize +
                       dataSize);
             UT_ASSERT(request.get<uint32_t>("room_id") == test);
@@ -128,7 +128,7 @@ namespace RType
         client.connect();
 
         // list rooms
-        client.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -136,14 +136,14 @@ namespace RType
 
         // create room
         request.clear();
-        request.setCode(Request::LR_CREATEROOM);
+        request.setCode(Request::CL_CREATEROOM);
         request.push<std::string>("room_name", "Room2BoGoss");
         client.send(request.toBuffer());
         request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // list rooms
-        client.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -152,12 +152,12 @@ namespace RType
         UT_ASSERT(rooms[0].nbPlayers == 1);
 
         // quit room
-        client.send(Request(Request::LR_QUITROOM).toBuffer());
+        client.send(Request(Request::CL_QUITROOM).toBuffer());
         request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // list rooms
-        client.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client, received);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -177,7 +177,7 @@ namespace RType
         client2.connect();
 
         // client1 list rooms
-        client1.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client1.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -185,14 +185,14 @@ namespace RType
 
         // client2 creates room
         request.clear();
-        request.setCode(Request::LR_CREATEROOM);
+        request.setCode(Request::CL_CREATEROOM);
         request.push<std::string>("room_name", "Room2BoGoss");
         client2.send(request.toBuffer());
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // client1 list rooms
-        client1.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client1.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -202,14 +202,14 @@ namespace RType
 
         // client1 creates room
         request.clear();
-        request.setCode(Request::LR_CREATEROOM);
+        request.setCode(Request::CL_CREATEROOM);
         request.push<std::string>("room_name", "'Sssssup bitches ?!");
         client1.send(request.toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // client2 list rooms
-        client2.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client2.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -220,10 +220,10 @@ namespace RType
         UT_ASSERT(rooms[1].nbPlayers == 1);
 
         // client1/client2 quits rooms
-        client1.send(Request(Request::LR_QUITROOM).toBuffer());
+        client1.send(Request(Request::CL_QUITROOM).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
-        client2.send(Request(Request::LR_QUITROOM).toBuffer());
+        client2.send(Request(Request::CL_QUITROOM).toBuffer());
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
     }
@@ -243,7 +243,7 @@ namespace RType
         client2.connect();
 
         // client1 renames
-        request.setCode(Request::LR_USERNAME);
+        request.setCode(Request::CL_USERNAME);
         request.push<std::string>("username", "Toto");
         client1.send(request.toBuffer());
         request = recvRequest(client1, received1);
@@ -251,7 +251,7 @@ namespace RType
 
         // client2 renames
         request.clear();
-        request.setCode(Request::LR_USERNAME);
+        request.setCode(Request::CL_USERNAME);
         request.push<std::string>("username", "Tata");
         client2.send(request.toBuffer());
         request = recvRequest(client2, received2);
@@ -259,14 +259,14 @@ namespace RType
 
         // client2 creates room
         request.clear();
-        request.setCode(Request::LR_CREATEROOM);
+        request.setCode(Request::CL_CREATEROOM);
         request.push<std::string>("room_name", "Room2BoGoss");
         client2.send(request.toBuffer());
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
         // client1 list rooms
-        client1.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client1.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -276,7 +276,7 @@ namespace RType
 
         // client1 joins room
         request.clear();
-        request.setCode(Request::LR_JOINROOM);
+        request.setCode(Request::CL_JOINROOM);
         request.push<uint32_t>("room_id", rooms[0].id);
         client1.send(request.toBuffer());
         request = recvRequest(client1, received1);
@@ -295,7 +295,7 @@ namespace RType
         UT_ASSERT(request.get<std::string>("username") == "Toto");
 
         // client1 list rooms
-        client1.send(Request(Request::LR_LISTROOMS).toBuffer());
+        client1.send(Request(Request::CL_LISTROOMS).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_LISTROOMS);
         rooms = request.get<Request::RoomsTab>("rooms");
@@ -305,7 +305,7 @@ namespace RType
 
         // client2 renames
         request.clear();
-        request.setCode(Request::LR_USERNAME);
+        request.setCode(Request::CL_USERNAME);
         request.push<std::string>("username", "Titi");
         client2.send(request.toBuffer());
         request = recvRequest(client2, received2);
@@ -318,7 +318,7 @@ namespace RType
         UT_ASSERT(request.get<std::string>("username") == "Titi");
 
         // client1 is ready
-        client1.send(Request(Request::LR_READY).toBuffer());
+        client1.send(Request(Request::CL_READY).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
@@ -328,7 +328,7 @@ namespace RType
         UT_ASSERT(request.get<uint8_t>("player_id") == id);
 
         // client1 is not ready
-        client1.send(Request(Request::LR_NOTREADY).toBuffer());
+        client1.send(Request(Request::CL_NOTREADY).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
@@ -338,7 +338,7 @@ namespace RType
         UT_ASSERT(request.get<uint8_t>("player_id") == id);
 
         // client1 is ready
-        client1.send(Request(Request::LR_READY).toBuffer());
+        client1.send(Request(Request::CL_READY).toBuffer());
         request = recvRequest(client1, received1);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 
@@ -348,7 +348,7 @@ namespace RType
         UT_ASSERT(request.get<uint8_t>("player_id") == id);
 
         // client2 is ready
-        client2.send(Request(Request::LR_READY).toBuffer());
+        client2.send(Request(Request::CL_READY).toBuffer());
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_OK);
 

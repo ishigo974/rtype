@@ -15,13 +15,13 @@ namespace RType
     const size_t                    Request::headerSize     = sizeof(uint16_t) +
                                                               sizeof(uint32_t);
     const Request::LobbyReqMap      Request::lobbyRequests  = {
-        { LR_LISTROOMS,     {}                          },
-        { LR_CREATEROOM,    { "room_name" }             },
-        { LR_JOINROOM,      { "room_id" }               },
-        { LR_QUITROOM,      {}                          },
-        { LR_READY,         {}                          },
-        { LR_NOTREADY,      {}                          },
-        { LR_USERNAME,      { "username"}               },
+        { CL_LISTROOMS,     {}                          },
+        { CL_CREATEROOM,    { "room_name" }             },
+        { CL_JOINROOM,      { "room_id" }               },
+        { CL_QUITROOM,      {}                          },
+        { CL_READY,         {}                          },
+        { CL_NOTREADY,      {}                          },
+        { CL_USERNAME,      { "username"}               },
         { SE_LISTROOMS,     { "rooms" }                 },
         { SE_JOINROOM,      { "player_id", "username" } },
         { SE_CLIUSRNM,      { "player_id", "username" } },
