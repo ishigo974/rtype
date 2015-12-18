@@ -13,7 +13,7 @@ public:
     virtual ~ITcpConnector() {}
 
 public:
-    virtual bool    connect() = 0;
+    virtual void    connect() = 0;
 };
 
 

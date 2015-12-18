@@ -22,7 +22,7 @@ public:
     virtual std::string toString() const;
 
 public:
-    virtual bool connect();
+    virtual void connect();
 
 public:
     virtual rSocket getSocket() const;

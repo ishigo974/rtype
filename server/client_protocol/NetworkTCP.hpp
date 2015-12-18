@@ -27,6 +27,7 @@ namespace RType
         Request popRequest();
         bool    pendingRequests() const;
         void    connect();
+        bool    isConnected() const;
 
     protected:
         void buildRequest();
