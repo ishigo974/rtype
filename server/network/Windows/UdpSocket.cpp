@@ -25,16 +25,15 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     WSABUF             toSend;
     DWORD              SendBytes;
     size_t             ret;
-    std::vector<char>  str(buffer.data(), buffer.data() + buffer.size());
-    char *address = new char[16];
+    std::vector<char>  buff(buffer.data(), buffer.data() + buffer.size());
+    std::vector<char> address(buffer.data(), buffer.data() + buffer.size());
 
     toSend.len             = buffer.size();
-    toSend.buf             = str.data();
+    toSend.buf             = buff.data();
     client.sin_family      = AF_INET;
 
-    std::copy<const char*, char*>(addr.c_str(), addr.c_str() + addr.size(),
-                             address);
-    client.sin_addr.s_addr = inet_pton(AF_INET, address, &client.sin_addr);
+    client.sin_addr.s_addr = inet_pton(AF_INET, address.data(), &client
+            .sin_addr);
     client.sin_port        = _port;
 
     if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,

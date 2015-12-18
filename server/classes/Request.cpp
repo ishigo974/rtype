@@ -129,7 +129,7 @@ namespace RType
             buffer.consume(sizeof(uint32_t));
             player.username = buffer.getString(size);
             buffer.consume(size);
-            player.isReady = buffer.get<uint8_t>();
+            player.isReady = (buffer.get<uint8_t>() != 0);
             buffer.consume(sizeof(uint8_t));
             players.push_back(player);
         }

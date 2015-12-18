@@ -34,7 +34,6 @@ public:
     virtual std::string toString() const;
 
 public:
-    virtual std::string const&  getAddr() const;
     rSocket                     getSocket() const;
     short int                   getPort() const;
     void                        setPort(short int port);

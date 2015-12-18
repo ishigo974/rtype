@@ -34,6 +34,8 @@ namespace RType
                     &ProtocolUT::lobbyRequestParsingWithoutData);
         registerTest("LobbyRequestParsingWithData",
                     &ProtocolUT::lobbyRequestParsingWithData);
+        registerTest("InGameEventParsingWithData",
+                    &ProtocolUT::inGameEventParsingWithData);
         registerTest("CreateSingleRoomAndList",
                     &ProtocolUT::createSingleRoomAndList);
         registerTest("CreateMultipleRoomsAndList",
@@ -364,6 +366,10 @@ namespace RType
         // client2 is notified that the game starts
         request = recvRequest(client2, received2);
         UT_ASSERT(request.getCode() == Request::SE_GAMESTART);
+    }
+
+    void            ProtocolUT::inGameEventParsingWithData()
+    {
     }
 
     /*

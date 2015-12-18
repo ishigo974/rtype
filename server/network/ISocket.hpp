@@ -22,7 +22,6 @@ public:
 
 public:
     virtual short int getPort() const = 0;
-    virtual std::string const& getAddr() const = 0;
 };
 
 #endif //RTYPE_ISOCKET_HPP

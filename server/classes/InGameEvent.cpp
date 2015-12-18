@@ -15,14 +15,14 @@ namespace RType
         { InGameEvent::SE_SHOTSTOP,     { "player_id", "time"              } },
         { InGameEvent::SE_MOBSPAWNED,   { "mob_id", "x", "y", "time"       } },
         { InGameEvent::SE_INPUTERROR,   { "time"                           } },
-        { InGameEvent::SE_PLYRDISCONN,  {} },
-        { InGameEvent::CL_PLAYERUP,     { "time" } },
-        { InGameEvent::CL_PLAYERDOWN,   { "time" } },
-        { InGameEvent::CL_PLAYERLEFT,   { "time" } },
-        { InGameEvent::CL_PLAYERRIGHT,  { "time" } },
-        { InGameEvent::CL_SHOTSTART,    { "shot_type", "time" } },
-        { InGameEvent::CL_SHOTSTOP,     { "time" } },
-        { InGameEvent::CL_DISCONNECT,   {} }
+        { InGameEvent::SE_PLYRDISCONN,  {}                                   },
+        { InGameEvent::CL_PLAYERUP,     { "time" }                           },
+        { InGameEvent::CL_PLAYERDOWN,   { "time" }                           },
+        { InGameEvent::CL_PLAYERLEFT,   { "time" }                           },
+        { InGameEvent::CL_PLAYERRIGHT,  { "time" }                           },
+        { InGameEvent::CL_SHOTSTART,    { "shot_type", "time" }              },
+        { InGameEvent::CL_SHOTSTOP,     { "time" }                           },
+        { InGameEvent::CL_DISCONNECT,   {}                                   }
     };
 
     /*

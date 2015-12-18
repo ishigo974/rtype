@@ -104,8 +104,3 @@ void UdpSocket::close() const
 {
     BaseSocket::close();
 }
-
-std::string const& UdpSocket::getAddr() const
-{
-    return this->_addr;
-}

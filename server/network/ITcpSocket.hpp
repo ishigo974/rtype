@@ -8,8 +8,11 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
 #else
+
 #include <sys/select.h>
+
 #endif
+
 #include "ISocket.hpp"
 
 class ITcpSocket : public ISocket
@@ -17,6 +20,9 @@ class ITcpSocket : public ISocket
 public:
     virtual ~ITcpSocket()
     { }
+
+public:
+    virtual std::string const& getAddr() const = 0;
 };
 
 #endif //RTYPE_ITCPSOCKET_HPP
