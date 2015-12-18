@@ -5,7 +5,6 @@
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
-# include <unistd.h>
 #include <sstream>
 #include "TcpConnector.hpp"
 
@@ -33,15 +32,16 @@ std::string const& TcpConnector::getAddr() const
     return _addr;
 }
 
-bool TcpConnector::connect()
+void TcpConnector::connect()
 {
     struct sockaddr_in sin;
 
     sin.sin_addr.s_addr = inet_addr(_addr.c_str());
     sin.sin_port        = htons(_port);
     sin.sin_family      = AF_INET;
-    return (::connect(_socket, reinterpret_cast<struct sockaddr *>(&sin),
-                      sizeof(sin)) >= 0);
+    if (::connect(_socket, reinterpret_cast<struct sockaddr *>(&sin),
+                  sizeof(sin)) < 0)
+        throw std::runtime_error("Can't connect to server");
 }
 
 rSocket TcpConnector::getSocket() const

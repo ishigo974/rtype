@@ -33,7 +33,7 @@ std::string const& TcpConnector::getAddr() const
     return _addr;
 }
 
-bool TcpConnector::connect()
+void TcpConnector::connect()
 {
     struct sockaddr_in sin;
 
@@ -43,8 +43,7 @@ bool TcpConnector::connect()
 
     if (WSAConnect(_socket, reinterpret_cast<struct sockaddr *>(&sin), sizeof(SOCKADDR), nullptr, nullptr, nullptr, nullptr)
             == SOCKET_ERROR)
-        return false;
-    return true;
+        throw std::runtime_error("Can't connect to server");
 }
 
 rSocket TcpConnector::getSocket() const

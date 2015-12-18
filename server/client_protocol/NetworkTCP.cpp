@@ -134,16 +134,25 @@ namespace RType
         if (_connected)
         {
             //TODO Send UI already connect
-            return ;
+            return;
         }
-        if (!_connector.connect())
+        try
+        {
+            _connector.connect();
+        }
+        catch (std::runtime_error const&)
         {
             //TODO Send UI can't connect
-            return ;
+            return;
         }
         _connected = true;
         SocketMonitor::getInstance().registerSocket(&_connector);
         //TODO Send UI connection success
-        return ;
+        return;
+    }
+
+    bool NetworkTCP::isConnected() const
+    {
+        return _connected;
     }
 }
