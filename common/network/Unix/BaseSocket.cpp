@@ -4,7 +4,8 @@
 
 # include <sys/socket.h>
 # include <unistd.h>
-#include "BaseSocket.hpp"
+# include <stdexcept>
+# include "BaseSocket.hpp"
 
 BaseSocket::BaseSocket()
 { }

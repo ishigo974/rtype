@@ -37,7 +37,7 @@ public:
     virtual std::string         toString();
 
 protected:
-    gu::Rect _bounds;
+    gu::Rect<int> _bounds;
 };
 
 
