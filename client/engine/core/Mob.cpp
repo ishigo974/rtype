@@ -116,7 +116,6 @@ void		Mob::move(Transform & transform)
       _type = 3;
       break;
     }
-  std::cout << transform.getPosition().toString() << std::endl;
 }
 
 void		Mob::update(double)

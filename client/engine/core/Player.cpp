@@ -132,17 +132,14 @@ void		Player::update(double)
     {
       if (_action.front() == ACommand::SHOOT)
 	{
-	  Bullet *bullet = static_cast<GameObject *>(parent())->getComponent<Bullet>();
-	  if (bullet == nullptr)
+	  std::vector<Object *> bullets = EntityManager::getChildrenOf(static_cast<GameObject *>(parent()));
+	  for (auto bullet : bullets)
 	    {
-	      std::cout << "Bullet failed" << std::endl;
-	      _action.pop();
-	      break;
+	      Bullet *b = static_cast<GameObject *>(bullet)->getComponent<Bullet>();
+	      b->setX(transform.getPosition().X());
+	      b->setY(transform.getPosition().Y());
+	      b->setDirection(Bullet::Direction::RIGHT);
 	    }
-	  bullet->setX(transform.getPosition().X());
-	  bullet->setY(transform.getPosition().Y());
-	  bullet->setDirection(Bullet::Direction::RIGHT);
-	  // std::cout << "SHOOT" << std::endl;
 	}
       else
 	this->move(transform);

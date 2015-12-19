@@ -17,7 +17,7 @@ public:
 
 public:
     Bullet();
-  Bullet(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1);
+  Bullet(unsigned int _id, std::string const& _name, int hp = 1, int damage = 5);
     virtual ~Bullet();
 
     Bullet(Bullet const& other);

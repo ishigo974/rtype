@@ -73,7 +73,7 @@ void backgroundTest()
     ss << "bg" << rand() % 4 + 1;
 
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
-    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bullet", 4);
+    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
 
     std::vector<GameObject *>	objs;
     std::vector<Mob *>	mobs;
@@ -122,7 +122,6 @@ void backgroundTest()
 	  }
 	obj->getComponent<Mob>()->setEnabled(true);
 	mobs.push_back(obj->getComponent<Mob>());
-	
 	++j;
       }
 
@@ -134,7 +133,8 @@ void backgroundTest()
     entityManager.attachComponent<Player>(p, "Player", 100, 2);
 
     entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-    entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 2);
+    entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
+    entityManager.addChild(p, bulletobj);
     Transform *tbullet = bulletobj->getComponent<Transform>();
     tbullet->getPosition().setX(500);
 

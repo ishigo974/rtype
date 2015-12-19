@@ -82,14 +82,14 @@ int	Bullet::getDamage() const
 
 void		Bullet::setX(float x)
 {
-  Transform &_transform = static_cast<GameObject *>(parent())->transform();
+  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setX(x);
 }
 
 void		Bullet::setY(float y)
 {
-  Transform &_transform = static_cast<GameObject *>(parent())->transform();
+  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setY(y);
 }
