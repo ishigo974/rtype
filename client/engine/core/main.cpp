@@ -15,6 +15,7 @@
 #include "Player.hpp"
 #include "Label.hpp"
 #include "Button.hpp"
+#include "Ball.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -97,10 +98,10 @@ void backgroundTest()
 
     GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
+    GameObject *ballobj   = entityManager.createEntity<GameObject>("Ball", 4);
 
     entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
+    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
@@ -108,6 +109,7 @@ void backgroundTest()
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
     Transform *tmob = obj->getComponent<Transform>();
     tmob->getPosition().setX(1250);
+    tmob->getPosition().setY(300);
 
     entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
     Transform *t = p->getComponent<Transform>();
@@ -116,6 +118,11 @@ void backgroundTest()
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
     entityManager.attachComponent<Player>(p, "Player", 100, 2);
 
+    entityManager.attachComponent<Transform>(ballobj, cu::Position(0, 0));
+    entityManager.attachComponent<SpriteRenderer>(ballobj, "Ball", "../res/mob.gif", gu::Rect<int>(0, 0, 30, 30));
+    entityManager.attachComponent<Ball>(ballobj, "Ball", 1, 2);
+    Transform *tball = ballobj->getComponent<Transform>();
+    tball->getPosition().setX(500);
 
     r.init();
     e.key = cu::Event::LAST_ACTION;
@@ -128,6 +135,8 @@ void backgroundTest()
     p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
 
+    ballobj->getComponent<Ball>()->setEnabled(true);
+    Ball *ball = ballobj->getComponent<Ball>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -138,18 +147,16 @@ void backgroundTest()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
-            // if (e.type == cu::Event::KeyPressed)
-            // {
-            //     std::cout << "Key pressed : " << e.key << std::endl;
-            // }
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
         mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
+        ball->update(BigBen::get().getElapsedtime());
         r.draw(*a);
         r.draw(*obj);
         r.draw(*p);
+        r.draw(*ballobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;

@@ -10,6 +10,7 @@ enum ComponentMask : RTypes::my_uint16_t
     ColliderMask     = 4,
     StateMachineMask = 8,
     PlayerMask       = 16,
+    BallMask         = 32,
     DrawableMask     = 128,
     InputHandlerMask = 256
 };

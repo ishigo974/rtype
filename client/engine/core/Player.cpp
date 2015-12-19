@@ -2,6 +2,7 @@
 #include "Player.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
+#include "Ball.hpp"
 
 Player::Player()
 {
@@ -108,8 +109,19 @@ void		Player::move()
 	  transform.getPosition().setX((transform.getPosition().X() + speed));
 	  break;
 	case ACommand::SHOOT:
-	  // std::cout << "SHOOT" << std::endl;
-	  break;
+	  {
+	    Ball *ball = static_cast<GameObject *>(parent())->getComponent<Ball>();
+	    if (ball == nullptr)
+	      {
+		std::cout << "Ball failed" << std::endl;
+		break;
+	      }
+	    ball->setX(transform.getPosition().X());
+	    ball->setY(transform.getPosition().Y());
+	    ball->setDirection(Ball::Direction::RIGHT);
+	    // std::cout << "SHOOT" << std::endl;
+	    break;
+	  }
 	default:
 	  break;
 	}
