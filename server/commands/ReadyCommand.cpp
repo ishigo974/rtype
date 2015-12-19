@@ -103,7 +103,7 @@ player/network component");
                         tcp->getIpAddr())
                     );
             }
-            std::cout << "izi" << std::endl; // debug
+            Server::display("Room '" + room->getRoomName() + "' is launching");
         }
     }
 }
