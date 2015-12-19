@@ -12,9 +12,9 @@ namespace RType
     const short NetworkSystem::defaultPortTCP = 6667;
     const std::string NetworkSystem::defaultAddr = "127.0.0.1";
 
-    NetworkSystem::NetworkSystem(EntityManager* em, std::string const& addr,
+    NetworkSystem::NetworkSystem( std::string const& addr,
                                  short tcp, short)
-            : _entityManager(em), _monitor(SocketMonitor::getInstance()),
+            : _monitor(SocketMonitor::getInstance()),
                              _tcpManager(addr, tcp)
     {
         init();

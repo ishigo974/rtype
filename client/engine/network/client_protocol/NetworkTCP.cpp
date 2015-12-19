@@ -23,17 +23,6 @@ namespace RType
         disconnection();
     }
 
-    std::string NetworkTCP::toString() const
-    {
-        std::ostringstream ss;
-
-        ss << "NetworkTCP {"
-        << "\n\t Connector : " << this->_connector.toString()
-        << "\n}" << std::endl;
-
-        return ss.str();
-    }
-
     void NetworkTCP::pushRequest(Request const& request)
     {
         _toSend.push_back(request);

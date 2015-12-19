@@ -19,7 +19,7 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14")#-Wall -Werror  -Wextra ")
 endif ()
 
 # -------------- #
@@ -29,33 +29,46 @@ endif ()
 include_directories(lib)
 include_directories(engine/core)
 include_directories(engine/graphics)
-include_directories(engine/network)
+include_directories(engine/network/client_protocol)
+include_directories(../common/network)
+include_directories(../common/exceptions)
+include_directories(../common/utils)
+if (WIN32)
+    include_directories(../common/network/Windows)
+endif ()
+if (UNIX)
+    include_directories(../common/network/Unix)
+endif ()
 
 file(GLOB source_files
         engine/core/*.cpp
         engine/core/*.hpp
         engine/graphics/*.cpp
         engine/graphics/*.hpp
-        engine/network/*.cpp
-        engine/network/*.hpp
         engine/network/client_protocol/*.cpp
         engine/network/client_protocol/*.hpp
         lib/*.hpp
+        ../common/network/*.cpp
+        ../common/network/*.hpp
+        ../common/exceptions/*.cpp
+        ../common/exceptions/*.hpp
+        ../common/utils/*.cpp
+        ../common/utils/*.hpp
         )
 
 if (UNIX)
     file(GLOB net_files
-            engine/network/Unix/*.cpp
-            engine/network/Unix/*.cpp
+            ../common/network/Unix/*.hpp
+            ../common/network/Unix/*.cpp
             )
-endif()
+endif ()
 
 if (WIN32)
     file(GLOB net_files
-            engine/network/Windows/*.cpp
-            engine/network/Windows/*.cpp
+            ../common/network/Windows/*.hpp
+            ../common/network/Windows/*.cpp
             )
-endif()
+endif ()
 
 # ------------------- #
 # Detect and add SFML #

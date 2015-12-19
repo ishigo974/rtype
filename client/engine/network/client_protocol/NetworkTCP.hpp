@@ -6,17 +6,15 @@
 #define RTYPE_SERVER_NETWORKTCP_HPP
 
 #include <queue>
-#include "IStringable.hpp"
 #include "Request.hpp"
 #include "TcpConnector.hpp"
-//#include "Component.hpp"
-#include "../../core/Component.hpp"
-#include "../../../lib/REnums.hpp"
-#include "../../../lib/RTypes.hpp"
+#include "Component.hpp"
+#include "REnums.hpp"
+#include "RTypes.hpp"
 
 namespace RType
 {
-    class NetworkTCP : public Component
+    class NetworkTCP
     {
     public:
         static RTypes::my_uint16_t const Mask = ComponentMask::NetworkMask;
@@ -26,9 +24,6 @@ namespace RType
         virtual ~NetworkTCP();
 
     public:
-        virtual std::string toString() const;
-
-    public:
         void    pushRequest(Request const&);
         void    update();
         Request popRequest();
@@ -36,12 +31,12 @@ namespace RType
         void    connect();
         bool    isConnected() const;
 
+    public:
+        static const size_t bufferSize;
+
     protected:
         void buildRequest();
         void disconnection();
-
-    public:
-        static const size_t bufferSize;
 
     private:
         NetworkTCP(NetworkTCP const&) = delete;
