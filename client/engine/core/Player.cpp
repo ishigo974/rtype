@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
-#include "Ball.hpp"
+#include "Bullet.hpp"
 
 Player::Player()
 {
@@ -18,6 +18,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _hp = other._hp;
     _damage = other._damage;
     _action = other._action;
+    _multiple = other._multiple;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -54,6 +55,7 @@ void Player::swap(Player& other)
     swap(_hp, other._hp);
     swap(_damage, other._damage);
     swap(_action, other._action);
+    swap(_multiple, other._multiple);
 }
 
 namespace std
@@ -87,24 +89,33 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(Transform & transform)
 {
-  float		speed = static_cast<float>(10.0);
+  float		speed = 5.0f;
 
   if (!_enabled)
     return ;
-  
+  if (_multiple)
+    {
+      _multiple = false;
+      speed = speed * 3 / 4;
+    }
+  if (_action.size() >= 2)
+    {
+      _multiple = true;
+      speed = speed * 3 / 4;
+    }
   switch (_action.front())
     {
     case ACommand::UP:
-      transform.getPosition().setY((transform.getPosition().Y() - speed));
+      transform.getPosition().setY(transform.getPosition().Y() - speed);
       break;
     case ACommand::DOWN:
-      transform.getPosition().setY((transform.getPosition().Y() + speed));
+      transform.getPosition().setY(transform.getPosition().Y() + speed);
       break;
     case ACommand::LEFT:
-      transform.getPosition().setX((transform.getPosition().X() - speed));
+      transform.getPosition().setX(transform.getPosition().X() - speed);
       break;
     case ACommand::RIGHT:
-      transform.getPosition().setX((transform.getPosition().X() + speed));
+      transform.getPosition().setX(transform.getPosition().X() + speed);
       break;
     default:
       break;
@@ -121,16 +132,16 @@ void		Player::update(double)
     {
       if (_action.front() == ACommand::SHOOT)
 	{
-	  Ball *ball = static_cast<GameObject *>(parent())->getComponent<Ball>();
-	  if (ball == nullptr)
+	  Bullet *bullet = static_cast<GameObject *>(parent())->getComponent<Bullet>();
+	  if (bullet == nullptr)
 	    {
-	      std::cout << "Ball failed" << std::endl;
+	      std::cout << "Bullet failed" << std::endl;
 	      _action.pop();
 	      break;
 	    }
-	  ball->setX(transform.getPosition().X());
-	  ball->setY(transform.getPosition().Y());
-	  ball->setDirection(Ball::Direction::RIGHT);
+	  bullet->setX(transform.getPosition().X());
+	  bullet->setY(transform.getPosition().Y());
+	  bullet->setDirection(Bullet::Direction::RIGHT);
 	  // std::cout << "SHOOT" << std::endl;
 	}
       else
