@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     }
 
     TcpConnector            client(std::string(argv[1]), std::atoi(argv[2]));
-    UdpSocket               u(6667);
+    UdpSocket               u(std::atoi(argv[2]) + 1);
     Request                 request;
     InGameEvent             event;
     Buffer                  received;
