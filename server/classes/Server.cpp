@@ -267,7 +267,7 @@ namespace RType
     */
     void            Server::display(std::string const& msg, bool err)
     {
-        if (err)
+        if (!err)
             std::cout << "| " << msg << std::endl;
         else
             std::cerr << "| " << msg << std::endl;
