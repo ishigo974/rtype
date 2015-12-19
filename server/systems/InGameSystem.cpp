@@ -17,6 +17,7 @@ namespace RType
         */
         InGame::InGame(short int port) : _socket(port)
         {
+            _socket.bind();
         }
 
         InGame::~InGame()

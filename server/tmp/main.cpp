@@ -41,10 +41,10 @@ int main(int argc, char **argv)
     InGameEvent             event;
     Buffer                  received;
 
-    client.connect();
+        client.connect();
 
-    request.setCode(Request::CL_CREATEROOM);
-    request.push<std::string>("room_name", "Room2BoGoss");
+      request.setCode(Request::CL_CREATEROOM);
+      request.push<std::string>("room_name", "Room2BoGoss");
     client.send(request.toBuffer());
     request = recvRequest(client, received);
 
