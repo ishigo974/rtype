@@ -20,8 +20,6 @@ namespace RType
 
     public:
         void        process();
-        void        pushRequest(Request const&);
-        void        update();
         Request     popRequest();
         bool        pendingRequests() const;
         void        connect();
@@ -37,6 +35,7 @@ namespace RType
         static const short int   defaultPortUDP;
         static const short int   defaultPortTCP;
         static const std::string defaultAddr;
+        static const size_t      buffLen;
 
     private:
         EntityManager *_entityManager;

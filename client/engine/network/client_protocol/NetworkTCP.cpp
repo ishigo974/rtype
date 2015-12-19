@@ -17,4 +17,22 @@ namespace RType
     {
         return Mask;
     }
+
+    Buffer NetworkTCP::toSend()
+    {
+        Buffer ret(_send);
+
+        _send.clear();
+        return ret;
+    }
+
+    void NetworkTCP::receive(Buffer const& buffer)
+    {
+        _receive.append(buffer);
+    }
+
+    void NetworkTCP::pushRequest(Request const& request)
+    {
+        _send.append(request.toBuffer());
+    }
 }

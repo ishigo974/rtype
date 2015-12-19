@@ -26,6 +26,11 @@ namespace RType
     public:
         virtual RTypes::my_uint16_t getMask() const;
 
+    public:
+        Buffer toSend();
+        void   receive(Buffer const& buffer);
+        void   pushRequest(Request const& request);
+
     private:
         NetworkTCP(NetworkTCP const&) = delete;
         NetworkTCP& operator=(NetworkTCP const&) = delete;
