@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include "SocketMonitor.hpp"
+#include "NetTypes.hpp"
 
 /*
 ** Static variables

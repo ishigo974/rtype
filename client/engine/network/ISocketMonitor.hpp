@@ -5,8 +5,8 @@
 #ifndef RTYPE_SERVER_ISOCKETMONITOR_HPP
 #define RTYPE_SERVER_ISOCKETMONITOR_HPP
 
-#include "IStringable.hpp"
 #include "IMonitorable.hpp"
+#include "../../../server/utils/IStringable.hpp"
 
 class ISocketMonitor : public IStringable
 {
