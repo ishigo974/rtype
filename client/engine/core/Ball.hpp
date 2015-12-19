@@ -46,7 +46,6 @@ protected:
     int _hp;
     int _damage;
   Ball::Direction	_direction;
-  Transform		_transform;
 };
 
 #endif /* !BALL_HPP_ */

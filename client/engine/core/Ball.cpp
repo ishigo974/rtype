@@ -11,7 +11,6 @@ Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage)
   : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
   _direction = Ball::Direction::DEFAULT;
-  _transform = static_cast<GameObject *>(parent())->transform();
 }
 
 Ball::Ball(Ball const& other) : Behaviour(other)
@@ -81,11 +80,15 @@ int	Ball::getDamage() const
 
 void		Ball::setX(float x)
 {
+  Transform &_transform = static_cast<GameObject *>(parent())->transform();
+
   _transform.getPosition().setX(x);
 }
 
 void		Ball::setY(float y)
 {
+  Transform &_transform = static_cast<GameObject *>(parent())->transform();
+
   _transform.getPosition().setY(y);
 }
 
@@ -97,6 +100,7 @@ void		Ball::setDirection(Ball::Direction d)
 void		Ball::move()
 {
   float		speed = static_cast<float>(10.0);
+  Transform &_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setX((_transform.getPosition().X() + _direction * speed));
 }
