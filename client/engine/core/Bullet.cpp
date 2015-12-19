@@ -1,52 +1,52 @@
 #include <iostream>
-#include "Ball.hpp"
+#include "Bullet.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
 
-Ball::Ball()
+Bullet::Bullet()
 {
 }
 
-Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage)
+Bullet::Bullet(unsigned int _id, std::string const& _name, int hp, int damage)
   : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
-  _direction = Ball::Direction::DEFAULT;
+  _direction = Bullet::Direction::DEFAULT;
 }
 
-Ball::Ball(Ball const& other) : Behaviour(other)
+Bullet::Bullet(Bullet const& other) : Behaviour(other)
 {
     _hp = other._hp;
     _damage = other._damage;
     _direction = other._direction;
 }
 
-Ball::Ball(Ball&& other) : Ball(other)
+Bullet::Bullet(Bullet&& other) : Bullet(other)
 {
     swap(other);
 }
 
-Ball& Ball::operator=(Ball other)
+Bullet& Bullet::operator=(Bullet other)
 {
     swap(other);
 
     return (*this);
 }
 
-Ball::~Ball()
+Bullet::~Bullet()
 {
 }
 
-bool Ball::operator==(Ball const& other)
+bool Bullet::operator==(Bullet const& other)
 {
     return (Behaviour::operator==(other));
 }
 
-bool Ball::operator!=(Ball const& other)
+bool Bullet::operator!=(Bullet const& other)
 {
-    return (!Ball::operator==(other));
+    return (!Bullet::operator==(other));
 }
 
-void Ball::swap(Ball& other)
+void Bullet::swap(Bullet& other)
 {
     using std::swap;
 
@@ -59,54 +59,54 @@ void Ball::swap(Ball& other)
 namespace std
 {
     template<>
-    inline void swap<Ball>(Ball& a, Ball& b)
+    inline void swap<Bullet>(Bullet& a, Bullet& b)
     {
         a.swap(b);
     }
 }
 
-RTypes::my_uint16_t     Ball::getMask() const
+RTypes::my_uint16_t     Bullet::getMask() const
 {
   return Mask;
 }
 
-int	Ball::getHp() const
+int	Bullet::getHp() const
 {
   return _hp;
 }
 
-int	Ball::getDamage() const
+int	Bullet::getDamage() const
 {
   return _damage;
 }
 
-void		Ball::setX(float x)
+void		Bullet::setX(float x)
 {
   Transform &_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setX(x);
 }
 
-void		Ball::setY(float y)
+void		Bullet::setY(float y)
 {
   Transform &_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setY(y);
 }
 
-void		Ball::setDirection(Ball::Direction d)
+void		Bullet::setDirection(Bullet::Direction d)
 {
   _direction = d;
 }
 
-void		Ball::move(Transform & transform)
+void		Bullet::move(Transform & transform)
 {
   float		speed = static_cast<float>(10.0);
 
   transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
 }
 
-void		Ball::update(double)
+void		Bullet::update(double)
 {
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
