@@ -7,8 +7,7 @@ class		ScrollingBackground : public Behaviour
 {
 public:
   ScrollingBackground();
-  ScrollingBackground(unsigned int _id, std::string const& _name, double speed,
-		      Object *parent);
+  ScrollingBackground(unsigned int _id, std::string const& _name, double speed);
   ScrollingBackground(ScrollingBackground const& other);
   ScrollingBackground(ScrollingBackground&& other);
   ScrollingBackground& operator=(ScrollingBackground other);

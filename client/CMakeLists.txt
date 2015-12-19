@@ -19,8 +19,7 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wextra ")
-    #-Werror  //TODO add WERROR
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 endif ()
 
 # -------------- #
@@ -95,10 +94,10 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif ()
 
-#if (Boost_FOUND)
-#    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
-#    include_directories(${Boost_INCLUDE_DIR})
-#endif ()
+if (Boost_FOUND)
+    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
+    include_directories(${Boost_INCLUDE_DIR})
+endif ()
 
 # ---- #
 # Link #
@@ -108,8 +107,5 @@ add_executable(${EXECUTABLE_NAME} ${source_files} ${net_files})
 
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-if (UNIX)
-    target_link_libraries(${EXECUTABLE_NAME} m)
-endif ()
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})

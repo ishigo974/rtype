@@ -13,11 +13,11 @@
 #include "ScrollingBackground.hpp"
 #include "Mob.hpp"
 #include "Player.hpp"
-
-#include "AudioEffect.hpp"
-#include "AudioEffectPlayer.hpp"
-#include "Music.hpp"
-#include "MusicPlayer.hpp"
+#include "Label.hpp"
+#include "Button.hpp"
+#include "Bullet.hpp"
+#include "GUIManager.hpp"
+#include "ObjectPool.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -48,32 +48,6 @@ bool gameObjectTest(EntityManager& entityManager)
     return (true);
 }
 
-void renderAndInputsTest()
-{
-    Renderer      r;
-    Input         i(r.getWindow());
-    EntityManager entityManager;
-    GameObject    *a = entityManager.createEntity<GameObject>("Test", 1);
-    cu::Event     e;
-
-    entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
-
-    r.init();
-    e.key = cu::Event::LAST_ACTION;
-
-    while (e.key != cu::Event::ESCAPE)
-    {
-        while (i.pollEvent(e))
-        {
-            std::cout << "Key pressed : " << e.key << std::endl;
-        }
-        r.draw(*a);
-        r.render();
-    }
-    std::cout << "Escape pressed" << std::endl;
-}
-
 bool timeTest()
 {
     for (int i = 0; i < 5; ++i)
@@ -96,39 +70,86 @@ void backgroundTest()
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
-    ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
+    ss << "bg" << rand() % 4 + 1;
 
-    GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
+    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
+    // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
+    // (void)bulletpool;
 
-    entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
-    entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
+    std::vector<GameObject *>	objs;
+    std::vector<Mob *>	mobs;
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
 
-    entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
+    entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
-    entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
+    int j = 0;
+    for (auto obj : objs)
+      {
+	entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
+	entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
+        Transform *t = obj->getComponent<Transform>();
+	t->getPosition().setX(Renderer::width - 32);
+	switch (j)
+	  {
+	  case 0:
+	    t->getPosition().setX(rand() % (Renderer::width - 32));
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
+	    break;
+	  case 1:
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
+	    break;
+	  case 2:
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
+	    break;
+	  case 3:
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
+	    break;
+	  default:
+	    break;
+	  }
+	obj->getComponent<Mob>()->setEnabled(true);
+	mobs.push_back(obj->getComponent<Mob>());
+	++j;
+      }
+
     Transform *t = p->getComponent<Transform>();
-    t->getPosition().setX(600);
-    t->getPosition().setY(680);
-    entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
-    entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
+    t->getPosition().setX(100);
 
+    t->getPosition().setY(300);
+    entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
+    entityManager.attachComponent<Player>(p, "Player", 100);
+
+    entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
+    entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
+    entityManager.addChild(p, bulletobj);
+    Transform *tbullet = bulletobj->getComponent<Transform>();
+    tbullet->getPosition().setX(500);
 
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
-    obj->getComponent<Mob>()->setEnabled(true);
-    Mob *mob = obj->getComponent<Mob>();
-
     p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
 
+    // bulletobj->getComponent<Bullet>()->setEnabled(true);
+    Bullet *bullet = bulletobj->getComponent<Bullet>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -139,18 +160,18 @@ void backgroundTest()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
-            if (e.type == cu::Event::KeyPressed)
-            {
-                std::cout << "Key pressed : " << e.key << std::endl;
-            }
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-        mob->update(BigBen::get().getElapsedtime());
+	for (auto mob : mobs)
+	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
+        bullet->update(BigBen::get().getElapsedtime());
         r.draw(*a);
-        r.draw(*obj);
+	for (auto obj : objs)
+	  r.draw(*obj);
         r.draw(*p);
+        r.draw(*bulletobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -208,7 +229,7 @@ bool mobTest()
     GameObject    *obj = entityManager.createEntity<GameObject>("Test", 1);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
     entityManager
             .attachComponent<SpriteRenderer>(obj, "Mob", "../res/r-typesheet19.gif", gu::Rect<int>(100, 0, 100, 300));
     obj->getComponent<Mob>()->setEnabled(true);
@@ -226,18 +247,21 @@ void menuTest()
     EntityManager entityManager;
     cu::Event     e;
 
+    Label l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
+    Button b(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
 
     std::stringstream ss;
-    ss << "../res/menu" << rand() % 4 + 1 << ".jpg";
+    ss << "menu" << rand() % 4 + 1;
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
                                                   gu::Rect<int>(0, 0, 1280, 720));
-    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
+    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
 
     State initialState("Aeris");
-    State mainMenu("Main Menu");
+    State mainMenu("MainMenu");
 
     initialState.addTransition("MainMenu", [](cu::Event const *e)
                                {
@@ -246,6 +270,7 @@ void menuTest()
                                &e);
 
     entityManager.attachComponent<StateMachine>(menu, initialState);
+    entityManager.attachComponent<GUIManager>(menu);
 
     r.init();
     e.type = cu::Event::None;
@@ -254,6 +279,10 @@ void menuTest()
     menu->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
     StateMachine        *sm = menu->getComponent<StateMachine>();
+    GUIManager          *gm = menu->getComponent<GUIManager>();
+
+    gm->addGUIElement(initialState.getName(), &l);
+    gm->addGUIElement(mainMenu.getName(), &b);
     sm->addState(mainMenu);
     std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
@@ -275,74 +304,51 @@ void menuTest()
         bg->update(BigBen::get().getElapsedtime());
         std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(*menu);
+        gm->draw(r.getWindow(), sm->getCurrent().getName());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
 }
 
-
-// Les sf::sleep sont la pour ne pas lancer les sons en meme temps car la sfml joue les sons
-// dans un thread a part; Ils seraient lancés en même temps sinon...
-
-int audioEffectPlayerTest(GameObject *gameObj, AudioEffectPlayer &soundPlayer)
+void	buttonAndLabelsTest()
 {
-	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
-	audio->setSoundToPlay("../res/laser1.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(400));
+  Renderer r;
+  Input i(r.getWindow());
+  Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+  cu::Event     e;
 
-	audio->setSoundToPlay("../res/laser2.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(400));
 
-	audio->setSoundToPlay("../res/laserKIKOOLOL.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(2000));
-
-	audio->setSoundToPlay("../res/laser1.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	return 0;
-}
-
-int	musicPlayerTest(GameObject *gameObj, MusicPlayer &musicPlayer)
-{
-	Music *music = gameObj->getComponent<Music>();
-
-	std::cout << music->toString() << std::endl;
-	musicPlayer.play(*gameObj, "../res/music.wav", false);
-	std::cout << music->toString() << std::endl;
-
-	return 0;
-}
-
-int testSound()
-{
-	EntityManager	entity;
-	MusicPlayer		musicPlayer;
-	AudioEffectPlayer soundPlayer;
-	GameObject		*gameObj = entity.createEntity<GameObject>("test", 1);
-
-	entity.attachComponent<Music>(gameObj, "Music");
-	entity.attachComponent<AudioEffect>(gameObj, "testAudio");
-
-	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
-	audio->addSound("../res/laser1.wav");
-	audio->addSound("../res/laser2.wav");
-	audio->addSound("../res/laser2.wav");
-	audio->addSound("DELAMERDE");
-	audio->addSound("ENBOITE");
-
-	musicPlayerTest(gameObj, musicPlayer);
-	sf::sleep(sf::milliseconds(1000));
-
-	audioEffectPlayerTest(gameObj, soundPlayer);
-	while (gameObj->getComponent<Music>()->isPlaying());
-
-	return (0);
+  r.getWindow().clear();
+  e.key = cu::Event::LAST_ACTION;
+  while (e.key != cu::Event::ESCAPE)
+    {
+      while (i.pollEvent(e))
+        {
+	  if (e.type == cu::Event::Closed)
+            {
+	      std::cout << "Close button pressed" << std::endl;
+	      return;
+            }
+	  if (e.type == cu::Event::MouseButtonReleased)
+	    {
+	      std::cout << "Button "
+			<< e.mouse.button
+			<< " released : ["
+			<< e.mouse.x
+			<< ";"
+			<< e.mouse.y
+			<< "]"
+			<< std::endl;
+	    }
+	  if (l.intersect(e.mouse.x, e.mouse.y))
+	    {
+	      std::cout << "Click on button" << std::endl;
+	    }
+        }
+      l.draw(r.getWindow());
+      r.render();
+    }
+  std::cout << "Escape pressed" << std::endl;
 }
 
 int main()
@@ -351,17 +357,17 @@ int main()
 
     srand(static_cast<unsigned>(time(nullptr)));
     if (gameObjectTest(entityManager))
-        std::cout << "gameObjectTest passed -> OK" << std::endl << std::endl;
+        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
     if (timeTest())
-        std::cout << "timeTest passed -> OK" << std::endl << std::endl;
+        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
     if (stateMachineTest())
-        std::cout << "stateMachineTest passed -> OK" << std::endl << std::endl;
+        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-    menuTest();
+    // buttonAndLabelsTest();
+    // menuTest();
     backgroundTest();
-	testSound();
 
     return 0;
 }

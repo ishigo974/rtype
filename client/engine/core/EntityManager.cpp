@@ -4,12 +4,9 @@
 
 #include "EntityManager.hpp"
 
-std::unordered_map<unsigned int, std::unique_ptr<Object> > EntityManager::
-                                                                    _entities;
-std::map<unsigned int, unsigned int>                       EntityManager::
-                                                                   _compHierarchy;
-std::map<unsigned int, unsigned int>                       EntityManager::
-                                                                   _goHierarchy;
+std::unordered_map<unsigned int, std::unique_ptr<Object> > EntityManager::_entities;
+std::map<unsigned int, unsigned int>                       EntityManager::_compHierarchy;
+std::map<unsigned int, unsigned int>                       EntityManager::_goHierarchy;
 std::map<std::string, Object *>                            EntityManager::_tags;
 
 std::vector<Object *> EntityManager::getByMask(unsigned int mask)

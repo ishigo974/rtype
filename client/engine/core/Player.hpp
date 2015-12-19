@@ -9,7 +9,7 @@ class	Player : public Behaviour
 {
 public:
   Player();
-  Player(unsigned int _id, std::string const& _name, int hp = 100, int damage = 1, Object* parent = nullptr);
+  Player(unsigned int _id, std::string const& _name, int hp = 100);
   virtual ~Player();
 
   Player(Player const& other);
@@ -20,22 +20,22 @@ public:
   bool operator!=(Player const& other);
 
   int	getHp() const;
-  int	getDamage() const;
   int	getDirection() const;
   void	setAction(ACommand::Action action);
 
-  void		move(double elapsedTime);
-  virtual void	update(double elapsedTime);
+  void		move(Transform & transform);
+  virtual void	update(double);
 
   void swap(Player& other);
 
+  std::string	toString();
   static const RTypes::my_uint16_t Mask = ComponentMask::PlayerMask;
   virtual RTypes::my_uint16_t	getMask() const;
 
 protected:
   int				_hp;
-  int				_damage;
   std::queue<ACommand::Action>	_action;
+  bool				_multiple = false;
 };
 
 #endif /* !PLAYER_HPP_ */

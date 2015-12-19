@@ -12,7 +12,7 @@ public:
 
 public:
   Behaviour();
-  Behaviour(unsigned int _id, std::string const& _name, Object* parent = nullptr);
+  Behaviour(unsigned int _id, std::string const& _name);
   Behaviour(Behaviour const& other);
   Behaviour(Behaviour&& other);
   Behaviour& operator=(Behaviour other);
@@ -31,7 +31,6 @@ public:
   void swap(Behaviour& other);
 
 protected:
-  Object	*_parent;
   bool		_enabled;
 };
 
