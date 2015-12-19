@@ -46,32 +46,6 @@ bool gameObjectTest(EntityManager& entityManager)
     return (true);
 }
 
-void renderAndInputsTest()
-{
-    Renderer      r;
-    Input         i(r.getWindow());
-    EntityManager entityManager;
-    GameObject    *a = entityManager.createEntity<GameObject>("Test", 1);
-    cu::Event     e;
-
-    entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
-
-    r.init();
-    e.key = cu::Event::LAST_ACTION;
-
-    while (e.key != cu::Event::ESCAPE)
-    {
-        while (i.pollEvent(e))
-        {
-            std::cout << "Key pressed : " << e.key << std::endl;
-        }
-        r.draw(*a);
-        r.render();
-    }
-    std::cout << "Escape pressed" << std::endl;
-}
-
 bool timeTest()
 {
     for (int i = 0; i < 5; ++i)
@@ -94,7 +68,7 @@ void backgroundTest()
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
-    ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
+    ss << "bg" << rand() % 4 + 1;
 
     GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
@@ -105,7 +79,7 @@ void backgroundTest()
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
+    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
     Transform *tmob = obj->getComponent<Transform>();
     tmob->getPosition().setX(1250);
@@ -114,7 +88,7 @@ void backgroundTest()
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(100);
     t->getPosition().setY(300);
-    entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
+    entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
     entityManager.attachComponent<Player>(p, "Player", 100, 2);
 
 
@@ -232,7 +206,7 @@ void menuTest()
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
 
     std::stringstream ss;
-    ss << "../res/menu" << rand() % 4 + 1 << ".jpg";
+    ss << "menu" << rand() % 4 + 1;
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
