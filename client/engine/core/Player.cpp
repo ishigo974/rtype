@@ -85,53 +85,56 @@ void	Player::setAction(ACommand::Action action)
   _action.push(action);
 }
 
-void		Player::move()
+void		Player::move(Transform & transform)
 {
   float		speed = static_cast<float>(10.0);
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   if (!_enabled)
     return ;
-  while (_action.size() > 0)
+  
+  switch (_action.front())
     {
-      switch (_action.front())
-	{
-	case ACommand::UP:
-	  transform.getPosition().setY((transform.getPosition().Y() - speed));
-	  break;
-	case ACommand::DOWN:
-	  transform.getPosition().setY((transform.getPosition().Y() + speed));
-	  break;
-	case ACommand::LEFT:
-	  transform.getPosition().setX((transform.getPosition().X() - speed));
-	  break;
-	case ACommand::RIGHT:
-	  transform.getPosition().setX((transform.getPosition().X() + speed));
-	  break;
-	case ACommand::SHOOT:
-	  {
-	    Ball *ball = static_cast<GameObject *>(parent())->getComponent<Ball>();
-	    if (ball == nullptr)
-	      {
-		std::cout << "Ball failed" << std::endl;
-		break;
-	      }
-	    ball->setX(transform.getPosition().X());
-	    ball->setY(transform.getPosition().Y());
-	    ball->setDirection(Ball::Direction::RIGHT);
-	    // std::cout << "SHOOT" << std::endl;
-	    break;
-	  }
-	default:
-	  break;
-	}
-      _action.pop();
+    case ACommand::UP:
+      transform.getPosition().setY((transform.getPosition().Y() - speed));
+      break;
+    case ACommand::DOWN:
+      transform.getPosition().setY((transform.getPosition().Y() + speed));
+      break;
+    case ACommand::LEFT:
+      transform.getPosition().setX((transform.getPosition().X() - speed));
+      break;
+    case ACommand::RIGHT:
+      transform.getPosition().setX((transform.getPosition().X() + speed));
+      break;
+    default:
+      break;
     }
 }
 
-void	Player::update(double)
+void		Player::update(double)
 {
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
+  while (_action.size() > 0)
+    {
+      if (_action.front() == ACommand::SHOOT)
+	{
+	  Ball *ball = static_cast<GameObject *>(parent())->getComponent<Ball>();
+	  if (ball == nullptr)
+	    {
+	      std::cout << "Ball failed" << std::endl;
+	      _action.pop();
+	      break;
+	    }
+	  ball->setX(transform.getPosition().X());
+	  ball->setY(transform.getPosition().Y());
+	  ball->setDirection(Ball::Direction::RIGHT);
+	  // std::cout << "SHOOT" << std::endl;
+	}
+      else
+	this->move(transform);
+      _action.pop();
+    }
 }

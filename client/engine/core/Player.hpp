@@ -24,7 +24,7 @@ public:
   int	getDirection() const;
   void	setAction(ACommand::Action action);
 
-  void		move();
+  void		move(Transform & transform);
   virtual void	update(double);
 
   void swap(Player& other);

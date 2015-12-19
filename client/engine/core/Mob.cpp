@@ -77,10 +77,9 @@ int	Mob::getDamage() const
 
 void		Mob::move()
 {
-  float		speed = static_cast<float>(4.0);
+  float		speed = static_cast<float>(3.0);
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
-  std::cout << _type << std::endl;
   if (!_enabled)
     return ;
   switch (_type)
@@ -107,7 +106,6 @@ void		Mob::move()
       transform.getPosition().setX((transform.getPosition().X() + _direction * speed * 3 / 4));
       break;
     case 3:
-      std::cout << transform.getPosition().toString() << std::endl;
       _direction = -1;
       transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
     }
