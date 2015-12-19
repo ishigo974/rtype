@@ -98,8 +98,12 @@ namespace RType
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
                 // TODO handle
+            } catch (...) {
+                _quit = true;
+                display("Waiting for InGameHandler thread");
+                inGameHandler.join();
+                throw ;
             }
-            // TODO add exceptions
         }
         display("Waiting for InGameHandler thread");
         inGameHandler.join();
@@ -118,6 +122,9 @@ namespace RType
                 _sm.update(Component::MASK_NETWORKUDP);
         } catch (std::exception const& e) {
             display("Fatal error: " + std::string(e.what()), true);
+            _quit = true;
+        } catch (...) {
+            display("Unexpected internal error", true);
             _quit = true;
         }
     }

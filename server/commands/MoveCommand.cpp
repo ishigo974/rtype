@@ -1,10 +1,26 @@
 #include <iostream>
+#include <stdexcept>
 #include "MoveCommand.hpp"
+#include "RoomComponent.hpp"
+#include "PositionComponent.hpp"
+#include "PlayerComponent.hpp"
+#include "InGameEvent.hpp"
 
 namespace RType
 {
     namespace Command
     {
+        /*
+        ** Static variables
+        */
+        const Move::DirCodeMatch   Move::dirCodeMatches  =
+        {
+            { UP,     InGameEvent::SE_PLAYERUP    },
+            { DOWN,   InGameEvent::SE_PLAYERDOWN  },
+            { LEFT,   InGameEvent::SE_PLAYERLEFT  },
+            { RIGHT,  InGameEvent::SE_PLAYERRIGHT }
+        };
+
         /*
         ** Constructor/Destructor
         */
@@ -68,7 +84,41 @@ namespace RType
 
         void        Move::execute()
         {
-            std::cout << "move to " << static_cast<int>(_direction) << std::endl;
+            static const float      speed = 10.0f; // TODO
+            Component::Position*    pos =
+                _entity->getComponent<Component::Position>();
+            Component::Player*      player =
+                _entity->getComponent<Component::Player>();
+            Component::Room*        room;
+            InGameEvent             event;
+
+            if (_direction == NONE)
+                return ;
+            if (pos == nullptr || player == nullptr
+                || ((room = player->getRoom()) == nullptr))
+                throw std::runtime_error("Entity does not have a "
+                                         "position/room component");
+            switch (_direction)
+            {
+                case NONE:
+                    break ;
+                case UP:
+                    pos->setY(pos->getY() < speed ? 0 : pos->getY() - speed);
+                    break ;
+                case DOWN:
+                    pos->setY(pos->getY() + speed > 720 ? 720 : pos->getY() + speed); // TODO
+                    break ;
+                case LEFT:
+                    pos->setX(pos->getX() < speed ? 0 : pos->getX() - speed);
+                    break ;
+                case RIGHT:
+                    pos->setX(pos->getX() + speed > 1280 ? 1280 : pos->getX() + speed); // TODO
+                    break ;
+            }
+            event.setCode(dirCodeMatches.at(_direction));
+            event.push<uint8_t>("player_id", room->getPlayerId(*_entity));
+            event.push<uint32_t>("time", _time);
+            room->broadcastUDP(event.toBuffer(), _entity);
         }
 
         void        Move::undo()

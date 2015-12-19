@@ -7,6 +7,7 @@
 #include "ValueError.hpp"
 #include "EntityManager.hpp"
 #include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 
 namespace RType
 {
@@ -103,8 +104,8 @@ namespace RType
             return true;
         }
 
-        void        Room::broadcast(Buffer const& buffer,
-                                    ECS::Entity const* except)
+        void        Room::broadcastTCP(Buffer const& buffer,
+                                       ECS::Entity const* except)
         {
             for (auto& entry: _players)
             {
@@ -112,8 +113,24 @@ namespace RType
                     ->getComponent<Component::NetworkTCP>();
 
                 if (network == nullptr)
-                    throw std::runtime_error("Player entity is missing his \
-Network component"); // TODO except
+                    throw std::runtime_error("Player entity is missing his "
+                                             "NetworkTCP component"); // TODO except
+                if (except == nullptr || except != entry.second.first)
+                    network->send(buffer);
+            }
+        }
+
+        void        Room::broadcastUDP(Buffer const& buffer,
+                                       ECS::Entity const* except)
+        {
+            for (auto& entry: _players)
+            {
+                Component::NetworkUDP*  network = entry.second.first
+                    ->getComponent<Component::NetworkUDP>();
+
+                if (network == nullptr)
+                    throw std::runtime_error("Player entity is missing his "
+                                             "NetworkUDP component"); // TODO except
                 if (except == nullptr || except != entry.second.first)
                     network->send(buffer);
             }

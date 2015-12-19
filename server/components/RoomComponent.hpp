@@ -37,7 +37,9 @@ namespace RType
             bool                        setPlayerReadiness(ECS::Entity& player,
                                                            bool isReady);
             void                        setName(std::string const& name);
-            void                        broadcast(Buffer const& buffer,
+            void                        broadcastTCP(Buffer const& buffer,
+                                          ECS::Entity const* except = nullptr);
+            void                        broadcastUDP(Buffer const& buffer,
                                           ECS::Entity const* except = nullptr);
             bool                        allReady() const;
             void                        setIsPlaying(bool isPlaying);

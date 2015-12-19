@@ -62,7 +62,7 @@ player/network component");
 
                 request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 request.push<std::string>("username", _usernameToSet);
-                room->broadcast(request.toBuffer(), _entity);
+                room->broadcastTCP(request.toBuffer(), _entity);
             }
         }
 
