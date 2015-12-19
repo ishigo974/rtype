@@ -10,6 +10,8 @@ Ball::Ball()
 Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage)
   : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
+  _direction = Ball::Direction::DEFAULT;
+  _transform = static_cast<GameObject *>(parent())->transform();
 }
 
 Ball::Ball(Ball const& other) : Behaviour(other)
@@ -62,6 +64,11 @@ namespace std
     }
 }
 
+RTypes::my_uint16_t     Ball::getMask() const
+{
+  return Mask;
+}
+
 int	Ball::getHp() const
 {
   return _hp;
@@ -74,24 +81,24 @@ int	Ball::getDamage() const
 
 void		Ball::setX(float x)
 {
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
-
-  transform.getPosition().setX(x);
+  _transform.getPosition().setX(x);
 }
 
 void		Ball::setY(float y)
 {
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+  _transform.getPosition().setY(y);
+}
 
-  transform.getPosition().setY(y);
+void		Ball::setDirection(Ball::Direction d)
+{
+  _direction = d;
 }
 
 void		Ball::move()
 {
-  float		speed = static_cast<float>(1.0);
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+  float		speed = static_cast<float>(10.0);
 
-  transform.getPosition().setX((transform.getPosition().X() + speed));
+  _transform.getPosition().setX((_transform.getPosition().X() + _direction * speed));
 }
 
 void	Ball::update(double)

@@ -7,6 +7,15 @@
 class Ball : public Behaviour
 {
 public:
+
+  enum Direction
+    {
+      LEFT = -1,
+      DEFAULT = 0,
+      RIGHT = 1
+    };
+
+public:
     Ball();
   Ball(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1);
     virtual ~Ball();
@@ -28,10 +37,16 @@ public:
 
   void	setX(float x);
   void	setY(float y);
+  void	setDirection(Ball::Direction d);
+
+  static const RTypes::my_uint16_t Mask = ComponentMask::BallMask;
+  virtual RTypes::my_uint16_t	getMask() const;
 
 protected:
     int _hp;
     int _damage;
+  Ball::Direction	_direction;
+  Transform		_transform;
 };
 
 #endif /* !BALL_HPP_ */
