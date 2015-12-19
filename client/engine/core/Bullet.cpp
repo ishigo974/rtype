@@ -141,5 +141,4 @@ void		Bullet::update(double)
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   this->move(transform);
-  std::cout << this->toString() << std::endl;
 }
