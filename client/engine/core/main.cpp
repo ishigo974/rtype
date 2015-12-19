@@ -226,7 +226,8 @@ void menuTest()
     EntityManager entityManager;
     cu::Event     e;
 
-    Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+    Label l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
+    Button b(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
 
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
 
@@ -259,7 +260,8 @@ void menuTest()
     StateMachine        *sm = menu->getComponent<StateMachine>();
     GUIManager          *gm = menu->getComponent<GUIManager>();
 
-    gm->addGUIElement(mainMenu.getName(), &l);
+    gm->addGUIElement(initialState.getName(), &l);
+    gm->addGUIElement(mainMenu.getName(), &b);
     sm->addState(mainMenu);
     std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
