@@ -9,11 +9,18 @@
 #include "IStringable.hpp"
 #include "Request.hpp"
 #include "TcpConnector.hpp"
+#include "Component.hpp"
+#include "../../core/Component.hpp"
+#include "../../../lib/REnums.hpp"
+#include "../../../lib/RTypes.hpp"
 
 namespace RType
 {
-    class NetworkTCP : public IStringable
+    class NetworkTCP : public Component
     {
+    public:
+        static RTypes::my_uint16_t const Mask = ComponentMask::NetworkMask;
+
     public:
         NetworkTCP(std::string const&, short int);
         virtual ~NetworkTCP();

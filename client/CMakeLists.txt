@@ -8,11 +8,11 @@ project(rtype_client)
 set(EXECUTABLE_NAME "rtype")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 if (WIN32)
-	foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
-		string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-		set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_SOURCE_DIR}/bin )
-	endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
-endif()
+    foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_SOURCE_DIR}/bin)
+    endforeach (OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES)
+endif ()
 
 if (WIN32)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 /WX -std=c++14")
@@ -29,6 +29,7 @@ endif ()
 include_directories(lib)
 include_directories(engine/core)
 include_directories(engine/graphics)
+include_directories(engine/network)
 
 file(GLOB source_files
         engine/core/*.cpp
@@ -37,8 +38,24 @@ file(GLOB source_files
         engine/graphics/*.hpp
         engine/network/*.cpp
         engine/network/*.hpp
+        engine/network/client_protocol/*.cpp
+        engine/network/client_protocol/*.hpp
         lib/*.hpp
         )
+
+if (UNIX)
+    file(GLOB net_files
+            engine/network/Unix/*.cpp
+            engine/network/Unix/*.cpp
+            )
+endif()
+
+if (WIN32)
+    file(GLOB net_files
+            engine/network/Windows/*.cpp
+            engine/network/Windows/*.cpp
+            )
+endif()
 
 # ------------------- #
 # Detect and add SFML #
@@ -51,9 +68,9 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-  set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-  set(CMAKE_MODULE_PATH "/usr/local/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-  set(SFML_ROOT "/usr/local")
+    set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+    set(CMAKE_MODULE_PATH "/usr/local/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+    set(SFML_ROOT "/usr/local")
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
@@ -73,12 +90,12 @@ endif ()
 # Link #
 # ---- #
 
-add_executable(${EXECUTABLE_NAME} ${source_files})
+add_executable(${EXECUTABLE_NAME} ${source_files} ${net_files})
 
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 if (UNIX)
-	target_link_libraries(${EXECUTABLE_NAME} m)
-endif()
+    target_link_libraries(${EXECUTABLE_NAME} m)
+endif ()
 #target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
 #target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})

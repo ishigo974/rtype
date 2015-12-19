@@ -5,22 +5,23 @@
 #ifndef RTYPE_SERVER_CLIENTNETWORK_HPP
 #define RTYPE_SERVER_CLIENTNETWORK_HPP
 
-#include "IStringable.hpp"
 #include "NetworkTCP.hpp"
 
 namespace RType
 {
-    class ClientNetwork
+    class NetworkSystem
     {
     public:
-        ClientNetwork
+        NetworkSystem
                 (std::string const& = defaultAddr, short int = defaultPortTCP,
                  short int = defaultPortUDP);
-        virtual ~ClientNetwork();
+        virtual ~NetworkSystem();
 
     public:
-        void initTCPConnection();
-        void initUDPConnection();
+        void process();
+
+    protected:
+        void init();
 
     public:
         static const short int   defaultPortUDP;

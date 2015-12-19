@@ -45,7 +45,7 @@ if (UNIX)
 endif ()
 
 file(GLOB tmp
-        client_protocol/*)
+        ../client/engine/network/client_protocol/*)
 
 file(GLOB source_files
         main.cpp
