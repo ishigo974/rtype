@@ -47,24 +47,12 @@ sf::RenderWindow& Renderer::getWindow()
     return _win;
 }
 
-gu::Rect<float>     Renderer::getFrustrum() const
-{
-    gu::Rect<float> frustrum;
-
-    frustrum.w = this->_win.getView().getSize().x;
-    frustrum.h = this->_win.getView().getSize().y;
-    frustrum.x = this->_win.getView().getCenter().x - frustrum.w / 2;
-    frustrum.y = this->_win.getView().getCenter().y - frustrum.h / 2;
-    return frustrum;
-}
-
 void Renderer::draw(const GameObject& object)
 {
     SpriteRenderer sr = object.renderer();
     Transform      tr = object.transform();
     sf::Sprite     sprite;
 
-    // this->_win.clear(sf::Color::White);
     sprite.setTexture(*this->_res[sr.getPath()]);
     sprite.setTextureRect(sf::IntRect(sr.getRect().x,
                                       sr.getRect().y,

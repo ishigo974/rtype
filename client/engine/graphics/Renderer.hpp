@@ -23,7 +23,6 @@ public:
 
 public:
 	sf::RenderWindow& getWindow();
-    gu::Rect<float> getFrustrum() const;
 
 public:
     // It souldn't stay public, really
