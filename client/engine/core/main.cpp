@@ -74,6 +74,8 @@ void backgroundTest()
 
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
     GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
+    // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
+    // (void)bulletpool;
 
     std::vector<GameObject *>	objs;
     std::vector<Mob *>	mobs;
@@ -130,7 +132,7 @@ void backgroundTest()
 
     t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-    entityManager.attachComponent<Player>(p, "Player", 100, 2);
+    entityManager.attachComponent<Player>(p, "Player", 100);
 
     entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
     entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);

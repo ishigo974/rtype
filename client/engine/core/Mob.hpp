@@ -26,6 +26,8 @@ public:
 
     void swap(Mob& other);
 
+  std::string	toString();
+
 protected:
     int _hp;
     int _damage;

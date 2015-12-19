@@ -3,20 +3,20 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
+#include "ObjectPool.hpp"
 
 Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, int hp, int damage)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage)
+Player::Player(unsigned int _id, std::string const& _name, int hp)
+  : Behaviour(_id, _name), _hp(hp)
 {
 }
 
 Player::Player(Player const& other) : Behaviour(other)
 {
     _hp = other._hp;
-    _damage = other._damage;
     _action = other._action;
     _multiple = other._multiple;
 }
@@ -53,7 +53,6 @@ void Player::swap(Player& other)
 
     swap(_enabled, other._enabled);
     swap(_hp, other._hp);
-    swap(_damage, other._damage);
     swap(_action, other._action);
     swap(_multiple, other._multiple);
 }
@@ -72,14 +71,22 @@ RTypes::my_uint16_t     Player::getMask() const
   return Mask;
 }
 
+std::string Player::toString()
+{
+    std::stringstream ss;
+    Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+    ss << "Player {"
+       << "\n\thp: " << _hp
+       << "\n\t" << transform.toString()
+       << "\n}" << std::endl;
+
+    return (ss.str());
+}
+
 int	Player::getHp() const
 {
   return _hp;
-}
-
-int	Player::getDamage() const
-{
-  return _damage;
 }
 
 void	Player::setAction(ACommand::Action action)

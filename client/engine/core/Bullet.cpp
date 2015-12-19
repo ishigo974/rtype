@@ -2,6 +2,7 @@
 #include "Bullet.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
+#include "Player.hpp"
 
 Bullet::Bullet()
 {
@@ -80,6 +81,21 @@ int	Bullet::getDamage() const
   return _damage;
 }
 
+std::string Bullet::toString()
+{
+    std::stringstream ss;
+    Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+    ss << "Player {"
+       << "\n\thp: " << _hp
+       << "\n\tdamage: " << _damage
+       << "\n\tdirection: " << _direction
+       << "\n\t" << transform.toString()
+       << "\n}" << std::endl;
+
+    return (ss.str());
+}
+
 void		Bullet::setX(float x)
 {
   Transform	&_transform = static_cast<GameObject *>(parent())->transform();
@@ -99,9 +115,19 @@ void		Bullet::setDirection(Bullet::Direction d)
   _direction = d;
 }
 
+void		Bullet::init()
+{
+  GameObject	*obj = static_cast<GameObject*>(EntityManager::getParentOf(this));
+  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
+
+  _transform.getPosition().setX(obj->transform().getPosition().X());
+  _transform.getPosition().setY(obj->transform().getPosition().Y());
+  _direction = Bullet::RIGHT;
+}
+
 void		Bullet::move(Transform & transform)
 {
-  float		speed = static_cast<float>(10.0);
+  float		speed = 10.0f;
 
   transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
 }
@@ -113,4 +139,5 @@ void		Bullet::update(double)
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   this->move(transform);
+  std::cout << this->toString() << std::endl;
 }
