@@ -100,7 +100,7 @@ void		Ball::setDirection(Ball::Direction d)
 void		Ball::move()
 {
   float		speed = static_cast<float>(10.0);
-  Transform &_transform = static_cast<GameObject *>(parent())->transform();
+  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
 
   _transform.getPosition().setX((_transform.getPosition().X() + _direction * speed));
 }

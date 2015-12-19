@@ -7,8 +7,8 @@ Mob::Mob()
 {
 }
 
-Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage)
+Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type)
+  : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type)
 {
   _direction = 1;
 }
@@ -77,34 +77,40 @@ int	Mob::getDamage() const
 
 void		Mob::move()
 {
-  float		speed = static_cast<float>(2.0);
+  float		speed = static_cast<float>(4.0);
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
+  std::cout << _type << std::endl;
   if (!_enabled)
     return ;
-  /* Mob 1 */
-  // if (transform.getPosition().Y() <= 0)
-  //   _direction = 1;
-  // else if (transform.getPosition().Y() >= 690)
-  //   _direction = -1;
-  // transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
-
-  /* Mob 2 */
-  // ne pas oublier de set le Y
-  // _direction = -1;
-  // transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
-
-  /* Mob 3 */
-  // ne pas oublier de set le X et le Y de départ
-  _direction = -1;
-  transform.getPosition().setY((transform.getPosition().Y() + _direction * -1 * speed));
-  transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
-
-  /* Mob 4 */
-  // ne pas oublier de set le X et le Y de départ
-  // _direction = -1;
-  // transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
-  // transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+  switch (_type)
+    {
+    case 0:
+      if (transform.getPosition().Y() <= 0)
+	_direction = 1;
+      else if (transform.getPosition().Y() >= 690)
+	_direction = -1;
+      transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+      break;
+    case 1:
+      if (transform.getPosition().Y() >= 690)
+	_type = 2;
+      _direction = -1;
+      transform.getPosition().setY((transform.getPosition().Y() + _direction * -1 * speed));
+      transform.getPosition().setX((transform.getPosition().X() + _direction * speed * 3 / 4));
+      break;
+    case 2:
+      if (transform.getPosition().Y() <= 0)
+	_type = 1;
+      _direction = -1;
+      transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+      transform.getPosition().setX((transform.getPosition().X() + _direction * speed * 3 / 4));
+      break;
+    case 3:
+      std::cout << transform.getPosition().toString() << std::endl;
+      _direction = -1;
+      transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+    }
 }
 
 void	Mob::update(double)
