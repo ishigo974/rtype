@@ -9,7 +9,7 @@ class	Player : public Behaviour
 {
 public:
   Player();
-  Player(unsigned int _id, std::string const& _name, int hp = 100, int damage = 1, Object* parent = nullptr);
+  Player(unsigned int _id, std::string const& _name, int hp = 100, int damage = 1);
   virtual ~Player();
 
   Player(Player const& other);

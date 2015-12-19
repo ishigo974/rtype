@@ -7,7 +7,7 @@ class Mob : public Behaviour
 {
 public:
     Mob();
-    Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1, Object *parent = nullptr);
+    Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1);
     virtual ~Mob();
 
     Mob(Mob const& other);

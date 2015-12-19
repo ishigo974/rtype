@@ -3,8 +3,8 @@
 Behaviour::Behaviour()
 { }
 
-Behaviour::Behaviour(unsigned int _id, std::string const& _name, Object* parent)
-  : Component(_id, _name), _parent(parent)
+Behaviour::Behaviour(unsigned int _id, std::string const& _name)
+  : Component(_id, _name)
 { }
 
 Behaviour::Behaviour(Behaviour const& other) : Component(other)
