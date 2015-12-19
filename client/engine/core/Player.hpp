@@ -36,6 +36,7 @@ protected:
   int				_hp;
   int				_damage;
   std::queue<ACommand::Action>	_action;
+  bool				_multiple = false;
 };
 
 #endif /* !PLAYER_HPP_ */
