@@ -15,9 +15,11 @@ Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int typ
 
 Mob::Mob(Mob const& other) : Behaviour(other)
 {
+  _enabled = other._enabled;
     _hp = other._hp;
     _damage = other._damage;
     _direction = other._direction;
+    _type = other._type;
 }
 
 Mob::Mob(Mob&& other) : Mob(other)
@@ -54,6 +56,7 @@ void Mob::swap(Mob& other)
     swap(_hp, other._hp);
     swap(_damage, other._damage);
     swap(_direction, other._direction);
+    swap(_type, other._type);
 }
 
 namespace std
@@ -107,6 +110,9 @@ void		Mob::move(Transform & transform)
     case 3:
       _direction = -1;
       transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+    default:
+      _type = 3;
+      break;
     }
 }
 

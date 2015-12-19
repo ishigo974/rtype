@@ -17,6 +17,7 @@ Ball::Ball(Ball const& other) : Behaviour(other)
 {
     _hp = other._hp;
     _damage = other._damage;
+    _direction = other._direction;
 }
 
 Ball::Ball(Ball&& other) : Ball(other)
@@ -52,6 +53,7 @@ void Ball::swap(Ball& other)
     swap(_enabled, other._enabled);
     swap(_hp, other._hp);
     swap(_damage, other._damage);
+    swap(_direction, other._direction);
 }
 
 namespace std
