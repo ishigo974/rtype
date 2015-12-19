@@ -82,11 +82,29 @@ void		Mob::move()
 
   if (!_enabled)
     return ;
-  if (transform.getPosition().Y() <= 0)
-    _direction = 1;
-  else if (transform.getPosition().Y() >= 690)
-    _direction = -1;
-  transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+  /* Mob 1 */
+  // if (transform.getPosition().Y() <= 0)
+  //   _direction = 1;
+  // else if (transform.getPosition().Y() >= 690)
+  //   _direction = -1;
+  // transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+
+  /* Mob 2 */
+  // ne pas oublier de set le Y
+  // _direction = -1;
+  // transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+
+  /* Mob 3 */
+  // ne pas oublier de set le X et le Y de départ
+  _direction = -1;
+  transform.getPosition().setY((transform.getPosition().Y() + _direction * -1 * speed));
+  transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+
+  /* Mob 4 */
+  // ne pas oublier de set le X et le Y de départ
+  // _direction = -1;
+  // transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+  // transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
 }
 
 void	Mob::update(double)
