@@ -138,7 +138,7 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Room>());
         _em.registerComponent(std::make_unique<Component::Player>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
-        _sm.registerSystem(std::make_unique<System::InGame>(_port));
+        _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
     }

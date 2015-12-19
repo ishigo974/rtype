@@ -6,7 +6,6 @@
 # define RTYPE_ISOCKET_HPP
 
 # include "Buffer.hpp"
-# include "IStringable.hpp"
 # include "IMonitorable.hpp"
 
 class ISocket : public IMonitorable

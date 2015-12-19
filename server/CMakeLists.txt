@@ -19,14 +19,15 @@ endif ()
 
 # Define sources and executable
 if (WIN32)
-    include_directories(network/Windows)
+    include_directories(../common/network/Windows)
 endif ()
 if (UNIX)
-include_directories(network/Unix)
+include_directories(../common/network/Unix)
 endif ()
-include_directories(network)
+include_directories(../common/network)
+include_directories(../common/exceptions)
+include_directories(../common/utils)
 include_directories(base_ecs)
-include_directories(exceptions)
 include_directories(base_ut)
 include_directories(components)
 include_directories(systems)
@@ -35,24 +36,24 @@ include_directories(commands)
 include_directories(unit_tests)
 include_directories(utils)
 
+
 if (WIN32)
     file(GLOB network_files
-    network/Windows/*.cpp)
+            ../common/network/Windows/*.cpp
+            ../common/network/Windows/*.hpp)
 endif ()
 if (UNIX)
     file(GLOB network_files
-            network/Unix/*.cpp)
+            ../common/network/Unix/*.cpp
+            ../common/network/Unix/*.hpp)
 endif ()
-
-file(GLOB tmp
-        client_protocol/*)
 
 file(GLOB source_files
         main.cpp
         base_ecs/*.hpp
         base_ecs/*.cpp
-        network/*.hpp
-        network/*.cpp
+        ../common/network/*.hpp
+        ../common/network/*.cpp
         classes/*.hpp
         classes/*.cpp
         utils/*.hpp
@@ -63,16 +64,19 @@ file(GLOB source_files
         systems/*.cpp
         commands/*.hpp
         commands/*.cpp
-        exceptions/*.hpp
-        exceptions/*.cpp
+        ../common/exceptions/*.hpp
+        ../common/exceptions/*.cpp
+        ../common/utils/*.cpp
+        ../common/utils/*.hpp
+
         )
 
 file(GLOB net_files
         main_network.cpp
         base_ecs/*.hpp
         base_ecs/*.cpp
-        network/*.hpp
-        network/*.cpp
+        ../common/network/*.hpp
+        ../common/network/*.cpp
         classes/*.hpp
         classes/*.cpp
         utils/*.hpp
@@ -83,16 +87,19 @@ file(GLOB net_files
         systems/*.cpp
         commands/*.hpp
         commands/*.cpp
-        exceptions/*.hpp
-        exceptions/*.cpp
+        ../common/exceptions/*.hpp
+        ../common/exceptions/*.cpp
+        ../common/utils/*.cpp
+        ../common/utils/*.hpp
+
         )
 
 file(GLOB ut_source_files
         main_ut.cpp
         base_ecs/*.hpp
         base_ecs/*.cpp
-        network/*.hpp
-        network/*.cpp
+        ../common/network/*.hpp
+        ../common/network/*.cpp
         classes/*.hpp
         classes/*.cpp
         commands/*.hpp
@@ -101,16 +108,18 @@ file(GLOB ut_source_files
         utils/*.cpp
         components/*.hpp
         components/*.cpp
-        exceptions/*.hpp
-        exceptions/*.cpp
+        ../common/exceptions/*.hpp
+        ../common/exceptions/*.cpp
         systems/*.hpp
         systems/*.cpp
         base_ut/*.hpp
         base_ut/*.cpp
         unit_tests/*.hpp
         unit_tests/*.cpp
+        ../common/utils/*.cpp
+        ../common/utils/*.hpp
         )
 
-add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files} ${tmp})
-add_executable(network_test ${net_files} ${network_files} ${tmp})
-add_executable(${UT_NAME} ${ut_source_files} ${network_files} ${tmp})
+add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files})
+add_executable(network_test ${net_files} ${network_files})
+add_executable(${UT_NAME} ${ut_source_files} ${network_files})

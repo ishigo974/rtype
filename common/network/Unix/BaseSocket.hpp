@@ -5,7 +5,6 @@
 #ifndef RTYPE_SERVER_BASESOCKET_HPP
 #define RTYPE_SERVER_BASESOCKET_HPP
 
-#include "IStringable.hpp"
 #include "Buffer.hpp"
 #include "NetTypes.hpp"
 

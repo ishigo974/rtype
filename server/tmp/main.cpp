@@ -1,103 +1,69 @@
+#include <unistd.h>
 #include <iostream>
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
+#include "Buffer.hpp"
+#include "UdpSocket.hpp"
+#include "TcpSocket.hpp"
+#include "TcpConnector.hpp"
+#include "InGameEvent.hpp"
+#include "Request.hpp"
 
-using boost::asio::ip::tcp;
+using namespace RType;
 
-int main(int argc, char* argv[])
+void            receiveAll(TcpConnector& client,
+                                       Buffer& buffer)
 {
-  try
-    {
-      if (argc != 3)
-	{
-	  std::cerr << "Usage: blocking_tcp_echo_client <host> <port>\n";
-	  return 1;
-	}
-
-      boost::asio::io_service io_service;
-
-      tcp::resolver resolver(io_service);
-      tcp::resolver::query query(tcp::v4(), argv[1], argv[2]);
-      tcp::resolver::iterator iterator = resolver.resolve(query);
-
-      tcp::socket socket(io_service);
-      boost::asio::connect(socket, iterator);
-
-
-      uint16_t code = 100;
-      uint32_t size = 0;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-
-      code = 301;
-      size = sizeof(uint32_t) + 6;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      size = 6;
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      std::cout << socket.send(boost::asio::buffer("teatea", 6)) << std::endl;
-
-      code = 301;
-      size = sizeof(uint32_t) + 6;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      size = 6;
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      socket.send(boost::asio::buffer("tototo", 6));
-
-      code = 100;
-      size = 0;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      
-      code = 101;
-      size = sizeof(uint32_t) + 5;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      size = 5;
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-      socket.send(boost::asio::buffer("hello", 5));
-
-      code = 201;
-      size = 0;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-
-      code = 202;
-      size = 0;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-
-      sleep(3);
-
-      code = 103;
-      size = 0;
-      socket.send(boost::asio::buffer(&code, sizeof(code)));
-      socket.send(boost::asio::buffer(&size, sizeof(size)));
-
-      sleep(5);
-
-    }
-  catch (std::exception& e)
-    {
-      std::cerr << "Exception: " << e.what() << "\n";
-    }
-
-  return 0;
+    if (buffer.empty())
+        client.receive(buffer, 4096);
 }
 
-// int	main()
-// {
-//   TcpSocket	s("127.0.0.1", 6667);
-//   Buffer	b;
+Request         recvRequest(TcpConnector& client,
+                                        Buffer& buffer)
+{
+    Request     request;
 
-//   b.append<uint16_t>(100);
-//   b.append<uint32_t>(0);
-//   s.send(b);
-//   b.clear();
-//   b.append<uint16_t>(101);
-//   b.append<uint32_t>(sizeof(uint32_t) + 5);
-//   b.append<std::string>("hello");
-//   s.send(b);
-//   return 0;
-// }
+    receiveAll(client, buffer);
+    request = Request(buffer);
+    buffer.consume(request.toBuffer().size());
+    return request;
+}
+
+int main(int argc, char **argv)
+{
+    if (argc != 3)
+    {
+        std::cerr << "Usage: blocking_tcp_echo_client <host> <port>\n";
+        return 1;
+    }
+
+    TcpConnector            client(std::string(argv[1]), std::atoi(argv[2]));
+    UdpSocket               u(std::atoi(argv[2]) + 1);
+    Request                 request;
+    InGameEvent             event;
+    Buffer                  received;
+
+        client.connect();
+
+      request.setCode(Request::CL_CREATEROOM);
+      request.push<std::string>("room_name", "Room2BoGoss");
+    client.send(request.toBuffer());
+    request = recvRequest(client, received);
+
+    client.send(Request(Request::CL_READY).toBuffer());
+    request = recvRequest(client, received);
+    request = recvRequest(client, received);
+    u.bind();
+
+    int i = 1;
+
+    while (42)
+    {
+        event.setCode(InGameEvent::CL_PLAYERUP);
+        event.push<uint32_t>("time", i);
+        u.sendTo(event.toBuffer(), std::string(argv[1]));
+        std::cout << event.toBuffer().size() << " " << event.toString() << std::endl;
+        sleep(2);
+        ++i;
+        event.clear();
+    }
+    return 0;
+}

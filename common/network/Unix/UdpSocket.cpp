@@ -30,6 +30,7 @@ size_t  UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     dest.sin_port        = htons(_port);
     dest.sin_family      = AF_INET;
 
+    std::cout << "SEND : " << buffer.size() << " -- TO: " << addr << std::endl;
     if ((ret = ::sendto(_socket, buffer.data(), buffer.size(), 0,
                         reinterpret_cast<struct sockaddr *>(&dest),
                         sizeof(dest))) == -1)
@@ -47,25 +48,25 @@ size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
     struct timeval     tv;
 
 
-    tv.tv_sec  = SocketMonitor::defaultSecVal;
+    std::memset(&client, 0, sizeof(client));
+    ret = -1;
+    tv.tv_sec  = 10;
     tv.tv_usec = SocketMonitor::defaultUsecVal;
 
     if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
         throw std::runtime_error("SetSockOpt failed");
-    if ((ret = ::recvfrom(_socket, buff, len, 0,
+    if (((ret = ::recvfrom(_socket, buff, len, 0,
                           reinterpret_cast<struct sockaddr *>(&client),
-                          &clientsize) == -1) && errno != EAGAIN)
+                          &clientsize)) == -1) && errno != EAGAIN)
         throw std::runtime_error("receive failed");
-    if (errno == EAGAIN && ret == -1)
-    {
+   if (ret == -1 && errno == EAGAIN)
         ret = 0;
-    }
     else
     {
         addr.assign(inet_ntoa(client.sin_addr));
         buffer.setData(buff, static_cast<size_t>(ret));
     }
-    delete buff;
+    delete[] buff;
     return static_cast<size_t>(ret);
 }
 

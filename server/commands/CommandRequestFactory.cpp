@@ -1,5 +1,5 @@
 #include <memory>
-#include "CommandFactory.hpp"
+#include "CommandRequestFactory.hpp"
 #include "UsernameCommand.hpp"
 #include "CreateRoomCommand.hpp"
 #include "ListRoomsCommand.hpp"
@@ -12,7 +12,7 @@ namespace RType
 {
     namespace Command
     {
-        Factory::Factory()
+        RequestFactory::RequestFactory()
         {
             learn(std::make_unique<Command::Username>());
             learn(std::make_unique<Command::CreateRoom>());
@@ -23,7 +23,7 @@ namespace RType
             learn(std::make_unique<Command::JoinRoom>());
         }
 
-        Factory::~Factory()
+        RequestFactory::~RequestFactory()
         {
         }
     }
