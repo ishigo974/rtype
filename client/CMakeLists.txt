@@ -64,10 +64,10 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif ()
 
-#if (Boost_FOUND)
-#    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
-#    include_directories(${Boost_INCLUDE_DIR})
-#endif ()
+if (Boost_FOUND)
+    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
+    include_directories(${Boost_INCLUDE_DIR})
+endif ()
 
 # ---- #
 # Link #
@@ -80,5 +80,5 @@ target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
 if (UNIX)
 	target_link_libraries(${EXECUTABLE_NAME} m)
 endif()
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
