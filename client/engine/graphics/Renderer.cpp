@@ -6,9 +6,11 @@
 #include <boost/foreach.hpp>
 #include "Renderer.hpp"
 
+unsigned int const Renderer::width = 1280;
+unsigned int const Renderer::height = 720;
 
 Renderer::Renderer() :
-        _win(sf::VideoMode(1280, 720), "Hey-Type",
+        _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type",
              sf::Style::Titlebar | sf::Style::Close)
 {
     _win.setFramerateLimit(60);

@@ -8,6 +8,10 @@
 class Renderer
 {
 public:
+    static unsigned int const width;
+    static unsigned int const height;
+
+public:
     Renderer();
     ~Renderer();
 
