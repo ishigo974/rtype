@@ -15,6 +15,7 @@
 #include "Player.hpp"
 #include "Label.hpp"
 #include "Button.hpp"
+#include "GUIManager.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -225,6 +226,8 @@ void menuTest()
     EntityManager entityManager;
     cu::Event     e;
 
+    Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
 
     std::stringstream ss;
@@ -236,7 +239,7 @@ void menuTest()
     entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
 
     State initialState("Aeris");
-    State mainMenu("Main Menu");
+    State mainMenu("MainMenu");
 
     initialState.addTransition("MainMenu", [](cu::Event const *e)
                                {
@@ -245,6 +248,7 @@ void menuTest()
                                &e);
 
     entityManager.attachComponent<StateMachine>(menu, initialState);
+    entityManager.attachComponent<GUIManager>(menu);
 
     r.init();
     e.type = cu::Event::None;
@@ -253,6 +257,9 @@ void menuTest()
     menu->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
     StateMachine        *sm = menu->getComponent<StateMachine>();
+    GUIManager          *gm = menu->getComponent<GUIManager>();
+
+    gm->addGUIElement(mainMenu.getName(), &l);
     sm->addState(mainMenu);
     std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
@@ -274,6 +281,7 @@ void menuTest()
         bg->update(BigBen::get().getElapsedtime());
         std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(*menu);
+        gm->draw(r.getWindow(), sm->getCurrent().getName());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -285,7 +293,7 @@ void	buttonAndLabelsTest()
   Input i(r.getWindow());
   Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
   cu::Event     e;
-  
+
 
   r.getWindow().clear();
   e.key = cu::Event::LAST_ACTION;
