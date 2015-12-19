@@ -53,7 +53,7 @@ const
     DWORD              flags      = 0;
     struct sockaddr_in client;
     int                clientSize = sizeof(client);
-    char               *address   = new char[16];
+    char               address[16];
     int                timeout;
 
     timeout = UdpSocket::defaultTimeout;
@@ -68,7 +68,7 @@ const
                       reinterpret_cast<SOCKADDR *>(&client), &clientSize,
                       nullptr, nullptr) == SOCKET_ERROR)
     {
-        if (WSAGetLastError() == WSAETIMEDOUT)
+        if (WSAGetLastError() == WSAETIMEDOUT || WSAGetLastError() == WSAEINVAL)
             read_size = 0;
         else
         {
@@ -79,10 +79,10 @@ const
     if (read_size > 0)
     {
         buffer.append(wsabuf.buf, read_size);
-        delete wsabuf.buf;
         inet_ntop(AF_INET, &(client.sin_addr), address, INET_ADDRSTRLEN);
         addr.assign(address);
     }
+    delete wsabuf.buf;
     return (read_size);
 }
 
