@@ -11,7 +11,7 @@ enum ComponentMask : RTypes::my_uint16_t
     StateMachineMask = 8,
     PlayerMask       = 16,
     DrawableMask     = 128,
-    InputHandlerMask = 256
+    NeteworkMask      = 256
 };
 
 #endif //RTYPE_RENUMS_HPP

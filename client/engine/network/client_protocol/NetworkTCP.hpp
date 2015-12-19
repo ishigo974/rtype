@@ -9,7 +9,7 @@
 #include "IStringable.hpp"
 #include "Request.hpp"
 #include "TcpConnector.hpp"
-#include "Component.hpp"
+//#include "Component.hpp"
 #include "../../core/Component.hpp"
 #include "../../../lib/REnums.hpp"
 #include "../../../lib/RTypes.hpp"

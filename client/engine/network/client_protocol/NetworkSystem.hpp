@@ -6,6 +6,7 @@
 #define RTYPE_SERVER_CLIENTNETWORK_HPP
 
 #include "NetworkTCP.hpp"
+#include "../../core/EntityManager.hpp"
 
 namespace RType
 {
@@ -13,8 +14,8 @@ namespace RType
     {
     public:
         NetworkSystem
-                (std::string const& = defaultAddr, short int = defaultPortTCP,
-                 short int = defaultPortUDP);
+                (EntityManager* em, std::string const& = defaultAddr, short
+                int = defaultPortTCP, short int = defaultPortUDP);
         virtual ~NetworkSystem();
 
     public:
@@ -29,6 +30,7 @@ namespace RType
         static const std::string defaultAddr;
 
     private:
+        EntityManager *_entityManager;
         SocketMonitor& _monitor;
         NetworkTCP _tcpManager;
     };
