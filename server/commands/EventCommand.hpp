@@ -33,7 +33,6 @@ namespace RType
 
         protected:
             ECS::Entity*            _entity;
-            ECS::ASystem*           _system;
         };
     }
 }

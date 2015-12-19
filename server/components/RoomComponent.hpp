@@ -8,6 +8,7 @@
 # include "IBehaviour.hpp"
 # include "ComponentMask.hpp"
 # include "Buffer.hpp"
+# include "PositionComponent.hpp"
 
 namespace RType
 {
@@ -18,6 +19,8 @@ namespace RType
         public:
             typedef std::pair<ECS::Entity*, bool>                   PlayerEntry;
             typedef std::unordered_map<unsigned int, PlayerEntry>   PlayersMap;
+            typedef std::unordered_map<unsigned int,
+                                        Component::Position>        PlayerPos; // TODO MOVE
 
         public:
             Room();
@@ -64,6 +67,7 @@ namespace RType
         public:
             static const unsigned int       nbMaxPlayers;
             static const ECS::ComponentMask mask;
+            static const PlayerPos          defaultPositions;
 
         protected:
             std::string                 _name;

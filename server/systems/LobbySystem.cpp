@@ -69,8 +69,10 @@ namespace RType
             {
                 try {
                     RType::Request  request = network->popRequest();
+                    std::unique_ptr<Command::Request>   cmd =
+                        Lobby::buildCommand(request, e);
 
-                    Lobby::buildCommand(request, e)->execute();
+                    cmd->execute();
                     Server::display("Received request " +
                         std::to_string(request.getCode()) + " from " +
                         network->repr());
@@ -131,16 +133,14 @@ namespace RType
         /*
         ** Protected member functions
         */
-        Command::Request*   Lobby::buildCommand(Request const& request,
-                                                ECS::Entity& entity)
+        std::unique_ptr<Command::Request>
+        Lobby::buildCommand(Request const& request, ECS::Entity& entity)
         {
-            Command::Request*       cmd = _factory.generate(cmdsNames.at(
+            std::unique_ptr<Command::Request> cmd =
+                _factory.generate(cmdsNames.at(
                         static_cast<Request::Code>(request.getCode())
                     ));
 
-            if (cmd == nullptr)
-                throw Exception::ValueError("No command corresponding "
-                    "to request code " + std::to_string(request.getCode()));
             cmd->setEntity(entity);
             cmd->initFromRequest(request, this);
             return cmd;

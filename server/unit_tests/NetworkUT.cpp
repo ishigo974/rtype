@@ -19,7 +19,7 @@ void            NetworkUT::registerTests()
     registerTest("Connect 4 client", &NetworkUT::multipleServerConnect);
     registerTest("Monitor 1 socket", &NetworkUT::simpleUpdate);
     registerTest("Monitor send", &NetworkUT::sendMonitor);
-    registerTest("Udp test", &NetworkUT::udpTest);
+    // registerTest("Udp test", &NetworkUT::udpTest);
 }
 
 std::string     NetworkUT::getName() const

@@ -2,6 +2,7 @@
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
+#include "PositionComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
 #include "ComponentsMasks.hpp"
@@ -102,6 +103,10 @@ player/network component");
                     ->addComponent(std::make_unique<Component::NetworkUDP>(
                         tcp->getIpAddr())
                     );
+                test.second.first
+                    ->addComponent(std::make_unique<Component::Position>(
+                        Component::Room::defaultPositions.at(test.first)
+                    ));
             }
             Server::display("Room '" + room->getRoomName() + "' is launching");
         }

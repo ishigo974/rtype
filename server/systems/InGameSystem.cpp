@@ -10,7 +10,14 @@ namespace RType
         /*
         ** Static variables
         */
-        const size_t    InGame::bufferSize  = 65000;
+        const size_t                InGame::bufferSize  = 65000;
+        const InGame::EventCmdMap   InGame::cmdsNames =
+        {
+            { InGameEvent::CL_PLAYERUP,     "MoveCommand" },
+            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand" },
+            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand" },
+            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand" }
+        };
 
         /*
         ** Constructor/Destructor
@@ -53,9 +60,15 @@ namespace RType
             while (udp->isEvent())
             {
                 InGameEvent event = udp->popEvent();
+                std::unique_ptr<Command::Event> cmd =
+                    _factory.generate(cmdsNames.at(
+                        static_cast<InGameEvent::Code>(event.getCode()))
+                    );
 
+                cmd->setEntity(e);
+                cmd->initFromEvent(event);
+                cmd->execute();
                 std::cout << event << std::endl;
-                // TODO build and execute command
             }
             if (udp->isToSend())
                 _socket.sendTo(udp->popToSend(), udp->getIpAddr());

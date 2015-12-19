@@ -15,8 +15,15 @@ namespace RType
         /*
         ** Static variables
         */
-        const unsigned int          Room::nbMaxPlayers  = 4;
-        const ECS::ComponentMask    Room::mask          = MASK_ROOM;
+        const unsigned int          Room::nbMaxPlayers      = 4;
+        const ECS::ComponentMask    Room::mask              = MASK_ROOM;
+        const Room::PlayerPos       Room::defaultPositions  =
+        {
+            { 1, Component::Position(20, 100) },
+            { 2, Component::Position(20, 150) },
+            { 3, Component::Position(20, 200) },
+            { 4, Component::Position(20, 250) }
+        };
 
         /*
         ** Constructor/Destructor

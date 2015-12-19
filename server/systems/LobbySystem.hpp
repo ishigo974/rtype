@@ -2,6 +2,7 @@
 # define LOBBYSYSTEM_HPP_
 
 # include <string>
+# include <memory>
 # include <unordered_map>
 # include "Entity.hpp"
 # include "ASystem.hpp"
@@ -44,8 +45,8 @@ namespace RType
             virtual bool                shouldAutoProcess() const;
 
         protected:
-            Command::Request*           buildCommand(Request const& request,
-                                                     ECS::Entity& entity);
+            std::unique_ptr<Command::Request>
+            buildCommand(Request const& request, ECS::Entity& entity);
 
         protected:
             static const RequestCmdMap  cmdsNames;
