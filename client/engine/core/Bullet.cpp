@@ -129,6 +129,8 @@ void		Bullet::move(Transform & transform)
 {
   float		speed = 10.0f;
 
+  if (!_enabled)
+    return ;
   transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
 }
 

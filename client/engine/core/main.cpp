@@ -148,7 +148,7 @@ void backgroundTest()
     p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
 
-    // bulletobj->getComponent<Bullet>()->setEnabled(true);
+    bulletobj->getComponent<Bullet>()->setEnabled(true);
     Bullet *bullet = bulletobj->getComponent<Bullet>();
 
     while (e.key != cu::Event::ESCAPE)
