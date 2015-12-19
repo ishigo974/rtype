@@ -12,7 +12,8 @@ enum ComponentMask : RTypes::my_uint16_t
     PlayerMask       = 16,
     BulletMask       = 32,
     GUIManagerMask   = 64,
-    DrawableMask     = 128
+    DrawableMask     = 128,
+    NetworkMask      = 256
 };
 
 #endif //RTYPE_RENUMS_HPP

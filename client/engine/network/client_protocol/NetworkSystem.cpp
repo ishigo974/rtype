@@ -51,37 +51,37 @@ namespace RType
         return ss.str();
     }
 
-    void NetworkSystem::pushRequest(Request const& request)
-    {
-
-    }
-
+//    void NetworkSystem::pushRequest(Request const& request)
+//    {
+//
+//    }
+//
     void NetworkSystem::update()
     {
     }
-
-    void NetworkSystem::buildRequest()
-    {
-    }
-
-    Request NetworkSystem::popRequest()
-    {
-    }
-
-    bool NetworkSystem::pendingRequests() const
-    {
-    }
-
-    void NetworkSystem::disconnection()
-    {
-
-    }
-
-    void NetworkSystem::connect()
-    {
-    }
-
-    bool NetworkSystem::isConnected() const
-    {
-    }
+//
+//    void NetworkSystem::buildRequest()
+//    {
+//    }
+//
+//    Request NetworkSystem::popRequest()
+//    {
+//    }
+//
+//    bool NetworkSystem::pendingRequests() const
+//    {
+//    }
+//
+//    void NetworkSystem::disconnection()
+//    {
+//
+//    }
+//
+//    void NetworkSystem::connect()
+//    {
+//    }
+//
+//    bool NetworkSystem::isConnected() const
+//    {
+//    }
 }
