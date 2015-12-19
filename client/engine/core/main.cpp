@@ -97,39 +97,64 @@ void backgroundTest()
     CommandSystem     cmds(&entityManager, &i);
     ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
 
-    GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
-    GameObject *obj2 = entityManager.createEntity<GameObject>("Mob2", 5);
-    GameObject *obj3 = entityManager.createEntity<GameObject>("Mob3", 6);
-    GameObject *obj4 = entityManager.createEntity<GameObject>("Mob4", 7);
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
     GameObject *ballobj   = entityManager.createEntity<GameObject>("Ball", 4);
+
+    std::vector<GameObject *>	objs;
+    std::vector<Mob *>	mobs;
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    // objs.push_back(entityManager.createEntity<GameObject>("Player", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Ball", 4));
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, 0);
-    Transform *tmob = obj->getComponent<Transform>();
-    tmob->getPosition().setX(1250);
-
-    entityManager.attachComponent<SpriteRenderer>(obj2, "Mob2", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj2, "Mob2", 1, 2, 1);
-    Transform *tmob2 = obj2->getComponent<Transform>();
-    tmob2->getPosition().setX(1250);
-    tmob2->getPosition().setY(0);
-    entityManager.attachComponent<SpriteRenderer>(obj3, "Mob3", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj3, "Mob3", 1, 2, 2);
-    Transform *tmob3 = obj3->getComponent<Transform>();
-    tmob3->getPosition().setX(1250);
-    tmob3->getPosition().setY(690);
-    entityManager.attachComponent<SpriteRenderer>(obj4, "Mob3", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj4, "Mob4", 1, 2, 3);
-    Transform *tmob4 = obj4->getComponent<Transform>();
-    tmob4->getPosition().setX(1250);
-    tmob4->getPosition().setY(345);
+    int j = 0;
+    for (auto obj : objs)
+      {
+	entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
+	entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
+        Transform *t = obj->getComponent<Transform>();
+	t->getPosition().setX(1250);
+	switch (j)
+	  {
+	  case 0:
+	    t->getPosition().setX(rand() % 1280);
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 1:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 2:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 3:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  default:
+	    break;
+	  }
+	obj->getComponent<Mob>()->setEnabled(true);
+	mobs.push_back(obj->getComponent<Mob>());
+	++j;
+      }
 
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(100);
+
     t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
     entityManager.attachComponent<Player>(p, "Player", 100, 2);
@@ -143,18 +168,6 @@ void backgroundTest()
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
-
-    obj->getComponent<Mob>()->setEnabled(true);
-    Mob *mob = obj->getComponent<Mob>();
-
-    obj2->getComponent<Mob>()->setEnabled(true);
-    Mob *mob2 = obj2->getComponent<Mob>();
-
-    obj3->getComponent<Mob>()->setEnabled(true);
-    Mob *mob3 = obj3->getComponent<Mob>();
-
-    obj4->getComponent<Mob>()->setEnabled(true);
-    Mob *mob4 = obj4->getComponent<Mob>();
 
     p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
@@ -174,17 +187,13 @@ void backgroundTest()
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-        mob->update(BigBen::get().getElapsedtime());
-        mob2->update(BigBen::get().getElapsedtime());
-        mob3->update(BigBen::get().getElapsedtime());
-        mob4->update(BigBen::get().getElapsedtime());
+	for (auto mob : mobs)
+	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
         ball->update(BigBen::get().getElapsedtime());
         r.draw(*a);
-        r.draw(*obj);
-        r.draw(*obj2);
-        r.draw(*obj3);
-        r.draw(*obj4);
+	for (auto obj : objs)
+	  r.draw(*obj);
         r.draw(*p);
         r.draw(*ballobj);
         r.render();
@@ -378,8 +387,8 @@ int main()
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-    buttonAndLabelsTest();
-    menuTest();
+    // buttonAndLabelsTest();
+    // menuTest();
     backgroundTest();
 
     return 0;
