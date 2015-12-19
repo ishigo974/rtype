@@ -75,10 +75,9 @@ int	Mob::getDamage() const
   return _damage;
 }
 
-void		Mob::move()
+void		Mob::move(Transform & transform)
 {
   float		speed = static_cast<float>(3.0);
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   if (!_enabled)
     return ;
@@ -111,9 +110,11 @@ void		Mob::move()
     }
 }
 
-void	Mob::update(double)
+void		Mob::update(double)
 {
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
+  this->move(transform);
 }

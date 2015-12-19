@@ -2,6 +2,7 @@
 # define MOB_HPP_
 
 # include "Behaviour.hpp"
+# include "Transform.hpp"
 
 class Mob : public Behaviour
 {
@@ -20,7 +21,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move();
+    void         move(Transform & transform);
     virtual void update(double);
 
     void swap(Mob& other);

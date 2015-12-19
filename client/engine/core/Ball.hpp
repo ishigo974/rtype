@@ -30,7 +30,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move();
+    void         move(Transform & transform);
     virtual void update(double elapsedTime);
 
     void swap(Ball& other);

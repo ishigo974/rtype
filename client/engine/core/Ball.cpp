@@ -97,17 +97,18 @@ void		Ball::setDirection(Ball::Direction d)
   _direction = d;
 }
 
-void		Ball::move()
+void		Ball::move(Transform & transform)
 {
   float		speed = static_cast<float>(10.0);
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
 
-  _transform.getPosition().setX((_transform.getPosition().X() + _direction * speed));
+  transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
 }
 
-void	Ball::update(double)
+void		Ball::update(double)
 {
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
+  this->move(transform);
 }
