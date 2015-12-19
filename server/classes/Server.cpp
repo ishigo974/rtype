@@ -1,5 +1,7 @@
 // Standards includes
+#include <thread>
 #include <memory>
+#include <functional>
 #include <iostream>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -22,11 +24,13 @@
 // Systems related includes
 #include "SystemManager.hpp"
 #include "LobbySystem.hpp"
+#include "InGameSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
 
@@ -56,16 +60,8 @@ namespace RType
     /*
     ** Constructors/Destructor
     */
-    Server::Server() :
-        _quit(false), _acceptor(Server::defaultPort),
-        _monitor(SocketMonitor::getInstance()),
-        _em(ECS::EntityManager::getInstance()),
-        _sm(ECS::SystemManager::getInstance())
-    {
-        init();
-    }
-
     Server::Server(short int port) :
+        _port(port),
         _quit(false), _acceptor(port),
         _monitor(SocketMonitor::getInstance()),
         _em(ECS::EntityManager::getInstance()),
@@ -83,8 +79,9 @@ namespace RType
     */
     void          Server::run()
     {
-        display("Server is now running on port " +
-                std::to_string(_acceptor.getPort()));
+        std::thread     inGameHandler(std::bind(&Server::readInGameEvents,
+                                                this));
+
         while (!_quit)
         {
             try {
@@ -103,12 +100,25 @@ namespace RType
             }
             // TODO add exceptions
         }
+        display("Waiting for InGameHandler thread");
+        inGameHandler.join();
         display("Server is shutting down");
     }
 
     void            Server::notifyDisconnected(unsigned int id)
     {
         _disconnected.push_back(id);
+    }
+
+    void            Server::readInGameEvents()
+    {
+        try {
+            while (!_quit)
+                _sm.update(Component::MASK_NETWORKUDP);
+        } catch (std::exception const& e) {
+            display("Fatal error: " + std::string(e.what()), true);
+            _quit = true;
+        }
     }
 
     std::string     Server::toString() const
@@ -124,9 +134,13 @@ namespace RType
         _monitor.registerSocket(&_acceptor);
         _monitor.registerRaw(stdinFileNo);
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
+        _em.registerComponent(std::make_unique<Component::NetworkUDP>());
         _em.registerComponent(std::make_unique<Component::Room>());
         _em.registerComponent(std::make_unique<Component::Player>());
         _sm.registerSystem(std::make_unique<System::Lobby>());
+        _sm.registerSystem(std::make_unique<System::InGame>(_port));
+        display("Server is now running on port " +
+                std::to_string(_acceptor.getPort()));
     }
 
     void            Server::checkDisconnected()
@@ -146,8 +160,7 @@ namespace RType
         ECS::Entity&            entity =
             _em.create(Component::MASK_NETWORKTCP | Component::MASK_PLAYER);
 
-        network = entity
-            .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+        network = entity.getComponent<Component::NetworkTCP>();
         if (network == nullptr)
             throw std::runtime_error("NetworkTCP component not found");
         network->setSocket(std::unique_ptr<ITcpSocket>(socket));
@@ -181,8 +194,8 @@ namespace RType
             (this->*it->second.second)(args);
         }
         else
-            Server::display("No command '" + cmd + "' ; \
-use \"help\" to get all available events");
+            Server::display("No command \"" + cmd + "\" ; "
+                            "use \"help\" to get all available events");
     }
 
     /*
@@ -202,16 +215,16 @@ use \"help\" to get all available events");
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name\t| Slots\t| Players - r: \
-ready, n: not ready");
+            Server::display("Name\t| Slots\t| Players - r: "
+                            "ready, n: not ready");
         for (auto& entry: rooms)
         {
             Component::Room* room =
-                entry->getComponent<Component::Room>(Component::MASK_ROOM);
+                entry->getComponent<Component::Room>();
 
             if (room == nullptr)
-                throw std::runtime_error("EntityManager: Retrieving entities by\
- mask failed");
+                throw std::runtime_error("EntityManager: Retrieving entities by"
+                                         " mask failed");
             Server::display(room->getRoomName() + "\t| " +
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
@@ -231,13 +244,13 @@ ready, n: not ready");
         for (auto& entry: clients)
         {
             Component::Player*      player =
-                entry->getComponent<Component::Player>(Component::MASK_PLAYER);
+                entry->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                entry->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                entry->getComponent<Component::NetworkTCP>();
 
             if (player == nullptr || network == nullptr)
-                throw std::runtime_error("EntityManager: Retrieving entities by\
- mask failed");
+                throw std::runtime_error("EntityManager: Retrieving entities by"
+                                         " mask failed");
             Server::display(player->getUsername() + "\t| " + network->repr() +
                             "\t| " + (player->getRoom() != nullptr ?
                                       player->getRoom()->getRoomName() : ""));
@@ -254,7 +267,7 @@ ready, n: not ready");
     */
     void            Server::display(std::string const& msg, bool err)
     {
-        if (err)
+        if (!err)
             std::cout << "| " << msg << std::endl;
         else
             std::cerr << "| " << msg << std::endl;

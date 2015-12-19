@@ -1,9 +1,9 @@
 //
-// Created by Denis Le Borgne on 21/11/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
-#ifndef RTYPE_TCPSOCKET_HPP
-#define RTYPE_TCPSOCKET_HPP
+#ifndef RTYPE_SERVER_TCPSOCKET_HPP
+#define RTYPE_SERVER_TCPSOCKET_HPP
 
 # include "Buffer.hpp"
 # include "ITcpSocket.hpp"
@@ -38,9 +38,6 @@ public:
 private:
     TcpSocket(TcpSocket const& sock) = delete;
     TcpSocket& operator=(TcpSocket const& sock) = delete;
-
-protected:
-    std::string _addr;
 };
 
-#endif //RTYPE_TCPSOCKET_HPP
+#endif //RTYPE_SERVER_TCPSOCKET_HPP

@@ -36,6 +36,8 @@ namespace RType
             void                        setName(std::string const& name);
             void                        broadcast(Buffer const& buffer,
                                           ECS::Entity const* except = nullptr);
+            bool                        allReady() const;
+            void                        setIsPlaying(bool isPlaying);
 
         public:
             std::string const&          getRoomName() const;
@@ -43,6 +45,10 @@ namespace RType
             unsigned int                getPlayerId(ECS::Entity& entity) const;
             std::string                 getPlayersNames() const;
             unsigned int                size() const;
+            PlayersMap const&           getPlayersMap() const;
+            bool                        isPlaying() const;
+            PlayersMap::const_iterator  begin() const;
+            PlayersMap::const_iterator  end() const;
 
         public:
             virtual void                update();
@@ -56,11 +62,13 @@ namespace RType
             unsigned int                getAvailableId() const;
 
         public:
-            static const unsigned int   nbMaxPlayers;
+            static const unsigned int       nbMaxPlayers;
+            static const ECS::ComponentMask mask;
 
         protected:
             std::string                 _name;
             PlayersMap                  _players;
+            bool                        _isPlaying;
         };
     }
 }

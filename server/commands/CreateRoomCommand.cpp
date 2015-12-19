@@ -1,3 +1,4 @@
+#include <iostream>
 #include "CreateRoomCommand.hpp"
 #include "EntityManager.hpp"
 #include "ComponentsMasks.hpp"
@@ -58,13 +59,11 @@ expected LobbySystem"); // TODO
         {
             ECS::Entity&            e =
                 ECS::EntityManager::getInstance().create(Component::MASK_ROOM);
-            Component::Room*        room =
-                e.getComponent<Component::Room>(Component::MASK_ROOM);
+            Component::Room*        room = e.getComponent<Component::Room>();
             Component::Player*      player =
-                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
+                _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                _entity->getComponent<Component::NetworkTCP>(
-                    Component::MASK_NETWORKTCP);
+                _entity->getComponent<Component::NetworkTCP>();
 
             if (room == nullptr || player == nullptr || network == nullptr)
                 throw std::runtime_error("Entity does not have a \

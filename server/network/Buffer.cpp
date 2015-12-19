@@ -45,6 +45,11 @@ uint8_t&            Buffer::operator[](size_t index)
     return _data[index];
 }
 
+bool                Buffer::operator==(Buffer const& other) const
+{
+    return _data == other._data;
+}
+
 /*
 ** Public member functions
 */
@@ -95,7 +100,7 @@ std::string         Buffer::toString() const
     std::ostringstream ss;
 
     ss << "Buffer {"
-    << "\n\t Data" << this->data();
+    << "\n\t Data : " << this->data();
     ss << "\n}" << std::endl;
 
     return ss.str();

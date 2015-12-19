@@ -15,33 +15,42 @@ namespace RType
     const size_t                    Request::headerSize     = sizeof(uint16_t) +
                                                               sizeof(uint32_t);
     const Request::LobbyReqMap      Request::lobbyRequests  = {
-        { LR_LISTROOMS,     {} },
-        { LR_CREATEROOM,    { "room_name" } },
-        { LR_JOINROOM,      { "room_id" } },
-        { LR_QUITROOM,      {} },
-        { LR_READY,         {} },
-        { LR_NOTREADY,      {} },
-        { LR_USERNAME,      { "username"} },
-        { SE_LISTROOMS,     { "rooms" } },
-        { SE_OK,            {} }
+        { CL_LISTROOMS,     {}                          },
+        { CL_CREATEROOM,    { "room_name" }             },
+        { CL_JOINROOM,      { "room_id" }               },
+        { CL_QUITROOM,      {}                          },
+        { CL_READY,         {}                          },
+        { CL_NOTREADY,      {}                          },
+        { CL_USERNAME,      { "username"}               },
+        { SE_LISTROOMS,     { "rooms" }                 },
+        { SE_JOINROOM,      { "player_id", "username" } },
+        { SE_CLIUSRNM,      { "player_id", "username" } },
+        { SE_CLIENTRDY,     { "player_id" }             },
+        { SE_CLINOTRDY,     { "player_id" }             },
+        { SE_GAMESTART,     {}                          },
+        { SE_ROOMINFO,      { "player_id", "players" }  },
+        { SE_QUITROOM,      { "player_id" }             },
+        { SE_OK,            {}                          },
+        { SE_KO,            {}                          }
     };
     const Request::DataSizeMap      Request::dataSizes  = {
-        { "size",       sizeof(uint32_t) },
-        { "room_name",  Request::variableSize },
-        { "room_id",    sizeof(uint32_t) },
-        { "username",   Request::variableSize },
-        { "rooms",      Request::variableSize }
+        { "size",       sizeof(uint32_t)        },
+        { "room_name",  Request::variableSize   },
+        { "room_id",    sizeof(uint32_t)        },
+        { "username",   Request::variableSize   },
+        { "rooms",      Request::variableSize   },
+        { "player_id",  sizeof(uint8_t)         },
+        { "players",    Request::variableSize   }
     };
 
     /*
     ** Constructor/Destructor
     */
-    Request::Request() : _protocol(PROTOCOL_UNSET), _code(unsetCode), _size(0)
+    Request::Request(uint16_t code) : ABasePacket(code)
     {
     }
 
-    Request::Request(Protocol protocol, Buffer const& raw) :
-        _protocol(protocol), _code(unsetCode), _size(0)
+    Request::Request(Buffer const& raw) : ABasePacket()
     {
         parse(raw);
     }
@@ -53,21 +62,14 @@ namespace RType
     /*
     ** Copy constructor and assign operator
     */
-    Request::Request(Request const& other) :
-        _protocol(other._protocol), _code(other._code),
-        _size(other._size), _data(other._data)
+    Request::Request(Request const& other) : ABasePacket(other)
     {
     }
 
     Request&        Request::operator=(Request const& other)
     {
         if (this != &other)
-        {
-            _protocol = other._protocol;
-            _code = other._code;
-            _size = other._size;
-            _data = other._data;
-        }
+            ABasePacket::operator=(other);
         return *this;
     }
 
@@ -75,20 +77,10 @@ namespace RType
     ** Public member functions
     */
     template <>
-    std::string         Request::get(std::string const& key) const
+    Request::RoomsTab   Request::get(std::string const& key) const
     {
         DataMap::const_iterator it = _data.find(key);
-
-        if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
-        return it->second.getString();
-    }
-
-    template <>
-    RoomsCollection     Request::get(std::string const& key) const
-    {
-        DataMap::const_iterator it = _data.find(key);
-        RoomsCollection         res;
+        RoomsTab                res;
         Buffer                  buffer;
 
         if (_code != SE_LISTROOMS)
@@ -101,32 +93,47 @@ namespace RType
             Room            room;
             uint32_t        size;
 
-            room.setId(buffer.get<uint32_t>());
+            room.id = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
             size = buffer.get<uint32_t>();
             buffer.consume(sizeof(uint32_t));
-            room.setName(buffer.getString(size));
+            room.name = buffer.getString(size);
             buffer.consume(size);
-            room.setNbPlayers(buffer.get<uint8_t>());
+            room.nbPlayers = buffer.get<uint8_t>();
             buffer.consume(sizeof(uint8_t));
             res.push_back(room);
         }
         return res;
     }
 
-    Request::Protocol   Request::getProtocol() const
+    template <>
+    Request::PlayersTab Request::get(std::string const& key) const
     {
-        return _protocol;
-    }
+        DataMap::const_iterator it = _data.find(key);
+        PlayersTab              players;
+        Buffer                  buffer;
 
-    uint16_t            Request::getCode() const
-    {
-        return _code;
-    }
+        if (_code != SE_ROOMINFO)
+            throw Exception::ValueError("Trying to retrieve players infos");
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        buffer = it->second;
+        while (!buffer.empty())
+        {
+            Player      player;
+            uint32_t    size;
 
-    size_t              Request::size() const
-    {
-        return _size;
+            player.id = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
+            size = buffer.get<uint32_t>();
+            buffer.consume(sizeof(uint32_t));
+            player.username = buffer.getString(size);
+            buffer.consume(size);
+            player.isReady = (buffer.get<uint8_t>() != 0);
+            buffer.consume(sizeof(uint8_t));
+            players.push_back(player);
+        }
+        return players;
     }
 
     std::string         Request::toString() const
@@ -134,12 +141,32 @@ namespace RType
         std::ostringstream  ss;
 
         ss << "Request {"
-            << "\n\t_protocol: " << _protocol
             << "\n\t_code: " << _code
-            << "\n\t_size: " << _size
             << "\n\tnb data: " << _data.size()
             << "\n}\n";
         return ss.str();
+    }
+
+    Buffer          Request::toBuffer() const
+    {
+        Buffer      res;
+        Buffer      data;
+        auto        it = lobbyRequests.find(static_cast<Code>(_code));
+
+        if (it == lobbyRequests.end())
+            throw Exception::IncompleteRequest("Code " + std::to_string(_code) +
+                                               " does not match any requests");
+        res.append<uint16_t>(_code);
+        for (auto& arg: it->second)
+        {
+            if (dataSizes.at(arg) == Request::variableSize
+                && arg != "players" && arg != "rooms")
+                data.append<uint32_t>(_data.at(arg).size());
+            data.append<Buffer>(_data.at(arg));
+        }
+        res.append<uint32_t>(data.size());
+        res.append(data);
+        return res;
     }
 
     /*
@@ -149,27 +176,24 @@ namespace RType
     {
         size_t      dataSize;
 
+        clear();
         if (raw.size() < headerSize)
             throw Exception::IncompleteRequest("Buffer can't contain a \
                                                 request header");
         _code = raw.get<uint16_t>();
         dataSize = raw.get<uint32_t>(sizeof(uint16_t));
-        _size = headerSize + dataSize;
         if (raw.size() - headerSize < dataSize)
             throw Exception::IncompleteRequest("Buffer can't contain \
                                                 request's data");
-        if (_protocol == PROTOCOL_LOBBY)
-            parseLobby(raw);
-        else if (_protocol == PROTOCOL_INGAME)
-            parseInGame(raw);
+        parseData(raw, dataSize);
     }
 
-    void            Request::parseLobby(Buffer const& raw)
+    void            Request::parseData(Buffer const& raw, size_t dataSize)
     {
-        Buffer                          tmp = raw;
-        size_t                          left = _size - headerSize;
-        LobbyReqMap::const_iterator     it =
-            lobbyRequests.find(static_cast<LobbyRequest>(_code));
+        Buffer                          tmp     = raw;
+        size_t                          left    = dataSize;
+        LobbyReqMap::const_iterator     it      =
+            lobbyRequests.find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);
         if (it == lobbyRequests.end())
@@ -183,7 +207,7 @@ namespace RType
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
-            if (arg == "rooms")
+            if (arg == "rooms" || arg == "players")
             {
                 _data.insert(std::make_pair(it->first, tmp));
                 return ;
@@ -206,10 +230,5 @@ namespace RType
             _data.insert(std::make_pair(it->first, res));
             left -= size;
         }
-    }
-
-    void            Request::parseInGame(Buffer const& /*raw*/)
-    {
-        // TODO
     }
 }

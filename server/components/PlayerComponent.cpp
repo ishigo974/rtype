@@ -9,7 +9,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const std::string   Player::defaultUsername = "Player";
+        const std::string           Player::defaultUsername = "Player";
+        const ECS::ComponentMask    Player::mask            = MASK_PLAYER;
 
         /*
         ** Constructor/Destructor
@@ -66,7 +67,7 @@ namespace RType
 
         ECS::ComponentMask  Player::getMask() const
         {
-            return MASK_PLAYER;
+            return mask;
         }
 
         ECS::IComponent*    Player::clone() const

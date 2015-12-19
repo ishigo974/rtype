@@ -34,6 +34,7 @@ namespace ECS
         void                processAll() const;
         void                process(std::string const& name) const;
         void                process(ComponentMask mask) const;
+        void                update(ComponentMask mask) const;
 
     public:
         void                registerSystem(UniqueSystemPtr system);

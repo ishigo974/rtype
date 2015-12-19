@@ -30,14 +30,15 @@ namespace ECS
         void                update();
 
         template <typename ComponentType>
-        ComponentType*      getComponent(ComponentMask mask) const
+        ComponentType*      getComponent() const
         {
             ComponentMap::const_iterator    it;
             ComponentType*                  res;
 
-            if ((it = _components.find(mask)) == _components.end()
-            || (res = dynamic_cast<ComponentType*>(it->second.get())) == nullptr)
-            return nullptr;
+            if ((it = _components.find(ComponentType::mask)) == _components.end()
+                || (res = dynamic_cast<ComponentType*>(it->second.get()))
+                    == nullptr)
+                return nullptr;
             return res;
         }
 

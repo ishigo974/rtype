@@ -1,5 +1,5 @@
 //
-// Created by Denis Le Borgne on 13/12/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
 #ifndef RTYPE_SERVER_BASESOCKET_HPP
@@ -9,7 +9,6 @@
 #include "Buffer.hpp"
 #include "NetTypes.hpp"
 
-
 class BaseSocket
 {
 public:
@@ -18,13 +17,14 @@ public:
     virtual ~BaseSocket();
 
 public:
-    virtual size_t    send(Buffer const& buffer) const;
-    virtual size_t    receive(Buffer& buffer, size_t len) const;
-    virtual void      close() const;
+    virtual size_t send(Buffer const& buffer) const;
+    virtual size_t receive(Buffer& buffer, size_t len) const;
+    virtual void   close() const;
 
 protected:
-    rSocket _socket;
-    short int _port;
+    rSocket     _socket;
+    short int   _port;
+    std::string _addr;
 };
 
 

@@ -22,11 +22,17 @@ namespace RType
     protected:
         static void             lobbyRequestParsingWithoutData();
         static void             lobbyRequestParsingWithData();
+        static void             inGameEventParsingWithData();
         static void             createSingleRoomAndList();
+        static void             createMultipleRoomsAndList();
+        static void             fullTestRoom();
 
     protected:
-        static Buffer           receiveAll(TcpConnector& client);
-        static Buffer           formatRequest(Request::LobbyRequest code,
+        static Request          recvRequest(TcpConnector& client,
+                                            Buffer& buffer);
+        static void             receiveAll(TcpConnector& client,
+                                            Buffer& buffer);
+        static Buffer           formatRequest(Request::Code code,
                                               Buffer const& data = Buffer());
 
     public:

@@ -1,7 +1,9 @@
+#include <iostream>
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
 #include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 #include "ComponentsMasks.hpp"
 #include "Server.hpp"
 
@@ -38,16 +40,16 @@ namespace RType
         ** Public member functions
         */
         void        Ready::initFromRequest(RType::Request const&,
-                                            ECS::ASystem*)
+                                           ECS::ASystem*)
         {
         }
 
         void        Ready::execute()
         {
             Component::Player*      player =
-                _entity->getComponent<Component::Player>(Component::MASK_PLAYER);
+                _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
-                _entity->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                _entity->getComponent<Component::NetworkTCP>();
             Component::Room*        room;
 
             if (player == nullptr || network == nullptr)
@@ -58,14 +60,14 @@ player/network component");
                 network->send(Server::responseKO);
             else
             {
-                Buffer      buffer;
+                RType::Request         request(RType::Request::SE_CLIENTRDY);
 
-                buffer.append<uint16_t>(RType::Request::SE_CLIENTRDY);
-                buffer.append<uint32_t>(sizeof(uint8_t));
-                buffer.append<uint8_t>(room->getPlayerId(*_entity));
+                request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
-                room->broadcast(buffer, _entity);
+                room->broadcast(request.toBuffer(), _entity);
             }
+            if (room->allReady())
+                startGame(room);
         }
 
         void        Ready::undo()
@@ -81,6 +83,26 @@ player/network component");
         std::string Ready::getName() const
         {
             return "ReadyCommand";
+        }
+
+        /*
+        ** Protected member functions
+        */
+        void        Ready::startGame(Component::Room* room) const
+        {
+            room->setIsPlaying(true);
+            room->broadcast(RType::Request(RType::Request::SE_GAMESTART)
+                            .toBuffer());
+            for (auto& test: *room)
+            {
+                Component::NetworkTCP*  tcp = test.second.first
+                    ->getComponent<Component::NetworkTCP>();
+
+                test.second.first
+                    ->addComponent(std::make_unique<Component::NetworkUDP>(
+                        tcp->getIpAddr())
+                    );
+            }
         }
     }
 }

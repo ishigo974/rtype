@@ -1,23 +1,13 @@
 //
-// Created by Denis Le Borgne on 06/12/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#else
-# include <sys/socket.h>
-# include <netdb.h>
-# include <arpa/inet.h>
-# include <unistd.h>
-#endif
 
 #include <sstream>
 #include "TcpConnector.hpp"
 
-
 TcpConnector::TcpConnector(std::string const& addr, short int port)
         : TcpSocket(addr, port)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -26,11 +16,6 @@ TcpConnector::TcpConnector(std::string const& addr, short int port)
         throw std::runtime_error("LOBYTE / HIBYTE failed");
     if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
             throw std::runtime_error("Socket failed");
-#else
-    if ((_socket = ::socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")
-            ->p_proto)) < 0)
-        throw std::runtime_error("Socket failed");
-#endif
 }
 
 TcpConnector::~TcpConnector()
@@ -48,9 +33,8 @@ std::string const& TcpConnector::getAddr() const
     return _addr;
 }
 
-bool TcpConnector::connect()
+void TcpConnector::connect()
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     struct sockaddr_in sin;
 
     inet_pton(AF_INET, _addr.c_str(), &sin.sin_addr);
@@ -59,17 +43,7 @@ bool TcpConnector::connect()
 
     if (WSAConnect(_socket, reinterpret_cast<struct sockaddr *>(&sin), sizeof(SOCKADDR), nullptr, nullptr, nullptr, nullptr)
             == SOCKET_ERROR)
-        return false;
-    return true;
-#else
-    struct sockaddr_in sin;
-
-    sin.sin_addr.s_addr = inet_addr(_addr.c_str());
-    sin.sin_port        = htons(_port);
-    sin.sin_family      = AF_INET;
-    return (::connect(_socket, reinterpret_cast<struct sockaddr *>(&sin),
-                      sizeof(sin)) >= 0);
-#endif
+        throw std::runtime_error("Can't connect to server");
 }
 
 rSocket TcpConnector::getSocket() const

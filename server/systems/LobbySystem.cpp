@@ -18,13 +18,13 @@ namespace RType
         ** Static variables
         */
         const Lobby::RequestCmdMap      Lobby::cmdsNames    = {
-            { Request::LR_LISTROOMS,    "ListRoomsCommand"  },
-            { Request::LR_CREATEROOM,   "CreateRoomCommand" },
-            { Request::LR_QUITROOM,     "QuitRoomCommand"   },
-            { Request::LR_USERNAME,     "UsernameCommand"   },
-            { Request::LR_READY,        "ReadyCommand"      },
-            { Request::LR_NOTREADY,     "NotReadyCommand"   },
-            { Request::LR_JOINROOM,     "JoinRoomCommand"   }
+            { Request::CL_LISTROOMS,    "ListRoomsCommand"  },
+            { Request::CL_CREATEROOM,   "CreateRoomCommand" },
+            { Request::CL_QUITROOM,     "QuitRoomCommand"   },
+            { Request::CL_USERNAME,     "UsernameCommand"   },
+            { Request::CL_READY,        "ReadyCommand"      },
+            { Request::CL_NOTREADY,     "NotReadyCommand"   },
+            { Request::CL_JOINROOM,     "JoinRoomCommand"   }
         };
 
         /*
@@ -48,7 +48,7 @@ namespace RType
             while (it != _rooms.end())
             {
                 Component::Room* room = it->second
-                    ->getComponent<Component::Room>(Component::MASK_ROOM);
+                    ->getComponent<Component::Room>();
 
                 if (room->size() == 0)
                 {
@@ -64,7 +64,7 @@ namespace RType
         void                Lobby::processEntity(ECS::Entity& e)
         {
             Component::NetworkTCP*  network = e
-                .getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                .getComponent<Component::NetworkTCP>();
 
             while (network->isRequest())
             {
@@ -96,7 +96,7 @@ request, ignored (" + network->repr() + ")", true);
             if (it == _rooms.end())
                 return nullptr;
             return it->second
-                        ->getComponent<Component::Room>(Component::MASK_ROOM);
+                        ->getComponent<Component::Room>();
         }
 
         ECS::ComponentMask  Lobby::getMask() const
@@ -114,6 +114,16 @@ request, ignored (" + network->repr() + ")", true);
             return _rooms;
         }
 
+        bool                Lobby::shouldAutoUpdate() const
+        {
+            return true;
+        }
+
+        bool                Lobby::shouldAutoProcess() const
+        {
+            return true;
+        }
+
         std::string         Lobby::toString() const
         {
             return "LobbySystem { mask: " + std::to_string(getMask()) + "}";
@@ -126,12 +136,12 @@ request, ignored (" + network->repr() + ")", true);
                                                 ECS::Entity& entity)
         {
             Command::Request*       cmd = _factory.generate(cmdsNames.at(
-                        static_cast<Request::LobbyRequest>(request.getCode())
+                        static_cast<Request::Code>(request.getCode())
                     ));
 
             if (cmd == nullptr)
-                throw Exception::ValueError("No command corresponding \
-to request code " + std::to_string(request.getCode()));
+                throw Exception::ValueError("No command corresponding "
+                    "to request code " + std::to_string(request.getCode()));
             cmd->setEntity(entity);
             cmd->initFromRequest(request, this);
             return cmd;

@@ -1,12 +1,8 @@
 //
-// Created by Denis Le Borgne on 13/12/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#else
-# include <sys/socket.h>
-# include <unistd.h>
-#endif
+
 #include "BaseSocket.hpp"
 
 BaseSocket::BaseSocket()
@@ -17,17 +13,16 @@ BaseSocket::~BaseSocket()
     close();
 }
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 size_t    BaseSocket::send(Buffer const& buffer) const
 {
     struct sockaddr_in client;
     WSABUF toSend;
     DWORD SendBytes;
     size_t ret;
-    std::vector<char> str(buffer.data(), buffer.data() + buffer.size());
+    std::vector<char> buff(buffer.data(), buffer.data() + buffer.size());
 
     toSend.len = buffer.size();
-    toSend.buf = str.data();
+    toSend.buf = buff.data();
     client.sin_family = AF_INET;
     client.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &client.sin_addr);
     client.sin_port = _port;
@@ -60,36 +55,8 @@ size_t    BaseSocket::receive(Buffer& buffer, size_t len) const
     delete wsabuf.buf;
     return (read_size);
 }
-#else
-
-size_t        BaseSocket::send(Buffer const& buffer) const
-{
-    ssize_t ret;
-
-    if ((ret = ::send(_socket, buffer.data(), buffer.size(), 0)) == -1)
-        throw std::runtime_error("send failed");
-    return (static_cast<size_t>(ret));
-}
-
-size_t        BaseSocket::receive(Buffer& buffer, size_t len) const
-{
-    ssize_t ret;
-    char    *buff = new char[len];
-
-    if ((ret = ::recv(_socket, buff, len, 0)) == -1)
-        throw std::runtime_error("receive failed");
-    buffer.setData(buff, static_cast<size_t>(ret));
-    return static_cast<size_t>(ret);
-
-}
-
-#endif
 
 void BaseSocket::close() const
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     closesocket(_socket);
-#else
-    ::close(_socket);
-#endif
 }

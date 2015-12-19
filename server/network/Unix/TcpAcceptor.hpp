@@ -1,9 +1,9 @@
 //
-// Created by Denis Le Borgne on 19/11/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
-#ifndef RTYPE_TCPACCEPTOR_HPP
-#define RTYPE_TCPACCEPTOR_HPP
+#ifndef RTYPE_SERVER_TCPACCEPTOR_HPP
+#define RTYPE_SERVER_TCPACCEPTOR_HPP
 
 #include "ITcpAcceptor.hpp"
 
@@ -36,4 +36,4 @@ private:
     rSocket   _socket;
 };
 
-#endif //RTYPE_TCPACCEPTOR_HPP
+#endif //RTYPE_SERVER_TCPACCEPTOR_HPP

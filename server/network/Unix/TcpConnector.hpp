@@ -1,5 +1,5 @@
 //
-// Created by Denis Le Borgne on 06/12/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
 #ifndef RTYPE_SERVER_TCPCONNECTOR_HPP
@@ -22,11 +22,10 @@ public:
     virtual std::string toString() const;
 
 public:
-    virtual bool connect();
+    virtual void connect();
 
 public:
     virtual rSocket getSocket() const;
 };
-
 
 #endif //RTYPE_SERVER_TCPCONNECTOR_HPP

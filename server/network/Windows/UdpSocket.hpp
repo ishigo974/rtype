@@ -1,9 +1,9 @@
 //
-// Created by Denis Le Borgne on 18/11/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
 
-#ifndef RTYPE_UDPSOCKET_HPP
-# define RTYPE_UDPSOCKET_HPP
+#ifndef RTYPE_SERVER_UDPSOCKET_HPP
+#define RTYPE_SERVER_UDPSOCKET_HPP
 
 # include <string>
 # include "IUdpSocket.hpp"
@@ -29,14 +29,23 @@ public:
     virtual std::string toString() const;
 
 public:
+    virtual size_t sendTo(Buffer const& buffer, std::string const& addr) const;
+    virtual size_t receiveFrom(Buffer& buffer, size_t len, std::string&
+    addr)
+                           const;
+
+public:
     rSocket   getSocket() const;
     short int getPort() const;
 
     void setPort(short int port);
+
+protected:
+    static const int defaultTimeout;
 
 private:
     UdpSocket(UdpSocket const& sock) = delete;
     UdpSocket& operator=(UdpSocket const& sock) = delete;
 };
 
-#endif //RTYPE_UDPSOCKET_HPP
+#endif //RTYPE_SERVER_UDPSOCKET_HPP

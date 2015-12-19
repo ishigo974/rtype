@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <string>
+#include <iostream>
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
@@ -14,12 +15,13 @@ namespace RType
         /*
         ** Static variables
         */
-        const unsigned int      Room::nbMaxPlayers  = 4;
+        const unsigned int          Room::nbMaxPlayers  = 4;
+        const ECS::ComponentMask    Room::mask          = MASK_ROOM;
 
         /*
         ** Constructor/Destructor
         */
-        Room::Room()
+        Room::Room() : _isPlaying(false)
         {
         }
 
@@ -31,7 +33,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Room::Room(Room const& other) :
-            _name(other._name), _players(other._players)
+            _name(other._name), _players(other._players),
+            _isPlaying(other._isPlaying)
         {
         }
 
@@ -41,6 +44,7 @@ namespace RType
             {
                 _name = other._name;
                 _players = other._players;
+                _isPlaying = other._isPlaying;
             }
             return *this;
         }
@@ -98,7 +102,7 @@ namespace RType
             for (auto& entry: _players)
             {
                 Component::NetworkTCP*  network = entry.second.first
-                    ->getComponent<Component::NetworkTCP>(Component::MASK_NETWORKTCP);
+                    ->getComponent<Component::NetworkTCP>();
 
                 if (network == nullptr)
                     throw std::runtime_error("Player entity is missing his \
@@ -154,6 +158,7 @@ Network component"); // TODO except
         {
             _name.clear();
             _players.clear();
+            _isPlaying = false;
         }
 
         std::string             Room::getName() const
@@ -171,7 +176,7 @@ Network component"); // TODO except
 
         ECS::ComponentMask      Room::getMask() const
         {
-            return Component::MASK_ROOM;
+            return mask;
         }
 
         ECS::IComponent*        Room::clone() const
@@ -193,7 +198,7 @@ Network component"); // TODO except
             for (auto& player: _players)
             {
                 Component::Player*  infos = player.second.first
-                    ->getComponent<Component::Player>(Component::MASK_PLAYER);
+                    ->getComponent<Component::Player>();
 
                 if (infos == nullptr)
                     res += "?";
@@ -205,6 +210,38 @@ Network component"); // TODO except
                 res += ", ";
             }
             return res.substr(0, res.size() - 2);
+        }
+
+        Room::PlayersMap const&         Room::getPlayersMap() const
+        {
+            return _players;
+        }
+
+        bool                            Room::allReady() const
+        {
+            return std::find_if(_players.begin(), _players.end(),
+                   [](std::pair<unsigned int, PlayerEntry> const& entry)
+                   { return entry.second.second == false; }) == _players.end();
+        }
+
+        void                    Room::setIsPlaying(bool isPlaying)
+        {
+            _isPlaying = isPlaying;
+        }
+
+        bool                    Room::isPlaying() const
+        {
+            return _isPlaying;
+        }
+
+        Room::PlayersMap::const_iterator  Room::begin() const
+        {
+            return _players.begin();
+        }
+
+        Room::PlayersMap::const_iterator  Room::end() const
+        {
+            return _players.end();
         }
 
         /*

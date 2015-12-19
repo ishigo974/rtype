@@ -38,6 +38,7 @@ namespace RType
             void                setOnDisconnect(ServerCallback const& c);
             Request             popRequest();
             std::string const&  repr() const;
+            std::string         getIpAddr() const;
 
         public:
             virtual void        update();
@@ -56,7 +57,10 @@ namespace RType
             void                        buildRequests();
 
         protected:
-            static const size_t     bufferSize;
+            static const size_t             bufferSize;
+
+        public:
+            static const ECS::ComponentMask mask;
 
         protected:
             unsigned int            _entityId;

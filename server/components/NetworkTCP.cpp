@@ -4,8 +4,6 @@
 #include "ComponentsMasks.hpp"
 #include "SocketMonitor.hpp"
 #include "Server.hpp"
-#include "Buffer.hpp"
-#include "EntityManager.hpp"
 #include "IncompleteRequest.hpp"
 #include "NotImplemented.hpp"
 
@@ -16,7 +14,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const size_t      NetworkTCP::bufferSize    = 20;
+        const size_t                NetworkTCP::bufferSize  = 200;
+        const ECS::ComponentMask    NetworkTCP::mask        = MASK_NETWORKTCP;
 
         /*
         ** Constructor/Destructor
@@ -145,7 +144,7 @@ namespace RType
 
         ECS::ComponentMask   NetworkTCP::getMask() const
         {
-            return MASK_NETWORKTCP;
+            return mask;
         }
 
         ECS::IComponent*     NetworkTCP::clone() const
@@ -162,6 +161,11 @@ namespace RType
             while (!_requests.empty())
                 _requests.pop();
             _repr.clear();
+        }
+
+        std::string         NetworkTCP::getIpAddr() const
+        {
+            return _socket->getAddr();
         }
 
         std::string           NetworkTCP::toString() const
@@ -195,10 +199,9 @@ namespace RType
             try {
                 while (!_received.empty())
                 {
-                    Request     request =
-                        Request(Request::PROTOCOL_LOBBY, _received);
+                    Request     request(_received);
 
-                    _received.consume(request.size());
+                    _received.consume(request.toBuffer().size());
                     _requests.push(request);
                 }
             } catch (Exception::IncompleteRequest const& /*e*/) {

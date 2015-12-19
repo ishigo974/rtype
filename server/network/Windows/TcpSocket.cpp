@@ -1,14 +1,6 @@
 //
-// Created by Denis Le Borgne on 21/11/2015.
+// Created by Denis Le Borgne on 14/12/2015.
 //
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-
-#else
-
-#include <netdb.h>
-
-#endif
 
 #include <cstring>
 #include <iostream>
@@ -17,7 +9,6 @@
 
 TcpSocket::TcpSocket(std::string const& addr, short int port)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -28,9 +19,6 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
     }
     if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
         throw std::runtime_error("Socket failed");
-#else
-    _socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")->p_proto);
-#endif
     _port = port;
     _addr = addr;
 }
@@ -72,10 +60,10 @@ std::string TcpSocket::toString() const
     std::ostringstream ss;
 
     ss  << "TcpSocket {"
-        << "\n\tAddress " << this->_addr
-        << "\n\tSocket " << this->_socket
-        << "\n\tPort " << this->_port
-        << "\n}" << std::endl;
+    << "\n\tAddress " << this->_addr
+    << "\n\tSocket " << this->_socket
+    << "\n\tPort " << this->_port
+    << "\n}" << std::endl;
 
     return ss.str();
 }

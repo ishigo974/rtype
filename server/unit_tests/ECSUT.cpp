@@ -132,9 +132,9 @@ namespace ECS
             Sample::Component1*   c1;
             Sample::Component2*   c2;
 
-            c1 = entity->getComponent<Sample::Component1>(Sample::Component1::mask);
+            c1 = entity->getComponent<Sample::Component1>();
             UT_ASSERT(c1 != nullptr);
-            c2 = entity->getComponent<Sample::Component2>(Sample::Component2::mask);
+            c2 = entity->getComponent<Sample::Component2>();
             UT_ASSERT(c2 != nullptr);
             UT_ASSERT(c1->getData() == "Tea est trop fort");
             UT_ASSERT(c2->getData() == "Tea est trop swag");
@@ -163,9 +163,9 @@ namespace ECS
             Sample::Component1*   c1;
             Sample::Component2*   c2;
 
-            c1 = entity->getComponent<Sample::Component1>(Sample::Component1::mask);
+            c1 = entity->getComponent<Sample::Component1>();
             UT_ASSERT(c1 != nullptr);
-            c2 = entity->getComponent<Sample::Component2>(Sample::Component2::mask);
+            c2 = entity->getComponent<Sample::Component2>();
             UT_ASSERT(c2 != nullptr);
             UT_ASSERT(c1->getData() == "Tea est trop fort");
             UT_ASSERT(c2->getData() == "Tea est trop swag");
@@ -256,8 +256,8 @@ namespace ECS
 
         void          System1::processEntity(Entity& e)
         {
-            Component1* c1 = e.getComponent<Component1>(Component1::mask);
-            Component2* c2 = e.getComponent<Component2>(Component2::mask);
+            Component1* c1 = e.getComponent<Component1>();
+            Component2* c2 = e.getComponent<Component2>();
 
             if (c1 == NULL || c2 == NULL)
             return ;
@@ -273,5 +273,11 @@ namespace ECS
 
         std::string   System1::toString() const
         { return "System1"; }
+
+        bool          System1::shouldAutoUpdate() const
+        { return true; }
+
+        bool          System1::shouldAutoProcess() const
+        { return true; }
     }
 }

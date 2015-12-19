@@ -32,6 +32,12 @@ namespace RType
             virtual std::string getName() const;
 
         protected:
+            Buffer          buildJoinRoomAlert(uint8_t id,
+                                                std::string const& username);
+            Buffer          buildRoomInfos(Component::Room::PlayersMap const&
+                                            players, unsigned int id);
+
+        protected:
             Component::Room*    _room;
         };
     }
