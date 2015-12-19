@@ -1,0 +1,26 @@
+//
+// Created by Denis Le Borgne on 18/11/2015.
+//
+
+#ifndef RTYPE_ISOCKET_HPP
+# define RTYPE_ISOCKET_HPP
+
+# include "Buffer.hpp"
+# include "IMonitorable.hpp"
+
+class ISocket : public IMonitorable
+{
+public:
+    virtual ~ISocket()
+    { }
+
+public:
+    virtual void   close() const                             = 0;
+    virtual size_t send(Buffer const& buffer) const          = 0;
+    virtual size_t receive(Buffer& buffer, size_t len) const = 0;
+
+public:
+    virtual short int getPort() const = 0;
+};
+
+#endif //RTYPE_ISOCKET_HPP

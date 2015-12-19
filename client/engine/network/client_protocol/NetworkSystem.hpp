@@ -14,12 +14,21 @@ namespace RType
     {
     public:
         NetworkSystem
-                (std::string const& = defaultAddr, short
+                (EntityManager *em, std::string const& = defaultAddr, short
                 int = defaultPortTCP, short int = defaultPortUDP);
         virtual ~NetworkSystem();
 
     public:
-        void process();
+        void        process();
+        void        pushRequest(Request const&);
+        void        update();
+        Request     popRequest();
+        bool        pendingRequests() const;
+        void        connect();
+        bool        isConnected() const;
+        std::string toString() const;
+        void        buildRequest();
+        void        disconnection();
 
     protected:
         void init();
@@ -30,8 +39,9 @@ namespace RType
         static const std::string defaultAddr;
 
     private:
+        EntityManager *_entityManager;
         SocketMonitor& _monitor;
-        NetworkTCP _tcpManager;
+        TcpConnector _connector;
     };
 }
 

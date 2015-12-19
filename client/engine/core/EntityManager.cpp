@@ -4,9 +4,13 @@
 
 #include "EntityManager.hpp"
 
-std::unordered_map<unsigned int, std::unique_ptr<Object> > EntityManager::_entities;
-std::map<unsigned int, unsigned int>                       EntityManager::_compHierarchy;
-std::map<unsigned int, unsigned int>                       EntityManager::_goHierarchy;
+std::unordered_map<unsigned int, std::unique_ptr<Object> > EntityManager::
+                                                                    _entities;
+std::map<unsigned int, unsigned int>                       EntityManager::
+                                                                   _compHierarchy;
+std::map<unsigned int, unsigned int>                       EntityManager::
+                                                                   _goHierarchy;
+std::map<std::string, Object *>                            EntityManager::_tags;
 
 std::vector<Object *> EntityManager::getByMask(unsigned int mask)
 {
@@ -75,7 +79,8 @@ void EntityManager::tagObject(Object *o, std::string const& tag)
         _tags[tag] = o;
     else
         throw std::logic_error(std::string("Tag already exists : ")
-                                       .append(tag).append(" for item ").append(o->toString()));
+                                       .append(tag).append(" for item ")
+                                       .append(o->toString()));
 }
 
 Object *EntityManager::getByTag(std::string const& tag)
@@ -85,5 +90,6 @@ Object *EntityManager::getByTag(std::string const& tag)
     if (selected != _tags.end())
         return (_tags[tag]);
     else
-        throw std::logic_error(std::string("Could not find object with tag ").append(tag));
+        throw std::logic_error(
+                std::string("Could not find object with tag ").append(tag));
 }

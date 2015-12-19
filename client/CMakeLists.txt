@@ -19,7 +19,8 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14")#-Wall -Werror  -Wextra ")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wextra ")
+    #-Werror  //TODO add WERROR
 endif ()
 
 # -------------- #

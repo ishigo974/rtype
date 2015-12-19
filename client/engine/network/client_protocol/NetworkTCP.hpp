@@ -14,40 +14,25 @@
 
 namespace RType
 {
-    class NetworkTCP
+    class NetworkTCP : public Component
     {
     public:
         static RTypes::my_uint16_t const Mask = ComponentMask::NetworkMask;
 
     public:
-        NetworkTCP(std::string const&, short int);
+        NetworkTCP();
         virtual ~NetworkTCP();
 
     public:
-        void    pushRequest(Request const&);
-        void    update();
-        Request popRequest();
-        bool    pendingRequests() const;
-        void    connect();
-        bool    isConnected() const;
-
-    public:
-        static const size_t bufferSize;
-
-    protected:
-        void buildRequest();
-        void disconnection();
+        virtual RTypes::my_uint16_t getMask() const;
 
     private:
         NetworkTCP(NetworkTCP const&) = delete;
         NetworkTCP& operator=(NetworkTCP const&) = delete;
 
     private:
-        TcpConnector         _connector;
-        bool                 _connected;
-        std::vector<Request> _toSend;
-        std::queue<Request>  _requests;
-        Buffer               _receive;
+        Buffer _send;
+        Buffer _receive;
     };
 }
 
