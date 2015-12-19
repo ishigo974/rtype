@@ -18,8 +18,7 @@ public:
     EntityManager();
     ~EntityManager();
 
-    std::vector<Object *> getByMask(unsigned int mask);
-
+    static std::vector<Object *> getByMask(unsigned int mask);
     static Object                *getParentOf(Component *component);
     static Object                *getParentOf(GameObject *go);
     static Object                *getByTag(std::string const& tag);

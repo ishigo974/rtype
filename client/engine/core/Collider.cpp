@@ -1,4 +1,7 @@
+#include <chrono>
 #include "Collider.hpp"
+#include "GameObject.hpp"
+#include "EntityManager.hpp"
 
 Collider::Collider() : Component()
 { }
@@ -61,6 +64,17 @@ std::string Collider::toString()
     << "\n}" << std::endl;
 
     return (ss.str());
+}
+
+void Collider::fixedUpdate()
+{
+    for (auto &e : EntityManager::getByMask(ComponentMask::ColliderMask))
+    {
+        if (this->_bounds.intersects(static_cast<Collider *>(e)->_bounds))
+        {
+            //TODO: Send message
+        }
+    }
 }
 
 namespace std
