@@ -78,7 +78,7 @@ void GameObject::swap(GameObject& other)
 namespace std
 {
     template<>
-    void swap<GameObject>(GameObject& a, GameObject& b)
+    inline void swap<GameObject>(GameObject& a, GameObject& b)
     {
         a.swap(b);
     }
@@ -86,12 +86,12 @@ namespace std
 
 bool GameObject::findMask(RTypes::my_uint16_t mask)
 {
-  for (auto comp : _components)
+    for (auto comp : _components)
     {
-      if ((comp->getMask() & mask) == mask)
-	return true;
+        if ((comp->getMask() & mask) == mask)
+            return true;
     }
-  return false;
+    return false;
 }
 
 void GameObject::addComponent(Component *const newComp)

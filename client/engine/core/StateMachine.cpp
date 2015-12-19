@@ -3,9 +3,9 @@
 #include "StateMachine.hpp"
 
 StateMachine::StateMachine(unsigned int id, State const& initialState) :
-  _states{{initialState.getName(), initialState}},
-  _id(id),
-  _current(_states[initialState.getName()])
+        _states{{initialState.getName(), initialState}},
+        _id(id),
+        _current(_states[initialState.getName()])
 { }
 
 StateMachine::~StateMachine()
@@ -23,7 +23,7 @@ void StateMachine::move()
     }
 }
 
-void StateMachine::addState(State const& state) throw(std::logic_error)
+void StateMachine::addState(State const& state)
 {
     auto found = std::find_if(_states.begin(), _states.end(), [state](auto&& e)
     {
@@ -49,5 +49,5 @@ State const& StateMachine::getCurrent() const
 
 RTypes::my_uint16_t StateMachine::getMask() const
 {
-  return Mask;
+    return Mask;
 }

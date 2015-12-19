@@ -56,7 +56,7 @@ void        CommandSystem::invalidateCommandAtTimestamp(timestamp time)
     }
 }
 
-int    CommandSystem::getSize() const
+unsigned long    CommandSystem::getSize() const
 {
     return _commands.size();
 }

@@ -72,9 +72,10 @@ void Object::swap(Object& other)
     swap(_id, other._id);
 }
 
-namespace std {
+namespace std
+{
     template<>
-    void swap<Object>(Object &a, Object &b)
+    inline void swap<Object>(Object& a, Object& b)
     {
         a.swap(b);
     }

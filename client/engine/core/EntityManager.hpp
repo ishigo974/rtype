@@ -20,7 +20,13 @@ public:
 
     std::vector<Object *> getByMask(unsigned int mask);
 
-    static Object *getParentOf(Component *component);
+    static Object                *getParentOf(Component *component);
+    static Object                *getParentOf(GameObject *go);
+    static Object                *getByTag(std::string const& tag);
+    static std::vector<Object *> getChildrenOf(GameObject *go);
+    static void                  addChild(GameObject *parent, GameObject *child);
+
+    static void tagObject(Object *o, std::string const& tag);
 
     template<class T, class ...Args, typename = std::enable_if<std::is_base_of<Object, T>::value> >
     T *createEntity(Args ...args)
@@ -43,14 +49,16 @@ public:
             _components[_compIds] = std::make_unique<T>(_compIds, args...);
 
             static_cast<GameObject *>(tmp->second.get())->addComponent(static_cast<T *>(_components[_compIds].get()));
-            _hierarchy[_compIds] = gameObject->getId();
+            _compHierarchy[_compIds] = gameObject->getId();
         }
     }
 
 private:
     static std::unordered_map<unsigned int, std::unique_ptr<Object> > _entities;
     std::unordered_map<unsigned int, std::unique_ptr<Component> >     _components;
-    static std::map<unsigned int, unsigned int>                       _hierarchy;
+    static std::map<unsigned int, unsigned int>                       _compHierarchy;
+    static std::map<unsigned int, unsigned int>                       _goHierarchy;
+    static std::map<std::string, Object *>                            _tags;
     unsigned int                                                      _ids;
     unsigned int                                                      _compIds;
 };

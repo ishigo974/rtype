@@ -55,10 +55,10 @@ std::string Collider::toString()
     std::stringstream ss;
 
     ss << "Collider {"
-        << "\n\tid: " << _id
-        << "\n\tname: " << _name
-        << "\n\tmask: " << Mask
-        << "\n}" << std::endl;
+    << "\n\tid: " << _id
+    << "\n\tname: " << _name
+    << "\n\tmask: " << Mask
+    << "\n}" << std::endl;
 
     return (ss.str());
 }
@@ -66,8 +66,8 @@ std::string Collider::toString()
 namespace std
 {
     template<>
-        void swap<Collider>(Collider& a, Collider& b)
-        {
-            a.swap(b);
-        }
+    inline void swap<Collider>(Collider& a, Collider& b)
+    {
+        a.swap(b);
+    }
 }

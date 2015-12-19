@@ -59,7 +59,7 @@ void Player::swap(Player& other)
 namespace std
 {
     template<>
-    void swap<Player>(Player& a, Player& b)
+    inline void swap<Player>(Player& a, Player& b)
     {
         a.swap(b);
     }

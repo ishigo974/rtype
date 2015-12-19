@@ -66,7 +66,7 @@ void Component::swap(Component& other)
 namespace std
 {
     template<>
-    void swap<Component>(Component& a, Component& b)
+    inline void swap<Component>(Component& a, Component& b)
     {
         a.swap(b);
     }
