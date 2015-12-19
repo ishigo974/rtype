@@ -1,1 +1,1 @@
-g++ *.cpp -lboost_system -lboost_thread -pthread
+g++ -std=c++14 main.cpp ../exceptions/*.cpp ../classes/ABasePacket.cpp ../classes/InGameEvent.cpp ../classes/Request.cpp ../network/*.cpp ../network/Unix/*.cpp -I ../network/ -I ../utils/ -I ../network/Unix/ -I../classes -I ../exceptions

@@ -63,6 +63,7 @@ size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
     else
     {
         addr.assign(inet_ntoa(client.sin_addr));
+        std::cout << addr << std::endl;
         buffer.setData(buff, static_cast<size_t>(ret));
     }
     delete buff;

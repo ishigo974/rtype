@@ -30,9 +30,13 @@ namespace RType
         {
             Buffer      buffer;
             std::string addr;
+            size_t      ret;
 
-            _socket.receiveFrom(buffer, bufferSize, addr);
-            _book[addr].append(buffer);
+            if ((ret = _socket.receiveFrom(buffer, bufferSize, addr)) > 0)
+            {
+                _book[addr].append(buffer);
+                std::cout << "received " << ret << " from: " << addr << std::endl; // debug
+            }
         }
 
         void            InGame::processEntity(ECS::Entity& e)
@@ -48,11 +52,14 @@ namespace RType
             {
                 udp->pushReceived(it->second);
                 _book.erase(it);
+                std::cout << "push received" << std::endl; // debug
             }
             while (udp->isEvent())
             {
                 InGameEvent event = udp->popEvent();
 
+                std::cout << "event" << std::endl;
+                std::cout << event << std::endl;
                 // TODO build and execute command
             }
             if (udp->isToSend())

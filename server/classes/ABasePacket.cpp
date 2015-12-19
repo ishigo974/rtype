@@ -65,6 +65,7 @@ namespace RType
 
         res += "\n\t_code " + std::to_string(_code);
         res += "\n\tnb data " + std::to_string(_data.size());
+        res += "\n}\n";
         return res;
     }
 

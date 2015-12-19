@@ -81,7 +81,6 @@ namespace RType
 
     public:
         virtual Buffer          toBuffer() const;
-        virtual std::string     toString() const;
 
     public:
         static const LobbyReqMap    lobbyRequests;

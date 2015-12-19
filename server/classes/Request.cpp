@@ -136,17 +136,6 @@ namespace RType
         return players;
     }
 
-    std::string         Request::toString() const
-    {
-        std::ostringstream  ss;
-
-        ss << "Request {"
-            << "\n\t_code: " << _code
-            << "\n\tnb data: " << _data.size()
-            << "\n}\n";
-        return ss.str();
-    }
-
     Buffer          Request::toBuffer() const
     {
         Buffer      res;

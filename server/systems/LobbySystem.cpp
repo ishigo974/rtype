@@ -6,7 +6,6 @@
 #include "Request.hpp"
 #include "ValueError.hpp"
 #include "Server.hpp"
-#include "CommandFactory.hpp"
 #include "Request.hpp"
 #include "RoomComponent.hpp"
 
@@ -78,8 +77,8 @@ namespace RType
                 } catch (Exception::ValueError const& e) {
                     Server::display(std::string(e.what()), true);
                 } catch (std::out_of_range const&) {
-                    Server::display("Can't build command from \
-request, ignored (" + network->repr() + ")", true);
+                    Server::display("Can't build command from "
+                        "request, ignored (" + network->repr() + ")", true);
                 }
             }
         }

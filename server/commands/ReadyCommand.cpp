@@ -103,6 +103,7 @@ player/network component");
                         tcp->getIpAddr())
                     );
             }
+            std::cout << "izi" << std::endl; // debug
         }
     }
 }
