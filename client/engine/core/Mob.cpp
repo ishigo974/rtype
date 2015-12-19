@@ -2,6 +2,7 @@
 #include "Mob.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
+#include "Renderer.hpp"
 
 Mob::Mob()
 {
@@ -82,6 +83,7 @@ void		Mob::move(Transform & transform)
 {
   float		speed = static_cast<float>(3.0);
 
+  _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
   if (!_enabled)
     return ;
   switch (_type)
@@ -89,12 +91,12 @@ void		Mob::move(Transform & transform)
     case 0:
       if (transform.getPosition().Y() <= 0)
 	_direction = 1;
-      else if (transform.getPosition().Y() >= 690)
+      else if (transform.getPosition().Y() >= Renderer::height - _graphicHeight)
 	_direction = -1;
       transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
       break;
     case 1:
-      if (transform.getPosition().Y() >= 690)
+      if (transform.getPosition().Y() >= Renderer::height - _graphicHeight)
 	_type = 2;
       _direction = -1;
       transform.getPosition().setY((transform.getPosition().Y() + _direction * -1 * speed));
@@ -114,6 +116,7 @@ void		Mob::move(Transform & transform)
       _type = 3;
       break;
     }
+  std::cout << transform.getPosition().toString() << std::endl;
 }
 
 void		Mob::update(double)

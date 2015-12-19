@@ -91,8 +91,6 @@ void backgroundTest()
     objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
     objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
     objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
-    // objs.push_back(entityManager.createEntity<GameObject>("Player", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Bullet", 4));
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
@@ -103,27 +101,28 @@ void backgroundTest()
 	entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
 	entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
         Transform *t = obj->getComponent<Transform>();
-	t->getPosition().setX(1250);
+	t->getPosition().setX(Renderer::width - 32);
 	switch (j)
 	  {
 	  case 0:
-	    t->getPosition().setX(rand() % 1280);
-	    t->getPosition().setY(rand() % 690);
+	    t->getPosition().setX(rand() % (Renderer::width - 32));
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
 	    break;
 	  case 1:
-	    t->getPosition().setY(rand() % 690);
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
 	    break;
 	  case 2:
-	    t->getPosition().setY(rand() % 690);
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
 	    break;
 	  case 3:
-	    t->getPosition().setY(rand() % 690);
+	    t->getPosition().setY(rand() % (Renderer::height - 21));
 	    break;
 	  default:
 	    break;
 	  }
 	obj->getComponent<Mob>()->setEnabled(true);
 	mobs.push_back(obj->getComponent<Mob>());
+	
 	++j;
       }
 

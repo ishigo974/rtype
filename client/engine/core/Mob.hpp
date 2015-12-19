@@ -31,6 +31,7 @@ protected:
     int _damage;
     int _direction;
   int	_type;
+  int	_graphicHeight;
 };
 
 #endif /* !MOB_HPP_ */
