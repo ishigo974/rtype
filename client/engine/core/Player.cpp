@@ -7,8 +7,8 @@ Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
-  : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
+Player::Player(unsigned int _id, std::string const& _name, int hp, int damage)
+  : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
 }
 
@@ -86,33 +86,26 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move()
 {
-  GameObject	*parent;
-  Transform	*transform;
   float		speed = static_cast<float>(10.0);
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   if (!_enabled)
-    return ;
-  parent = static_cast<GameObject *>(this->_parent);
-  if (parent == nullptr)
-    return ;
-  transform = parent->getComponent<Transform>();
-  if (transform == nullptr)
     return ;
   while (_action.size() > 0)
     {
       switch (_action.front())
 	{
 	case ACommand::UP:
-	  transform->getPosition().setY((transform->getPosition().Y() - speed));
+	  transform.getPosition().setY((transform.getPosition().Y() - speed));
 	  break;
 	case ACommand::DOWN:
-	  transform->getPosition().setY((transform->getPosition().Y() + speed));
+	  transform.getPosition().setY((transform.getPosition().Y() + speed));
 	  break;
 	case ACommand::LEFT:
-	  transform->getPosition().setX((transform->getPosition().X() - speed));
+	  transform.getPosition().setX((transform.getPosition().X() - speed));
 	  break;
 	case ACommand::RIGHT:
-	  transform->getPosition().setX((transform->getPosition().X() + speed));
+	  transform.getPosition().setX((transform.getPosition().X() + speed));
 	  break;
 	case ACommand::SHOOT:
 	  // std::cout << "SHOOT" << std::endl;

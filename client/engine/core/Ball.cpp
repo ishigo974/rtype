@@ -7,8 +7,8 @@ Ball::Ball()
 {
 }
 
-Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
-  : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
+Ball::Ball(unsigned int _id, std::string const& _name, int hp, int damage)
+  : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
 }
 
@@ -72,21 +72,26 @@ int	Ball::getDamage() const
   return _damage;
 }
 
+void		Ball::setX(float x)
+{
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+  transform.getPosition().setX(x);
+}
+
+void		Ball::setY(float y)
+{
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+  transform.getPosition().setY(y);
+}
+
 void		Ball::move()
 {
-  GameObject	*parent;
-  Transform	*transform;
   float		speed = static_cast<float>(1.0);
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
-  if (!_enabled)
-    return ;
-  parent = static_cast<GameObject *>(this->_parent);
-  if (parent == nullptr)
-    return ;
-  transform = parent->getComponent<Transform>();
-  if (transform == nullptr)
-    return ;
-  transform->getPosition().setX((transform->getPosition().X() + speed));
+  transform.getPosition().setX((transform.getPosition().X() + speed));
 }
 
 void	Ball::update(double)

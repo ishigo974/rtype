@@ -7,8 +7,8 @@ Mob::Mob()
 {
 }
 
-Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, Object* parent)
-  : Behaviour(_id, _name, parent), _hp(hp), _damage(damage)
+Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage)
+  : Behaviour(_id, _name), _hp(hp), _damage(damage)
 {
   _direction = 1;
 }
@@ -77,24 +77,16 @@ int	Mob::getDamage() const
 
 void		Mob::move()
 {
-  GameObject	*parent;
-  Transform	*transform;
   float		speed = static_cast<float>(2.0);
+  Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   if (!_enabled)
     return ;
-  parent = static_cast<GameObject *>(this->_parent);
-  if (parent == nullptr)
-    return ;
-  transform = parent->getComponent<Transform>();
-  if (transform == nullptr)
-    return ;
-
-  if (transform->getPosition().Y() <= 0)
+  if (transform.getPosition().Y() <= 0)
     _direction = 1;
-  else if (transform->getPosition().Y() >= 690)
+  else if (transform.getPosition().Y() >= 690)
     _direction = -1;
-  transform->getPosition().setY((transform->getPosition().Y() + _direction * speed));
+  transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
 }
 
 void	Mob::update(double)

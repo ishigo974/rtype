@@ -7,9 +7,8 @@ ScrollingBackground::ScrollingBackground()
 
 ScrollingBackground::ScrollingBackground(unsigned int _id,
 					 std::string const& _name,
-					 double speed,
-					 Object *parent) :
-  Behaviour(_id, _name, parent), _speed(speed)
+					 double speed) :
+  Behaviour(_id, _name), _speed(speed)
 {}
 
 ScrollingBackground::ScrollingBackground(ScrollingBackground const& other) :
@@ -66,10 +65,7 @@ void ScrollingBackground::update(double elapsedTime)
   if (!_enabled)
     return ;
 
-  GameObject *parent = static_cast<GameObject *>(this->_parent);
-  if (parent == nullptr)
-    return;
-  SpriteRenderer *sr = parent->getComponent<SpriteRenderer>();
+  SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
   if (sr == nullptr)
     return;
 

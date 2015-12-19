@@ -101,11 +101,11 @@ void backgroundTest()
     entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
                                                   gu::Rect<int>(0, 0, 1280, 720));
-    entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
+    entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
     Transform *tmob = obj->getComponent<Transform>();
     tmob->getPosition().setX(1250);
 
@@ -114,7 +114,7 @@ void backgroundTest()
     t->getPosition().setX(100);
     t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
-    entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
+    entityManager.attachComponent<Player>(p, "Player", 100, 2);
 
 
     r.init();
@@ -207,7 +207,7 @@ bool mobTest()
     GameObject    *obj = entityManager.createEntity<GameObject>("Test", 1);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
+    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
     entityManager
             .attachComponent<SpriteRenderer>(obj, "Mob", "../res/r-typesheet19.gif", gu::Rect<int>(100, 0, 100, 300));
     obj->getComponent<Mob>()->setEnabled(true);
@@ -233,7 +233,7 @@ void menuTest()
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
                                                   gu::Rect<int>(0, 0, 1280, 720));
-    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
+    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
 
     State initialState("Aeris");
     State mainMenu("Main Menu");
