@@ -17,11 +17,11 @@ public:
     CommandSystem(EntityManager *entityManager, Input *i);
     virtual ~CommandSystem();
 
-    void        addCommand();
-    std::string toString();
-    int         getSize() const;
-    ACommand    *getByTimestamp(timestamp time);
-    void        invalidateCommandAtTimestamp(timestamp time);
+    void          addCommand();
+    std::string   toString();
+    unsigned long getSize() const;
+    ACommand      *getByTimestamp(timestamp time);
+    void          invalidateCommandAtTimestamp(timestamp time);
 
 private:
     std::vector<ACommand *>                         _commands;

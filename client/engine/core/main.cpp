@@ -15,6 +15,7 @@
 #include "Player.hpp"
 #include "Label.hpp"
 #include "Button.hpp"
+#include "Ball.hpp"
 #include "GUIManager.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
@@ -70,39 +71,83 @@ void backgroundTest()
     CommandSystem     cmds(&entityManager, &i);
     ss << "bg" << rand() % 4 + 1;
 
-    GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
     GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
+    GameObject *ballobj   = entityManager.createEntity<GameObject>("Ball", 4);
 
-    entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
+    std::vector<GameObject *>	objs;
+    std::vector<Mob *>	mobs;
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+    // objs.push_back(entityManager.createEntity<GameObject>("Player", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Ball", 4));
+
+    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
-    entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
-    Transform *tmob = obj->getComponent<Transform>();
-    tmob->getPosition().setX(1250);
+    int j = 0;
+    for (auto obj : objs)
+      {
+	entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
+	entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
+        Transform *t = obj->getComponent<Transform>();
+	t->getPosition().setX(1250);
+	switch (j)
+	  {
+	  case 0:
+	    t->getPosition().setX(rand() % 1280);
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 1:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 2:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  case 3:
+	    t->getPosition().setY(rand() % 690);
+	    break;
+	  default:
+	    break;
+	  }
+	obj->getComponent<Mob>()->setEnabled(true);
+	mobs.push_back(obj->getComponent<Mob>());
+	++j;
+      }
 
-    entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(100);
+
     t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
     entityManager.attachComponent<Player>(p, "Player", 100, 2);
 
+    entityManager.attachComponent<SpriteRenderer>(ballobj, "Ball", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
+    entityManager.attachComponent<Ball>(ballobj, "Ball", 1, 2);
+    Transform *tball = ballobj->getComponent<Transform>();
+    tball->getPosition().setX(500);
 
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
-    obj->getComponent<Mob>()->setEnabled(true);
-    Mob *mob = obj->getComponent<Mob>();
-
     p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
 
+    ballobj->getComponent<Ball>()->setEnabled(true);
+    Ball *ball = ballobj->getComponent<Ball>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -113,18 +158,18 @@ void backgroundTest()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
-            // if (e.type == cu::Event::KeyPressed)
-            // {
-            //     std::cout << "Key pressed : " << e.key << std::endl;
-            // }
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-        mob->update(BigBen::get().getElapsedtime());
+	for (auto mob : mobs)
+	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
+        ball->update(BigBen::get().getElapsedtime());
         r.draw(*a);
-        r.draw(*obj);
+	for (auto obj : objs)
+	  r.draw(*obj);
         r.draw(*p);
+        r.draw(*ballobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -318,8 +363,8 @@ int main()
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-    buttonAndLabelsTest();
-    menuTest();
+    // buttonAndLabelsTest();
+    // menuTest();
     backgroundTest();
 
     return 0;

@@ -43,7 +43,7 @@ void State::swap(State& o)
 namespace std
 {
     template<>
-    void swap<State>(State& a, State& b)
+    inline void swap<State>(State& a, State& b)
     {
         a.swap(b);
     }

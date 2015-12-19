@@ -2,12 +2,13 @@
 # define MOB_HPP_
 
 # include "Behaviour.hpp"
+# include "Transform.hpp"
 
 class Mob : public Behaviour
 {
 public:
     Mob();
-    Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1);
+  Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1, int type = 0);
     virtual ~Mob();
 
     Mob(Mob const& other);
@@ -20,7 +21,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move();
+    void         move(Transform & transform);
     virtual void update(double);
 
     void swap(Mob& other);
@@ -29,6 +30,7 @@ protected:
     int _hp;
     int _damage;
     int _direction;
+  int	_type;
 };
 
 #endif /* !MOB_HPP_ */
