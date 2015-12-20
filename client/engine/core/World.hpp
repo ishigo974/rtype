@@ -5,6 +5,7 @@
 #ifndef RTYPE_WORLD_HPP
 # define RTYPE_WORLD_HPP
 
+# include <chrono>
 # include "EntityManager.hpp"
 
 class World
@@ -13,7 +14,8 @@ public:
     World(EntityManager *em);
 
 public:
-    void update();
+    std::vector<GameObject *> const * getEntities() const;
+    void gameLoop();
 
 public:
     template<class T, class ...Args>
@@ -21,6 +23,8 @@ public:
     {
         _entities.push_back(_em->createEntity<T>(args...));
     }
+
+    void addEntity(GameObject *entity);
 
 private:
     EntityManager             *_em;
