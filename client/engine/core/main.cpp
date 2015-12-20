@@ -3,17 +3,13 @@
 #include "GameObject.hpp"
 #include "StateMachine.hpp"
 #include "CommandSystem.hpp"
-#include "Event.hpp"
-#include "EntityManager.hpp"
 #include "Behaviour.hpp"
-#include "Input.hpp"
-#include "Event.hpp"
 #include "Renderer.hpp"
-#include "BigBen.hpp"
 #include "ScrollingBackground.hpp"
 #include "Mob.hpp"
 #include "Player.hpp"
-
+#include "NetworkTCP.hpp"
+#include "NetworkSystem.hpp"
 #include "AudioEffect.hpp"
 #include "AudioEffectPlayer.hpp"
 #include "Music.hpp"
@@ -57,7 +53,10 @@ void renderAndInputsTest()
     cu::Event     e;
 
     entityManager.attachComponent<Transform>(a, cu::Position(100, 100));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", "../res/r-typesheet1.gif", gu::Rect<int>(100, 0, 100, 300));
+    entityManager.attachComponent<SpriteRenderer>(a, "lel",
+                                                  "../res/r-typesheet1.gif",
+                                                  gu::Rect<int>(100, 0, 100,
+                                                                300));
 
     r.init();
     e.key = cu::Event::LAST_ACTION;
@@ -92,7 +91,8 @@ void backgroundTest()
     Renderer          r;
     Input             i(r.getWindow());
     EntityManager     entityManager;
-    GameObject        *a = entityManager.createEntity<GameObject>("Background", 1);
+    GameObject        *a = entityManager
+            .createEntity<GameObject>("Background", 1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
@@ -103,18 +103,23 @@ void backgroundTest()
 
     entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
+                                                  gu::Rect<int>(0, 0, 1280,
+                                                                720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif", gu::Rect<int>(100, 0, 30, 30));
+    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif",
+                                                  gu::Rect<int>(100, 0, 30,
+                                                                30));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
 
     entityManager.attachComponent<Transform>(p, cu::Position(0, 0));
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(600);
     t->getPosition().setY(680);
-    entityManager.attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif", gu::Rect<int>(500, 0, 30, 30));
+    entityManager
+            .attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif",
+                                             gu::Rect<int>(500, 0, 30, 30));
     entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
 
 
@@ -210,7 +215,9 @@ bool mobTest()
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
     entityManager
-            .attachComponent<SpriteRenderer>(obj, "Mob", "../res/r-typesheet19.gif", gu::Rect<int>(100, 0, 100, 300));
+            .attachComponent<SpriteRenderer>(obj, "Mob",
+                                             "../res/r-typesheet19.gif",
+                                             gu::Rect<int>(100, 0, 100, 300));
     obj->getComponent<Mob>()->setEnabled(true);
     Mob *mob = obj->getComponent<Mob>();
     std::cout << mob->getName() << std::endl;
@@ -233,7 +240,8 @@ void menuTest()
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
+                                                  gu::Rect<int>(0, 0, 1280,
+                                                                720));
     entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
 
     State initialState("Aeris");
@@ -282,71 +290,113 @@ void menuTest()
 
 
 // Les sf::sleep sont la pour ne pas lancer les sons en meme temps car la sfml joue les sons
-// dans un thread a part; Ils seraient lancés en même temps sinon...
+// dans un thread a part; Ils seraient lancï¿½s en mï¿½me temps sinon...
 
-int audioEffectPlayerTest(GameObject *gameObj, AudioEffectPlayer &soundPlayer)
+int audioEffectPlayerTest(GameObject *gameObj, AudioEffectPlayer& soundPlayer)
 {
-	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
-	audio->setSoundToPlay("../res/laser1.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(400));
+    AudioEffect *audio = gameObj->getComponent<AudioEffect>();
+    audio->setSoundToPlay("../res/laser1.wav");
+    std::cout << audio->toString() << std::endl;
+    soundPlayer.play(*gameObj);
+    sf::sleep(sf::milliseconds(400));
 
-	audio->setSoundToPlay("../res/laser2.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(400));
+    audio->setSoundToPlay("../res/laser2.wav");
+    std::cout << audio->toString() << std::endl;
+    soundPlayer.play(*gameObj);
+    sf::sleep(sf::milliseconds(400));
 
-	audio->setSoundToPlay("../res/laserKIKOOLOL.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	sf::sleep(sf::milliseconds(2000));
+    audio->setSoundToPlay("../res/laserKIKOOLOL.wav");
+    std::cout << audio->toString() << std::endl;
+    soundPlayer.play(*gameObj);
+    sf::sleep(sf::milliseconds(2000));
 
-	audio->setSoundToPlay("../res/laser1.wav");
-	std::cout << audio->toString() << std::endl;
-	soundPlayer.play(*gameObj);
-	return 0;
+    audio->setSoundToPlay("../res/laser1.wav");
+    std::cout << audio->toString() << std::endl;
+    soundPlayer.play(*gameObj);
+    return 0;
 }
 
-int	musicPlayerTest(GameObject *gameObj, MusicPlayer &musicPlayer)
+int musicPlayerTest(GameObject *gameObj, MusicPlayer& musicPlayer)
 {
-	Music *music = gameObj->getComponent<Music>();
+    Music *music = gameObj->getComponent<Music>();
 
-	std::cout << music->toString() << std::endl;
-	musicPlayer.play(*gameObj, "../res/music.wav", false);
-	std::cout << music->toString() << std::endl;
+    std::cout << music->toString() << std::endl;
+    musicPlayer.play(*gameObj, "../res/music.wav", false);
+    std::cout << music->toString() << std::endl;
 
-	return 0;
+    return 0;
 }
 
 int testSound()
 {
-	EntityManager	entity;
-	MusicPlayer		musicPlayer;
-	AudioEffectPlayer soundPlayer;
-	GameObject		*gameObj = entity.createEntity<GameObject>("test", 1);
+    EntityManager     entity;
+    MusicPlayer       musicPlayer;
+    AudioEffectPlayer soundPlayer;
+    GameObject        *gameObj = entity.createEntity<GameObject>("test", 1);
 
-	entity.attachComponent<Music>(gameObj, "Music");
-	entity.attachComponent<AudioEffect>(gameObj, "testAudio");
+    entity.attachComponent<Music>(gameObj, "Music");
+    entity.attachComponent<AudioEffect>(gameObj, "testAudio");
 
-	AudioEffect *audio = gameObj->getComponent<AudioEffect>();
-	audio->addSound("../res/laser1.wav");
-	audio->addSound("../res/laser2.wav");
-	audio->addSound("../res/laser2.wav");
-	audio->addSound("DELAMERDE");
-	audio->addSound("ENBOITE");
+    AudioEffect *audio = gameObj->getComponent<AudioEffect>();
+    audio->addSound("../res/laser1.wav");
+    audio->addSound("../res/laser2.wav");
+    audio->addSound("../res/laser2.wav");
+    audio->addSound("DELAMERDE");
+    audio->addSound("ENBOITE");
 
-	musicPlayerTest(gameObj, musicPlayer);
-	sf::sleep(sf::milliseconds(1000));
+    musicPlayerTest(gameObj, musicPlayer);
+    sf::sleep(sf::milliseconds(1000));
 
-	audioEffectPlayerTest(gameObj, soundPlayer);
-	while (gameObj->getComponent<Music>()->isPlaying());
+    audioEffectPlayerTest(gameObj, soundPlayer);
+    while (gameObj->getComponent<Music>()->isPlaying());
 
-	return (0);
+    return (0);
+}
+
+#include "UDPSystem.hpp"
+#include "InGameEvent.hpp"
+
+void testNetwork()
+{
+    EntityManager        entity;
+    RType::NetworkSystem networkSystem(&entity);
+    RType::NetworkTCP    *networkTCP;
+    RType::Request       request;
+    RType::Request       tmp;
+    RType::NetworkUDP *networkUDP;
+    RType::UDPSystem udpSystem(&entity);
+
+    GameObject *gameObj = entity.createEntity<GameObject>("Test", 1);
+
+    entity.attachComponent<RType::NetworkTCP>(gameObj, "Network");
+    entity.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
+
+    networkTCP = gameObj->getComponent<RType::NetworkTCP>();
+    networkUDP = gameObj->getComponent<RType::NetworkUDP>();
+
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", "BestRoomEver");
+    networkTCP->pushRequest(request);
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
+    networkSystem.process();
+    RType::InGameEvent             event;
+    int i = 1;
+    while (1)
+    {
+        event.setCode(RType::InGameEvent::CL_PLAYERUP);
+        event.push<uint32_t>("time", i);
+        networkUDP->pushRequest(event);
+        udpSystem.process();
+        ++i;
+        event.clear();
+
+    }
 }
 
 int main()
 {
+    testNetwork();
     EntityManager entityManager;
 
     srand(static_cast<unsigned>(time(nullptr)));
@@ -361,7 +411,7 @@ int main()
 
     menuTest();
     backgroundTest();
-	testSound();
+    testSound();
 
     return 0;
 }

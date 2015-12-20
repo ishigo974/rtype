@@ -30,7 +30,6 @@ size_t  UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     dest.sin_port        = htons(_port);
     dest.sin_family      = AF_INET;
 
-    std::cout << "SEND : " << buffer.size() << " -- TO: " << addr << std::endl;
     if ((ret = ::sendto(_socket, buffer.data(), buffer.size(), 0,
                         reinterpret_cast<struct sockaddr *>(&dest),
                         sizeof(dest))) == -1)

@@ -6,7 +6,9 @@
 #define RTYPE_SERVER_CLIENTNETWORK_HPP
 
 #include "NetworkTCP.hpp"
-#include "../../core/EntityManager.hpp"
+#include "SocketMonitor.hpp"
+#include "UdpSocket.hpp"
+#include "EntityManager.hpp"
 
 namespace RType
 {
@@ -15,24 +17,15 @@ namespace RType
     public:
         NetworkSystem
                 (EntityManager *em, std::string const& = defaultAddr, short
-                int = defaultPortTCP, short int = defaultPortUDP);
+                int = defaultPortTCP);
         virtual ~NetworkSystem();
 
     public:
         void        process();
-        Request     popRequest();
-        bool        pendingRequests() const;
-        void        connect();
-        bool        isConnected() const;
         std::string toString() const;
-        void        buildRequest();
-        void        disconnection();
 
-    protected:
-        void init();
 
     public:
-        static const short int   defaultPortUDP;
         static const short int   defaultPortTCP;
         static const std::string defaultAddr;
         static const size_t      buffLen;
