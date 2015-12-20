@@ -42,33 +42,31 @@ public:
     virtual void update();
 
 public:
-    void    setSec(long value);
-    void    setUsec(long value);
+    void setSec(long value);
+    void setUsec(long value);
 
 public:
     virtual std::string toString() const;
 
-    private:
-    DWORD                       _eventTotal;
-    std::vector<HANDLE>       _eventArray;
+private:
+    DWORD                               _eventTotal;
+    std::vector<HANDLE>                 _eventArray;
     std::vector<rSocket>                _socketArray;
     std::map<rSocket, WSANETWORKEVENTS> _socketEvents;
 
 private:
-    long	_secValue;
+    long    _secValue;
     long    _usecValue;
     rSocket _maxFd;
 
 public:
-    static const long			defaultSecVal;
-    static const long			defaultUsecVal;
+    static const long         defaultSecVal;
+    static const long         defaultUsecVal;
     static const unsigned int noFd;
 
 protected:
     static UniqueMonitorPtr instance;
 };
-
-
 
 
 #endif //RTYPE_SERVER_SOCKETMONITOR_HPP

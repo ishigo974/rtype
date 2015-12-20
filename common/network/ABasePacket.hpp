@@ -12,9 +12,9 @@ namespace RType
     class ABasePacket : public IStringable
     {
     public:
-        typedef std::unordered_map<std::string, Buffer>     DataMap;
-        typedef std::unordered_map<std::string, size_t>     DataSizeMap;
-        typedef std::vector<std::string>                    DataArgs;
+        typedef std::unordered_map<std::string, Buffer> DataMap;
+        typedef std::unordered_map<std::string, size_t> DataSizeMap;
+        typedef std::vector<std::string>                DataArgs;
 
     public:
         ABasePacket(uint16_t code = 0);
@@ -22,14 +22,14 @@ namespace RType
 
     public:
         ABasePacket(ABasePacket const& other);
-        ABasePacket&    operator=(ABasePacket const& other);
+        ABasePacket& operator=(ABasePacket const& other);
 
     public:
         bool            operator==(ABasePacket const& other) const;
 
     public:
-        template <typename Type>
-        Type                get(std::string const& key) const
+        template<typename Type>
+        Type get(std::string const& key) const
         {
             DataMap::const_iterator it = _data.find(key);
 
@@ -38,34 +38,34 @@ namespace RType
             return it->second.get<Type>();
         }
 
-        template <typename Type>
-        void                push(std::string const& key, Type const& data)
+        template<typename Type>
+        void push(std::string const& key, Type const& data)
         {
-            Buffer          buffer;
+            Buffer buffer;
 
             buffer.setData(data);
             _data.insert(std::make_pair(key, buffer));
         }
 
     public:
-        virtual void        parse(Buffer const& raw) = 0;
-        virtual Buffer      toBuffer() const = 0;
+        virtual void   parse(Buffer const& raw) = 0;
+        virtual Buffer toBuffer() const         = 0;
 
     public:
-        void                setCode(uint16_t code);
-        virtual void        clear();
+        void         setCode(uint16_t code);
+        virtual void clear();
 
     public:
-        uint16_t            getCode() const;
-        Buffer const&       getRaw() const;
+        uint16_t getCode() const;
+        Buffer const& getRaw() const;
         virtual std::string toString() const;
 
     protected:
-        uint16_t    _code;
-        DataMap     _data;
+        uint16_t _code;
+        DataMap  _data;
     };
 
-    template <>
+    template<>
     std::string             ABasePacket::get(std::string const& key) const;
 }
 

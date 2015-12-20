@@ -7,12 +7,13 @@
 class IStringable
 {
 public:
-    virtual ~IStringable() {}
+    virtual ~IStringable()
+    { }
 
 public:
-    virtual std::string     toString() const = 0;
+    virtual std::string toString() const = 0;
 };
 
-std::ostream&   operator<<(std::ostream& lhs, IStringable const& rhs);
+std::ostream& operator<<(std::ostream& lhs, IStringable const& rhs);
 
 #endif /* !ISTRINGABLE_HPP_ */

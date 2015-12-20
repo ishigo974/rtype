@@ -7,36 +7,36 @@ namespace RType
     /*
     ** Static variables
     */
-    const size_t                InGameEvent::headerSize     = sizeof(uint32_t) +
-                                                              sizeof(uint16_t) +
-                                                              sizeof(uint32_t);
-    const InGameEvent::EventMap InGameEvent::inGameEvents   =
-    {
-        { InGameEvent::SE_PLAYERUP,     { "player_id", "time"              } },
-        { InGameEvent::SE_PLAYERDOWN,   { "player_id", "time"              } },
-        { InGameEvent::SE_PLAYERLEFT,   { "player_id", "time"              } },
-        { InGameEvent::SE_PLAYERRIGHT,  { "player_id", "time"              } },
-        { InGameEvent::SE_SHOTSTART,    { "player_id", "shot_type", "time" } },
-        { InGameEvent::SE_SHOTSTOP,     { "player_id", "time"              } },
-        { InGameEvent::SE_MOBSPAWNED,   { "mob_id", "x", "y", "time"       } },
-        { InGameEvent::SE_INPUTERROR,   { "time"                           } },
-        { InGameEvent::SE_PLYRDISCONN,  {}                                   },
-        { InGameEvent::CL_PLAYERUP,     { "time" }                           },
-        { InGameEvent::CL_PLAYERDOWN,   { "time" }                           },
-        { InGameEvent::CL_PLAYERLEFT,   { "time" }                           },
-        { InGameEvent::CL_PLAYERRIGHT,  { "time" }                           },
-        { InGameEvent::CL_SHOTSTART,    { "shot_type", "time" }              },
-        { InGameEvent::CL_SHOTSTOP,     { "time" }                           },
-        { InGameEvent::CL_DISCONNECT,   {}                                   }
-    };
-    const InGameEvent::DataSizeMap  InGameEvent::dataSizes  = {
-        { "size",       sizeof(uint32_t)        },
-        { "player_id",  sizeof(uint8_t)         },
-        { "time",       sizeof(uint32_t)        },
-        { "shot_type",  sizeof(uint8_t)         },
-        { "mob_id",     sizeof(uint8_t)         },
-        { "x",          sizeof(uint32_t)        },
-        { "y",          sizeof(uint32_t)        }
+    const size_t                InGameEvent::headerSize = sizeof(uint32_t) +
+                                                          sizeof(uint16_t) +
+                                                          sizeof(uint32_t);
+    const InGameEvent::EventMap     InGameEvent::inGameEvents =
+                                            {
+                                                    {InGameEvent::SE_PLAYERUP,    {"player_id", "time"}},
+                                                    {InGameEvent::SE_PLAYERDOWN,  {"player_id", "time"}},
+                                                    {InGameEvent::SE_PLAYERLEFT,  {"player_id", "time"}},
+                                                    {InGameEvent::SE_PLAYERRIGHT, {"player_id", "time"}},
+                                                    {InGameEvent::SE_SHOTSTART,   {"player_id", "shot_type", "time"}},
+                                                    {InGameEvent::SE_SHOTSTOP,    {"player_id", "time"}},
+                                                    {InGameEvent::SE_MOBSPAWNED,  {"mob_id",    "x",         "y", "time"}},
+                                                    {InGameEvent::SE_INPUTERROR,  {"time"}},
+                                                    {InGameEvent::SE_PLYRDISCONN, {}},
+                                                    {InGameEvent::CL_PLAYERUP,    {"time"}},
+                                                    {InGameEvent::CL_PLAYERDOWN,  {"time"}},
+                                                    {InGameEvent::CL_PLAYERLEFT,  {"time"}},
+                                                    {InGameEvent::CL_PLAYERRIGHT, {"time"}},
+                                                    {InGameEvent::CL_SHOTSTART,   {"shot_type", "time"}},
+                                                    {InGameEvent::CL_SHOTSTOP,    {"time"}},
+                                                    {InGameEvent::CL_DISCONNECT,  {}}
+                                            };
+    const InGameEvent::DataSizeMap  InGameEvent::dataSizes    = {
+            {"size",      sizeof(uint32_t)},
+            {"player_id", sizeof(uint8_t)},
+            {"time",      sizeof(uint32_t)},
+            {"shot_type", sizeof(uint8_t)},
+            {"mob_id",    sizeof(uint8_t)},
+            {"x",         sizeof(uint32_t)},
+            {"y",         sizeof(uint32_t)}
     };
 
     /*
@@ -59,11 +59,11 @@ namespace RType
     ** Copy constructor and assign operator
     */
     InGameEvent::InGameEvent(InGameEvent const& other) :
-        ABasePacket(other), _id(other._id)
+            ABasePacket(other), _id(other._id)
     {
     }
 
-    InGameEvent&      InGameEvent::operator=(InGameEvent const& other)
+    InGameEvent& InGameEvent::operator=(InGameEvent const& other)
     {
         if (this != &other)
         {
@@ -106,14 +106,14 @@ namespace RType
     */
     void        InGameEvent::parse(Buffer const& raw)
     {
-        size_t      dataSize;
+        size_t dataSize;
 
         clear();
         if (raw.size() < headerSize)
             throw Exception::IncompleteRequest("Buffer can't contain a \
                                                 request header");
-        _id = raw.get<uint32_t>();
-        _code = raw.get<uint16_t>(sizeof(uint32_t));
+        _id      = raw.get<uint32_t>();
+        _code    = raw.get<uint16_t>(sizeof(uint32_t));
         dataSize = raw.get<uint32_t>(sizeof(uint32_t) + sizeof(uint16_t));
         if (raw.size() - headerSize < dataSize)
             throw Exception::IncompleteRequest("Buffer can't contain \
@@ -123,18 +123,20 @@ namespace RType
 
     void        InGameEvent::parseData(Buffer const& raw)
     {
-        Buffer                       tmp     = raw;
-        EventMap::const_iterator     it      =
-            inGameEvents.find(static_cast<Code>(_code));
+        Buffer                   tmp = raw;
+        EventMap::const_iterator it  =
+                                         inGameEvents
+                                                 .find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);
         if (it == inGameEvents.end())
             throw Exception::NotImplemented("Request '" + std::to_string(_code)
-                + "' does not exists or is not implemented");
+                                            +
+                                            "' does not exists or is not implemented");
         for (std::string const& arg: it->second)
         {
-            auto    it = dataSizes.find(arg);
-            Buffer  res;
+            auto   it = dataSizes.find(arg);
+            Buffer res;
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
@@ -149,9 +151,9 @@ namespace RType
 
     Buffer      InGameEvent::toBuffer() const
     {
-        Buffer      res;
-        Buffer      data;
-        auto        it = inGameEvents.find(static_cast<Code>(_code));
+        Buffer res;
+        Buffer data;
+        auto   it = inGameEvents.find(static_cast<Code>(_code));
 
         if (it == inGameEvents.end())
             throw Exception::IncompleteRequest("Code " + std::to_string(_code) +

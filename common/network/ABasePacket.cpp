@@ -17,11 +17,11 @@ namespace RType
     ** Copy constructor and assign operator
     */
     ABasePacket::ABasePacket(ABasePacket const& other) :
-        _code(other._code), _data(other._data)
+            _code(other._code), _data(other._data)
     {
     }
 
-    ABasePacket&    ABasePacket::operator=(ABasePacket const& other)
+    ABasePacket& ABasePacket::operator=(ABasePacket const& other)
     {
         if (this != &other)
         {
@@ -69,7 +69,7 @@ namespace RType
         return res;
     }
 
-    template <>
+    template<>
     std::string         ABasePacket::get(std::string const& key) const
     {
         DataMap::const_iterator it = _data.find(key);

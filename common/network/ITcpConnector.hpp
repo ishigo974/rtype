@@ -10,10 +10,11 @@
 class ITcpConnector
 {
 public:
-    virtual ~ITcpConnector() {}
+    virtual ~ITcpConnector()
+    { }
 
 public:
-    virtual void    connect() = 0;
+    virtual void connect() = 0;
 };
 
 

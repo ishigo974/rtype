@@ -19,8 +19,8 @@ TcpSocket::TcpSocket(std::string const& addr, short int port)
     }
     if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
         throw std::runtime_error("Socket failed");
-    _port = port;
-    _addr = addr;
+    _port        = port;
+    _addr        = addr;
 }
 
 TcpSocket::TcpSocket(rSocket socket, std::string const& addr, short int port)
@@ -57,15 +57,18 @@ void TcpSocket::setAddr(const std::string& addr)
 
 std::string TcpSocket::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss  << "TcpSocket {"
-    << "\n\tAddress " << this->_addr
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
+    ss += "TcpSocket {";
+    ss += "\n\tAddress ";
+    ss += this->_addr;
+    ss += "\n\tSocket ";
+    ss += this->_socket;
+    ss += "\n\tPort ";
+    ss += this->_port;
+    ss += "\n}\n";
 
-    return ss.str();
+    return ss;
 }
 
 TcpSocket::~TcpSocket()

@@ -20,7 +20,7 @@ public:
     Buffer& operator=(Buffer const& buffer);
 
 public:
-    uint8_t&    operator[](size_t index);
+    uint8_t& operator[](size_t index);
     bool        operator==(Buffer const& other) const;
 
 public:

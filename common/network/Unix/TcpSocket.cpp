@@ -4,8 +4,6 @@
 
 #include <netdb.h>
 #include <cstring>
-#include <iostream>
-#include <sstream>
 #include "TcpSocket.hpp"
 
 TcpSocket::TcpSocket(std::string const& addr, short int port)
@@ -49,15 +47,18 @@ void TcpSocket::setAddr(const std::string& addr)
 
 std::string TcpSocket::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss << "TcpSocket {"
-    << "\n\tAddress " << this->_addr
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
+    ss += "TcpSocket {";
+    ss += "\n\tAddress ";
+    ss += this->_addr;
+    ss += "\n\tSocket ";
+    ss += this->_socket;
+    ss += "\n\tPort ";
+    ss += this->_port;
+    ss += "\n}\n";
 
-    return ss.str();
+    return ss;
 }
 
 TcpSocket::~TcpSocket()

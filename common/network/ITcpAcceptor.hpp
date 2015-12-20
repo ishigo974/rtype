@@ -11,7 +11,8 @@
 class ITcpAcceptor : public IMonitorable
 {
 public:
-    virtual ~ITcpAcceptor() {}
+    virtual ~ITcpAcceptor()
+    { }
 
 public:
     virtual ITcpSocket *accept() const = 0;

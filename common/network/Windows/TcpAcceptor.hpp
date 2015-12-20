@@ -24,12 +24,12 @@ public:
     virtual std::string toString() const;
 
 public:
-    virtual rSocket   getSocket() const;
+    virtual rSocket getSocket() const;
 
 public:
     short int getPort() const;
-    void setPort(short int port);
-    void close();
+    void      setPort(short int port);
+    void      close();
 
 private:
     short int _port;

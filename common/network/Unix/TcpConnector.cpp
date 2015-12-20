@@ -5,7 +5,6 @@
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
-#include <sstream>
 #include "TcpConnector.hpp"
 
 
@@ -51,12 +50,14 @@ rSocket TcpConnector::getSocket() const
 
 std::string TcpConnector::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss << "TcpConnector {"
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
+    ss += "TcpConnector {";
+    ss += "\n\tSocket ";
+    ss += this->_socket;
+    ss += "\n\tPort ";
+    ss += this->_port;
+    ss += "\n}\n";
 
-    return ss.str();
+    return ss;
 }

@@ -3,8 +3,6 @@
 //
 
 #include <cstring>
-#include <iostream>
-#include <sstream>
 #include "SocketMonitor.hpp"
 #include "UdpSocket.hpp"
 
@@ -116,14 +114,16 @@ void UdpSocket::setPort(short int port)
 
 std::string UdpSocket::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss << "UdpSocket {"
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
+    ss += "UdpSocket {";
+    ss += "\n\tSocket ";
+    ss += this->_socket;
+    ss += "\n\tPort ";
+    ss += this->_port;
+    ss += "\n}\n";
 
-    return ss.str();
+    return ss;
 }
 
 size_t UdpSocket::send(Buffer const& buffer) const

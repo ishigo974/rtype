@@ -17,13 +17,13 @@ public:
     virtual ~BaseSocket();
 
 public:
-    virtual size_t    send(Buffer const& buffer) const;
-    virtual size_t    receive(Buffer& buffer, size_t len) const;
-    virtual void      close() const;
+    virtual size_t send(Buffer const& buffer) const;
+    virtual size_t receive(Buffer& buffer, size_t len) const;
+    virtual void   close() const;
 
 protected:
-    rSocket _socket;
-    short int _port;
+    rSocket     _socket;
+    short int   _port;
     std::string _addr;
 };
 

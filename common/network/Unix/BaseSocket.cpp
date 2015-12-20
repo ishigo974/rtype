@@ -35,6 +35,7 @@ size_t        BaseSocket::receive(Buffer& buffer, size_t len) const
     delete[] buff;
     return static_cast<size_t>(ret);
 }
+
 void BaseSocket::close() const
 {
     ::close(_socket);

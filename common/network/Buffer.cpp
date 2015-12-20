@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
 #include "Buffer.hpp"
 
 /*
@@ -36,7 +35,7 @@ Buffer& Buffer::operator=(Buffer const& other)
 /*
 ** Overloaded operators
 */
-uint8_t&            Buffer::operator[](size_t index)
+uint8_t& Buffer::operator[](size_t index)
 {
     if (index >= _data.size())
         throw std::out_of_range("attempt to reach index " +
@@ -58,7 +57,7 @@ void                Buffer::consume(size_t size)
     if (size > _data.size())
     {
         _data.erase(_data.begin(), _data.end());
-        return ;
+        return;
     }
     _data.erase(_data.begin(), _data.begin() + size);
 }
@@ -68,14 +67,14 @@ bool                Buffer::empty() const
     return (_data.empty());
 }
 
-uint8_t const*      Buffer::data() const
+uint8_t const *Buffer::data() const
 {
     return (_data.data());
 }
 
-uint8_t* Buffer::data()
+uint8_t *Buffer::data()
 {
-	return _data.data();
+    return _data.data();
 }
 
 size_t              Buffer::size() const
@@ -109,26 +108,26 @@ std::string         Buffer::toString() const
 /*
 ** Template specializations
 */
-template <>
+template<>
 void                Buffer::append(std::string const& data)
 {
     _data.insert(_data.end(), data.begin(), data.end());
 }
 
-template <>
+template<>
 void                Buffer::append(Buffer const& data)
 {
     _data.insert(_data.end(), data._data.begin(), data._data.end());
 }
 
-template <>
+template<>
 void                Buffer::setData(Buffer const& data)
 {
     _data.erase(_data.begin(), _data.end());
     _data.assign(data._data.begin(), data._data.end());
 }
 
-template <>
+template<>
 void                Buffer::setData(std::string const& data)
 {
     _data.erase(_data.begin(), _data.end());
@@ -137,7 +136,7 @@ void                Buffer::setData(std::string const& data)
 
 bool                Buffer::isBigEndian() const
 {
-    uint16_t        i = 1;
+    uint16_t i = 1;
 
     if ((i >> 8) == 0)
         return true;

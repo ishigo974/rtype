@@ -48,18 +48,18 @@ public:
     virtual std::string toString() const;
 
 private:
-    fd_set _readFds;
-    fd_set _writeFds;
-    fd_set _tmpReadFds;
-    fd_set _tmpWriteFds;
+    fd_set      _readFds;
+    fd_set      _writeFds;
+    fd_set      _tmpReadFds;
+    fd_set      _tmpWriteFds;
     time_t      _secValue;
     suseconds_t _usecValue;
 
     rSocket _maxFd;
 
 public:
-    static const time_t      defaultSecVal;
-    static const suseconds_t defaultUsecVal;
+    static const time_t       defaultSecVal;
+    static const suseconds_t  defaultUsecVal;
     static const unsigned int noFd;
 
 protected:

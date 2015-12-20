@@ -6,8 +6,6 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <stdexcept>
-#include <iostream>
-#include <sstream>
 #include "TcpAcceptor.hpp"
 #include "TcpSocket.hpp"
 
@@ -71,12 +69,13 @@ void TcpAcceptor::setPort(short int port)
 
 std::string TcpAcceptor::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss << "TcpAcceptor {"
-    << "\n\tSocket " << this->_socket
-    << "\n\tPort " << this->_port
-    << "\n}" << std::endl;
-
-    return ss.str();
+    ss += "TcpAcceptor {";
+    ss += "\n\tSocket ";
+    ss += this->_socket;
+    ss += "\n\tPort ";
+    ss += this->_port;
+    ss += "\n}\n";
+    return ss;
 }

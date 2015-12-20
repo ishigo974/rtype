@@ -4,17 +4,14 @@
 
 #include <algorithm>
 #include <ctime>
-#include <iostream>
-#include <sstream>
 #include "SocketMonitor.hpp"
-#include "NetTypes.hpp"
 
 /*
 ** Static variables
 */
-const time_t        SocketMonitor::defaultSecVal    = 5;
-const suseconds_t   SocketMonitor::defaultUsecVal   = 0;
-const unsigned int                  SocketMonitor::noFd = 0;
+const time_t                        SocketMonitor::defaultSecVal  = 5;
+const suseconds_t                   SocketMonitor::defaultUsecVal = 0;
+const unsigned int                  SocketMonitor::noFd           = 0;
 SocketMonitor::UniqueMonitorPtr     SocketMonitor::instance;
 
 /*
@@ -126,12 +123,15 @@ void SocketMonitor::setUsec(suseconds_t value)
 
 std::string SocketMonitor::toString() const
 {
-    std::ostringstream ss;
+    std::string ss;
 
-    ss << "SocketMonitor {"
-    << "\n\t_fdMax: " << _maxFd
-    << "\n\t_secValue " << _secValue
-    << "\n\t_usecValue " << _usecValue
-    << "\n}" << std::endl;
-    return ss.str();
+    ss += "SocketMonitor {";
+    ss += "\n\t_fdMax: ";
+    ss += _maxFd;
+    ss += "\n\t_secValue ";
+    ss += _secValue;
+    ss += "\n\t_usecValue ";
+    ss += _usecValue;
+    ss += "\n}\n";
+    return ss;
 }
