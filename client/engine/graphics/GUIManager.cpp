@@ -19,7 +19,8 @@ void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
 
     for (auto e : _scenes)
     {
-        e.second->draw(win);
+        if (e.first == state)
+            e.second->draw(win);
     }
 }
 
@@ -67,3 +68,5 @@ namespace std
     }
 }
 
+GUIManager::GUIManager()
+{ }

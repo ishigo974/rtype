@@ -13,7 +13,7 @@
 class Menu : public GameObject
 {
 public:
-    Menu(unsigned int, std::string const&, int, EntityManager&, cu::Event&);
+    Menu(unsigned int, std::string const&, int, EntityManager *, cu::Event*);
     Menu(Menu const& other);
     Menu(Menu&& other);
     Menu& operator=(Menu other);
@@ -49,8 +49,8 @@ private:
 
     StateMachine *_sm;
 
-    cu::Event&  _event;
-    EntityManager _em;
+    cu::Event     *_event;
+    EntityManager *_em;
 };
 
 #endif // !MENU_HPP_

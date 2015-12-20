@@ -13,6 +13,7 @@ public:
     TextField(TextField const& other);
     TextField(TextField&& other);
     TextField& operator=(TextField other);
+
     TextField(std::string const& text = "", unsigned int = 0);
     TextField(gu::Rect<float> const& rect, std::string const& text = "", unsigned int = 0);
     virtual ~TextField();

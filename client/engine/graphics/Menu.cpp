@@ -1,6 +1,6 @@
 #include "Menu.hpp"
 
-Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& em, cu::Event& event) :
+Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* em, cu::Event* event) :
         GameObject(id, name, layer),
         title(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
         refresh(gu::Rect<float>(1000, 600, 200, 25), "REFRESH"),
@@ -22,7 +22,7 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& e
     {
         return (e->type == cu::Event::MouseButtonReleased &&
                 title->intersect(e->mouse.x, e->mouse.y));
-    }, &event, &title);
+    }, _event, &title);
 
     mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms)
     {
@@ -31,12 +31,12 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& e
                 if ((*it)->intersect(e->mouse.x, e->mouse.y))
                     return (true);
         return (false);
-    }, &event, rooms);
+    }, _event, rooms);
 
     inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back)
     {
         return e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y);
-    }, &event, &back);
+    }, _event, &back);
 
     _sm = new StateMachine(_titleState);
 }
@@ -136,9 +136,9 @@ void Menu::init()
     std::string str("menu");
     str += rand() % 4 + 1;
 
-    _em.attachComponent<SpriteRenderer>(this, "sr", str,
+    _em->attachComponent<SpriteRenderer>(this, "sr", str,
                                        gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<GUIManager>(this, "Manager");
+    _em->attachComponent<GUIManager>(this, "Manager");
 
     setupGUIElements();
     setupStates();
