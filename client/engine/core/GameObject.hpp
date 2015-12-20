@@ -34,7 +34,7 @@ public:
     virtual bool findMask(RTypes::my_uint16_t mask);
     void         addComponent(Component *const newComp);
 
-    virtual std::string toString();
+    virtual std::string toString() const;
     int                 getLayer() const;
     void                setLayer(unsigned int _layer);
 

@@ -2,7 +2,7 @@
 #include "GUIManager.hpp"
 
 GUIManager::GUIManager(unsigned int id) :
-    _id(id)
+    Component(id, "StateMachine")
 {}
 
 GUIManager::~GUIManager() {}

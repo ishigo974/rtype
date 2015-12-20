@@ -42,17 +42,20 @@ RTypes::my_uint16_t Component::getMask() const
     return Mask;
 }
 
-std::string Component::toString()
+std::string Component::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "Component {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tmask: " << Mask
-    << "\n}" << std::endl;
+    ss += "Component {";
+    ss += "\n\tid: ";
+    ss += _id;
+    ss += "\n\tname: ";
+    ss += _name;
+    ss += "\n\tmask: ";
+    ss += Mask;
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 void Component::swap(Component& other)
@@ -72,7 +75,7 @@ namespace std
     }
 }
 
-Object *Component::parent()
+Object *Component::parent() const
 {
     return (EntityManager::getParentOf(this));
 }

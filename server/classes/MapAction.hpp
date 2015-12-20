@@ -15,24 +15,30 @@ namespace RType
                 Spawn = 0
             };
 
-            Action(Type act, MobType mt, MovementType mvt, cu::Position const& p) :
-                action(act), mob(mt), movement(mvt), pos(p) {}
+            Action(Type act, MobType mt, MovementType mvt,
+                   cu::Position const& p) :
+                    action(act), mob(mt), movement(mvt), pos(p)
+            { }
 
-            Type            action;
-            MobType         mob;
-            MovementType    movement;
-            cu::Position    pos;
+            Type         action;
+            MobType      mob;
+            MovementType movement;
+            cu::Position pos;
 
-            std::string     toString()
+            std::string toString() const
             {
-                std::stringstream ss;
+                std::string ss;
 
-                ss << mob
-                   << " " << action
-                   << " " << movement
-                   << " " << pos.X()
-                   << " " << pos.Y();
-                return ss.str();
+                ss += mob;
+                ss += " ";
+                ss += action;
+                ss += " ";
+                ss += movement;
+                ss += " ";
+                ss += pos.X();
+                ss += " ";
+                ss += pos.Y();
+                return ss;
             }
         };
     }

@@ -32,7 +32,7 @@ EntityManager::EntityManager()
     _compIds = 0;
 }
 
-Object *EntityManager::getParentOf(Component *component)
+Object *EntityManager::getParentOf(Component const *component)
 {
     auto selected = _compHierarchy.find(component->getId());
 
@@ -46,7 +46,7 @@ void EntityManager::addChild(GameObject *parent, GameObject *child)
     _goHierarchy[child->getId()] = parent->getId();
 }
 
-Object *EntityManager::getParentOf(GameObject *go)
+Object *EntityManager::getParentOf(GameObject const *go)
 {
     auto selected = _goHierarchy.find(go->getId());
 

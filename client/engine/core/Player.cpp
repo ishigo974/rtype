@@ -73,7 +73,7 @@ RTypes::my_uint16_t     Player::getMask() const
   return Mask;
 }
 
-std::string Player::toString()
+std::string Player::toString() const
 {
     std::stringstream ss;
     Transform	&transform = static_cast<GameObject *>(parent())->transform();

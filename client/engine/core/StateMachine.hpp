@@ -22,7 +22,6 @@ public:
 
 private:
     std::map<std::string, State> _states;
-    unsigned int                 _id;
     State& _current;
 };
 

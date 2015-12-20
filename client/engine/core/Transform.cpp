@@ -60,7 +60,7 @@ bool Transform::operator!=(Transform const& other)
     return (!Transform::operator==(other));
 }
 
-std::string Transform::toString()
+std::string Transform::toString() const
 {
     std::stringstream ss;
 

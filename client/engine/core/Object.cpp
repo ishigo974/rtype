@@ -31,7 +31,7 @@ Object& Object::operator=(Object other)
     return (*this);
 }
 
-std::string Object::toString()
+std::string Object::toString() const
 {
     std::stringstream ss;
 

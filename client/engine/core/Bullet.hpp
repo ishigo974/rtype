@@ -40,7 +40,7 @@ public:
   float	getX();
   float	getY();
   void	setDirection(Bullet::Direction d);
-  std::string	toString();
+  std::string	toString() const;
   void	create();
   void	deleteObj();
   bool	getAvailable() const;

@@ -52,7 +52,7 @@ RTypes::my_uint16_t Collider::getMask() const
     return (Mask);
 }
 
-std::string Collider::toString()
+std::string Collider::toString() const
 {
     //TODO : _bounds.toSting()
     std::stringstream ss;

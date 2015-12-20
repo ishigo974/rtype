@@ -110,7 +110,7 @@ namespace cu
         float Y() const;
         void  setY(float _y);
 
-        std::string toString();
+        std::string toString() const;
 
         void swap(Position& other);
 
@@ -138,7 +138,7 @@ namespace cu
         float getAngle() const;
         void  setAngle(float _angle);
 
-        std::string toString();
+        std::string toString() const;
 
         void swap(Rotation& other);
 

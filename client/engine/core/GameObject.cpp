@@ -45,7 +45,7 @@ bool GameObject::operator!=(GameObject const& other)
     return (!GameObject::operator==(other));
 }
 
-std::string GameObject::toString()
+std::string GameObject::toString() const
 {
     std::stringstream ss;
 

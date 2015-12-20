@@ -29,13 +29,13 @@ public:
     }
 
 public:
-    virtual void swap(Component& other);
+    void swap(Component& other);
 
     virtual RTypes::my_uint16_t getMask() const;
 
-    virtual std::string toString();
+    virtual std::string toString() const;
 
-    virtual Object *parent();
+    virtual Object *parent() const;
 };
 
 static const Component ErrorComponent = Component(0, "Error");

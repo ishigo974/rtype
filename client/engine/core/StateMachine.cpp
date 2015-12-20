@@ -3,8 +3,8 @@
 #include "StateMachine.hpp"
 
 StateMachine::StateMachine(unsigned int id, State const& initialState) :
+        Component(id, "StateMachine"),
         _states{{initialState.getName(), initialState}},
-        _id(id),
         _current(_states[initialState.getName()])
 { }
 

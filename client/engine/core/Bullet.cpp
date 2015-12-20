@@ -93,7 +93,7 @@ int	Bullet::getDamage() const
   return _damage;
 }
 
-std::string Bullet::toString()
+std::string Bullet::toString() const
 {
     std::stringstream ss;
     Transform	&transform = static_cast<GameObject *>(parent())->transform();

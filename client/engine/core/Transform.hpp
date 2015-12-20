@@ -24,7 +24,7 @@ public:
     virtual bool operator==(Transform const& other);
     virtual bool operator!=(Transform const& other);
 
-    virtual std::string toString();
+    virtual std::string toString() const;
 
     void swap(Transform& second);
 

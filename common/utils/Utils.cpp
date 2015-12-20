@@ -14,7 +14,7 @@ namespace std
     using cu::Point2D;
 
     template<>
-    inline void swap<Vector2D>(Vector2D& a, Vector2D& b)
+    inline void swap<Vector2D>(Vector2D& a, Vector2D& b) throw ()
     {
         a.swap(b);
     }
@@ -149,7 +149,7 @@ namespace cu
         return (!Rotation::operator==(other));
     }
 
-    std::string Position::toString()
+    std::string Position::toString() const
     {
         std::stringstream ss;
 
@@ -158,7 +158,7 @@ namespace cu
         return (ss.str());
     }
 
-    std::string Rotation::toString()
+    std::string Rotation::toString() const
     {
         std::stringstream ss;
 

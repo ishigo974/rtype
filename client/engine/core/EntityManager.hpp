@@ -18,8 +18,8 @@ public:
     EntityManager();
     ~EntityManager();
 
-    static Object *getParentOf(Component *component);
-    static Object *getParentOf(GameObject *go);
+    static Object *getParentOf(Component const *component);
+    static Object *getParentOf(GameObject const *go);
 
     static void                  addChild(GameObject *parent, GameObject *child);
     static std::vector<Object *> getChildrenOf(GameObject *go);

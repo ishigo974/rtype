@@ -10,6 +10,7 @@ Label::Label(gu::Rect<int> const& rect, std::string const& str, unsigned int siz
   this->_text.setCharacterSize(size);
   this->_text.setPosition(static_cast<float>(rect.x),
 			  static_cast<float>(rect.y));
+  static_cast<void>(_size); //TODO LE VIRER
 }
 
 Label::~Label()

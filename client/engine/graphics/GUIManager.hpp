@@ -20,7 +20,6 @@ public:
     virtual RTypes::my_uint16_t getMask() const;
 
 private:
-    unsigned int	_id;
     std::unordered_map<std::string, std::vector<GUIElement *> > _scenes;
 };
 
