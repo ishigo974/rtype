@@ -1,5 +1,5 @@
-#ifndef COMMANDFACTORY_HPP_
-# define COMMANDFACTORY_HPP_
+#ifndef COMMANDREQUESTFACTORY_HPP_
+# define COMMANDREQUESTFACTORY_HPP_
 
 # include "BaseFactory.hpp"
 # include "RequestCommand.hpp"
@@ -21,4 +21,4 @@ namespace RType
     }
 }
 
-#endif /* !COMMANDFACTORY_HPP_ */
+#endif /* !COMMANDREQUESTFACTORY_HPP_ */

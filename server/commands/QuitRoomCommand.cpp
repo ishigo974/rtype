@@ -63,7 +63,7 @@ player/network component");
                 room->removePlayer(*_entity);
                 player->setRoom(nullptr);
                 network->send(Server::responseOK);
-                room->broadcast(request.toBuffer(), _entity);
+                room->broadcastTCP(request.toBuffer(), _entity);
             }
         }
 

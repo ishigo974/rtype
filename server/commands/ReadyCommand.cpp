@@ -2,6 +2,7 @@
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
+#include "PositionComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
 #include "ComponentsMasks.hpp"
@@ -64,7 +65,7 @@ player/network component");
 
                 request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
-                room->broadcast(request.toBuffer(), _entity);
+                room->broadcastTCP(request.toBuffer(), _entity);
             }
             if (room->allReady())
                 startGame(room);
@@ -91,7 +92,7 @@ player/network component");
         void        Ready::startGame(Component::Room* room) const
         {
             room->setIsPlaying(true);
-            room->broadcast(RType::Request(RType::Request::SE_GAMESTART)
+            room->broadcastTCP(RType::Request(RType::Request::SE_GAMESTART)
                             .toBuffer());
             for (auto& test: *room)
             {
@@ -102,8 +103,12 @@ player/network component");
                     ->addComponent(std::make_unique<Component::NetworkUDP>(
                         tcp->getIpAddr())
                     );
+                test.second.first
+                    ->addComponent(std::make_unique<Component::Position>(
+                        Component::Room::defaultPositions.at(test.first)
+                    ));
             }
-            std::cout << "izi" << std::endl; // debug
+            Server::display("Room '" + room->getRoomName() + "' is launching");
         }
     }
 }

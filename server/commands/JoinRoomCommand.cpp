@@ -78,7 +78,7 @@ namespace RType
                 request.push<uint8_t>("player_id",
                                       _room->getPlayerId(*_entity));
                 request.push<std::string>("username", player->getUsername());
-                _room->broadcast(request.toBuffer(), _entity);
+                _room->broadcastTCP(request.toBuffer(), _entity);
                 network->send(buildRoomInfos(_room->getPlayersMap(),
                                              _room->getPlayerId(*_entity)));
             }

@@ -1,27 +1,26 @@
 //
-// Created by Denis Le Borgne on 18/12/2015.
+// Created by Denis Le Borgne on 20/12/2015.
 //
 
 #include <iostream>
-#include "NetworkTCP.hpp"
+#include "NetworkUDP.hpp"
 #include "IncompleteRequest.hpp"
 
 namespace RType
 {
-    NetworkTCP::NetworkTCP(unsigned id, std::string const& name)
+    NetworkUDP::NetworkUDP(unsigned id, std::string const& name)
             : Component(id, name)
     { }
 
-    NetworkTCP::~NetworkTCP()
-    {
-    }
+    NetworkUDP::~NetworkUDP()
+    { }
 
-    RTypes::my_uint16_t NetworkTCP::getMask() const
+    RTypes::my_uint16_t NetworkUDP::getMask() const
     {
         return Mask;
     }
 
-    Buffer NetworkTCP::toSend()
+    Buffer NetworkUDP::toSend()
     {
         Buffer ret(_send);
 
@@ -29,21 +28,21 @@ namespace RType
         return ret;
     }
 
-    void NetworkTCP::receive(Buffer const& buffer)
+    void NetworkUDP::receive(Buffer const& buffer)
     {
         _receive.append(buffer);
     }
 
-    void NetworkTCP::pushRequest(Request const& request)
+    void NetworkUDP::pushRequest(InGameEvent const& request)
     {
         _send.append(request.toBuffer());
     }
 
-    Request NetworkTCP::popRequest()
+    InGameEvent NetworkUDP::popRequest()
     {
         if (_receive.empty())
             throw Exception::IncompleteRequest("Empty buffer");
-        Request ret(_receive);
+        InGameEvent ret(_receive);
         _receive.consume(ret.toBuffer().size());
         return ret;
     }

@@ -4,8 +4,11 @@
 # include <string>
 # include <memory>
 # include <unordered_map>
+# include <functional>
 # include "ComponentMask.hpp"
 # include "IStringable.hpp"
+
+#include <iostream>
 
 namespace ECS
 {

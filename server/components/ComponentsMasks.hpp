@@ -12,7 +12,10 @@ namespace RType
             MASK_NETWORKTCP     = 1,
             MASK_PLAYER         = 1 << 1,
             MASK_ROOM           = 1 << 2,
-            MASK_NETWORKUDP     = 1 << 3
+            MASK_NETWORKUDP     = 1 << 3,
+            MASK_POSITION       = 1 << 4,
+            MASK_SHOT           = 1 << 5,
+            MASK_SHIP           = 1 << 6
         };
     }
 }
