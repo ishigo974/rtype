@@ -17,7 +17,8 @@
 #include "Button.hpp"
 #include "Bullet.hpp"
 #include "GUIManager.hpp"
-#include "ObjectPool.hpp"
+#include "ZobPool.hpp"
+#include "RCSVParser.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -122,7 +123,7 @@ void backgroundTest()
 	  }
 	obj->getComponent<Mob>()->setEnabled(true);
 	mobs.push_back(obj->getComponent<Mob>());
-	
+
 	++j;
       }
 
@@ -349,23 +350,34 @@ void	buttonAndLabelsTest()
   std::cout << "Escape pressed" << std::endl;
 }
 
+void    RCSVParserTest()
+{
+    RCSVParser p("../res/map1.rcsv");
+    std::multimap<double, Spawn> map;
+
+    p.parse(map);
+    for (auto m : map)
+        std::cout << m.first << " => " << m.second.toString() << std::endl;
+}
+
 int main()
 {
-    EntityManager entityManager;
-
-    srand(static_cast<unsigned>(time(nullptr)));
-    if (gameObjectTest(entityManager))
-        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
-    if (timeTest())
-        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
-    if (stateMachineTest())
-        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+    // EntityManager entityManager;
+    //
+    // srand(static_cast<unsigned>(time(nullptr)));
+    // if (gameObjectTest(entityManager))
+    //     std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+    // if (timeTest())
+    //     std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+    // if (stateMachineTest())
+    //     std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
     // buttonAndLabelsTest();
     // menuTest();
-    backgroundTest();
+    // backgroundTest();
+    RCSVParserTest();
 
     return 0;
 }
