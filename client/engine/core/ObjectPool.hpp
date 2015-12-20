@@ -36,8 +36,8 @@ public:
     _objects.push(obj);
   }
 
-  std::queue<T *>	_objects;
 private:
+  std::queue<T *>	_objects;
   EntityManager		*_entityManager;
 };
 

@@ -104,7 +104,7 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(Transform & transform)
 {
-  float		speed = 5.0f;
+  float		speed = 7.5f;
 
   if (!_enabled)
     return ;
@@ -142,13 +142,12 @@ std::vector<BulletObject *>	Player::getActiveBullets() const
   return _activeBullets;
 }
 
-void		Player::update(double // elapsedtime
-			       )
+void		Player::update(double elapsedtime)
 {
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
-  // for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
-  //   (*it)->getComponent<Bullet>()->update(elapsedtime);
+  _time += elapsedtime;
+  // std::cout << _time << std::endl;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
@@ -162,13 +161,14 @@ void		Player::update(double // elapsedtime
     }
   while (_action.size() > 0)
     {
-      if (_action.front() == ACommand::SHOOT && _activeBullets.size() < 30)
+      if (_action.front() == ACommand::SHOOT && _shotTime >= 0.0001)
       	{
       	  BulletObject *bullet = _bullets->create("Bullet", 12);
       	  _activeBullets.push_back(bullet);
       	  Bullet *b = bullet->getComponent<Bullet>();
       	  b->setX(transform.getPosition().X());
       	  b->setY(transform.getPosition().Y());
+	  _time = 0;
 	}
       else
 	this->move(transform);

@@ -45,6 +45,7 @@ protected:
   ObjectPool<BulletObject, Bullet>	*_bullets;
   std::vector<BulletObject *>		_activeBullets;
   EntityManager			*_entityManager;
+  double			_shotTime = 0;
 };
 
 #endif /* !PLAYER_HPP_ */
