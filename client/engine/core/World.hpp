@@ -6,7 +6,10 @@
 # define RTYPE_WORLD_HPP
 
 # include <chrono>
+#include <Renderer.hpp>
 # include "EntityManager.hpp"
+#include "CommandSystem.hpp"
+#include "BehaviourSystem.hpp"
 
 class World
 {
@@ -14,8 +17,8 @@ public:
     World(EntityManager *em);
 
 public:
-    std::vector<GameObject *> const * getEntities() const;
-    void gameLoop();
+    std::vector<GameObject *> const *getEntities() const;
+    void                            gameLoop();
 
 public:
     template<class T, class ...Args>
@@ -29,6 +32,11 @@ public:
 private:
     EntityManager             *_em;
     std::vector<GameObject *> _entities;
+    CommandSystem             *_cmdSystem;
+    Renderer                  *_renderer;
+    BehaviourSystem           *_behaviourSystem;
+
+    double _lag;
 };
 
 
