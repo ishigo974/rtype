@@ -69,7 +69,7 @@ void backgroundTest()
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
 
-    GameObject        *a = entityManager.createEntity<GameObject>("Background", 15);
+    GameObject        *a = entityManager.createEntity<GameObject>("Background", -1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
