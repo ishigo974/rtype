@@ -23,7 +23,7 @@ public:
 
 public:
     template<class ...Args>
-    bool handleMessage(Args ...args)
+    bool handleMessage(Args ...)
     {
         return (false);
     }

@@ -72,7 +72,7 @@ void Collider::fixedUpdate()
     {
         if (this->_bounds.intersects(static_cast<Collider *>(e)->_bounds))
         {
-            //TODO: Send message
+            sendMessage(static_cast<Collider *>(e));
         }
     }
 }

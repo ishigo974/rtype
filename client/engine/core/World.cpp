@@ -3,3 +3,9 @@
 //
 
 #include "World.hpp"
+
+World::World(EntityManager *em)
+        : _em(em)
+{
+
+}
