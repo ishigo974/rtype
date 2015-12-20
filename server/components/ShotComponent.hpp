@@ -3,14 +3,14 @@
 
 # include <string>
 # include "ComponentMask.hpp"
-# include "IComponent.hpp"
+# include "IBehaviour.hpp"
 # include "Entity.hpp"
 
 namespace RType
 {
     namespace Component
     {
-        class Shot : public ECS::IComponent
+        class Shot : public ECS::IBehaviour
         {
         public:
             enum Type
@@ -25,6 +25,9 @@ namespace RType
         public:
             Shot(Shot const& other);
             Shot&                       operator=(Shot const& other);
+
+        public:
+            virtual void                update();
 
         public:
             Type                        getType() const;

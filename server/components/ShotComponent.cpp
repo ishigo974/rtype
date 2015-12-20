@@ -1,5 +1,7 @@
 #include "ShotComponent.hpp"
+#include "PositionComponent.hpp"
 #include "ComponentsMasks.hpp"
+#include "EntityManager.hpp"
 
 namespace RType
 {
@@ -42,6 +44,24 @@ namespace RType
         /*
         ** Public member functions
         */
+        void                Shot::update()
+        {
+            Component::Position*    pos =
+                ECS::EntityManager::getInstance().getByCmpnt(this)
+                    .getComponent<Component::Position>();
+
+            if (pos == nullptr)
+                return ;
+            switch (_type)
+            {
+                case NORMAL:
+                    pos->setX(pos->getX() + 10); // TODO
+                    break ;
+                default:
+                    break ;
+            }
+        }
+
         Shot::Type          Shot::getType() const
         {
             return _type;
