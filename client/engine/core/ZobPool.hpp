@@ -2,16 +2,29 @@
 # define OBJECTPOOL_HPP_
 
 template <typename T>
-class	ObjectPool
+class	ObjectPool : Object
 {
 public:
   ObjectPool() {}
   virtual ~ObjectPool() {}
 
-  void	create();
+  void	create()
+  {
+    for (int i = 0; i < _size; ++i)
+      {
+	_objects[i]->obj->init();
+	return ;
+      }
+  }
+
+  struct	s_obj
+  {
+    T		*obj;
+    bool	inUse;
+  };
 
 private:
-  T			*_objects[40];
+  ObjectPool::s_obj	*_objects[40];
   static const int	_size = 40;
 };
 

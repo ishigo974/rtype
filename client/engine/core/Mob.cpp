@@ -69,6 +69,22 @@ namespace std
     }
 }
 
+std::string Mob::toString()
+{
+    std::stringstream ss;
+    Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+    ss << "Player {"
+       << "\n\thp: " << _hp
+       << "\n\tdamage: " << _damage
+       << "\n\ttype: " << _type
+       << "\n\tGraphic height: " << _graphicHeight
+       << "\n\t" << transform.toString()
+       << "\n}" << std::endl;
+
+    return (ss.str());
+}
+
 int	Mob::getHp() const
 {
   return _hp;
@@ -81,7 +97,7 @@ int	Mob::getDamage() const
 
 void		Mob::move(Transform & transform)
 {
-  float		speed = static_cast<float>(3.0);
+  float		speed = 3.0f;
 
   _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
   if (!_enabled)
@@ -116,7 +132,6 @@ void		Mob::move(Transform & transform)
       _type = 3;
       break;
     }
-  std::cout << transform.getPosition().toString() << std::endl;
 }
 
 void		Mob::update(double)

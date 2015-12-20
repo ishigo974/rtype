@@ -3,20 +3,20 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
+#include "ZobPool.hpp"
 
 Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, int hp, int damage)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage)
+Player::Player(unsigned int _id, std::string const& _name, int hp)
+  : Behaviour(_id, _name), _hp(hp)
 {
 }
 
 Player::Player(Player const& other) : Behaviour(other)
 {
     _hp = other._hp;
-    _damage = other._damage;
     _action = other._action;
     _multiple = other._multiple;
 }
@@ -53,7 +53,6 @@ void Player::swap(Player& other)
 
     swap(_enabled, other._enabled);
     swap(_hp, other._hp);
-    swap(_damage, other._damage);
     swap(_action, other._action);
     swap(_multiple, other._multiple);
 }
@@ -72,14 +71,22 @@ RTypes::my_uint16_t     Player::getMask() const
   return Mask;
 }
 
+std::string Player::toString()
+{
+    std::stringstream ss;
+    Transform	&transform = static_cast<GameObject *>(parent())->transform();
+
+    ss << "Player {"
+       << "\n\thp: " << _hp
+       << "\n\t" << transform.toString()
+       << "\n}" << std::endl;
+
+    return (ss.str());
+}
+
 int	Player::getHp() const
 {
   return _hp;
-}
-
-int	Player::getDamage() const
-{
-  return _damage;
 }
 
 void	Player::setAction(ACommand::Action action)
@@ -132,17 +139,14 @@ void		Player::update(double)
     {
       if (_action.front() == ACommand::SHOOT)
 	{
-	  Bullet *bullet = static_cast<GameObject *>(parent())->getComponent<Bullet>();
-	  if (bullet == nullptr)
+	  std::vector<Object *> bullets = EntityManager::getChildrenOf(static_cast<GameObject *>(parent()));
+	  for (auto bullet : bullets)
 	    {
-	      std::cout << "Bullet failed" << std::endl;
-	      _action.pop();
-	      break;
+	      Bullet *b = static_cast<GameObject *>(bullet)->getComponent<Bullet>();
+	      b->setX(transform.getPosition().X());
+	      b->setY(transform.getPosition().Y());
+	      b->setDirection(Bullet::Direction::RIGHT);
 	    }
-	  bullet->setX(transform.getPosition().X());
-	  bullet->setY(transform.getPosition().Y());
-	  bullet->setDirection(Bullet::Direction::RIGHT);
-	  // std::cout << "SHOOT" << std::endl;
 	}
       else
 	this->move(transform);

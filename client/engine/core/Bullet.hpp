@@ -17,7 +17,7 @@ public:
 
 public:
     Bullet();
-  Bullet(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1);
+  Bullet(unsigned int _id, std::string const& _name, int hp = 1, int damage = 5);
     virtual ~Bullet();
 
     Bullet(Bullet const& other);
@@ -35,9 +35,11 @@ public:
 
     void swap(Bullet& other);
 
+  void	init();
   void	setX(float x);
   void	setY(float y);
   void	setDirection(Bullet::Direction d);
+  std::string	toString();
 
   static const RTypes::my_uint16_t Mask = ComponentMask::BulletMask;
   virtual RTypes::my_uint16_t	getMask() const;
