@@ -11,8 +11,8 @@ namespace RType
     const short       UDPSystem::defaultPortUDP = 6668;
     const size_t      UDPSystem::buffLen        = 1024;
 
-    UDPSystem::UDPSystem(EntityManager *em, short tcp)
-            : _entityManager(em), _socket(defaultPortUDP)
+    UDPSystem::UDPSystem(EntityManager *em, short udp)
+            : _entityManager(em), _socket(udp)
     {
         _socket.bind();
     }
