@@ -12,7 +12,8 @@ public:
     static const RTypes::my_uint16_t Mask = ComponentMask::GUIManagerMask;
 
 public:
-    GUIManager(unsigned int id);
+    GUIManager();
+    GUIManager(unsigned int id, std::string const& name);
     GUIManager(GUIManager const& other);
     GUIManager(GUIManager&& other);
     GUIManager& operator=(GUIManager other);

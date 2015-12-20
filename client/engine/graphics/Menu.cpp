@@ -5,7 +5,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& e
         title(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
         refresh(gu::Rect<float>(1000, 600, 200, 25), "REFRESH"),
         back(gu::Rect<float>(50, 50, 200, 25), "BACK"),
-        _event(event)
+        _event(event),
+        _em(em)
 {
     _titleState = State("title");
     mainMenu    = State("mainMenu");
@@ -16,12 +17,6 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& e
     rooms.push_back(new TextField(gu::Rect<float>(100, 300, 300, 25), "LE ZEAUB 3"));
     rooms.push_back(new TextField(gu::Rect<float>(100, 400, 300, 25), "LE ZEAUB 4"));
     rooms.push_back(new TextField(gu::Rect<float>(100, 500, 300, 25), "LE ZEAUB 5"));
-
-    std::string str("menu");
-    str += rand() % 4 + 1;
-
-    em.attachComponent<SpriteRenderer>(this, "sr", str,
-                                       gu::Rect<int>(0, 0, 1280, 720));
 
     _titleState.addTransition("mainMenu", [](cu::Event *e, TextField *title)
     {
@@ -44,10 +39,6 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager& e
     }, &event, &back);
 
     _sm = new StateMachine(_titleState);
-    em.attachComponent<GUIManager>(this);
-
-    setupGUIElements();
-    setupStates();
 }
 
 Menu::Menu(Menu const& other) :
@@ -138,4 +129,17 @@ void Menu::move()
 std::string const& Menu::getCurrentStateName() const
 {
     return (_sm->getCurrent().getName());
+}
+
+void Menu::init()
+{
+    std::string str("menu");
+    str += rand() % 4 + 1;
+
+    _em.attachComponent<SpriteRenderer>(this, "sr", str,
+                                       gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<GUIManager>(this, "Manager");
+
+    setupGUIElements();
+    setupStates();
 }

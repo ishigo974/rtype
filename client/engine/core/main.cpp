@@ -268,6 +268,7 @@ void menuTest()
     e.key  = cu::Event::LAST_ACTION;
 
     Menu *menu = entityManager.createEntity<Menu>("menu", 1, entityManager, e);
+    menu->init();
 
 
     //   State initialState("Aeris");

@@ -1,8 +1,7 @@
 #include <iostream>
 #include "GUIManager.hpp"
 
-GUIManager::GUIManager(unsigned int id) :
-        _id(id)
+GUIManager::GUIManager(unsigned int id, std::string const& name) : Component(id, name)
 { }
 
 GUIManager::~GUIManager()
@@ -39,7 +38,7 @@ GUIManager::GUIManager(GUIManager const& other) : Component(other)
     _scenes = other._scenes;
 }
 
-GUIManager::GUIManager(GUIManager&& other)
+GUIManager::GUIManager(GUIManager&& other) : GUIManager(other)
 {
     swap(other);
 }

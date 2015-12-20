@@ -18,6 +18,8 @@ public:
     Menu(Menu&& other);
     Menu& operator=(Menu other);
 
+    void init();
+
     virtual ~Menu();
 
     virtual bool operator==(Menu const& other);
@@ -48,6 +50,7 @@ private:
     StateMachine *_sm;
 
     cu::Event&  _event;
+    EntityManager _em;
 };
 
 #endif // !MENU_HPP_
