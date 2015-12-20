@@ -26,6 +26,7 @@ public:
 
 public:
 	sf::RenderWindow& getWindow();
+    static bool         comp(Object *, Object *);
 
 public:
     // It souldn't stay public, really

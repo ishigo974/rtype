@@ -67,14 +67,14 @@ void backgroundTest()
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
 
-    GameObject        *a = entityManager.createEntity<GameObject>("Background", 1);
+    GameObject        *a = entityManager.createEntity<GameObject>("Background", -1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
     ss << "bg" << rand() % 4 + 1;
 
-    GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
-    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
+    GameObject *p   = entityManager.createEntity<GameObject>("Player", 0);
+    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 0);
     // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
     // (void)bulletpool;
 
@@ -169,11 +169,6 @@ void backgroundTest()
 	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
         bullet->update(BigBen::get().getElapsedtime());
-    //     r.draw(a);
-	// for (auto obj : objs)
-	//   r.draw(obj);
-    //     r.draw(p);
-    //     r.draw(bulletobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;

@@ -41,6 +41,7 @@ void    Renderer::init()
 void Renderer::render()
 {
     auto obj = this->_em->getByMask(128);
+    std::sort(obj.begin(), obj.end(), &Renderer::comp);
     for (auto i : obj)
         this->draw(static_cast<GameObject *>(i));
     this->_win.display();
@@ -49,6 +50,14 @@ void Renderer::render()
 sf::RenderWindow& Renderer::getWindow()
 {
     return _win;
+}
+
+bool      Renderer::comp(Object* a, Object* b)
+{
+    GameObject* p = static_cast<GameObject*>(a);
+    GameObject* d = static_cast<GameObject*>(b);
+
+    return p->getLayer() < d->getLayer();
 }
 
 void Renderer::draw(const GameObject* object)
