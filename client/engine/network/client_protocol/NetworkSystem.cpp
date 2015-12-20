@@ -23,7 +23,9 @@ namespace RType
     }
 
     NetworkSystem::~NetworkSystem()
-    { }
+    {
+        _connector.close();
+    }
 
     void NetworkSystem::process()
     {

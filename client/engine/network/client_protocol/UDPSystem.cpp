@@ -11,14 +11,16 @@ namespace RType
     const short       UDPSystem::defaultPortUDP = 6668;
     const size_t      UDPSystem::buffLen        = 1024;
 
-    UDPSystem::UDPSystem(EntityManager *em, short udp)
-            : _entityManager(em), _socket(udp)
+    UDPSystem::UDPSystem(EntityManager *em, std::string const& addr, short udp)
+            : _entityManager(em), _addr(addr), _socket(udp)
     {
         _socket.bind();
     }
 
     UDPSystem::~UDPSystem()
-    { }
+    {
+        _socket.close();
+    }
 
     void UDPSystem::process()
     {
@@ -42,7 +44,8 @@ namespace RType
         netUDP->receive(receive);
         try
         {
-            _socket.sendTo(netUDP->toSend(), NetworkSystem::defaultAddr);
+
+            _socket.sendTo(netUDP->toSend(), _addr);
         }
         catch (std::runtime_error const&)
         { }

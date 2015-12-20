@@ -462,7 +462,7 @@ void testNetwork()
 
 int main()
 {
-    // testNetwork();
+     testNetwork();
     EntityManager entityManager;
 
     srand(static_cast<unsigned>(time(nullptr)));
@@ -477,6 +477,6 @@ int main()
     // buttonAndLabelsTest();
     // menuTest();
     backgroundTest();
-    // testSound();
+    testSound();
     return 0;
 }

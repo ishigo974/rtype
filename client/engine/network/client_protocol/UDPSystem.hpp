@@ -15,7 +15,8 @@ namespace RType
     class UDPSystem
     {
     public:
-        UDPSystem(EntityManager *em, short int = defaultPortUDP);
+        UDPSystem(EntityManager *em, std::string const& addr =
+        NetworkSystem::defaultAddr, short int = defaultPortUDP);
         virtual ~UDPSystem();
 
     public:
@@ -29,6 +30,7 @@ namespace RType
 
     private:
         EntityManager *_entityManager;
+        std::string   _addr;
         UdpSocket     _socket;
     };
 }
