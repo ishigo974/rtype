@@ -17,8 +17,9 @@
 #include "Button.hpp"
 #include "Bullet.hpp"
 #include "GUIManager.hpp"
-#include "ZobPool.hpp"
+#include "ObjectPool.hpp"
 #include "RCSVParser.hpp"
+#include "PlayerObject.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
 {
@@ -73,8 +74,9 @@ void backgroundTest()
     CommandSystem     cmds(&entityManager, &i);
     ss << "bg" << rand() % 4 + 1;
 
-    GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
-    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
+    PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 3, &entityManager);
+    p->init();
+    // GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
     // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
     // (void)bulletpool;
 
@@ -94,6 +96,7 @@ void backgroundTest()
     objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
     objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
     objs.push_back(entityManager.createEntity<GameObject>("Mob4", 7));
+
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
@@ -129,29 +132,46 @@ void backgroundTest()
 	++j;
       }
 
-    Transform *t = p->getComponent<Transform>();
-    t->getPosition().setX(100);
+    // Transform *t = p->getComponent<Transform>();
+    // t->getPosition().setX(100);
 
-    t->getPosition().setY(300);
-    entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-    entityManager.attachComponent<Player>(p, "Player", 100);
+    // t->getPosition().setY(300);
+    // entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
+    // entityManager.attachComponent<Player>(p, "Player", 100);
 
-    entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-    entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
-    entityManager.addChild(p, bulletobj);
-    Transform *tbullet = bulletobj->getComponent<Transform>();
-    tbullet->getPosition().setX(500);
+    // entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
+    // entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
+    // entityManager.addChild(p, bulletobj);
+    // Transform *tbullet = bulletobj->getComponent<Transform>();
+    // tbullet->getPosition().setX(500);
+
+    // ObjectPool<GameObject>	pool;
+    // for (int i = 0; i < 40; ++i)
+    //   {
+    // 	GameObject *obj = pool.create();
+    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
+    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
+    // 	entityManager.addChild(p, obj);
+    //   }
+
+    // GameObject *pool = entityManager.createEntity<ObjectPool<GameObject> >()	pool;
+    // for (int i = 0; i < 40; ++i)
+    //   {
+    // 	GameObject *obj = pool.create();
+    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
+    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
+    // 	entityManager.addChild(p, obj);
+    //   }
 
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
-    p->getComponent<Player>()->setEnabled(true);
     Player *player = p->getComponent<Player>();
 
-    bulletobj->getComponent<Bullet>()->setEnabled(true);
-    Bullet *bullet = bulletobj->getComponent<Bullet>();
+    // bulletobj->getComponent<Bullet>()->setEnabled(true);
+    // Bullet *bullet = bulletobj->getComponent<Bullet>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -168,12 +188,12 @@ void backgroundTest()
 	for (auto mob : mobs)
 	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
-        bullet->update(BigBen::get().getElapsedtime());
+        // bullet->update(BigBen::get().getElapsedtime());
         r.draw(*a);
 	for (auto obj : objs)
 	  r.draw(*obj);
         r.draw(*p);
-        r.draw(*bulletobj);
+        // r.draw(*bulletobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -379,7 +399,7 @@ int main()
 
     // buttonAndLabelsTest();
     // menuTest();
-    // backgroundTest();
+    backgroundTest();
     RCSVParserTest();
 
     return 0;
