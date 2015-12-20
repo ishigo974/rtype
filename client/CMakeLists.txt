@@ -8,11 +8,11 @@ project(rtype_client)
 set(EXECUTABLE_NAME "rtype")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 if (WIN32)
-	foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
-		string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-		set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_SOURCE_DIR}/bin )
-	endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
-endif()
+    foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${PROJECT_SOURCE_DIR}/bin)
+    endforeach (OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES)
+endif ()
 
 if (WIN32)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 /WX -std=c++14")
@@ -29,16 +29,46 @@ endif ()
 include_directories(lib)
 include_directories(engine/core)
 include_directories(engine/graphics)
+include_directories(engine/network/client_protocol)
+include_directories(../common/network)
+include_directories(../common/exceptions)
+include_directories(../common/utils)
+if (WIN32)
+    include_directories(../common/network/Windows)
+endif ()
+if (UNIX)
+    include_directories(../common/network/Unix)
+endif ()
 
 file(GLOB source_files
         engine/core/*.cpp
         engine/core/*.hpp
         engine/graphics/*.cpp
         engine/graphics/*.hpp
-        engine/network/*.cpp
-        engine/network/*.hpp
+        engine/network/client_protocol/*.cpp
+        engine/network/client_protocol/*.hpp
         lib/*.hpp
+        ../common/network/*.cpp
+        ../common/network/*.hpp
+        ../common/exceptions/*.cpp
+        ../common/exceptions/*.hpp
+        ../common/utils/*.cpp
+        ../common/utils/*.hpp
         )
+
+if (UNIX)
+    file(GLOB net_files
+            ../common/network/Unix/*.hpp
+            ../common/network/Unix/*.cpp
+            )
+endif ()
+
+if (WIN32)
+    file(GLOB net_files
+            ../common/network/Windows/*.hpp
+            ../common/network/Windows/*.cpp
+            )
+endif ()
 
 # ------------------- #
 # Detect and add SFML #
@@ -51,9 +81,9 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-  set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-  set(CMAKE_MODULE_PATH "/usr/local/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
-  set(SFML_ROOT "/usr/local")
+    set(CMAKE_MODULE_PATH "/usr/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+    set(CMAKE_MODULE_PATH "/usr/local/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
+    set(SFML_ROOT "/usr/local")
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
@@ -64,21 +94,18 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif ()
 
-#if (Boost_FOUND)
-#    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
-#    include_directories(${Boost_INCLUDE_DIR})
-#endif ()
+if (Boost_FOUND)
+    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
+    include_directories(${Boost_INCLUDE_DIR})
+endif ()
 
 # ---- #
 # Link #
 # ---- #
 
-add_executable(${EXECUTABLE_NAME} ${source_files})
+add_executable(${EXECUTABLE_NAME} ${source_files} ${net_files})
 
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-if (UNIX)
-	target_link_libraries(${EXECUTABLE_NAME} m)
-endif()
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})

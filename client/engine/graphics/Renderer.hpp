@@ -8,6 +8,10 @@
 class Renderer
 {
 public:
+    static unsigned int const width;
+    static unsigned int const height;
+
+public:
     Renderer();
     ~Renderer();
 
@@ -21,7 +25,7 @@ public:
 	sf::RenderWindow& getWindow();
 
 public:
-    // To be honest, I don't know yet if it will stay public
+    // It souldn't stay public, really
     void draw(const GameObject&);
 
 private:

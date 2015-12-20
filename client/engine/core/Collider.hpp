@@ -9,6 +9,7 @@
 # include <vector>
 # include "Component.hpp"
 # include "Utils.hpp"
+# include "Rect.hpp"
 
 class Collider : public Component
 {
@@ -30,11 +31,17 @@ public:
 
     void swap(Collider& other);
 
+public:
+    virtual void fixedUpdate();
+
     virtual RTypes::my_uint16_t getMask() const;
     virtual std::string         toString();
 
+public:
+    void sendMessage(Collider *e);
+
 protected:
-    std::vector<cu::Point2D> _bounds;
+    gu::Rect<int> _bounds;
 };
 
 
