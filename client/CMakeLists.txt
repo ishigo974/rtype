@@ -32,6 +32,7 @@ include_directories(engine/graphics)
 include_directories(engine/network/client_protocol)
 include_directories(../common/network)
 include_directories(../common/exceptions)
+include_directories(../common/classes)
 include_directories(../common/utils)
 if (WIN32)
     include_directories(../common/network/Windows)
@@ -52,6 +53,8 @@ file(GLOB source_files
         ../common/network/*.hpp
         ../common/exceptions/*.cpp
         ../common/exceptions/*.hpp
+        ../common/classes/*.cpp
+        ../common/classes/*.hpp
         ../common/utils/*.cpp
         ../common/utils/*.hpp
         )

@@ -49,8 +49,6 @@ bool gameObjectTest(EntityManager& entityManager)
     return (true);
 }
 
-<<<<<<< HEAD
-=======
 void renderAndInputsTest()
 {
     Renderer      r;
@@ -80,7 +78,6 @@ void renderAndInputsTest()
     std::cout << "Escape pressed" << std::endl;
 }
 
->>>>>>> rcnetwork
 bool timeTest()
 {
     for (int i = 0; i < 5; ++i)
@@ -104,7 +101,7 @@ void backgroundTest()
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
-<<<<<<< HEAD
+
     ss << "bg" << rand() % 4 + 1;
 
     GameObject *p         = entityManager.createEntity<GameObject>("Player", 3);
@@ -161,40 +158,13 @@ void backgroundTest()
         mobs.push_back(obj->getComponent<Mob>());
         ++j;
     }
-=======
-    ss << "../res/bg" << rand() % 4 + 1 << ".jpg";
-
-    GameObject *obj = entityManager.createEntity<GameObject>("Mob", 2);
-    GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
-
-    entityManager.attachComponent<Transform>(a, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280,
-                                                                720));
-    entityManager.attachComponent<ScrollingBackground>(a, "lal", 60, a);
-
-    entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "../res/mob.gif",
-                                                  gu::Rect<int>(100, 0, 30,
-                                                                30));
-    entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, obj);
->>>>>>> rcnetwork
 
     Transform *t = p->getComponent<Transform>();
-<<<<<<< HEAD
     t->getPosition().setX(100);
 
     t->getPosition().setY(300);
     entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
     entityManager.attachComponent<Player>(p, "Player", 100);
-=======
-    t->getPosition().setX(600);
-    t->getPosition().setY(680);
-    entityManager
-            .attachComponent<SpriteRenderer>(p, "Player", "../res/player.gif",
-                                             gu::Rect<int>(500, 0, 30, 30));
-    entityManager.attachComponent<Player>(p, "Player", 100, 2, p);
->>>>>>> rcnetwork
 
     entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
     entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
@@ -321,14 +291,8 @@ void menuTest()
 
     entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
     entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-<<<<<<< HEAD
                                                   gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
-=======
-                                                  gu::Rect<int>(0, 0, 1280,
-                                                                720));
-    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0, menu);
->>>>>>> rcnetwork
 
     State initialState("Aeris");
     State mainMenu("MainMenu");
@@ -380,14 +344,12 @@ void menuTest()
     std::cout << "Escape pressed" << std::endl;
 }
 
-<<<<<<< HEAD
 void buttonAndLabelsTest()
 {
     Renderer  r;
     Input     i(r.getWindow());
     Button    l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
     cu::Event e;
-
 
     r.getWindow().clear();
     e.key = cu::Event::LAST_ACTION;
@@ -420,7 +382,7 @@ void buttonAndLabelsTest()
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
-=======
+}
 
 // Les sf::sleep sont la pour ne pas lancer les sons en meme temps car la sfml joue les sons
 // dans un thread a part; Ils seraient lanc�s en m�me temps sinon...
@@ -525,7 +487,6 @@ void testNetwork()
         event.clear();
 
     }
->>>>>>> rcnetwork
 }
 
 int main()
@@ -546,10 +507,6 @@ int main()
     // buttonAndLabelsTest();
     // menuTest();
     backgroundTest();
-<<<<<<< HEAD
-=======
-    testSound();
->>>>>>> rcnetwork
-
+    // testSound();
     return 0;
 }

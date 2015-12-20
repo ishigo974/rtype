@@ -27,6 +27,7 @@ endif ()
 include_directories(../common/network)
 include_directories(../common/exceptions)
 include_directories(../common/utils)
+include_directories(../common/classes)
 include_directories(base_ecs)
 include_directories(base_ut)
 include_directories(exceptions)
@@ -43,6 +44,7 @@ if (WIN32)
             ../common/network/Windows/*.cpp
             ../common/network/Windows/*.hpp)
 endif ()
+
 if (UNIX)
     file(GLOB network_files
             ../common/network/Unix/*.cpp
@@ -55,33 +57,12 @@ file(GLOB source_files
         base_ecs/*.cpp
         ../common/network/*.hpp
         ../common/network/*.cpp
+        ../common/classes/*.hpp
+        ../common/classes/*.cpp
         classes/*.hpp
         classes/*.cpp
         exceptions/*.hpp
         exceptions/*.cpp
-        utils/*.hpp
-        utils/*.cpp
-        components/*.hpp
-        components/*.cpp
-        systems/*.hpp
-        systems/*.cpp
-        commands/*.hpp
-        commands/*.cpp
-        ../common/exceptions/*.hpp
-        ../common/exceptions/*.cpp
-        ../common/utils/*.cpp
-        ../common/utils/*.hpp
-
-        )
-
-file(GLOB net_files
-        main_network.cpp
-        base_ecs/*.hpp
-        base_ecs/*.cpp
-        ../common/network/*.hpp
-        ../common/network/*.cpp
-        classes/*.hpp
-        classes/*.cpp
         utils/*.hpp
         utils/*.cpp
         components/*.hpp
@@ -103,6 +84,8 @@ file(GLOB ut_source_files
         base_ecs/*.cpp
         ../common/network/*.hpp
         ../common/network/*.cpp
+        ../common/classes/*.hpp
+        ../common/classes/*.cpp
         exceptions/*.hpp
         exceptions/*.cpp
         classes/*.hpp
@@ -126,5 +109,4 @@ file(GLOB ut_source_files
         )
 
 add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files})
-add_executable(network_test ${net_files} ${network_files})
 add_executable(${UT_NAME} ${ut_source_files} ${network_files})
