@@ -6,6 +6,7 @@
 # include "ACommand.hpp"
 # include "ObjectPool.hpp"
 # include "Bullet.hpp"
+# include "BulletObject.hpp"
 # include "EntityManager.hpp"
 
 class	Player : public Behaviour
@@ -35,12 +36,14 @@ public:
   static const RTypes::my_uint16_t Mask = ComponentMask::PlayerMask;
   virtual RTypes::my_uint16_t	getMask() const;
 
+  std::vector<BulletObject *>	getActiveBullets() const;
+
 protected:
   int				_hp;
   std::queue<ACommand::Action>	_action;
   bool				_multiple = false;
-  ObjectPool<Bullet>		_bullets;
-  std::vector<Bullet *>		_activeBullets;
+  ObjectPool<BulletObject, Bullet>	*_bullets;
+  std::vector<BulletObject *>		_activeBullets;
   EntityManager			*_entityManager;
 };
 

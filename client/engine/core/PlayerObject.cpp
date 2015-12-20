@@ -64,7 +64,7 @@ std::string	PlayerObject::toString() const
 {
   std::stringstream ss;
 
-  ss << "GameObject {"
+  ss << "PlayerObject {"
      << "\n\tid: " << _id
      << "\n\tname: " << _name
      << "\n\tlayer: " << _layer

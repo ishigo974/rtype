@@ -17,7 +17,7 @@ public:
 
 public:
     Bullet();
-  Bullet(unsigned int _id, std::string const& _name, int hp = 1, int damage = 5);
+  Bullet(unsigned int _id, std::string const& _name);
     virtual ~Bullet();
 
     Bullet(Bullet const& other);
@@ -53,7 +53,7 @@ protected:
     int _hp;
     int _damage;
   Bullet::Direction	_direction;
-  Transform		*_transform;
+  // Transform		*_transform;
   bool			_available;
 };
 

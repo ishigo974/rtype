@@ -69,34 +69,31 @@ void backgroundTest()
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
 
-    GameObject        *a = entityManager.createEntity<GameObject>("Background", 1);
+    GameObject        *a = entityManager.createEntity<GameObject>("Background", 15);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
     ss << "bg" << rand() % 4 + 1;
 
-    PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 3, &entityManager);
+    PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 10, &entityManager);
     p->init();
-    // GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
-    // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
-    // (void)bulletpool;
 
     std::vector<GameObject *>	objs;
     std::vector<Mob *>	mobs;
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    // objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
 
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
@@ -146,24 +143,6 @@ void backgroundTest()
     // Transform *tbullet = bulletobj->getComponent<Transform>();
     // tbullet->getPosition().setX(500);
 
-    // ObjectPool<GameObject>	pool;
-    // for (int i = 0; i < 40; ++i)
-    //   {
-    // 	GameObject *obj = pool.create();
-    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
-    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
-    // 	entityManager.addChild(p, obj);
-    //   }
-
-    // GameObject *pool = entityManager.createEntity<ObjectPool<GameObject> >()	pool;
-    // for (int i = 0; i < 40; ++i)
-    //   {
-    // 	GameObject *obj = pool.create();
-    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
-    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
-    // 	entityManager.addChild(p, obj);
-    //   }
-
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
@@ -186,9 +165,12 @@ void backgroundTest()
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-	for (auto mob : mobs)
-	  mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
+	std::vector<BulletObject *> obj = player->getActiveBullets();
+	for (auto b : obj)
+	  b->getComponent<Bullet>()->update(BigBen::get().getElapsedtime());
+        for (auto mob : mobs)
+	  mob->update(BigBen::get().getElapsedtime());
         //bullet->update(BigBen::get().getElapsedtime());
     //     r.draw(a);
 	// for (auto obj : objs)
@@ -229,27 +211,10 @@ bool stateMachineTest()
     return (true);
 }
 
-// bool commandSystemTest(EntityManager *entityManager)
-// {
-//     CommandSystem cmds(entityManager);
-//     cu::Event upEvent;
-//     cu::Event downEvent;
-
-//     upEvent.key = cu::Event::UP;
-//     downEvent.key = cu::Event::DOWN;
-
-//     cmds.addCommand(upEvent);
-//     cmds.addCommand(downEvent);
-//     std::cout << cmds.toString() << std::endl;
-//     assert(cmds.getSize() == 2);
-//     cmds.process();
-//     return (true);
-// }
-
 bool mobTest()
 {
     EntityManager entityManager;
-    GameObject    *obj = entityManager.createEntity<GameObject>("Test", 1);
+    GameObject    *obj = entityManager.createEntity<GameObject>("Test", 3);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
