@@ -29,6 +29,7 @@ include_directories(../common/exceptions)
 include_directories(../common/utils)
 include_directories(base_ecs)
 include_directories(base_ut)
+include_directories(exceptions)
 include_directories(components)
 include_directories(systems)
 include_directories(classes)
@@ -56,6 +57,8 @@ file(GLOB source_files
         ../common/network/*.cpp
         classes/*.hpp
         classes/*.cpp
+        exceptions/*.hpp
+        exceptions/*.cpp
         utils/*.hpp
         utils/*.cpp
         components/*.hpp
@@ -100,6 +103,8 @@ file(GLOB ut_source_files
         base_ecs/*.cpp
         ../common/network/*.hpp
         ../common/network/*.cpp
+        exceptions/*.hpp
+        exceptions/*.cpp
         classes/*.hpp
         classes/*.cpp
         commands/*.hpp
