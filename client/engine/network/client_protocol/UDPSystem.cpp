@@ -44,7 +44,6 @@ namespace RType
         netUDP->receive(receive);
         try
         {
-
             _socket.sendTo(netUDP->toSend(), _addr);
         }
         catch (std::runtime_error const&)
