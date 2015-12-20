@@ -4,7 +4,7 @@
 # include <map>
 # include <fstream>
 # include <string>
-# include "Spawn.hpp"
+# include "Action.hpp"
 
 class RCSVParser
 {
@@ -14,11 +14,11 @@ public:
 
 public:
     //TODO Parse
-    void    parse(std::multimap<double, Spawn> &);
+    void    parse(std::multimap<double, Action> &);
 
 private:
     //TODO ParseLine
-    void    parseLine(std::multimap<double, Spawn> &, std::string &);
+    void    parseLine(std::multimap<double, Action> &, std::string &);
 
 private:
     std::string     _path;

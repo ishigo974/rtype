@@ -57,7 +57,7 @@ if (UNIX)
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
-#find_package(Boost 1.59 REQUIRED)
+#find_package(Boost 1.55 REQUIRED)
 
 if (SFML_FOUND)
     message(STATUS ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
