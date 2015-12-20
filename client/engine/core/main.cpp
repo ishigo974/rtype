@@ -19,7 +19,6 @@
 #include "AudioEffectPlayer.hpp"
 #include "Music.hpp"
 #include "MusicPlayer.hpp"
-#include "RCSVParser.hpp"
 #include "PlayerObject.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
@@ -462,53 +461,53 @@ void testNetwork()
     }
 }
 
-bool    RCSVParserTest()
-{
-    RCSVParser p1("../res/ut_map_1.rcsv");
-    RCSVParser p2("../res/ut_map_2.rcsv");
-    RCSVParser p3("../res/ut_map_3.rcsv");
-    RCSVParser p4("../res/ut_map_4.rcsv");
-    RCSVParser p5("../res/ut_map_5.rcsv");
-    std::multimap<double, Action> map;
-    auto it = map.begin();
-    int i = 0;
-
-    p1.parse(map);
-    assert(map.find(5.0) != map.end());
-    assert(map.begin()->second.toString() == std::string("0 0 0 1300 360"));
-
-    map.clear();
-    p2.parse(map);
-    assert((it = map.find(2.3)) != map.end());
-    assert(it->second.toString() == std::string("0 0 0 1313 270.93"));
-    assert((it = map.find(9.3)) != map.end());
-    assert(it->second.toString() == std::string("0 0 0 23.32 14.32"));
-
-
-    try
-    {
-        map.clear();
-        p3.parse(map);
-    }
-    catch (std::runtime_error const&) {++i;}
-    catch (std::invalid_argument const&) {++i;}
-    try
-    {
-        map.clear();
-        p4.parse(map);
-    }
-    catch (std::runtime_error const&) {++i;}
-    catch (std::invalid_argument const&) {++i;}
-    try
-    {
-        map.clear();
-        p5.parse(map);
-    }
-    catch (std::runtime_error const&) {++i;}
-    catch (std::invalid_argument const&) {++i;}
-
-    return i == 3 ? true : false;
-}
+// bool    RCSVParserTest()
+// {
+//     RCSVParser p1("../res/ut_map_1.rcsv");
+//     RCSVParser p2("../res/ut_map_2.rcsv");
+//     RCSVParser p3("../res/ut_map_3.rcsv");
+//     RCSVParser p4("../res/ut_map_4.rcsv");
+//     RCSVParser p5("../res/ut_map_5.rcsv");
+//     std::multimap<double, Action> map;
+//     auto it = map.begin();
+//     int i = 0;
+//
+//     p1.parse(map);
+//     assert(map.find(5.0) != map.end());
+//     assert(map.begin()->second.toString() == std::string("0 0 0 1300 360"));
+//
+//     map.clear();
+//     p2.parse(map);
+//     assert((it = map.find(2.3)) != map.end());
+//     assert(it->second.toString() == std::string("0 0 0 1313 270.93"));
+//     assert((it = map.find(9.3)) != map.end());
+//     assert(it->second.toString() == std::string("0 0 0 23.32 14.32"));
+//
+//
+//     try
+//     {
+//         map.clear();
+//         p3.parse(map);
+//     }
+//     catch (std::runtime_error const&) {++i;}
+//     catch (std::invalid_argument const&) {++i;}
+//     try
+//     {
+//         map.clear();
+//         p4.parse(map);
+//     }
+//     catch (std::runtime_error const&) {++i;}
+//     catch (std::invalid_argument const&) {++i;}
+//     try
+//     {
+//         map.clear();
+//         p5.parse(map);
+//     }
+//     catch (std::runtime_error const&) {++i;}
+//     catch (std::invalid_argument const&) {++i;}
+//
+//     return i == 3 ? true : false;
+// }
 
 int main()
 {
@@ -524,8 +523,6 @@ int main()
         std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystemTest passed -> OK\e[0m" << std::endl;
-    if (RCSVParserTest())
-        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
     // buttonAndLabelsTest();
     // menuTest();
     backgroundTest();
