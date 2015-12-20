@@ -2,30 +2,29 @@
 #include "GUIManager.hpp"
 
 GUIManager::GUIManager(unsigned int id) :
-    _id(id)
-{}
+        _id(id)
+{ }
 
-GUIManager::~GUIManager() {}
+GUIManager::~GUIManager()
+{ }
 
 void    GUIManager::addGUIElement(std::string const& state, GUIElement *gui)
 {
     std::cout << "Adding an element to : " << state << std::endl;
-    this->_scenes[state];
-    this->_scenes[state].push_back(gui);
+    this->_scenes.insert(std::make_pair(state, gui));
 }
 
 void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
 {
     std::cout << "Drawing : " << state << std::endl;
-    for (auto it = this->_scenes[state].begin();
-        it != this->_scenes[state].end();
-        ++it)
+
+    for (auto e : _scenes)
     {
-        (*it)->draw(win);
+        e.second->draw(win);
     }
 }
 
-void GUIManager::onGUI(cu::Event* e)
+void GUIManager::onGUI()
 {
 
 }
@@ -34,3 +33,38 @@ RTypes::my_uint16_t GUIManager::getMask() const
 {
     return Mask;
 }
+
+GUIManager::GUIManager(GUIManager const& other) : Component(other)
+{
+    _scenes = other._scenes;
+}
+
+GUIManager::GUIManager(GUIManager&& other)
+{
+    swap(other);
+}
+
+void GUIManager::swap(GUIManager& other)
+{
+    using std::swap;
+
+    swap(_id, other._id);
+    swap(_scenes, other._scenes);
+}
+
+GUIManager& GUIManager::operator=(GUIManager other)
+{
+    swap(other);
+
+    return (*this);
+}
+
+namespace std
+{
+    template<>
+    void swap<GUIManager>(GUIManager& a, GUIManager& b)
+    {
+        a.swap(b);
+    }
+}
+

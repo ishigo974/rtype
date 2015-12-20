@@ -8,17 +8,17 @@
 class Button : public GUIElement
 {
 public:
-  Button(gu::Rect<int> const& rect,
-	 std::string const& label,
-	 unsigned int size);
-  virtual ~Button();
+    Button(gu::Rect<float> const& rect,
+           std::string const& label,
+           unsigned int size);
+    virtual ~Button();
 
 public:
-  virtual void	draw(sf::RenderWindow&);
+    virtual void draw(sf::RenderWindow&);
 
 private:
-  sf::RectangleShape	_rect;
-  Label			_label;
+    sf::RectangleShape _rect;
+    Label              _label;
 };
 
 #endif // !BUTTON_HPP_

@@ -4,18 +4,23 @@
 # include <SFML/Graphics.hpp>
 # include "Rect.hpp"
 
-class	GUIElement
+class GUIElement
 {
 public:
-  GUIElement(gu::Rect<int> const& rect);
-  virtual ~GUIElement();
+    GUIElement();
+    GUIElement(gu::Rect<float> const& rect);
+    GUIElement(GUIElement const& other);
+    GUIElement(GUIElement&& other);
+    GUIElement& operator=(GUIElement other);
+    virtual ~GUIElement();
 
+    void    swap(GUIElement &other);
 public:
-  virtual void	draw(sf::RenderWindow&) = 0;
-  bool		intersect(int x, int y);
+    virtual void draw(sf::RenderWindow&);
+    bool         intersect(int x, int y);
 
 protected:
-  gu::Rect<int>	_rect;
+    gu::Rect<float> _rect;
 };
 
 #endif // !GUIELEMENT_HPP_

@@ -8,17 +8,17 @@
 class Label : public GUIElement
 {
 public:
-  Label(gu::Rect<int> const& rect, std::string const& str, unsigned int size,
-	std::string const& font = "../res/cs_regular.ttf");
-  virtual ~Label();
+    Label(gu::Rect<float> const& rect, std::string const& str, unsigned int size,
+          std::string const& font = "../res/cs_regular.ttf");
+    virtual ~Label();
 
 public:
-  virtual void	draw(sf::RenderWindow&);
+    virtual void draw(sf::RenderWindow&);
 
 private:
-  unsigned int	_size;
-  sf::Font	_font;
-  sf::Text	_text;
+    unsigned int _size;
+    sf::Font     _font;
+    sf::Text     _text;
 };
 
 #endif // !LABEL_HPP_

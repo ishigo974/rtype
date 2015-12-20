@@ -13,17 +13,22 @@ public:
 
 public:
     GUIManager(unsigned int id);
+    GUIManager(GUIManager const& other);
+    GUIManager(GUIManager&& other);
+    GUIManager& operator=(GUIManager other);
     virtual ~GUIManager();
 
+    void swap(GUIManager& other);
+
 public:
-    void addGUIElement(std::string const& state, GUIElement *gui);
-    void draw(sf::RenderWindow&, std::string const& state);
+    void                        addGUIElement(std::string const& state, GUIElement *gui);
+    void                        draw(sf::RenderWindow&, std::string const& state);
     virtual RTypes::my_uint16_t getMask() const;
-	void onGUI(cu::Event *e);
+    void                        onGUI();
 
 private:
-    unsigned int	_id;
-    std::unordered_map<std::string, std::vector<GUIElement *> > _scenes;
+    unsigned int                             _id;
+    std::multimap<std::string, GUIElement *> _scenes;
 };
 
 #endif // !GUIMANAGER_HPP_

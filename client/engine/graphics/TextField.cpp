@@ -1,139 +1,185 @@
 #include "TextField.hpp"
 
 TextField::TextField(std::string const& str, unsigned int limit) :
-	GUIElement(gu::Rect<int>(0,0,0,0)), _x(0), _y(0), _width(0), _height(0), _padding(0), _strLimit(limit)
+        GUIElement(gu::Rect<float>(0, 0, 0, 0)), _padding(0), _strLimit(limit)
 {
-	_font.loadFromFile("../res/cs_regular.ttf");
-	setSize();
-	setPosition();
-	_rect.setFillColor(sf::Color::White);
-	_text.setFont(_font);
-	_text.setColor(sf::Color::Black);
-	setText(str);
-	//_text.setString(str);
+    _font.loadFromFile("../res/cs_regular.ttf");
+    setSize();
+    setPosition();
+    _rectShape.setFillColor(sf::Color::White);
+    _text.setFont(_font);
+    _text.setColor(sf::Color::Black);
+    setText(str);
+    //_text.setString(str);
 }
 
-TextField::TextField(gu::Rect<int> const& rect, std::string const& str, unsigned int limit) :
-	GUIElement(rect), _x(rect.x), _y(rect.y), _width(rect.w), _height(rect.h), _padding(0), _strLimit(limit)
+TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsigned int limit) :
+        GUIElement(rect), _padding(0), _strLimit(limit)
 {
-	_font.loadFromFile("../res/cs_regular.ttf");
-	setSize();
-	setPosition();
-	_rect.setFillColor(sf::Color::White);
-	_text.setFont(_font);
-	_text.setColor(sf::Color::Black);
-	setText(str);
-	//_text.setString(str);
+    _font.loadFromFile("../res/cs_regular.ttf");
+    setSize();
+    setPosition();
+    _rectShape.setFillColor(sf::Color::White);
+    _text.setFont(_font);
+    _text.setColor(sf::Color::Black);
+    setText(str);
+    //_text.setString(str);
 }
 
 TextField::~TextField()
 { }
 
-void TextField::draw(sf::RenderWindow &window)
+void TextField::draw(sf::RenderWindow& window)
 {
-	window.draw(_rect);
-	window.draw(_text);
+    window.draw(_rectShape);
+    window.draw(_text);
 }
 
 void TextField::setWidth(float width)
 {
-	_width = width;
-	setSize();
+    _rect.w = width;
+    setSize();
 }
 
 float TextField::getWidth() const
 {
-	return _width;
+    return _rect.w;
 }
 
 void TextField::setHeight(float height)
 {
-	_height = height;
-	setSize();
+    _rect.h = height;
+    setSize();
 }
 
 float TextField::getHeight() const
 {
-	return _height;
+    return _rect.h;
 }
 
-bool TextField::setFont(const std::string &path)
+bool TextField::setFont(const std::string& path)
 {
-	if (!_font.loadFromFile(path))
-	{
-		std::cerr << "Error loading font: " << path << std::endl;
-		return false;
-	}
-	return true;
+    if (!_font.loadFromFile(path))
+    {
+        std::cerr << "Error loading font: " << path << std::endl;
+        return false;
+    }
+    return true;
 }
 
 void TextField::setPosition(float posX, float posY)
 {
-	_x = posX;
-	_y = posY;
-	setPosition();
+    _rect.x = posX;
+    _rect.y = posY;
+    setPosition();
 }
 
 std::pair<float, float> TextField::getPosition() const
 {
-	return std::pair<float, float>(_x, _y);
+    return std::pair<float, float>(_rect.x, _rect.y);
 }
 
-void TextField::setText(const std::string &str)
+void TextField::setText(const std::string& str)
 {
-	std::cout << "pre text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-	std::cout << "pre rect: " << _rect.getLocalBounds().width << std::endl;
+    std::cout << "pre text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
+    std::cout << "pre rect: " << _rectShape.getLocalBounds().width << std::endl;
 
-	std::string tmp = _str;
-	_str = str;
-	_text.setString(_str);
-	if ((_strLimit != 0 && _text.getString().getSize() > _strLimit) ||
-		(_text.getLocalBounds().width + (2 * _padding) >= _rect.getLocalBounds().width))
-	{
-		std::cout << "during text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-		std::cout << "during rect: " << _rect.getLocalBounds().width << std::endl;
-		_str = tmp;
-		_text.setString(tmp);
-	}
-	std::cout << "post text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-	std::cout << "post rect: " << _rect.getLocalBounds().width << std::endl << std::endl;
+    std::string tmp = _str;
+    _str = str;
+    _text.setString(_str);
+    if ((_strLimit != 0 && _text.getString().getSize() > _strLimit) ||
+        (_text.getLocalBounds().width + (2 * _padding) >= _rectShape.getLocalBounds().width))
+    {
+        std::cout << "during text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
+        std::cout << "during rect: " << _rectShape.getLocalBounds().width << std::endl;
+        _str = tmp;
+        _text.setString(tmp);
+    }
+    std::cout << "post text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
+    std::cout << "post rect: " << _rectShape.getLocalBounds().width << std::endl << std::endl;
 }
 
 std::string TextField::getText() const
 {
-	return _str;
+    return _str;
 }
 
-void TextField::setBackColor(const sf::Color &color)
+void TextField::setBackColor(const sf::Color& color)
 {
-	_rect.setFillColor(color);
+    _rectShape.setFillColor(color);
 }
 
-void TextField::setForeColor(const sf::Color &color)
+void TextField::setForeColor(const sf::Color& color)
 {
-	_text.setColor(color);
+    _text.setColor(color);
 }
 
 void TextField::setPadding(unsigned int padding)
 {
-	_padding = padding;
-	setSize();
-	setPosition();
+    _padding = padding;
+    setSize();
+    setPosition();
 }
 
 unsigned int TextField::getPadding() const
 {
-	return _padding;
+    return _padding;
 }
 
-void	TextField::setSize()
+void    TextField::setSize()
 {
-	_rect.setSize(sf::Vector2f(_width + (2 * _padding), _height + (2 * _padding)));
-	_text.setCharacterSize((int)_height);
+    _rectShape.setSize(sf::Vector2f(_rect.w + (2 * _padding), _rect.h + (2 * _padding)));
+    _text.setCharacterSize((unsigned int) _rect.h);
 }
 
-void	TextField::setPosition()
+void    TextField::setPosition()
 {
-	_rect.setPosition(_x, _y);
-	_text.setPosition(_x + _padding, _y + _padding);
+    _rectShape.setPosition(_rect.x, _rect.y);
+    _text.setPosition(_rect.x + _padding, _rect.y + _padding);
+}
+
+TextField::TextField()
+{ }
+
+TextField::TextField(TextField const& other) : GUIElement(other._rect)
+{
+    _padding   = other._padding;
+    _strLimit  = other._strLimit;
+    _text      = other._text;
+    _str       = other._str;
+    _rectShape = other._rectShape;
+    _font      = other._font;
+}
+
+TextField::TextField(TextField&& other) : TextField(other)
+{
+    swap(other);
+}
+
+TextField& TextField::operator=(TextField other)
+{
+    swap(other);
+
+    return (*this);
+}
+
+void TextField::swap(TextField& other)
+{
+    using std::swap;
+
+    swap(_padding, other._padding);
+    swap(_strLimit, other._strLimit);
+    swap(_text, other._text);
+    swap(_str, other._str);
+    swap(_rectShape, other._rectShape);
+    swap(_font, other._font);
+}
+
+namespace std
+{
+    template<>
+    void swap<TextField>(TextField &a, TextField &b)
+    {
+        a.swap(b);
+    }
 }

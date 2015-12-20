@@ -200,8 +200,8 @@
 //    State s1("S1");
 //    State s2("S2");
 //
-//    sm.addState(s1);
-//    sm.addState(s2);
+//    sm.setupStates(s1);
+//    sm.setupStates(s2);
 //
 //    sm.move();
 //
@@ -250,72 +250,66 @@ void menuTest()
     Input         i(r.getWindow());
     EntityManager entityManager;
     cu::Event     e;
-	
+
 //	Menu menu = Menu(entityManager, e);
 
-	//std::vector<TextField*> lRoom;
+    //std::vector<TextField*> lRoom;
 
-	//TextField title(gu::Rect<int>(300, 100, 800, 60), "Le R-Type officiel 2015");
-	//lRoom.push_back(new TextField(gu::Rect<int>(100, 100, 300, 25), "LE ZEAUB 1"));
-	//lRoom.push_back(new TextField(gu::Rect<int>(100, 200, 300, 25), "LE ZEAUB 2"));
-	//lRoom.push_back(new TextField(gu::Rect<int>(100, 300, 300, 25), "LE ZEAUB 3"));
-	//lRoom.push_back(new TextField(gu::Rect<int>(100, 400, 300, 25), "LE ZEAUB 4"));
-	//lRoom.push_back(new TextField(gu::Rect<int>(100, 500, 300, 25), "LE ZEAUB 5"));
-	//TextField refresh(gu::Rect<int>(1000, 600, 200, 25), "REFRESH");
-	//TextField back(gu::Rect<int>(50, 50, 200, 25), "BACK");
+    //TextField title(gu::Rect<int>(300, 100, 800, 60), "Le R-Type officiel 2015");
+    //lRoom.push_back(new TextField(gu::Rect<int>(100, 100, 300, 25), "LE ZEAUB 1"));
+    //lRoom.push_back(new TextField(gu::Rect<int>(100, 200, 300, 25), "LE ZEAUB 2"));
+    //lRoom.push_back(new TextField(gu::Rect<int>(100, 300, 300, 25), "LE ZEAUB 3"));
+    //lRoom.push_back(new TextField(gu::Rect<int>(100, 400, 300, 25), "LE ZEAUB 4"));
+    //lRoom.push_back(new TextField(gu::Rect<int>(100, 500, 300, 25), "LE ZEAUB 5"));
+    //TextField refresh(gu::Rect<int>(1000, 600, 200, 25), "REFRESH");
+    //TextField back(gu::Rect<int>(50, 50, 200, 25), "BACK");
 
-    GameObject *menu = entityManager.createEntity<Menu>("menu", 1, entityManager, e);
-
-    std::stringstream ss;
-    ss << "menu" << rand() % 4 + 1;
-
-    entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
-
- //   State initialState("Aeris");
- //   State mainMenu("MainMenu");
-	//State inRoom("inRoom");
-
- //   initialState.addTransition("MainMenu", [](cu::Event const *e, TextField *title)
- //                              {
- //                                  return e->type == cu::Event::MouseButtonReleased && title->intersect(e->mouse.x, e->mouse.y);
- //                              },
- //                              &e, &title);
-
-	//mainMenu.addTransition("inRoom", [](cu::Event const *e, std::vector<TextField*> &lRoom) {
-	//	if (e->type == cu::Event::MouseButtonReleased)
-	//		for (auto it = lRoom.begin(); it != lRoom.end(); ++it)
-	//			if ((*it)->intersect(e->mouse.x, e->mouse.y))
-	//				return true;
-	//}, &e, lRoom);
-
-	//inRoom.addTransition("MainMenu", [](cu::Event const *e, TextField *back)
-	//{
-	//	return e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y);
-	//}, &e, &back);
- //   entityManager.attachComponent<StateMachine>(menu, initialState);
- //   entityManager.attachComponent<GUIManager>(menu);
-
-    r.init();
     e.type = cu::Event::None;
     e.key  = cu::Event::LAST_ACTION;
 
+    Menu *menu = entityManager.createEntity<Menu>("menu", 1, entityManager, e);
+
+
+    //   State initialState("Aeris");
+    //   State mainMenu("MainMenu");
+    //State inRoom("inRoom");
+
+    //   initialState.addTransition("MainMenu", [](cu::Event const *e, TextField *title)
+    //                              {
+    //                                  return e->type == cu::Event::MouseButtonReleased && title->intersect(e->mouse.x, e->mouse.y);
+    //                              },
+    //                              &e, &title);
+
+    //mainMenu.addTransition("inRoom", [](cu::Event const *e, std::vector<TextField*> &lRoom) {
+    //	if (e->type == cu::Event::MouseButtonReleased)
+    //		for (auto it = lRoom.begin(); it != lRoom.end(); ++it)
+    //			if ((*it)->intersect(e->mouse.x, e->mouse.y))
+    //				return true;
+    //}, &e, lRoom);
+
+    //inRoom.addTransition("MainMenu", [](cu::Event const *e, TextField *back)
+    //{
+    //	return e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y);
+    //}, &e, &back);
+    //   entityManager.attachComponent<StateMachine>(menu, initialState);
+    //   entityManager.attachComponent<GUIManager>(menu);
+
 //    menu->getComponent<ScrollingBackground>()->setEnabled(true);
 //    ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
-    StateMachine        *sm = menu->getComponent<StateMachine>();
-    GUIManager          *gm = menu->getComponent<GUIManager>();
+    GUIManager *gm = menu->getComponent<GUIManager>();
+    r.init();
 
- //   gm->addGUIElement(initialState.getName(), &title);
-	//gm->addGUIElement(mainMenu.getName(), lRoom[0]);
-	//gm->addGUIElement(mainMenu.getName(), lRoom[1]);
-	//gm->addGUIElement(mainMenu.getName(), lRoom[2]);
-	//gm->addGUIElement(mainMenu.getName(), lRoom[3]);
-	//gm->addGUIElement(mainMenu.getName(), lRoom[4]);
-	//gm->addGUIElement(mainMenu.getName(), &refresh);
-	//gm->addGUIElement(inRoom.getName(), &back);
-	//sm->addState(mainMenu);
-	//sm->addState(inRoom);
- //   std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+    //   gm->setupGUIElements(initialState.getName(), &title);
+    //gm->setupGUIElements(mainMenu.getName(), lRoom[0]);
+    //gm->setupGUIElements(mainMenu.getName(), lRoom[1]);
+    //gm->setupGUIElements(mainMenu.getName(), lRoom[2]);
+    //gm->setupGUIElements(mainMenu.getName(), lRoom[3]);
+    //gm->setupGUIElements(mainMenu.getName(), lRoom[4]);
+    //gm->setupGUIElements(mainMenu.getName(), &refresh);
+    //gm->setupGUIElements(inRoom.getName(), &back);
+    //sm->setupStates(mainMenu);
+    //sm->setupStates(inRoom);
+    //   std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -328,60 +322,60 @@ void menuTest()
             }
             if (e.type == cu::Event::KeyPressed)
                 std::cout << "Key pressed : " << e.key << std::endl;
-			if (e.type == cu::Event::KeyReleased)
-				std::cout << "Key released : " << e.key << std::endl;
-			if (e.type == cu::Event::MouseButtonReleased)
-				sm->move();
+            if (e.type == cu::Event::KeyReleased)
+                std::cout << "Key released : " << e.key << std::endl;
+            if (e.type == cu::Event::MouseButtonReleased)
+                menu->move();
         }
 //        bg->update(BigBen::get().getElapsedtime());
         //std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(*menu);
-        gm->draw(r.getWindow(), sm->getCurrent().getName());
+        gm->draw(r.getWindow(), menu->getCurrentStateName());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
 }
 
-void	buttonAndLabelsTest()
+void buttonAndLabelsTest()
 {
-  Renderer r;
-  Input i(r.getWindow());
-  TextField t(gu::Rect<int>(100, 100, 300, 25), "LE ZEAUB DE OUF");
-  t.setBackColor(sf::Color::White);
-  cu::Event     e;
+    Renderer  r;
+    Input     i(r.getWindow());
+    TextField t(gu::Rect<float>(100, 100, 300, 25), "LE ZEAUB DE OUF");
+    t.setBackColor(sf::Color::White);
+    cu::Event e;
 
 
-  r.getWindow().clear();
-  e.key = cu::Event::LAST_ACTION;
-  while (e.key != cu::Event::ESCAPE)
+    r.getWindow().clear();
+    e.key = cu::Event::LAST_ACTION;
+    while (e.key != cu::Event::ESCAPE)
     {
-		while (i.pollEvent(e))
-		{
-			if (e.type == cu::Event::Closed)
-			{
-				std::cout << "Close button pressed" << std::endl;
-				return;
-			}
-			if (e.type == cu::Event::MouseButtonReleased)
-			{
-				std::cout << "Button "
-					<< e.mouse.button
-					<< " released : ["
-					<< e.mouse.x
-					<< ";"
-					<< e.mouse.y
-					<< "]"
-					<< std::endl;
-			}
-			if (t.intersect(e.mouse.x, e.mouse.y))
-			{
-				std::cout << "Click on button" << std::endl;
-			}
-		}
-      t.draw(r.getWindow());
-      r.render();
+        while (i.pollEvent(e))
+        {
+            if (e.type == cu::Event::Closed)
+            {
+                std::cout << "Close button pressed" << std::endl;
+                return;
+            }
+            if (e.type == cu::Event::MouseButtonReleased)
+            {
+                std::cout << "Button "
+                << e.mouse.button
+                << " released : ["
+                << e.mouse.x
+                << ";"
+                << e.mouse.y
+                << "]"
+                << std::endl;
+            }
+            if (t.intersect(e.mouse.x, e.mouse.y))
+            {
+                std::cout << "Click on button" << std::endl;
+            }
+        }
+        t.draw(r.getWindow());
+        r.render();
     }
-  std::cout << "Escape pressed" << std::endl;
+    std::cout << "Escape pressed" << std::endl;
 }
 //
 //void    RCSVParserTest()
@@ -398,7 +392,7 @@ int main()
 {
     // EntityManager entityManager;
     //
-	srand(static_cast<unsigned>(time(nullptr)));
+    srand(static_cast<unsigned>(time(nullptr)));
     // if (gameObjectTest(entityManager))
     //     std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
     // if (timeTest())
@@ -408,9 +402,9 @@ int main()
     // if (commandSystemTest(&entityManager))
     //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
 
-     //buttonAndLabelsTest();
-     menuTest();
-     //backgroundTest();
+    //buttonAndLabelsTest();
+    menuTest();
+    //backgroundTest();
     //RCSVParserTest();
 
     return 0;

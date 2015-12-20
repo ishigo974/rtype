@@ -7,41 +7,47 @@
 # include "State.hpp"
 # include "Event.hpp"
 # include "EntityManager.hpp"
-#include "EntityManager.hpp"
-#include "StateMachine.hpp"
-#include "GUIManager.hpp"
+# include "StateMachine.hpp"
+# include "GUIManager.hpp"
 
 class Menu : public GameObject
 {
 public:
-	Menu();
-	Menu(unsigned int, std::string const&, int, EntityManager &, cu::Event &);
-	Menu(Menu const& other);
-	Menu(Menu&& other);
-	Menu& operator=(Menu other);
+    Menu(unsigned int, std::string const&, int, EntityManager&, cu::Event&);
+    Menu(Menu const& other);
+    Menu(Menu&& other);
+    Menu& operator=(Menu other);
 
-	virtual ~Menu();
+    virtual ~Menu();
 
-	virtual bool operator==(Menu const& other);
-	virtual bool operator!=(Menu const& other);
+    virtual bool operator==(Menu const& other);
+    virtual bool operator!=(Menu const& other);
 
-	virtual std::string toString();
+    virtual std::string toString();
 
-	void swap(Menu& other);
+    void swap(Menu& other);
+
+public:
+    void move();
+    std::string const& getCurrentStateName() const;
 
 private:
-	void addGUIElement();
-	void addState();
+    void setupGUIElements();
+    void setupStates();
 
 private:
-	std::vector<TextField*> rooms;
-	TextField title;
-	TextField refresh;
-	TextField back;
+    std::vector<TextField *> rooms;
+    TextField                title;
+    TextField                refresh;
+    TextField                back;
 
-	State Title;
-	State mainMenu;
-	State inRoom;
+    State _titleState;
+    State mainMenu;
+    State inRoom;
+
+    StateMachine *_sm;
+
+    cu::Event&  _event;
 };
 
 #endif // !MENU_HPP_
