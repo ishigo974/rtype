@@ -146,7 +146,7 @@ void		Player::update(double elapsedtime)
 {
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
-  _time += elapsedtime;
+  _shotTime += elapsedtime;
   // std::cout << _time << std::endl;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
@@ -168,7 +168,7 @@ void		Player::update(double elapsedtime)
       	  Bullet *b = bullet->getComponent<Bullet>();
       	  b->setX(transform.getPosition().X());
       	  b->setY(transform.getPosition().Y());
-	  _time = 0;
+	  _shotTime = 0;
 	}
       else
 	this->move(transform);
