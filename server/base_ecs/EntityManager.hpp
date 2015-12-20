@@ -17,7 +17,7 @@ namespace ECS
         typedef std::unique_ptr<Entity>               UniqueEntityPtr;
         typedef std::unique_ptr<IComponent>           UniqueCompPtr;
         typedef std::unordered_map<unsigned int,
-                                    UniqueEntityPtr>   EntityMap;
+                                    UniqueEntityPtr>  EntityMap;
 
     protected:
         EntityManager();

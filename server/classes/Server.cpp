@@ -25,6 +25,7 @@
 #include "SystemManager.hpp"
 #include "LobbySystem.hpp"
 #include "InGameSystem.hpp"
+#include "ShotFiringSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
@@ -34,6 +35,7 @@
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "PositionComponent.hpp"
+#include "ShotComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"
@@ -141,13 +143,18 @@ namespace RType
     {
         _monitor.registerSocket(&_acceptor);
         _monitor.registerRaw(stdinFileNo);
+
         _em.registerComponent(std::make_unique<Component::NetworkTCP>());
         _em.registerComponent(std::make_unique<Component::NetworkUDP>());
         _em.registerComponent(std::make_unique<Component::Room>());
         _em.registerComponent(std::make_unique<Component::Player>());
         _em.registerComponent(std::make_unique<Component::Position>());
+        _em.registerComponent(std::make_unique<Component::Shot>());
+
         _sm.registerSystem(std::make_unique<System::Lobby>());
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
+        _sm.registerSystem(std::make_unique<System::ShotFiring>());
+
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
     }
