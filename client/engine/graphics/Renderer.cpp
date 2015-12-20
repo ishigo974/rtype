@@ -9,9 +9,10 @@
 unsigned int const Renderer::width = 1280;
 unsigned int const Renderer::height = 720;
 
-Renderer::Renderer() :
+Renderer::Renderer(EntityManager *em) :
         _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type",
-             sf::Style::Titlebar | sf::Style::Close)
+             sf::Style::Titlebar | sf::Style::Close),
+        _em(em)
 {
     _win.setFramerateLimit(60);
 }
@@ -39,6 +40,9 @@ void    Renderer::init()
 
 void Renderer::render()
 {
+    auto obj = this->_em->getByMask(128);
+    for (auto i : obj)
+        this->draw(static_cast<GameObject *>(i));
     this->_win.display();
 }
 
@@ -47,10 +51,10 @@ sf::RenderWindow& Renderer::getWindow()
     return _win;
 }
 
-void Renderer::draw(const GameObject& object)
+void Renderer::draw(const GameObject* object)
 {
-    SpriteRenderer sr = object.renderer();
-    Transform      tr = object.transform();
+    SpriteRenderer sr = object->renderer();
+    Transform      tr = object->transform();
     sf::Sprite     sprite;
 
     sprite.setTexture(*this->_res[sr.getPath()]);

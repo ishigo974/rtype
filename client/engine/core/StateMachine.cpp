@@ -19,7 +19,7 @@ void StateMachine::move()
 
     if (_current.canMove(tmp))
     {
-        _current = tmp;
+        _current = _states[tmp];
     }
 }
 
