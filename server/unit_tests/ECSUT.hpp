@@ -17,17 +17,19 @@ namespace ECS
 
     private:
         ECSUT(ECSUT const& other) = delete;
-        ECSUT&                operator=(ECSUT const& other) = delete;
+        ECSUT&                  operator=(ECSUT const& other) = delete;
 
     protected:
-        static void           entityLifeRecyclingSimple();
-        static void           entityLifeRecyclingWithComponent();
-        static void           systemProcess();
-        static void           systemManager();
+        static void             entityLifeRecyclingSimple();
+        static void             entityLifeRecyclingWithComponent();
+        static void             dynamicComponentAddDel();
+        static void             retrieveEntityByComponent();
+        static void             systemProcess();
+        static void             systemManager();
 
     public:
-        virtual void          registerTests();
-        virtual std::string   getName() const;
+        virtual void            registerTests();
+        virtual std::string     getName() const;
     };
 
     namespace Sample

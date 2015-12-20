@@ -51,6 +51,7 @@ namespace RType
                 shot.addComponent(
                     std::make_unique<Component::Shot>(ship->getShotType(), &e));
                 *shotPos = *pos;
+                // reset lastTime
             }
         }
 

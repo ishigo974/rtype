@@ -2,6 +2,7 @@
 #include <sstream>
 #include "Entity.hpp"
 #include "IBehaviour.hpp"
+#include "EntityManager.hpp"
 
 namespace ECS
 {
@@ -18,13 +19,16 @@ namespace ECS
 
     Entity::~Entity()
     {
+        for (auto& entry: _components)
+            ECS::EntityManager::getInstance()
+                .removeCmpntEntityLink(entry.second.get());
     }
 
     /*
     ** Copy constructor and assign operator
     */
     Entity::Entity(Entity const& other) :
-    _id(other._id), _mask(other._mask)
+        _id(other._id), _mask(other._mask)
     {
         for (auto&& i : other._components)
             _components[i.first] = std::unique_ptr<IComponent>(i.second->clone());
@@ -56,16 +60,20 @@ namespace ECS
     {
         _mask |= component->getMask();
         _components[component->getMask()] = std::move(component);
+        ECS::EntityManager::getInstance()
+            .addCmpntEntityLink(component.get(), *this);
     }
 
     bool            Entity::removeComponent(ComponentMask mask)
     {
-        if (_components.erase(mask) > 0)
-        {
-            _mask &= mask;
-            return true;
-        }
-        return false;
+        auto it = _components.find(mask);
+
+        if (it == _components.end())
+            return false;
+        _mask &= ~mask; // TODO
+        ECS::EntityManager::getInstance()
+            .removeCmpntEntityLink(it->second.get());
+        return true;
     }
 
     void              Entity::update()

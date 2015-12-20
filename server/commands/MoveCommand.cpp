@@ -103,16 +103,16 @@ namespace RType
                 case NONE:
                     break ;
                 case UP:
-                    pos->setY(pos->getY() < speed ? 0 : pos->getY() - speed);
+                    pos->setY(pos->getY() < static_cast<unsigned int>(speed) ? 0 : pos->getY() - static_cast<unsigned int>(speed));
                     break ;
                 case DOWN:
-                    pos->setY(pos->getY() + speed > 720 ? 720 : pos->getY() + speed); // TODO
+                    pos->setY(pos->getY() + static_cast<unsigned int>(speed) > 720 ? 720 : pos->getY() + static_cast<unsigned int>(speed)); // TODO
                     break ;
                 case LEFT:
-                    pos->setX(pos->getX() < speed ? 0 : pos->getX() - speed);
+                    pos->setX(pos->getX() < static_cast<unsigned int>(speed) ? 0 : pos->getX() - static_cast<unsigned int>(speed));
                     break ;
                 case RIGHT:
-                    pos->setX(pos->getX() + speed > 1280 ? 1280 : pos->getX() + speed); // TODO
+                    pos->setX(pos->getX() + static_cast<unsigned int>(speed) > 1280 ? 1280 : pos->getX() + static_cast<unsigned int>(speed)); // TODO
                     break ;
             }
             event.setCode(dirCodeMatches.at(_direction));
