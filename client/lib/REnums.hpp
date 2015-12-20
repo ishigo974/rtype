@@ -34,4 +34,9 @@ enum MovementType : RTypes::my_uint16_t
     UpAndDown = 3
 };
 
+enum ActionType : RTypes::my_uint16_t
+{
+    Spawn = 0
+};
+
 #endif //RTYPE_RENUMS_HPP

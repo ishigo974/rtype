@@ -6,9 +6,10 @@
 
 struct Action
 {
-    Action(MobType mt, MovementType mvt, cu::Position const& p) :
-        mob(mt), movement(mvt), pos(p) {}
+    Action(ActionType act, MobType mt, MovementType mvt, cu::Position const& p) :
+        action(act), mob(mt), movement(mvt), pos(p) {}
 
+    ActionType      action;
     MobType         mob;
     MovementType    movement;
     cu::Position    pos;
@@ -18,6 +19,7 @@ struct Action
         std::stringstream ss;
 
         ss << mob
+           << " " << action
            << " " << movement
            << " " << pos.X()
            << " " << pos.Y();

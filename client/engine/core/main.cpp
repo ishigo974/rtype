@@ -17,7 +17,7 @@
 #include "Button.hpp"
 #include "Bullet.hpp"
 #include "GUIManager.hpp"
-#include "ZobPool.hpp"
+// #include "ObjectPool.hpp"
 #include "RCSVParser.hpp"
 
 bool gameObjectTest(EntityManager& entityManager)
@@ -353,30 +353,45 @@ void	buttonAndLabelsTest()
   std::cout << "Escape pressed" << std::endl;
 }
 
-void    RCSVParserTest()
+bool    RCSVParserTest()
 {
-    RCSVParser p("../res/map1.rcsv");
+    RCSVParser p("../res/ut_map_1.rcsv");
+    RCSVParser p2("../res/ut_map_2.rcsv");
     std::multimap<double, Action> map;
 
     p.parse(map);
-    for (auto m : map)
-        std::cout << m.first << " => " << m.second.toString() << std::endl;
+    assert(map.find(5.0) != map.end());
+    assert(map.begin()->second.toString() == std::string("0 0 0 1300 360"));
+
+    map.clear();
+    p2.parse(map);
+    auto it = map.begin();
+    assert((it = map.find(2.3)) != map.end());
+    assert(it->second.toString() == std::string("0 0 0 1313 270.93"));
+    assert((it = map.find(9.3)) != map.end());
+    assert(it->second.toString() == std::string("0 0 0 23.32 14.32"));
+
+    return true;
+    // std::cout << it->second.toString() << std::endl;
+    // for (auto m : map)
+    //     std::cout << m.first << " => " << m.second.toString() << std::endl;
 }
 
 int main()
 {
-    // EntityManager entityManager;
-    //
-    // srand(static_cast<unsigned>(time(nullptr)));
-    // if (gameObjectTest(entityManager))
-    //     std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
-    // if (timeTest())
-    //     std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
-    // if (stateMachineTest())
-    //     std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-    // if (commandSystemTest(&entityManager))
-    //   std::cout << "\e[32mCommandSystem passed -> OK\e[0m" << std::endl;
+    EntityManager entityManager;
 
+    srand(static_cast<unsigned>(time(nullptr)));
+    if (gameObjectTest(entityManager))
+        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+    if (timeTest())
+        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+    if (stateMachineTest())
+        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+    // if (commandSystemTest(&entityManager))
+    //   std::cout << "\e[32mCommandSystemTest passed -> OK\e[0m" << std::endl;
+    if (RCSVParserTest())
+        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
     // buttonAndLabelsTest();
     // menuTest();
     // backgroundTest();
