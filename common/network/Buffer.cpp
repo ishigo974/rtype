@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <stdexcept>
 #include <sstream>
 #include "Buffer.hpp"
 

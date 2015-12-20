@@ -37,14 +37,15 @@ public:
 
   void	setX(float x);
   void	setY(float y);
-  float	getX();
-  float	getY();
+  float	getX() const;
+  float	getY() const;
   void	setDirection(Bullet::Direction d);
   std::string	toString() const;
   void	create();
   void	deleteObj();
   bool	getAvailable() const;
   void	setAvailable(bool a);
+  void	setTransform(Transform * transform);
 
   static const RTypes::my_uint16_t Mask = ComponentMask::BulletMask;
   virtual RTypes::my_uint16_t	getMask() const;
@@ -53,7 +54,7 @@ protected:
     int _hp;
     int _damage;
   Bullet::Direction	_direction;
-  // Transform		*_transform;
+  Transform		*_transform;
   bool			_available;
 };
 

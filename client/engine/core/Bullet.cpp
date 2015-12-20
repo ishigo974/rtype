@@ -81,6 +81,11 @@ RTypes::my_uint16_t     Bullet::getMask() const
   return Mask;
 }
 
+void	Bullet::setTransform(Transform * transform)
+{
+  _transform = transform;
+}
+
 int	Bullet::getHp() const
 {
   return _hp;
@@ -94,7 +99,6 @@ int	Bullet::getDamage() const
 std::string Bullet::toString() const
 {
     std::stringstream ss;
-    Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
     ss << "Bullet {"
        << "\n\thp: " << _hp
@@ -102,38 +106,30 @@ std::string Bullet::toString() const
        << "\n\tdirection: " << _direction
        << "\n\tavailable: " << _available
        << "\n\tenabled: " << _enabled
-       << "\n\t" << transform.toString()
+       << "\n\t" << _transform->toString()
        << "\n}" << std::endl;
 
     return (ss.str());
 }
 
-float		Bullet::getX()
+float		Bullet::getX() const
 {
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
-  return _transform.getPosition().X();
+  return _transform->getPosition().X();
 }
 
-float		Bullet::getY()
+float		Bullet::getY() const
 {
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
-  return _transform.getPosition().Y();
+  return _transform->getPosition().Y();
 }
 
 void		Bullet::setX(float x)
 {
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
-  _transform.getPosition().setX(x);
+  _transform->getPosition().setX(x);
 }
 
 void		Bullet::setY(float y)
 {
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
-  _transform.getPosition().setY(y);
+  _transform->getPosition().setY(y);
 }
 
 void	Bullet::setAvailable(bool a)
@@ -154,18 +150,14 @@ void		Bullet::setDirection(Bullet::Direction d)
 void		Bullet::move()
 {
   float		speed = 10.0f;
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
   if (!_enabled)
     return ;
-  _transform.getPosition().setX((_transform.getPosition().X() + _direction * speed));
+  _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
 }
 
 void		Bullet::update(double)
 {
-  Transform	&_transform = static_cast<GameObject *>(parent())->transform();
-
-  if (_transform.getPosition().X() > Renderer::width)
+  if (_transform->getPosition().X() > Renderer::width)
     _available = true;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;

@@ -94,4 +94,5 @@ void	BulletObject::init()
   b->setDirection(Bullet::Direction::RIGHT);
   b->setEnabled(true);
   b->setAvailable(false);
+  b->setTransform(this->getComponent<Transform>());
 }

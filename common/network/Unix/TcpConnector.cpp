@@ -5,7 +5,8 @@
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
-#include "TcpConnector.hpp"
+# include <stdexcept>
+# include "TcpConnector.hpp"
 
 
 TcpConnector::TcpConnector(std::string const& addr, short int port)
