@@ -85,15 +85,15 @@ void backgroundTest()
     objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
     objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
     objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
-    // objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
 
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
@@ -130,28 +130,12 @@ void backgroundTest()
 	++j;
       }
 
-    // Transform *t = p->getComponent<Transform>();
-    // t->getPosition().setX(100);
-
-    // t->getPosition().setY(300);
-    // entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-    // entityManager.attachComponent<Player>(p, "Player", 100);
-
-    // entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-    // entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
-    // entityManager.addChild(p, bulletobj);
-    // Transform *tbullet = bulletobj->getComponent<Transform>();
-    // tbullet->getPosition().setX(500);
-
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
     Player *player = p->getComponent<Player>();
-
-    // bulletobj->getComponent<Bullet>()->setEnabled(true);
-    // Bullet *bullet = bulletobj->getComponent<Bullet>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -171,12 +155,6 @@ void backgroundTest()
 	  b->getComponent<Bullet>()->update(BigBen::get().getElapsedtime());
         for (auto mob : mobs)
 	  mob->update(BigBen::get().getElapsedtime());
-        //bullet->update(BigBen::get().getElapsedtime());
-    //     r.draw(a);
-	// for (auto obj : objs)
-	//   r.draw(obj);
-    //     r.draw(p);
-    //     r.draw(bulletobj);
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -402,8 +380,6 @@ int main()
         std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
     if (stateMachineTest())
         std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-    // if (commandSystemTest(&entityManager))
-    //   std::cout << "\e[32mCommandSystemTest passed -> OK\e[0m" << std::endl;
     if (RCSVParserTest())
         std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
     // buttonAndLabelsTest();

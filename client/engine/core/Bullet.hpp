@@ -37,7 +37,7 @@ public:
 
   void	setX(float x);
   void	setY(float y);
-  float	getX() const;
+  float	getX();
   float	getY();
   void	setDirection(Bullet::Direction d);
   std::string	toString();

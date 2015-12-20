@@ -108,7 +108,7 @@ std::string Bullet::toString()
     return (ss.str());
 }
 
-float		Bullet::getX() const
+float		Bullet::getX()
 {
   Transform	&_transform = static_cast<GameObject *>(parent())->transform();
 
