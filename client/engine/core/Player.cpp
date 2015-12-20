@@ -3,14 +3,14 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
-// #include "ObjectPool.hpp"
+#include "ObjectPool.hpp"
 
 Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, int hp)
-  : Behaviour(_id, _name), _hp(hp)
+Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp)
+  : Behaviour(_id, _name), _hp(hp), _entityManager(manager)
 {
 }
 
@@ -19,6 +19,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _hp = other._hp;
     _action = other._action;
     _multiple = other._multiple;
+    _entityManager = other._entityManager;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -55,6 +56,7 @@ void Player::swap(Player& other)
     swap(_hp, other._hp);
     swap(_action, other._action);
     swap(_multiple, other._multiple);
+    swap(_entityManager, other._entityManager);
 }
 
 namespace std
@@ -129,27 +131,42 @@ void		Player::move(Transform & transform)
     }
 }
 
-void		Player::update(double)
+void		Player::update(double elapsedtime)
 {
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
+  for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
+    {
+      if ((*it)->getAvailable())
+	{
+	  _bullets.deleteObject(*it);
+	  (*it)->setAvailable(true);
+	  (*it)->setEnabled(false);
+	  _activeBullets.erase(it);
+	  break;
+	}
+    }
+  for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
+    (*it)->update(elapsedtime);
   while (_action.size() > 0)
     {
-      if (_action.front() == ACommand::SHOOT)
+      if (_action.front() == ACommand::SHOOT && _activeBullets.size() < 30)
 	{
-	  std::vector<Object *> bullets = EntityManager::getChildrenOf(static_cast<GameObject *>(parent()));
-	  for (auto bullet : bullets)
-	    {
-	      Bullet *b = static_cast<GameObject *>(bullet)->getComponent<Bullet>();
-	      b->setX(transform.getPosition().X());
-	      b->setY(transform.getPosition().Y());
-	      b->setDirection(Bullet::Direction::RIGHT);
-	    }
+	  Bullet *bullet = _bullets.create();
+	  _activeBullets.push_back(bullet);
+	  _entityManager->attachComponent<SpriteRenderer>(static_cast<GameObject *>(this->parent()), "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
+	  bullet->setDirection(Bullet::RIGHT);
+	  bullet->setEnabled(true);
+	  bullet->setAvailable(false);
+	  bullet->setX(transform.getPosition().X());
+	  bullet->setY(transform.getPosition().Y());
 	}
       else
 	this->move(transform);
       _action.pop();
     }
+  std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
+  std::cout << "INACTIVE BULLETS => " << _bullets._objects.size() << std::endl;
 }

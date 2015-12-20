@@ -4,12 +4,15 @@
 # include <queue>
 # include "Behaviour.hpp"
 # include "ACommand.hpp"
+# include "ObjectPool.hpp"
+# include "Bullet.hpp"
+# include "EntityManager.hpp"
 
 class	Player : public Behaviour
 {
 public:
   Player();
-  Player(unsigned int _id, std::string const& _name, int hp = 100);
+  Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 100);
   virtual ~Player();
 
   Player(Player const& other);
@@ -36,6 +39,9 @@ protected:
   int				_hp;
   std::queue<ACommand::Action>	_action;
   bool				_multiple = false;
+  ObjectPool<Bullet>		_bullets;
+  std::vector<Bullet *>		_activeBullets;
+  EntityManager			*_entityManager;
 };
 
 #endif /* !PLAYER_HPP_ */
