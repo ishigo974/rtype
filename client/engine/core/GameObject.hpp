@@ -28,15 +28,17 @@ public:
     virtual Transform     & transform() const;
     virtual SpriteRenderer& renderer() const;
 
-    virtual std::string toString();
+    void swap(GameObject& other);
 
-    int  getLayer() const;
-    void setLayer(unsigned int _layer);
-
+public:
     virtual bool findMask(RTypes::my_uint16_t mask);
+    void         addComponent(Component *const newComp);
 
-    void addComponent(Component *const newComp);
+    virtual std::string toString();
+    int                 getLayer() const;
+    void                setLayer(unsigned int _layer);
 
+public:
     template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
     T *getComponent() const
     {
@@ -48,7 +50,24 @@ public:
         return ((selected == _components.end()) ? nullptr : static_cast<T *>(*selected));
     };
 
-    void swap(GameObject& other);
+    template<class ...Args>
+    void broadcastMessage(Args... args)
+    {
+        for (auto& e : _components)
+        {
+            e->handleMessage(args...);
+        }
+    }
+
+    template<class ...Args>
+    void sendMessage(Args... args)
+    {
+        for (auto& e : _components)
+        {
+            if (e->handleMessage(args...))
+                return;
+        }
+    }
 
 protected:
     int                      _layer;

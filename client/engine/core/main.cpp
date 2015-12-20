@@ -72,13 +72,13 @@ void backgroundTest()
     CommandSystem     cmds(&entityManager, &i);
     ss << "bg" << rand() % 4 + 1;
 
-    GameObject *p   = entityManager.createEntity<GameObject>("Player", 3);
-    GameObject *bulletobj   = entityManager.createEntity<GameObject>("Bulletobj", 4);
+    GameObject *p         = entityManager.createEntity<GameObject>("Player", 3);
+    GameObject *bulletobj = entityManager.createEntity<GameObject>("Bulletobj", 4);
     // ObjectPool<Bullet> *bulletpool   = entityManager.createEntity<ObjectPool<Bullet> >("Bulletpool");
     // (void)bulletpool;
 
-    std::vector<GameObject *>	objs;
-    std::vector<Mob *>	mobs;
+    std::vector<GameObject *> objs;
+    std::vector<Mob *>        mobs;
     objs.push_back(entityManager.createEntity<GameObject>("Mob", 2));
     objs.push_back(entityManager.createEntity<GameObject>("Mob2", 5));
     objs.push_back(entityManager.createEntity<GameObject>("Mob3", 6));
@@ -97,35 +97,35 @@ void backgroundTest()
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
     entityManager.attachComponent<ScrollingBackground>(a, "lal", 60);
 
-    int j = 0;
+    int       j = 0;
     for (auto obj : objs)
-      {
-	entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
-	entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
+    {
+        entityManager.attachComponent<SpriteRenderer>(obj, "Mob", "mob", gu::Rect<int>(1, 4, 32, 21));
+        entityManager.attachComponent<Mob>(obj, "Mob", 1, 2, j % 4);
         Transform *t = obj->getComponent<Transform>();
-	t->getPosition().setX(Renderer::width - 32);
-	switch (j)
-	  {
-	  case 0:
-	    t->getPosition().setX(rand() % (Renderer::width - 32));
-	    t->getPosition().setY(rand() % (Renderer::height - 21));
-	    break;
-	  case 1:
-	    t->getPosition().setY(rand() % (Renderer::height - 21));
-	    break;
-	  case 2:
-	    t->getPosition().setY(rand() % (Renderer::height - 21));
-	    break;
-	  case 3:
-	    t->getPosition().setY(rand() % (Renderer::height - 21));
-	    break;
-	  default:
-	    break;
-	  }
-	obj->getComponent<Mob>()->setEnabled(true);
-	mobs.push_back(obj->getComponent<Mob>());
-	++j;
-      }
+        t->getPosition().setX(Renderer::width - 32);
+        switch (j)
+        {
+            case 0:
+                t->getPosition().setX(rand() % (Renderer::width - 32));
+                t->getPosition().setY(rand() % (Renderer::height - 21));
+                break;
+            case 1:
+                t->getPosition().setY(rand() % (Renderer::height - 21));
+                break;
+            case 2:
+                t->getPosition().setY(rand() % (Renderer::height - 21));
+                break;
+            case 3:
+                t->getPosition().setY(rand() % (Renderer::height - 21));
+                break;
+            default:
+                break;
+        }
+        obj->getComponent<Mob>()->setEnabled(true);
+        mobs.push_back(obj->getComponent<Mob>());
+        ++j;
+    }
 
     Transform *t = p->getComponent<Transform>();
     t->getPosition().setX(100);
@@ -163,13 +163,13 @@ void backgroundTest()
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-	for (auto mob : mobs)
-	  mob->update(BigBen::get().getElapsedtime());
+        for (auto mob : mobs)
+            mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
         bullet->update(BigBen::get().getElapsedtime());
         r.draw(*a);
-	for (auto obj : objs)
-	  r.draw(*obj);
+        for (auto obj : objs)
+            r.draw(*obj);
         r.draw(*p);
         r.draw(*bulletobj);
         r.render();
@@ -247,7 +247,7 @@ void menuTest()
     EntityManager entityManager;
     cu::Event     e;
 
-    Label l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
+    Label  l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
     Button b(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
 
     GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
@@ -310,45 +310,45 @@ void menuTest()
     std::cout << "Escape pressed" << std::endl;
 }
 
-void	buttonAndLabelsTest()
+void buttonAndLabelsTest()
 {
-  Renderer r;
-  Input i(r.getWindow());
-  Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
-  cu::Event     e;
+    Renderer  r;
+    Input     i(r.getWindow());
+    Button    l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+    cu::Event e;
 
 
-  r.getWindow().clear();
-  e.key = cu::Event::LAST_ACTION;
-  while (e.key != cu::Event::ESCAPE)
+    r.getWindow().clear();
+    e.key = cu::Event::LAST_ACTION;
+    while (e.key != cu::Event::ESCAPE)
     {
-      while (i.pollEvent(e))
+        while (i.pollEvent(e))
         {
-	  if (e.type == cu::Event::Closed)
+            if (e.type == cu::Event::Closed)
             {
-	      std::cout << "Close button pressed" << std::endl;
-	      return;
+                std::cout << "Close button pressed" << std::endl;
+                return;
             }
-	  if (e.type == cu::Event::MouseButtonReleased)
-	    {
-	      std::cout << "Button "
-			<< e.mouse.button
-			<< " released : ["
-			<< e.mouse.x
-			<< ";"
-			<< e.mouse.y
-			<< "]"
-			<< std::endl;
-	    }
-	  if (l.intersect(e.mouse.x, e.mouse.y))
-	    {
-	      std::cout << "Click on button" << std::endl;
-	    }
+            if (e.type == cu::Event::MouseButtonReleased)
+            {
+                std::cout << "Button "
+                << e.mouse.button
+                << " released : ["
+                << e.mouse.x
+                << ";"
+                << e.mouse.y
+                << "]"
+                << std::endl;
+            }
+            if (l.intersect(e.mouse.x, e.mouse.y))
+            {
+                std::cout << "Click on button" << std::endl;
+            }
         }
-      l.draw(r.getWindow());
-      r.render();
+        l.draw(r.getWindow());
+        r.render();
     }
-  std::cout << "Escape pressed" << std::endl;
+    std::cout << "Escape pressed" << std::endl;
 }
 
 int main()

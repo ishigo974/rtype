@@ -31,10 +31,14 @@ public:
 
     void swap(Collider& other);
 
+public:
     virtual void fixedUpdate();
 
     virtual RTypes::my_uint16_t getMask() const;
     virtual std::string         toString();
+
+public:
+    void sendMessage(Collider *e);
 
 protected:
     gu::Rect<int> _bounds;

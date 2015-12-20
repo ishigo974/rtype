@@ -85,3 +85,8 @@ namespace std
         a.swap(b);
     }
 }
+
+void Collider::sendMessage(Collider *e)
+{
+    static_cast<GameObject *>(parent())->sendMessage(*this, *e);
+}

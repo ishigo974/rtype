@@ -21,6 +21,14 @@ public:
     virtual bool operator==(Component const& other);
     virtual bool operator!=(Component const& other);
 
+public:
+    template<class ...Args>
+    bool handleMessage(Args ...args)
+    {
+        return (false);
+    }
+
+public:
     virtual void swap(Component& other);
 
     virtual RTypes::my_uint16_t getMask() const;

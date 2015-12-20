@@ -18,15 +18,17 @@ public:
     EntityManager();
     ~EntityManager();
 
-    static std::vector<Object *> getByMask(unsigned int mask);
-    static Object                *getParentOf(Component *component);
-    static Object                *getParentOf(GameObject *go);
-    static Object                *getByTag(std::string const& tag);
-    static std::vector<Object *> getChildrenOf(GameObject *go);
+    static Object *getParentOf(Component *component);
+    static Object *getParentOf(GameObject *go);
+
     static void                  addChild(GameObject *parent, GameObject *child);
+    static std::vector<Object *> getChildrenOf(GameObject *go);
 
-    static void tagObject(Object *o, std::string const& tag);
+    static std::vector<Object *> getByMask(unsigned int mask);
+    static void                  tagObject(Object *o, std::string const& tag);
+    static Object                *getByTag(std::string const& tag);
 
+public:
     template<class T, class ...Args, typename = std::enable_if<std::is_base_of<Object, T>::value> >
     T *createEntity(Args ...args)
     {
