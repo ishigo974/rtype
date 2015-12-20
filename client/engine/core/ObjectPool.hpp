@@ -5,27 +5,42 @@ template <typename T>
 class	ObjectPool : Object
 {
 public:
-  ObjectPool() {}
-  virtual ~ObjectPool() {}
+  ObjectPool() { }
+  virtual ~ObjectPool() { }
 
-  void	create()
+  // static void* operator new (size_t size);
+  // static void operator delete (void *p);
+
+  void	init()
   {
-    for (int i = 0; i < _size; ++i)
+    T *obj = new T;
+    _objects.push(obj);
+  }
+
+  T	*create()
+  {
+    if (_objects.empty())
       {
-	_objects[i]->obj->init();
-	return ;
+	T *obj = new T;
+	obj->create();
+	return obj;
+      }
+    else
+      {
+	T *obj = _objects.front();
+	_objects.pop();
+	return obj;
       }
   }
 
-  struct	s_obj
+  void	deleteObject(T *obj)
   {
-    T		*obj;
-    bool	inUse;
-  };
+    obj->deleteObj();
+    _objects.push(obj);
+  }
 
+  std::queue<T *>	_objects;	
 private:
-  ObjectPool::s_obj	*_objects[40];
-  static const int	_size = 40;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */

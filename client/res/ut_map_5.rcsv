@@ -1,0 +1,5 @@
+#TimeStamp;MobType;MoveType;XPos;YPos;
+# Comment followed by an empty line
+
+2.3;0;0;0;1313.0;270.93 # No trailing ';', comment after a valid line
+9.3;0;lel;0;23.32;14.32; # Wrong value
