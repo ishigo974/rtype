@@ -19,8 +19,7 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wextra ")
-    #-Werror  //TODO add WERROR
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 endif ()
 
 # -------------- #
@@ -33,6 +32,7 @@ include_directories(engine/graphics)
 include_directories(engine/network/client_protocol)
 include_directories(../common/network)
 include_directories(../common/exceptions)
+include_directories(../common/classes)
 include_directories(../common/utils)
 if (WIN32)
     include_directories(../common/network/Windows)
@@ -53,6 +53,8 @@ file(GLOB source_files
         ../common/network/*.hpp
         ../common/exceptions/*.cpp
         ../common/exceptions/*.hpp
+        ../common/classes/*.cpp
+        ../common/classes/*.hpp
         ../common/utils/*.cpp
         ../common/utils/*.hpp
         )
@@ -88,17 +90,17 @@ if (UNIX)
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
-#find_package(Boost 1.59 REQUIRED)
+#find_package(Boost 1.55 REQUIRED)
 
 if (SFML_FOUND)
     message(STATUS ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
     include_directories(${SFML_INCLUDE_DIR})
 endif ()
 
-#if (Boost_FOUND)
-#    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
-#    include_directories(${Boost_INCLUDE_DIR})
-#endif ()
+if (Boost_FOUND)
+    message(STATUS ${Boost_LIBRARIES} ${Boost_DEPENDENCIES})
+    include_directories(${Boost_INCLUDE_DIR})
+endif ()
 
 # ---- #
 # Link #
@@ -108,8 +110,5 @@ add_executable(${EXECUTABLE_NAME} ${source_files} ${net_files})
 
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES})
-if (UNIX)
-    target_link_libraries(${EXECUTABLE_NAME} m)
-endif ()
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
-#target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_DEPENDENCIES})
+target_link_libraries(${EXECUTABLE_NAME} ${Boost_LIBRARIES})

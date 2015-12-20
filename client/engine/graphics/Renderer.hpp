@@ -2,31 +2,40 @@
 # define RENDERER_HPP_
 
 # include <SFML/Graphics.hpp>
-# include "Resources.hpp"
+# include "EntityManager.hpp"
 # include "GameObject.hpp"
+# include "Resources.hpp"
+
 
 class Renderer
 {
 public:
-    Renderer();
+    static unsigned int const width;
+    static unsigned int const height;
+
+public:
+    Renderer(EntityManager *);
     ~Renderer();
 
     Renderer(const Renderer&) = delete;
     Renderer& operator=(const Renderer&) = delete;
+
 public:
     void init();
     void render();
 
 public:
 	sf::RenderWindow& getWindow();
+    static bool         comp(Object *, Object *);
 
 public:
-    // To be honest, I don't know yet if it will stay public
-    void draw(const GameObject&);
+    // It souldn't stay public, really
+    void draw(const GameObject*);
 
 private:
-    sf::RenderWindow _win;
-    Resources        _res;
+    sf::RenderWindow    _win;
+    EntityManager       *_em;
+    Resources           _res;
 };
 
 #endif // !RENDERER_HPP_

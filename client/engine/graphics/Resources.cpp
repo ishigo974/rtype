@@ -1,11 +1,14 @@
 #include <iostream>
 #include "Resources.hpp"
 
+std::string const Resources::resFile = "../res/textures.json";
+
 Resources::Resources()
 {
 	this->_textures["MissingTexture"] = new sf::Texture();
-	if (!this->_textures["MissingTexture"]->loadFromFile("../res/MissingTexture.png"))
-		throw std::runtime_error("../res/MissingTexture.png not found");
+	if (!this->_textures["MissingTexture"]->
+                                    loadFromFile("../res/MissingTexture.png"))
+		throw std::runtime_error("MissingTexture not found");
 	else
 		this->_textures["MissingTexture"]->setRepeated(true);
 }
@@ -13,18 +16,18 @@ Resources::Resources()
 Resources::~Resources()
 {
 	for (auto it = this->_textures.begin();
-	it != this->_textures.end();
+	    it != this->_textures.end();
 		++it)
 	{
 		delete it->second;
 	}
 }
 
-const sf::Texture* Resources::getTexture(const std::string& path) const
+const sf::Texture* Resources::getTexture(const std::string& name) const
 {
     try
     {
-        return this->_textures.at(path);
+        return this->_textures.at(name);
     }
     catch (std::out_of_range& e)
     {
@@ -33,20 +36,22 @@ const sf::Texture* Resources::getTexture(const std::string& path) const
     }
 }
 
-const sf::Texture* Resources::operator[](const std::string& path) const
+const sf::Texture* Resources::operator[](const std::string& name) const
 {
-	return this->getTexture(path);
+	return this->getTexture(name);
 }
 
-bool    Resources::addTexture(const std::string& path, bool repeated)
+bool    Resources::addTexture(std::string const& name,
+                            std::string const& path,
+                            bool repeated)
 {
-  this->_textures[path] = new sf::Texture();
-  if (!this->_textures[path]->loadFromFile(path))
+  this->_textures[name] = new sf::Texture();
+  if (!this->_textures[name]->loadFromFile(path))
     {
-      delete this->_textures[path];
-      this->_textures.erase(path);
+      delete this->_textures[name];
+      this->_textures.erase(name);
       return false;
     }
-  this->_textures[path]->setRepeated(repeated);
+  this->_textures[name]->setRepeated(repeated);
   return true;
 }

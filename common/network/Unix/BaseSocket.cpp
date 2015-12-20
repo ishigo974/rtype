@@ -5,10 +5,11 @@
 # include <sys/socket.h>
 # include <unistd.h>
 # include <stdexcept>
-#include "BaseSocket.hpp"
+# include "BaseSocket.hpp"
 
 BaseSocket::BaseSocket()
-{ }
+{
+}
 
 BaseSocket::~BaseSocket()
 {

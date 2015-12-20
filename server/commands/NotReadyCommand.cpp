@@ -62,7 +62,7 @@ namespace RType
 
                 request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
-                room->broadcast(request.toBuffer(), _entity);
+                room->broadcastTCP(request.toBuffer(), _entity);
             }
         }
 

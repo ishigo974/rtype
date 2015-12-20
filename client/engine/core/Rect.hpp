@@ -20,15 +20,23 @@ namespace gu
 
         bool operator==(const Rect& rhs)
         {
-            return this->x == rhs.x
-                   && this->y == rhs.y
-                   && this->w == rhs.w
-                   && this->h == rhs.h;
+            return (this->x == rhs.x
+                    && this->y == rhs.y
+                    && this->w == rhs.w
+                    && this->h == rhs.h);
         }
 
         bool operator!=(const Rect& rhs)
         {
             return !Rect::operator==(rhs);
+        }
+
+        bool intersects(Rect const& other)
+        {
+            return (x < other.x + other.w &&
+                    x + w > other.x &&
+                    y < other.y + other.h &&
+                    h + y > other.y);
         }
     };
 }
