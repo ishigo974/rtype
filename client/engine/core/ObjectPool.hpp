@@ -1,46 +1,44 @@
 #ifndef OBJECTPOOL_HPP_
 # define OBJECTPOOL_HPP_
 
-template <typename T>
+template <typename T, typename U>
 class	ObjectPool : Object
 {
 public:
-  ObjectPool() { }
+  ObjectPool(EntityManager *manager)
+  {
+    _entityManager = manager;
+  }
   virtual ~ObjectPool() { }
 
   // static void* operator new (size_t size);
   // static void operator delete (void *p);
 
-  void	init()
+  T	*create(std::string const & name, int layer)
   {
-    T *obj = new T;
-    _objects.push(obj);
-  }
-
-  T	*create()
-  {
+    T *obj;
     if (_objects.empty())
       {
-	T *obj = new T;
-	obj->create();
-	return obj;
+	obj = _entityManager->createEntity<T>(name, layer, _entityManager);
       }
     else
       {
-	T *obj = _objects.front();
+	obj = _objects.front();
 	_objects.pop();
-	return obj;
       }
+    obj->init();
+    return obj;
   }
 
   void	deleteObject(T *obj)
   {
-    obj->deleteObj();
+    obj->deleteObject();
     _objects.push(obj);
   }
 
-  std::queue<T *>	_objects;	
 private:
+  std::queue<T *>	_objects;
+  EntityManager		*_entityManager;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */

@@ -105,25 +105,25 @@ void backgroundTest()
 
     ss << "bg" << rand() % 4 + 1;
 
-    PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 0, &entityManager);
+    PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 10, &entityManager);
     p->init();
 
     std::vector<GameObject *>	objs;
     std::vector<Mob *>	mobs;
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 0));
-    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 0));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob2", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob3", 3));
+    objs.push_back(entityManager.createEntity<GameObject>("Mob4", 3));
 
 
     entityManager.attachComponent<SpriteRenderer>(a, "lel", ss.str(), gu::Rect<int>(0, 0, 1280, 720));
@@ -159,46 +159,12 @@ void backgroundTest()
         ++j;
     }
 
-    // Transform *t = p->getComponent<Transform>();
-    // t->getPosition().setX(100);
-
-    // t->getPosition().setY(300);
-    // entityManager.attachComponent<SpriteRenderer>(p, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-    // entityManager.attachComponent<Player>(p, "Player", 100);
-
-    // entityManager.attachComponent<SpriteRenderer>(bulletobj, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-    // entityManager.attachComponent<Bullet>(bulletobj, "Bullet", 1, 5);
-    // entityManager.addChild(p, bulletobj);
-    // Transform *tbullet = bulletobj->getComponent<Transform>();
-    // tbullet->getPosition().setX(500);
-
-    // ObjectPool<GameObject>	pool;
-    // for (int i = 0; i < 40; ++i)
-    //   {
-    // 	GameObject *obj = pool.create();
-    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
-    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
-    // 	entityManager.addChild(p, obj);
-    //   }
-
-    // GameObject *pool = entityManager.createEntity<ObjectPool<GameObject> >()	pool;
-    // for (int i = 0; i < 40; ++i)
-    //   {
-    // 	GameObject *obj = pool.create();
-    //     obj = entityManager.createEntity<GameObject>("pool bullet", 10);
-    // 	entityManager.attachComponent<Bullet>(obj, "Bullet X", 1, 5);
-    // 	entityManager.addChild(p, obj);
-    //   }
-
     r.init();
     e.key = cu::Event::LAST_ACTION;
     a->getComponent<ScrollingBackground>()->setEnabled(true);
     ScrollingBackground *bg = a->getComponent<ScrollingBackground>();
 
     Player *player = p->getComponent<Player>();
-
-    // bulletobj->getComponent<Bullet>()->setEnabled(true);
-    // Bullet *bullet = bulletobj->getComponent<Bullet>();
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -212,10 +178,12 @@ void backgroundTest()
         }
         cmds.addCommand();
         bg->update(BigBen::get().getElapsedtime());
-        for (auto mob : mobs)
-            mob->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
-
+	std::vector<BulletObject *> obj = player->getActiveBullets();
+	for (auto b : obj)
+	  b->getComponent<Bullet>()->update(BigBen::get().getElapsedtime());
+        for (auto mob : mobs)
+	  mob->update(BigBen::get().getElapsedtime());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
@@ -250,27 +218,10 @@ bool stateMachineTest()
     return (true);
 }
 
-// bool commandSystemTest(EntityManager *entityManager)
-// {
-//     CommandSystem cmds(entityManager);
-//     cu::Event upEvent;
-//     cu::Event downEvent;
-
-//     upEvent.key = cu::Event::UP;
-//     downEvent.key = cu::Event::DOWN;
-
-//     cmds.addCommand(upEvent);
-//     cmds.addCommand(downEvent);
-//     std::cout << cmds.toString() << std::endl;
-//     assert(cmds.getSize() == 2);
-//     cmds.process();
-//     return (true);
-// }
-
 bool mobTest()
 {
     EntityManager entityManager;
-    GameObject    *obj = entityManager.createEntity<GameObject>("Test", 1);
+    GameObject    *obj = entityManager.createEntity<GameObject>("Test", 3);
 
     entityManager.attachComponent<Transform>(obj, cu::Position(0, 0));
     entityManager.attachComponent<Mob>(obj, "Mob", 1, 2);
@@ -521,8 +472,8 @@ int main()
         std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
     if (stateMachineTest())
         std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-    // if (commandSystemTest(&entityManager))
-    //   std::cout << "\e[32mCommandSystemTest passed -> OK\e[0m" << std::endl;
+//    if (RCSVParserTest())
+//        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
     // buttonAndLabelsTest();
     // menuTest();
     backgroundTest();
