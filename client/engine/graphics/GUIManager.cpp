@@ -25,6 +25,11 @@ void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
     }
 }
 
+void GUIManager::onGUI(cu::Event* e)
+{
+
+}
+
 RTypes::my_uint16_t GUIManager::getMask() const
 {
     return Mask;

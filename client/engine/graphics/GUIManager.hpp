@@ -4,6 +4,7 @@
 # include <unordered_map>
 # include "Component.hpp"
 # include "GUIElement.hpp"
+# include "Event.hpp"
 
 class GUIManager : public Component
 {
@@ -18,6 +19,7 @@ public:
     void addGUIElement(std::string const& state, GUIElement *gui);
     void draw(sf::RenderWindow&, std::string const& state);
     virtual RTypes::my_uint16_t getMask() const;
+	void onGUI(cu::Event *e);
 
 private:
     unsigned int	_id;

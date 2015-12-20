@@ -19,13 +19,13 @@ void StateMachine::move()
 
     if (_current.canMove(tmp))
     {
-        _current = tmp;
+        _current = _states[tmp];
     }
 }
 
 void StateMachine::addState(State const& state)
 {
-    auto found = std::find_if(_states.begin(), _states.end(), [state](auto&& e)
+    auto found = std::find_if(_states.begin(), _states.end(), [state](auto& e)
     {
         return (e.second.getName() == state.getName());
     });

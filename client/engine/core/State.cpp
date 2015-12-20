@@ -51,7 +51,7 @@ namespace std
 
 bool State::canMove(std::string& out)
 {
-    for (auto&& e : _transitions)
+    for (auto& e : _transitions)
     {
         if (e.second->validate())
         {
