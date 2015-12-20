@@ -8,22 +8,18 @@
 Bullet::Bullet()
 {
   _direction = Bullet::Direction::DEFAULT;
-  // _transform = new Transform(0, cu::Position(0, 0));
   _hp = 1;
   _damage = 5;
   _available = true;
-  // visible = false;
 }
 
 Bullet::Bullet(unsigned int _id, std::string const& _name)
   : Behaviour(_id, _name)
 {
   _direction = Bullet::Direction::DEFAULT;
-  // _transform = new Transform(0, cu::Position(0, 0));
   _available = true;
   _hp = 1;
   _damage = 5;
-  // visible = false;
 }
 
 Bullet::Bullet(Bullet const& other) : Behaviour(other)

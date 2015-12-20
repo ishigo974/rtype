@@ -147,7 +147,6 @@ void		Player::update(double elapsedtime)
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
   _shotTime += elapsedtime;
-  // std::cout << _time << std::endl;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
