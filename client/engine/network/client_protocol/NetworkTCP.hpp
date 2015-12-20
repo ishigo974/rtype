@@ -17,14 +17,20 @@ namespace RType
     class NetworkTCP : public Component
     {
     public:
-        static RTypes::my_uint16_t const Mask = ComponentMask::NetworkMask;
+        static RTypes::my_uint16_t const Mask = ComponentMask::TCPMask;
 
     public:
-        NetworkTCP();
+        NetworkTCP(unsigned _id, std::string const& _name);
         virtual ~NetworkTCP();
 
     public:
         virtual RTypes::my_uint16_t getMask() const;
+
+    public:
+        Buffer toSend();
+        void   receive(Buffer const& buffer);
+        void   pushRequest(Request const& request);
+        Request popRequest();
 
     private:
         NetworkTCP(NetworkTCP const&) = delete;
@@ -35,6 +41,5 @@ namespace RType
         Buffer _receive;
     };
 }
-
 
 #endif //RTYPE_SERVER_NETWORKTCP_HPP

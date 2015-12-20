@@ -9,16 +9,17 @@
 namespace RType
 {
 
-    const short NetworkSystem::defaultPortUDP = 9999;
     const short NetworkSystem::defaultPortTCP = 6667;
     const std::string NetworkSystem::defaultAddr = "127.0.0.1";
+    const size_t      NetworkSystem::buffLen = 1024;
 
-    NetworkSystem::NetworkSystem(EntityManager* em, std::string const& addr,
-                                 short tcp, short)
+    NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr,
+                                 short tcp)
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
               _connector(addr, tcp)
     {
-        init();
+        _connector.connect();
+        SocketMonitor::getInstance().registerSocket(&_connector);
     }
 
     NetworkSystem::~NetworkSystem()
@@ -26,18 +27,38 @@ namespace RType
 
     void NetworkSystem::process()
     {
+        NetworkTCP            *netTcp;
+        std::vector<Object *> components;
+        Buffer                receive;
+
+        components = _entityManager->getByMask(ComponentMask::TCPMask);
+        netTcp     = static_cast<GameObject *>(components[0])
+                ->getComponent<NetworkTCP>();
+
         try
         {
             _monitor.update();
-        } catch (...)
+        }
+        catch (std::runtime_error const&)
         {
 
         }
-    }
-
-    void NetworkSystem::init()
-    {
-        SocketMonitor::getInstance().registerSocket(&_connector);
+        if (_monitor.isReadable(&_connector))
+        {
+            try
+            {
+                _connector.receive(receive, buffLen);
+            }
+            catch (std::runtime_error const&)
+            {
+                _connector.close();
+                _monitor.deleteSocket(&_connector);
+                //TODO Send UI disconnection
+            }
+            netTcp->receive(receive);
+        }
+        if (_monitor.isWritable(&_connector))
+            _connector.send(netTcp->toSend());
     }
 
     std::string NetworkSystem::toString() const
@@ -50,38 +71,4 @@ namespace RType
 
         return ss.str();
     }
-
-//    void NetworkSystem::pushRequest(Request const& request)
-//    {
-//
-//    }
-//
-    void NetworkSystem::update()
-    {
-    }
-//
-//    void NetworkSystem::buildRequest()
-//    {
-//    }
-//
-//    Request NetworkSystem::popRequest()
-//    {
-//    }
-//
-//    bool NetworkSystem::pendingRequests() const
-//    {
-//    }
-//
-//    void NetworkSystem::disconnection()
-//    {
-//
-//    }
-//
-//    void NetworkSystem::connect()
-//    {
-//    }
-//
-//    bool NetworkSystem::isConnected() const
-//    {
-//    }
 }

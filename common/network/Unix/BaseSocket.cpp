@@ -8,7 +8,8 @@
 # include "BaseSocket.hpp"
 
 BaseSocket::BaseSocket()
-{ }
+{
+}
 
 BaseSocket::~BaseSocket()
 {
