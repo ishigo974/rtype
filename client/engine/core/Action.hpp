@@ -1,12 +1,12 @@
-#ifndef SPAWN_HPP_
-# define SPAWN_HPP_
+#ifndef ACTION_HPP_
+# define ACTION_HPP_
 
 # include "REnums.hpp"
 # include "Utils.hpp"
 
-struct Spawn
+struct Action
 {
-    Spawn(MobType mt, MovementType mvt, cu::Position const& p) :
+    Action(MobType mt, MovementType mvt, cu::Position const& p) :
         mob(mt), movement(mvt), pos(p) {}
 
     MobType         mob;
@@ -25,4 +25,4 @@ struct Spawn
     }
 };
 
-#endif // !SPAWN_HPP_
+#endif // !ACTION_HPP_

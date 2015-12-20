@@ -356,7 +356,7 @@ void	buttonAndLabelsTest()
 void    RCSVParserTest()
 {
     RCSVParser p("../res/map1.rcsv");
-    std::multimap<double, Spawn> map;
+    std::multimap<double, Action> map;
 
     p.parse(map);
     for (auto m : map)
