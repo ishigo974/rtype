@@ -204,6 +204,21 @@ namespace ECS
 
     void            ECSUT::retrieveEntityByComponent()
     {
+        EntityManager&      em      = EntityManager::getInstance();
+        Entity*             entity  = nullptr;
+        Sample::Component1* cmp1    = nullptr;
+        Sample::Component2* cmp2    = nullptr;
+
+        em.registerComponent(std::make_unique<Sample::Component1>());
+        em.registerComponent(std::make_unique<Sample::Component2>());
+        entity = &em.create((Sample::Component1::mask
+                            | Sample::Component2::mask));
+        em.create((Sample::Component1::mask | Sample::Component2::mask));
+        cmp1 = entity->getComponent<Sample::Component1>();
+        UT_ASSERT(&em.getByCmpnt(cmp1) == entity);
+        cmp2 = entity->getComponent<Sample::Component2>();
+        UT_ASSERT(&em.getByCmpnt(cmp2) == entity);
+        em.clean();
     }
 
     namespace Sample

@@ -59,9 +59,9 @@ namespace ECS
     void            Entity::addComponent(std::unique_ptr<IComponent> component)
     {
         _mask |= component->getMask();
-        _components[component->getMask()] = std::move(component);
         ECS::EntityManager::getInstance()
             .addCmpntEntityLink(component.get(), *this);
+        _components[component->getMask()] = std::move(component);
     }
 
     bool            Entity::removeComponent(ComponentMask mask)

@@ -31,7 +31,6 @@ namespace ECS
     */
     EntityManager&    EntityManager::getInstance()
     {
-        // static EntityManager m;
         if (EntityManager::instance == nullptr)
             EntityManager::instance =
                 std::unique_ptr<EntityManager>(new EntityManager());
@@ -97,10 +96,10 @@ namespace ECS
         return *it->second;
     }
 
-    void             EntityManager::addCmpntEntityLink(IComponent const* cmpnt,
+    void             EntityManager::addCmpntEntityLink(IComponent const* cmp,
                                                        Entity const& e)
     {
-        _cmpntsEntities.insert(std::make_pair(cmpnt, e.getId()));
+        _cmpntsEntities.insert(std::make_pair(cmp, e.getId()));
     }
 
     void             EntityManager::removeCmpntEntityLink(IComponent const* cmp)

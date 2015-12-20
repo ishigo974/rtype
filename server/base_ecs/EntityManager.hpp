@@ -4,6 +4,7 @@
 # include <memory>
 # include <unordered_map>
 # include <algorithm>
+# include <functional>
 # include "Entity.hpp"
 # include "IComponent.hpp"
 # include "ComponentMask.hpp"
@@ -20,7 +21,8 @@ namespace ECS
         typedef std::unordered_map<unsigned int,
                                     UniqueEntityPtr>    EntityMap;
         typedef std::unordered_map<IComponent const*,
-                                   unsigned int>        ComponentIdMap;
+                                   unsigned int,
+                                   std::hash<IComponent const*> >        ComponentIdMap;
 
     protected:
         EntityManager();
