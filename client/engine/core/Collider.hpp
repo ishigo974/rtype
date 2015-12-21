@@ -32,7 +32,7 @@ public:
     void swap(Collider& other);
 
 public:
-    virtual void fixedUpdate();
+    virtual void fixedUpdate(double elapsedtime);
 
     virtual RTypes::my_uint16_t getMask() const;
     virtual std::string         toString() const;

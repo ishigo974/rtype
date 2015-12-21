@@ -54,15 +54,17 @@ namespace RType
     const Buffer        Server::responseKO      = Server::getResponseKO();
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
     const std::string   Server::mobTypesPath    = ".rtypemobs";
+    const std::string   Server::mapsPath        = ".rtypemaps";
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
-        { "users",  { "list connected users",   &Server::handleCLIClients } },
-        { "rooms",  { "list rooms",             &Server::handleCLIRooms }   },
-        { "mobs",   { "list mobs types",        &Server::handleCLIMobs }    },
-        { "quit",   { "shutdown server",        &Server::handleCLIQuit }    },
+        { "users",  { "list connected users",   &Server::handleCLIClients   } },
+        { "rooms",  { "list rooms",             &Server::handleCLIRooms     } },
+        { "mobs",   { "list mobs types",        &Server::handleCLIMobs      } },
+        { "maps",   { "list maps",              &Server::handleCLIMaps      } },
+        { "quit",   { "shutdown server",        &Server::handleCLIQuit      } },
         { "help",   { "displays infos about how to use the server's CLI",
-                      &Server::handleCLIHelp }                              },
+                      &Server::handleCLIHelp                                } },
     };
 
     /*
@@ -162,9 +164,48 @@ namespace RType
         _sm.registerSystem(std::make_unique<System::ShotFiring>());
 
         loadMobTypesFromFile();
+        loadMapsFromFile();
 
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
+    }
+
+    void            Server::loadMapsFromFile()
+    {
+        std::ifstream   file(mapsPath.c_str());
+        std::string     line;
+
+        if (!file)
+        {
+            Server::display("Configuration file '" + mapsPath + "' was "
+                            "not found, can't load mobs types");
+            return ;
+        }
+        while (std::getline(file, line))
+        {
+            std::ifstream       mapFile(line.c_str());
+
+            if (line.empty())
+                continue ;
+            try {
+                if (mapFile.good())
+                {
+                    Map::Parser         parser(line);
+                    Map::Parser::Map    map;
+
+                    map = parser.parse();
+                    _maps.push_back(map);
+                    Server::display("Map loaded from " + line);
+                }
+                else
+                    Server::display("Can't load map: No such file: " + line);
+            } catch (std::runtime_error const& e) {
+                Server::display("Can't load map from " + line +
+                                ": " + e.what());
+            }
+            mapFile.close();
+        }
+        file.close();
     }
 
     void            Server::loadMobTypesFromFile()
@@ -277,8 +318,7 @@ namespace RType
         if (rooms.empty())
             Server::display("No rooms yet");
         else
-            Server::display("Name\t| Slots\t| Players - r: "
-                            "ready, n: not ready");
+            Server::display("Name\t\t| Slots\t| Started\t| Players");
         for (auto& entry: rooms)
         {
             Component::Room* room =
@@ -287,16 +327,20 @@ namespace RType
             if (room == nullptr)
                 throw std::runtime_error("EntityManager: Retrieving entities by"
                                          " mask failed");
-            Server::display(room->getRoomName() + "\t| " +
-                            std::to_string(room->size()) + "/" +
-                            std::to_string(Component::Room::nbMaxPlayers) +
-                            "\t| " + room->getPlayersNames());
+            Server::display(room->getRoomName() + "\t| "
+                            + std::to_string(room->size()) + "/"
+                            + std::to_string(Component::Room::nbMaxPlayers)
+                            + "\t| " + (room->isPlaying() ? "Yes\t" : "No\t")
+                            + "\t| " + room->getPlayersNames());
         }
     }
 
     void            Server::handleCLIMobs(ArgsTab const&)
     {
-        Server::display("Id\t| Name\t\t| Lives\t| Score value\t");
+        if (_mobTypeFactory.begin() == _mobTypeFactory.end())
+            Server::display("No mobs yet");
+        else
+            Server::display("Id\t| Name\t\t| Lives\t| Score value\t");
         for (auto& entry: _mobTypeFactory)
         {
             Server::display(std::to_string(entry.second->getId()) + "\t| "
@@ -330,6 +374,14 @@ namespace RType
                             "\t| " + (player->getRoom() != nullptr ?
                                       player->getRoom()->getRoomName() : ""));
         }
+    }
+
+    void            Server::handleCLIMaps(ArgsTab const&)
+    {
+        if (_maps.empty())
+            Server::display("No maps yet");
+        for (auto& map: _maps)
+            Server::display(map.first);
     }
 
     void            Server::handleCLIQuit(ArgsTab const&)

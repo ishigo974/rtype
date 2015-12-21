@@ -76,9 +76,6 @@ std::string	BulletObject::toString() const
 
 void	BulletObject::deleteObject()
 {
-  _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-  _entityManager->attachComponent<Bullet>(this, "Bullet");
-
   Bullet *b = this->getComponent<Bullet>();
   b->setDirection(Bullet::Direction::DEFAULT);
   b->setEnabled(false);
@@ -94,5 +91,4 @@ void	BulletObject::init()
   b->setDirection(Bullet::Direction::RIGHT);
   b->setEnabled(true);
   b->setAvailable(false);
-  b->setTransform(this->getComponent<Transform>());
 }

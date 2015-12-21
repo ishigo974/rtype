@@ -13,47 +13,61 @@
 #include "Label.hpp"
 #include "Button.hpp"
 #include "TextField.hpp"
+#include "BehaviourSystem.hpp"
 #include "GUIManager.hpp"
 #include "Menu.hpp"
+#include "World.hpp"
+#include "PlayerObject.hpp"
 
-void menuTest()
+bool worldTest()
 {
-    EntityManager entityManager;
-    Renderer      r(&entityManager);
-    Input         i(r.getWindow());
-    cu::Event     e;
+    EntityManager em;
+    Renderer renderer(&em);
+    Input i(renderer.getWindow());
+    BehaviourSystem bs(&em);
+    cu::Event   event;
 
-    e.type = cu::Event::None;
-    e.key  = cu::Event::LAST_ACTION;
+    em.createEntity<Menu>("Niquez-vos-races-Type", 1, &em, &event)->init();
+    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &event);
 
-    Menu *menu = entityManager.createEntity<Menu>("menu", 1, &entityManager, &e);
-    menu->init();
-    r.init();
+    PlayerObject *player = em.createEntity<PlayerObject>("Player", 1, &em);
+    player->init();
+    GameObject *first = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *bg = em.createEntity<GameObject>("bg", -1);
 
-    while (e.key != cu::Event::ESCAPE)
-    {
-        while (i.pollEvent(e))
-        {
-            if (e.type == cu::Event::Closed)
-            {
-                std::cout << "Close button pressed" << std::endl;
-                return;
-            }
-            if (e.type == cu::Event::KeyPressed)
-                std::cout << "Key pressed : " << e.key << std::endl;
-            if (e.type == cu::Event::KeyReleased)
-                std::cout << "Key released : " << e.key << std::endl;
-            if (e.type == cu::Event::MouseButtonReleased)
-                menu->move();
-        }
-        r.render();
-    }
-    std::cout << "Escape pressed" << std::endl;
+    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
+
+    em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
+    em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+
+    // w.addEntity(first);
+    // w.addEntity(bg);
+    // w.addEntity(player);
+
+    w.gameLoop();
+
+    return (true);
 }
 
 int main()
 {
-    srand(static_cast<unsigned>(time(nullptr)));
-    menuTest();
+//     testNetwork();
+//    EntityManager entityManager;
+//
+//    srand(static_cast<unsigned>(time(nullptr)));
+//    if (gameObjectTest(entityManager))
+//        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+//    if (timeTest())
+//        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+//    if (stateMachineTest())
+//        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+////    if (RCSVParserTest())
+////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
+//    // buttonAndLabelsTest();
+//    // menuTest();
+   // backgroundTest();
+//    testSound();
+
+    worldTest();
     return 0;
 }
