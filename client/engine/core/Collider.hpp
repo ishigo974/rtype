@@ -38,7 +38,6 @@ public:
     virtual std::string         toString() const;
 
 public:
-    void sendMessage(Collider *e);
     bool intersects(Collider *o);
 
 protected:

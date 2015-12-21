@@ -82,11 +82,6 @@ namespace std
     }
 }
 
-void Collider::sendMessage(Collider *e)
-{
-    static_cast<GameObject *>(parent())->sendMessage(*this, *e);
-}
-
 bool Collider::intersects(Collider *o)
 {
     return (_bounds.intersects(o->_bounds));

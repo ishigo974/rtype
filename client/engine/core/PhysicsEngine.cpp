@@ -28,7 +28,10 @@ void PhysicsEngine::process(double fixedElapsed)
             if (left != right)
             {
                 if (lCol->intersects(rCol))
-                    std::cerr << right->toString() << " entered " << left->toString() << std::endl;
+                {
+                    left->sendMessage(rCol);
+                    right->sendMessage(lCol);
+                }
             }
         }
     }

@@ -177,3 +177,9 @@ void		Player::update(double elapsedtime)
   //std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
   //std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
+
+bool Player::handleMessage(Collider *o)
+{
+    std::cout << o->toString() << std::endl;
+    return (true);
+}

@@ -490,8 +490,9 @@ bool worldTest()
     Renderer renderer(&em);
     Input i(renderer.getWindow());
     BehaviourSystem bs(&em);
+    PhysicsEngine pe(&em);
 
-    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i);
+    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &pe);
 
     PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);
     player->init();
