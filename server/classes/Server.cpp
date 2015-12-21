@@ -3,6 +3,8 @@
 #include <memory>
 #include <functional>
 #include <iostream>
+#include <fstream>
+#include "DLLoader.hpp"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 # ifndef STDIN_FILENO
@@ -36,6 +38,7 @@
 #include "PlayerComponent.hpp"
 #include "PositionComponent.hpp"
 #include "ShotComponent.hpp"
+#include "MobComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"
@@ -50,14 +53,16 @@ namespace RType
     const Buffer        Server::responseOK      = Server::getResponseOK();
     const Buffer        Server::responseKO      = Server::getResponseKO();
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
+    const std::string   Server::mobTypesPath    = ".rtypemobs";
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
         { "users",  { "list connected users",   &Server::handleCLIClients } },
-        { "rooms",  { "list rooms",             &Server::handleCLIRooms } },
-        { "quit",   { "shutdown server",        &Server::handleCLIQuit } },
+        { "rooms",  { "list rooms",             &Server::handleCLIRooms }   },
+        { "mobs",   { "list mobs types",        &Server::handleCLIMobs }    },
+        { "quit",   { "shutdown server",        &Server::handleCLIQuit }    },
         { "help",   { "displays infos about how to use the server's CLI",
-                      &Server::handleCLIHelp } },
+                      &Server::handleCLIHelp }                              },
     };
 
     /*
@@ -150,13 +155,54 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Player>());
         _em.registerComponent(std::make_unique<Component::Position>());
         _em.registerComponent(std::make_unique<Component::Shot>());
+        _em.registerComponent(std::make_unique<Component::Mob>());
 
         _sm.registerSystem(std::make_unique<System::Lobby>());
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
         _sm.registerSystem(std::make_unique<System::ShotFiring>());
 
+        loadMobTypesFromFile();
+
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
+    }
+
+    void            Server::loadMobTypesFromFile()
+    {
+        std::ifstream   file(mobTypesPath.c_str());
+        std::string     line;
+
+        if (!file)
+        {
+            Server::display("Configuration file '" + mobTypesPath + "' was "
+                            "not found, can't load mobs types");
+            return ;
+        }
+        while (std::getline(file, line))
+        {
+            std::ifstream       mobFile(line.c_str());
+            MobType::IMobType*  mobType = nullptr;
+
+            if (line.empty())
+                continue ;
+            try {
+                if (mobFile.good())
+                {
+                    mobType = DLLoader<MobType::IMobType*>::getInstanceOf(line,
+                                                                "getMobType");
+
+                    Server::display("Mob '" + mobType->getName() + "' loaded");
+                    _mobTypeFactory
+                        .learn(std::unique_ptr<MobType::IMobType>(mobType));
+                }
+                else
+                    Server::display("Can't load mob type: No such file: " +
+                                    line);
+                mobFile.close();
+            } catch (std::runtime_error const&) {
+            }
+        }
+        file.close();
     }
 
     void            Server::checkDisconnected()
@@ -245,6 +291,19 @@ namespace RType
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
                             "\t| " + room->getPlayersNames());
+        }
+    }
+
+    void            Server::handleCLIMobs(ArgsTab const&)
+    {
+        Server::display("Id\t| Name\t\t| Lives\t| Score value\t");
+        for (auto& entry: _mobTypeFactory)
+        {
+            Server::display(std::to_string(entry.second->getId()) + "\t| "
+                            + entry.second->getName() + "\t| "
+                            + std::to_string(entry.second->getNbLives())
+                            + "\t| "
+                            + std::to_string(entry.second->getScoreValue()));
         }
     }
 

@@ -15,7 +15,8 @@ namespace RType
             MASK_NETWORKUDP     = 1 << 3,
             MASK_POSITION       = 1 << 4,
             MASK_SHOT           = 1 << 5,
-            MASK_SHIP           = 1 << 6
+            MASK_SHIP           = 1 << 6,
+            MASK_MOB            = 1 << 7
         };
     }
 }

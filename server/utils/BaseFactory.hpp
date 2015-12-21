@@ -73,6 +73,16 @@ namespace Utils
             _book.clear();
         }
 
+        typename TypeBook::const_iterator    begin() const
+        {
+            return _book.begin();
+        }
+
+        typename TypeBook::const_iterator    end() const
+        {
+            return _book.end();
+        }
+
     public:
         virtual std::string     toString() const
         {
