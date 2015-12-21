@@ -25,6 +25,7 @@ void    ShootCommand::execute()
     for (auto obj : objs)
         static_cast<GameObject *>(obj)->getComponent<Player>()->setAction(ACommand::SHOOT);
 
+    // TODO
 //    event.setCode(RType::InGameEvent::CL_SHOTSTART);
 //    event.push<uint32_t>("time",
 //                         std::chrono::time_point_cast<std::chrono::milliseconds>

@@ -173,6 +173,7 @@ void		Player::update(double elapsedtime)
 	this->move();
       _action.pop();
     }
+  // TODO remove debug comments
   // std::cout << toString() << std::endl;
   // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
   // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;

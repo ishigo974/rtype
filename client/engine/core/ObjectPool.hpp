@@ -11,6 +11,7 @@ public:
   }
   virtual ~ObjectPool() { }
 
+  // TODO
   // static void* operator new (size_t size);
   // static void operator delete (void *p);
 
