@@ -1,5 +1,8 @@
 #include "MobComponent.hpp"
+#include "PositionComponent.hpp"
 #include "ComponentsMasks.hpp"
+#include "Utils.hpp"
+#include "EntityManager.hpp"
 
 namespace RType
 {
@@ -69,6 +72,14 @@ namespace RType
 
         void            Mob::update()
         {
+            Component::Position*    pos = ECS::EntityManager::getInstance()
+                .getByCmpnt(this).getComponent<Component::Position>();
+            cu::Position            newpos =
+                _movePattern(cu::Position(pos->getX(), pos->getY()), 1);
+
+            pos->setX(newpos.X());
+            pos->setY(newpos.Y());
+            // TODO with elapsed time
         }
 
         void            Mob::addLives(unsigned int nb)
