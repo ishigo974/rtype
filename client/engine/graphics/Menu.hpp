@@ -38,20 +38,25 @@ private:
   void setupGUIElements();
   void setupStates();
   void refreshRoomList();
-  
+  void createNewRoom();
+  void ready();
+
 private:
     std::vector<TextField *> rooms;
+    std::vector<TextField *> playersInRoom;
     TextField                mainTitle;
+    TextField                createRoom;
     TextField                refresh;
     TextField                back;
-  TextField roomTitle;
+    TextField		     roomTitle;
+    TextField                readyField;
+    TextField                inputRoomName;
 
-  std::string _selectedRoom;
+    State		     _titleState;
+    State		     mainMenu;
+    State		     inRoom;
+    State		     createRoomState;
   
-    State _titleState;
-    State mainMenu;
-    State inRoom;
-
     StateMachine *_sm;
 
     cu::Event     *_event;

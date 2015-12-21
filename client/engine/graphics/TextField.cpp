@@ -101,6 +101,12 @@ std::string TextField::getText() const
     return _str;
 }
 
+void TextField::clearText()
+{
+  _str = "";
+  _text.setString(_str);
+}
+
 void TextField::setBackColor(const sf::Color& color)
 {
     _rectShape.setFillColor(color);
