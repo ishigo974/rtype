@@ -68,13 +68,7 @@ std::string Collider::toString() const
 
 void Collider::fixedUpdate()
 {
-    for (auto &e : EntityManager::getByMask(ComponentMask::ColliderMask))
-    {
-        if (this->_bounds.intersects(static_cast<Collider *>(e)->_bounds))
-        {
-            sendMessage(static_cast<Collider *>(e));
-        }
-    }
+
 }
 
 namespace std
@@ -89,4 +83,9 @@ namespace std
 void Collider::sendMessage(Collider *e)
 {
     static_cast<GameObject *>(parent())->sendMessage(*this, *e);
+}
+
+bool Collider::intersects(Collider& o)
+{
+    return (_bounds.intersects(o._bounds));
 }

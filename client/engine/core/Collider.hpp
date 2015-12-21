@@ -39,6 +39,7 @@ public:
 
 public:
     void sendMessage(Collider *e);
+    bool intersects(Collider &o);
 
 protected:
     gu::Rect<int> _bounds;
