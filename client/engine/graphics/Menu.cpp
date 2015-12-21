@@ -118,8 +118,6 @@ void Menu::createNewRoom(std::string const &roomName)
 void Menu::ready()
 {
     _ready = true;
-    // request.setCode(RType::Request::CL_READY);
-    // request.push<std::string>("room_name", roomName);
     _network->pushRequest(RType::Request(RType::Request::CL_READY));
 }
 
