@@ -251,65 +251,14 @@ void menuTest()
     Input         i(r.getWindow());
     cu::Event     e;
 
-//	Menu menu = Menu(entityManager, e);
-
-    //std::vector<TextField*> lRoom;
-
-    //TextField title(gu::Rect<int>(300, 100, 800, 60), "Le R-Type officiel 2015");
-    //lRoom.push_back(new TextField(gu::Rect<int>(100, 100, 300, 25), "LE ZEAUB 1"));
-    //lRoom.push_back(new TextField(gu::Rect<int>(100, 200, 300, 25), "LE ZEAUB 2"));
-    //lRoom.push_back(new TextField(gu::Rect<int>(100, 300, 300, 25), "LE ZEAUB 3"));
-    //lRoom.push_back(new TextField(gu::Rect<int>(100, 400, 300, 25), "LE ZEAUB 4"));
-    //lRoom.push_back(new TextField(gu::Rect<int>(100, 500, 300, 25), "LE ZEAUB 5"));
-    //TextField refresh(gu::Rect<int>(1000, 600, 200, 25), "REFRESH");
-    //TextField back(gu::Rect<int>(50, 50, 200, 25), "BACK");
-
     e.type = cu::Event::None;
     e.key  = cu::Event::LAST_ACTION;
 
     Menu *menu = entityManager.createEntity<Menu>("menu", 1, &entityManager, &e);
     menu->init();
 
-    //   State initialState("Aeris");
-    //   State mainMenu("MainMenu");
-    //State inRoom("inRoom");
-
-    //   initialState.addTransition("MainMenu", [](cu::Event const *e, TextField *title)
-    //                              {
-    //                                  return e->type == cu::Event::MouseButtonReleased && title->intersect(e->mouse.x, e->mouse.y);
-    //                              },
-    //                              &e, &title);
-
-    //mainMenu.addTransition("inRoom", [](cu::Event const *e, std::vector<TextField*> &lRoom) {
-    //	if (e->type == cu::Event::MouseButtonReleased)
-    //		for (auto it = lRoom.begin(); it != lRoom.end(); ++it)
-    //			if ((*it)->intersect(e->mouse.x, e->mouse.y))
-    //				return true;
-    //}, &e, lRoom);
-
-    //inRoom.addTransition("MainMenu", [](cu::Event const *e, TextField *back)
-    //{
-    //	return e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y);
-    //}, &e, &back);
-    //   entityManager.attachComponent<StateMachine>(menu, initialState);
-    //   entityManager.attachComponent<GUIManager>(menu);
-
-//    menu->getComponent<ScrollingBackground>()->setEnabled(true);
-//    ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
     GUIManager *gm = menu->getComponent<GUIManager>();
     r.init();
-
-    //   gm->setupGUIElements(initialState.getName(), &title);
-    //gm->setupGUIElements(mainMenu.getName(), lRoom[0]);
-    //gm->setupGUIElements(mainMenu.getName(), lRoom[1]);
-    //gm->setupGUIElements(mainMenu.getName(), lRoom[2]);
-    //gm->setupGUIElements(mainMenu.getName(), lRoom[3]);
-    //gm->setupGUIElements(mainMenu.getName(), lRoom[4]);
-    //gm->setupGUIElements(mainMenu.getName(), &refresh);
-    //gm->setupGUIElements(inRoom.getName(), &back);
-    //sm->setupStates(mainMenu);
-    //sm->setupStates(inRoom);
-    //   std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -327,8 +276,6 @@ void menuTest()
             if (e.type == cu::Event::MouseButtonReleased)
                 menu->move();
         }
-//        bg->update(BigBen::get().getElapsedtime());
-        //std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
         r.draw(menu);
         gm->draw(r.getWindow(), menu->getCurrentStateName());
         r.render();

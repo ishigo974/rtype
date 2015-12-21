@@ -32,7 +32,8 @@ TextField::~TextField()
 
 void TextField::draw(sf::RenderWindow& window)
 {
-    window.draw(_rectShape);
+  std::cout << "Drawing: " << _str << std::endl;
+  window.draw(_rectShape);
     window.draw(_text);
 }
 

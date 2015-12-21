@@ -17,13 +17,13 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* e
     back.setBackColor(sf::Color(80, 80, 80));
     rooms.push_back(new TextField(gu::Rect<float>(100, 100, 300, 50), "AZERTYUIOPQSDFGHJK", 10));
     rooms.back()->setBackColor(sf::Color(80, 80, 80));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 200, 300, 50), "", 10));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 200, 300, 50), "apzozp", 10));
     rooms.back()->setBackColor(sf::Color(80, 80, 80));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 300, 300, 50), "", 10));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 300, 300, 50), "dck,dv", 10));
     rooms.back()->setBackColor(sf::Color(80, 80, 80));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 400, 300, 50), "", 10));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 400, 300, 50), "vizfn", 10));
     rooms.back()->setBackColor(sf::Color(80, 80, 80));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 500, 300, 50), "", 10));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 500, 300, 50), "efdcdcq", 10));
     rooms.back()->setBackColor(sf::Color(80, 80, 80));
 
     transitionToStates();
