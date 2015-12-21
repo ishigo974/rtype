@@ -18,7 +18,7 @@ public:
 
 public:
     Collider();
-    Collider(unsigned int _id, std::string const& _name);
+    Collider(unsigned int _id, std::string const& _name, int width, int height);
 
     Collider(Collider const& other);
     Collider(Collider&& other);
