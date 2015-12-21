@@ -140,10 +140,10 @@ void		Mob::update(double)
 {
   if (!_transform)
     _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
-  if (_transform->getPosition().X() > Renderer::width + 1000
-      || _transform->getPosition().X() < -1000
-      || _transform->getPosition().Y() > Renderer::height + 1000
-      || _transform->getPosition().Y() < -1000)
+  if (_transform->getPosition().X() > Renderer::width + 100
+      || _transform->getPosition().X() < -100
+      || _transform->getPosition().Y() > Renderer::height + 100
+      || _transform->getPosition().Y() < -100)
     _enabled = false;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
