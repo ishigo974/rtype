@@ -149,9 +149,8 @@ void		Bullet::setDirection(Bullet::Direction d)
 
 void		Bullet::move(double elapsedtime)
 {
-  float		speed = 1.0f;
+  float		speed = 0.75f;
 
-  std::cout << elapsedtime << std::endl;
   _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * elapsedtime));
 }
 

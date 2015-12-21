@@ -152,7 +152,6 @@ void		Player::update(double elapsedtime)
   for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
     if ((*it)->getComponent<Bullet>()->getAvailable())
       {
-	std::cout << "delete bullet" << std::endl;
 	_bullets->deleteObject(*it);
 	_activeBullets.erase(it);
 	break;

@@ -9,7 +9,9 @@ ScrollingBackground::ScrollingBackground(unsigned int _id,
 					 std::string const& _name,
 					 double speed) :
   Behaviour(_id, _name), _speed(speed)
-{}
+{
+  _enabled = true;
+}
 
 ScrollingBackground::ScrollingBackground(ScrollingBackground const& other) :
   Behaviour(other)
