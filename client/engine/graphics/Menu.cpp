@@ -17,7 +17,9 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* e
     mainMenu        = State("mainMenu");
     inRoom          = State("inRoom");
     createRoomState = State("createRoom");
-
+    _ready = false;
+    _isVisible = true;
+    
     refresh.setBackColor(sf::Color(80, 80, 80));
     createRoom.setBackColor(sf::Color(80, 80, 80));
     back.setBackColor(sf::Color(80, 80, 80));
@@ -108,7 +110,23 @@ void Menu::createNewRoom()
 
 void Menu::ready()
 {
+  _ready = true;
   std::cout << "Ready" << std::endl;
+}
+
+bool Menu::isReady() const
+{
+  return _ready;
+}
+
+bool Menu::isVisible() const
+{
+  return _isVisible;
+}
+
+void Menu::setVisible(bool visible)
+{
+  _isVisible = visible;
 }
 
 void Menu::transitionToStates()
@@ -243,7 +261,7 @@ void Menu::init()
     _em->attachComponent<SpriteRenderer>(this, "sr", str,
                                        gu::Rect<int>(0, 0, 1280, 720));
     _em->attachComponent<GUIManager>(this, "Manager");
-
+    
     setupGUIElements();
     setupStates();
 }

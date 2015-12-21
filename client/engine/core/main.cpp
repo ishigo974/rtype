@@ -27,8 +27,9 @@ bool worldTest()
     BehaviourSystem bs(&em);
     cu::Event   event;
 
-    em.createEntity<Menu>("Niquez-vos-races-Type", 1, &em, &event)->init();
-    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &event);
+    Menu *menu = em.createEntity<Menu>("Niquez-vos-races-Type", 1, &em, &event);
+    menu->init();
+    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &event, menu);
 
     PlayerObject *player = em.createEntity<PlayerObject>("Player", 1, &em);
     player->init();

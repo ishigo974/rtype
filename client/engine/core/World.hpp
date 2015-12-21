@@ -10,11 +10,12 @@
 # include "EntityManager.hpp"
 # include "CommandSystem.hpp"
 # include "BehaviourSystem.hpp"
+# include "Menu.hpp"
 
 class World
 {
 public:
-  World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, cu::Event* event);
+  World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, cu::Event* event, Menu *menu);
 
 public:
     std::vector<GameObject *> const *getEntities() const;
@@ -40,7 +41,9 @@ private:
     double      _lag;
     double      _fixedStep;
     bool        _end;
-    cu::Event*  _event;
+  bool _inGame;
+  cu::Event*  _event;
+  Menu *_menu;
 };
 
 

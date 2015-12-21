@@ -4,14 +4,15 @@
 
 #include "World.hpp"
 
-World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, cu::Event* event)
-: _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs), _input(i), _event(event)
+World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, cu::Event* event, Menu *menu)
+  : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs), _input(i), _event(event), _menu(menu)
 {
     BigBen::getElapsedtime();
     _fixedStep = 0.003;
     _lag       = 0.0;
     _end       = false;
 
+    _inGame = false;
     _renderer->init();
 }
 
@@ -40,8 +41,10 @@ void World::gameLoop()
             }
         }
 
-        _cmdSystem->addCommand();
-
+	if (_inGame)
+	  _cmdSystem->addCommand();
+	else
+	  _menu->move();
         while (lag >= _fixedStep)
         {
             _behaviourSystem->process(lag / _fixedStep);
@@ -49,5 +52,7 @@ void World::gameLoop()
         }
 
         _renderer->render();
+	if (_menu->isReady())
+	  _inGame = true;
     }
 }

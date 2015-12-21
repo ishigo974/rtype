@@ -40,7 +40,11 @@ private:
   void refreshRoomList();
   void createNewRoom();
   void ready();
-
+public:
+  bool isReady() const;
+  bool isVisible() const;
+  void setVisible(bool);
+  
 private:
     std::vector<TextField *> rooms;
     std::vector<TextField *> playersInRoom;
@@ -61,6 +65,8 @@ private:
 
     cu::Event     *_event;
     EntityManager *_em;
+    bool _ready;
+    bool _isVisible;
 };
 
 #endif // !MENU_HPP_
