@@ -38,8 +38,8 @@ public:
   }
 
 private:
-  std::queue<T *>	_objects;
   EntityManager		*_entityManager;
+  std::queue<T *>	_objects;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */

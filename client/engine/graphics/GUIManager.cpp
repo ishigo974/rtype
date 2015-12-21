@@ -9,20 +9,19 @@ GUIManager::~GUIManager() {}
 
 void    GUIManager::addGUIElement(std::string const& state, GUIElement *gui)
 {
-    std::cout << "Adding an element to : " << state << std::endl;
-    this->_scenes[state];
-    this->_scenes[state].push_back(gui);
+    this->_scenes.insert(std::make_pair(state, gui));
 }
 
-void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
+std::vector<GUIElement *>   GUIManager::getGUIElements(std::string const& state)
 {
-    std::cout << "Drawing : " << state << std::endl;
-    for (auto it = this->_scenes[state].begin();
-        it != this->_scenes[state].end();
-        ++it)
+    std::vector<GUIElement *> vec(0);
+
+    for (auto obj : _scenes)
     {
-        (*it)->draw(win);
+        if (obj.first == state)
+            vec.push_back(obj.second);
     }
+    return vec;
 }
 
 RTypes::my_uint16_t GUIManager::getMask() const

@@ -1,7 +1,8 @@
 #ifndef GUIMANAGER_HPP_
 # define GUIMANAGER_HPP_
 
-# include <unordered_map>
+# include <map>
+# include <vector>
 # include "Component.hpp"
 # include "GUIElement.hpp"
 
@@ -16,11 +17,11 @@ public:
 
 public:
     void addGUIElement(std::string const& state, GUIElement *gui);
-    void draw(sf::RenderWindow&, std::string const& state);
+    std::vector<GUIElement *> getGUIElements(std::string const& state);
     virtual RTypes::my_uint16_t getMask() const;
 
 private:
-    std::unordered_map<std::string, std::vector<GUIElement *> > _scenes;
+    std::multimap<std::string, GUIElement *>    _scenes;
 };
 
 #endif // !GUIMANAGER_HPP_

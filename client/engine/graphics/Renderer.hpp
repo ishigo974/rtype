@@ -28,9 +28,9 @@ public:
 	sf::RenderWindow& getWindow();
     static bool         comp(Object *, Object *);
 
-public:
-    // It souldn't stay public, really
+private:
     void draw(const GameObject*);
+    void drawGUI(const GameObject *);
 
 private:
     sf::RenderWindow    _win;

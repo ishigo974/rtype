@@ -2,6 +2,7 @@
 # define BUTTON_HPP_
 
 # include <string>
+# include <vector>
 # include "GUIElement.hpp"
 # include "Label.hpp"
 
@@ -14,7 +15,7 @@ public:
   virtual ~Button();
 
 public:
-  virtual void	draw(sf::RenderWindow&);
+  virtual std::vector<const sf::Drawable *>    getDrawable() const;
 
 private:
   sf::RectangleShape	_rect;
