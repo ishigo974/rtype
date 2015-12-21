@@ -246,8 +246,6 @@
 
 void menuTest()
 {
-    Renderer      r;
-    Input         i(r.getWindow());
     EntityManager entityManager;
     Renderer      r(&entityManager);
     Input         i(r.getWindow());
@@ -331,58 +329,58 @@ void menuTest()
         }
 //        bg->update(BigBen::get().getElapsedtime());
         //std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
-        r.draw(*menu);
+        r.draw(menu);
         gm->draw(r.getWindow(), menu->getCurrentStateName());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
 }
 
-void buttonAndLabelsTest()
-{
-    Renderer  r;
-    Input     i(r.getWindow());
-    TextField t(gu::Rect<float>(100, 100, 300, 25), "LE ZEAUB DE OUF");
-    t.setBackColor(sf::Color::White);
-    cu::Event e;
-
-    audio->setSoundToPlay("../res/laser2.wav");
-    std::cout << audio->toString() << std::endl;
-    soundPlayer.play(*gameObj);
-    sf::sleep(sf::milliseconds(400));
-
-    r.getWindow().clear();
-    e.key = cu::Event::LAST_ACTION;
-    while (e.key != cu::Event::ESCAPE)
-    {
-        while (i.pollEvent(e))
-        {
-            if (e.type == cu::Event::Closed)
-            {
-                std::cout << "Close button pressed" << std::endl;
-                return;
-            }
-            if (e.type == cu::Event::MouseButtonReleased)
-            {
-                std::cout << "Button "
-                << e.mouse.button
-                << " released : ["
-                << e.mouse.x
-                << ";"
-                << e.mouse.y
-                << "]"
-                << std::endl;
-            }
-            if (t.intersect(e.mouse.x, e.mouse.y))
-            {
-                std::cout << "Click on button" << std::endl;
-            }
-        }
-        t.draw(r.getWindow());
-        r.render();
-    }
-    std::cout << "Escape pressed" << std::endl;
-}
+//void buttonAndLabelsTest()
+//{
+//    Renderer  r;
+//    Input     i(r.getWindow());
+//    TextField t(gu::Rect<float>(100, 100, 300, 25), "LE ZEAUB DE OUF");
+//    t.setBackColor(sf::Color::White);
+//    cu::Event e;
+//
+//    audio->setSoundToPlay("../res/laser2.wav");
+//    std::cout << audio->toString() << std::endl;
+//    soundPlayer.play(*gameObj);
+//    sf::sleep(sf::milliseconds(400));
+//
+//    r.getWindow().clear();
+//    e.key = cu::Event::LAST_ACTION;
+//    while (e.key != cu::Event::ESCAPE)
+//    {
+//        while (i.pollEvent(e))
+//        {
+//            if (e.type == cu::Event::Closed)
+//            {
+//                std::cout << "Close button pressed" << std::endl;
+//                return;
+//            }
+//            if (e.type == cu::Event::MouseButtonReleased)
+//            {
+//                std::cout << "Button "
+//                << e.mouse.button
+//                << " released : ["
+//                << e.mouse.x
+//                << ";"
+//                << e.mouse.y
+//                << "]"
+//                << std::endl;
+//            }
+//            if (t.intersect(e.mouse.x, e.mouse.y))
+//            {
+//                std::cout << "Click on button" << std::endl;
+//            }
+//        }
+//        t.draw(r.getWindow());
+//        r.render();
+//    }
+//    std::cout << "Escape pressed" << std::endl;
+//}
 //
 //void    RCSVParserTest()
 //{
@@ -413,6 +411,5 @@ int main()
     //backgroundTest();
     //RCSVParserTest();
 
-    worldTest();
     return 0;
 }
