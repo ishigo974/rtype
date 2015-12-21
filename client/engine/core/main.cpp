@@ -524,9 +524,9 @@ int main()
 ////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
 //    // buttonAndLabelsTest();
 //    // menuTest();
-//    backgroundTest();
+    backgroundTest();
 //    testSound();
 
-    worldTest();
+ //   worldTest();
     return 0;
 }
