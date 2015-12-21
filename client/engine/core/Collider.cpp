@@ -6,7 +6,8 @@
 Collider::Collider() : Component()
 { }
 
-Collider::Collider(unsigned int _id, std::string const& _name) : Component(_id, _name)
+Collider::Collider(unsigned int _id, std::string const& _name, int width, int height)
+  : Component(_id, _name), _bounds(0, 0, width, height)
 { }
 
 Collider::Collider(Collider const& other) : Component(other)
@@ -54,7 +55,7 @@ RTypes::my_uint16_t Collider::getMask() const
 
 std::string Collider::toString() const
 {
-    //TODO : _bounds.toSting()
+    //TODO : _bounds.toString()
     std::stringstream ss;
 
     ss << "Collider {"
@@ -68,11 +69,28 @@ std::string Collider::toString() const
 
 void Collider::fixedUpdate(double)
 {
-    for (auto &e : EntityManager::getByMask(ComponentMask::ColliderMask))
-    {
-        if (this->_bounds.intersects(static_cast<Collider *>(e)->_bounds))
+    auto tmp = EntityManager::getByMask(ComponentMask::ColliderMask);
+
+    _bounds.x = static_cast<GameObject *>(this->parent())->transform().getPosition().X();
+    _bounds.y = static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
+    //std::cout << static_cast<GameObject *>(this->parent())->transform().toString() << std::endl;
+    for (auto e : tmp)
+      {
+      if (this->_bounds.intersects(static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds))
         {
-            sendMessage(static_cast<Collider *>(e));
+	  std::cout << "FIRST" << std::endl;
+	  std::cout << "x == " << _bounds.x << std::endl;
+	  std::cout << "y == " << _bounds.y << std::endl;
+	  std::cout << "w == " << _bounds.w << std::endl;
+	  std::cout << "h == " << _bounds.h << std::endl;
+
+	  std::cout << "OTHER" << std::endl;
+	  std::cout << "x == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.x << std::endl;
+	  std::cout << "y == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.y << std::endl;
+	  std::cout << "w == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.w << std::endl;
+	  std::cout << "h == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.h << std::endl;
+	  // std::cout << "Collision" << std::endl;
+	  sendMessage(static_cast<Collider *>(e));
         }
     }
 }

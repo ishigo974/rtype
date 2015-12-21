@@ -1,6 +1,8 @@
 #ifndef OBJECTPOOL_HPP_
 # define OBJECTPOOL_HPP_
 
+# include <queue>
+
 template <typename T, typename U>
 class	ObjectPool : Object
 {
@@ -37,9 +39,9 @@ public:
     _objects.push(obj);
   }
 
-  std::queue<T *>	_objects;
 private:
   EntityManager		*_entityManager;
+  std::queue<T *>	_objects;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */

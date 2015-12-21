@@ -13,6 +13,8 @@ UdpSocket::UdpSocket(short int port) : BaseSocket()
     _port        = port;
     if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         throw std::runtime_error("socket failed");
+    _tv.tv_sec  = SocketMonitor::defaultSecVal;
+    _tv.tv_usec = SocketMonitor::defaultUsecVal;
 }
 
 UdpSocket::~UdpSocket()
@@ -42,22 +44,17 @@ size_t        UdpSocket::receiveFrom(Buffer& buffer, size_t len,
     struct sockaddr_in client;
     char               *buff      = new char[len];
     socklen_t          clientsize = sizeof(client);
-    struct timeval     tv;
-
 
     std::memset(&client, 0, sizeof(client));
     ret = -1;
-    tv.tv_sec  = 2;
-    tv.tv_usec = 0;
-
-    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0)
+    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO, &_tv, sizeof(_tv)) < 0)
         throw std::runtime_error("SetSockOpt failed");
     if (((ret = ::recvfrom(_socket, buff, len, 0,
-                          reinterpret_cast<struct sockaddr *>(&client),
-                          &clientsize)) == -1) && errno != EAGAIN)
+                           reinterpret_cast<struct sockaddr *>(&client),
+                           &clientsize)) == -1) && errno != EAGAIN)
         throw std::runtime_error("receive failed");
-   if (ret == -1 && errno == EAGAIN)
-        ret = 0;
+    if (ret == -1 && errno == EAGAIN)
+        ret   = 0;
     else
     {
         addr.assign(inet_ntoa(client.sin_addr));
@@ -120,4 +117,24 @@ size_t UdpSocket::receive(Buffer& buffer, size_t len) const
 void UdpSocket::close() const
 {
     BaseSocket::close();
+}
+
+void UdpSocket::setTimeoutSec(long i)
+{
+    _tv.tv_sec = i;
+}
+
+void UdpSocket::setTimeoutUsec(long i)
+{
+    _tv.tv_usec = static_cast<suseconds_t>(i);
+}
+
+long UdpSocket::getTimeoutSec() const
+{
+    return _tv.tv_sec;
+}
+
+long UdpSocket::getTimeoutUsec() const
+{
+    return _tv.tv_usec;
 }
