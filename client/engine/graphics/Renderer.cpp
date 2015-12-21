@@ -94,6 +94,8 @@ void Renderer::draw(const GameObject *object)
 
 void Renderer::drawGUI(const Menu *object)
 {
+    if (!object->isVisible())
+        return ;
     GUIManager      *gm = object->getComponent<GUIManager>();
 
     if (gm == nullptr)
