@@ -33,6 +33,7 @@ public:
     std::pair<float, float> getPosition() const;
     void                    setText(const std::string&);
     std::string             getText() const;
+    void		    clearText();
     void                    setBackColor(const sf::Color&);
     void                    setForeColor(const sf::Color&);
     void                    setPadding(unsigned int);
