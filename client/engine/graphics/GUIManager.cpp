@@ -15,7 +15,7 @@ void    GUIManager::addGUIElement(std::string const& state, GUIElement *gui)
 
 void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
 {
-    std::cout << "Drawing : " << state << std::endl;
+  //    std::cout << "Drawing : " << state << std::endl;
 
     for (auto e : _scenes)
     {

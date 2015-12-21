@@ -2,9 +2,10 @@
 
 Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* em, cu::Event* event) :
         GameObject(id, name, layer),
-        title(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
-        refresh(gu::Rect<float>(1000, 600, 200, 25), "REFRESH"),
-        back(gu::Rect<float>(50, 50, 200, 25), "BACK"),
+        mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
+        refresh(gu::Rect<float>(1000, 600, 200, 50), "REFRESH", 10),
+        back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
+	roomTitle(gu::Rect<float>(320, 50, 640, 70), ""),
         _event(event),
         _em(em)
 {
@@ -12,40 +13,30 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* e
     mainMenu    = State("mainMenu");
     inRoom      = State("inRoom");
 
-    rooms.push_back(new TextField(gu::Rect<float>(100, 100, 300, 25), "LE ZEAUB 1"));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 200, 300, 25), "LE ZEAUB 2"));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 300, 300, 25), "LE ZEAUB 3"));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 400, 300, 25), "LE ZEAUB 4"));
-    rooms.push_back(new TextField(gu::Rect<float>(100, 500, 300, 25), "LE ZEAUB 5"));
+    refresh.setBackColor(sf::Color(80, 80, 80));
+    back.setBackColor(sf::Color(80, 80, 80));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 100, 300, 50), "AZERTYUIOPQSDFGHJK", 10));
+    rooms.back()->setBackColor(sf::Color(80, 80, 80));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 200, 300, 50), "", 10));
+    rooms.back()->setBackColor(sf::Color(80, 80, 80));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 300, 300, 50), "", 10));
+    rooms.back()->setBackColor(sf::Color(80, 80, 80));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 400, 300, 50), "", 10));
+    rooms.back()->setBackColor(sf::Color(80, 80, 80));
+    rooms.push_back(new TextField(gu::Rect<float>(100, 500, 300, 50), "", 10));
+    rooms.back()->setBackColor(sf::Color(80, 80, 80));
 
-    _titleState.addTransition("mainMenu", [](cu::Event *e, TextField *title)
-    {
-        return (e->type == cu::Event::MouseButtonReleased &&
-                title->intersect(e->mouse.x, e->mouse.y));
-    }, _event, &title);
-
-    mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms)
-    {
-        if (e->type == cu::Event::MouseButtonReleased)
-            for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                if ((*it)->intersect(e->mouse.x, e->mouse.y))
-                    return (true);
-        return (false);
-    }, _event, rooms);
-
-    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back)
-    {
-        return e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y);
-    }, _event, &back);
+    transitionToStates();
 
     _sm = new StateMachine(_titleState);
 }
 
 Menu::Menu(Menu const& other) :
         GameObject(other),
-        title(other.title),
+        mainTitle(other.mainTitle),
         refresh(other.refresh),
         back(other.back),
+	roomTitle(other.roomTitle),
         _event(other._event)
 {
 }
@@ -87,29 +78,82 @@ void Menu::swap(Menu& other)
 {
     using std::swap;
 
-    swap(title, other.title);
+    swap(mainTitle, other.mainTitle);
     swap(refresh, other.refresh);
     swap(back, other.back);
+    swap(roomTitle, other.roomTitle);
+}
+
+void Menu::refreshRoomList()
+{
+  std::cout << "Get rooms" << std::endl;
+  rooms.clear();
+  setupGUIElements();
+}
+
+void Menu::transitionToStates()
+{
+  _titleState.addTransition("mainMenu", [](cu::Event *e, Menu *menu)
+    {
+      if (e->type == cu::Event::MouseButtonReleased)
+	{
+	  menu->refreshRoomList();
+	  return true;
+	}
+      return false;
+    }, _event, this);
+
+    mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms,
+					TextField *rT)
+    {
+        if (e->type == cu::Event::MouseButtonReleased)
+            for (auto it = rooms.begin(); it != rooms.end(); ++it)
+                if ((*it)->intersect(e->mouse.x, e->mouse.y))
+		  {
+		    rT->setText((*it)->getText());
+		    return (true);
+		  }
+        return (false);
+    }, _event, rooms, &roomTitle);
+
+    mainMenu.addTransition("mainMenu", [](cu::Event *e, TextField *r, Menu *menu)
+			   {
+			     if (e->type == cu::Event::MouseButtonReleased &&
+				 r->intersect(e->mouse.x, e->mouse.y))
+			       {
+				 menu->refreshRoomList();
+				 return true;
+			       }
+			     return false;
+			   }, _event, &refresh, this);
+    
+    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
+    {
+      if (e->type == cu::Event::MouseButtonReleased && back->intersect(e->mouse.x, e->mouse.y))
+	{
+	  menu->refreshRoomList();
+	  return true;
+	}
+      return false;
+    }, _event, &back, this);
 }
 
 void Menu::setupGUIElements()
 {
     GUIManager *gm = getComponent<GUIManager>();
 
-    gm->addGUIElement(_titleState.getName(), &title);
-    gm->addGUIElement(mainMenu.getName(), rooms[0]);
-    gm->addGUIElement(mainMenu.getName(), rooms[1]);
-    gm->addGUIElement(mainMenu.getName(), rooms[2]);
-    gm->addGUIElement(mainMenu.getName(), rooms[3]);
-    gm->addGUIElement(mainMenu.getName(), rooms[4]);
+    gm->addGUIElement(_titleState.getName(), &mainTitle);
+    for (auto it = rooms.begin(); it != rooms.end(); ++it)
+      gm->addGUIElement(mainMenu.getName(), *it);
     gm->addGUIElement(mainMenu.getName(), &refresh);
     gm->addGUIElement(inRoom.getName(), &back);
+    gm->addGUIElement(inRoom.getName(), &roomTitle);
 }
 
 void Menu::setupStates()
 {
-    _sm->addState(mainMenu);
-    _sm->addState(inRoom);
+  _sm->addState(mainMenu);
+  _sm->addState(inRoom);
 }
 
 namespace std
@@ -134,8 +178,7 @@ std::string const& Menu::getCurrentStateName() const
 void Menu::init()
 {
     std::string str("menu");
-    str += rand() % 4 + 1;
-
+    str += std::to_string(rand() % 4 + 1);
     _em->attachComponent<SpriteRenderer>(this, "sr", str,
                                        gu::Rect<int>(0, 0, 1280, 720));
     _em->attachComponent<GUIManager>(this, "Manager");

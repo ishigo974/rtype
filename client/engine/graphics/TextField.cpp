@@ -1,25 +1,26 @@
 #include "TextField.hpp"
 
-TextField::TextField(std::string const& str, unsigned int limit) :
-        GUIElement(gu::Rect<float>(0, 0, 0, 0)), _padding(0), _strLimit(limit)
+TextField::TextField(std::string const& str, unsigned int padding, unsigned int limit) :
+        GUIElement(gu::Rect<float>(0, 0, 0, 0)), _padding(padding), _strLimit(limit)
 {
     _font.loadFromFile("../res/cs_regular.ttf");
     setSize();
     setPosition();
-    _rectShape.setFillColor(sf::Color::White);
+    _rectShape.setFillColor(sf::Color::Transparent);
     _text.setFont(_font);
     _text.setColor(sf::Color::Black);
     setText(str);
     //_text.setString(str);
 }
 
-TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsigned int limit) :
-        GUIElement(rect), _padding(0), _strLimit(limit)
+TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsigned int padding,
+		     unsigned int limit) :
+        GUIElement(rect), _padding(padding), _strLimit(limit)
 {
     _font.loadFromFile("../res/cs_regular.ttf");
     setSize();
     setPosition();
-    _rectShape.setFillColor(sf::Color::White);
+    _rectShape.setFillColor(sf::Color::Transparent);
     _text.setFont(_font);
     _text.setColor(sf::Color::Black);
     setText(str);
@@ -81,22 +82,15 @@ std::pair<float, float> TextField::getPosition() const
 
 void TextField::setText(const std::string& str)
 {
-    std::cout << "pre text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-    std::cout << "pre rect: " << _rectShape.getLocalBounds().width << std::endl;
-
     std::string tmp = _str;
     _str = str;
     _text.setString(_str);
-    if ((_strLimit != 0 && _text.getString().getSize() > _strLimit) ||
-        (_text.getLocalBounds().width + (2 * _padding) >= _rectShape.getLocalBounds().width))
+    if (_strLimit != 0 && _text.getString().getSize() > _strLimit)
+    //     (_text.getLocalBounds().width + (2 * _padding) >= _rectShape.getLocalBounds().width))
     {
-        std::cout << "during text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-        std::cout << "during rect: " << _rectShape.getLocalBounds().width << std::endl;
         _str = tmp;
         _text.setString(tmp);
     }
-    std::cout << "post text: " << _text.getLocalBounds().width + (2 * _padding) << std::endl;
-    std::cout << "post rect: " << _rectShape.getLocalBounds().width << std::endl << std::endl;
 }
 
 std::string TextField::getText() const
@@ -128,8 +122,8 @@ unsigned int TextField::getPadding() const
 
 void    TextField::setSize()
 {
-    _rectShape.setSize(sf::Vector2f(_rect.w + (2 * _padding), _rect.h + (2 * _padding)));
-    _text.setCharacterSize((unsigned int) _rect.h);
+    _rectShape.setSize(sf::Vector2f(_rect.w, _rect.h));
+    _text.setCharacterSize((unsigned int) _rect.h - 2 * _padding);
 }
 
 void    TextField::setPosition()
@@ -138,8 +132,8 @@ void    TextField::setPosition()
     _text.setPosition(_rect.x + _padding, _rect.y + _padding);
 }
 
-TextField::TextField()
-{ }
+// TextField::TextField()
+// { }
 
 TextField::TextField(TextField const& other) : GUIElement(other._rect)
 {

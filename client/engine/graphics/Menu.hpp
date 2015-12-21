@@ -34,15 +34,20 @@ public:
     std::string const& getCurrentStateName() const;
 
 private:
-    void setupGUIElements();
-    void setupStates();
-
+  void transitionToStates();
+  void setupGUIElements();
+  void setupStates();
+  void refreshRoomList();
+  
 private:
     std::vector<TextField *> rooms;
-    TextField                title;
+    TextField                mainTitle;
     TextField                refresh;
     TextField                back;
+  TextField roomTitle;
 
+  std::string _selectedRoom;
+  
     State _titleState;
     State mainMenu;
     State inRoom;
