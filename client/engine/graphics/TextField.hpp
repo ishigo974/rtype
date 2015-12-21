@@ -9,20 +9,19 @@
 class TextField : public GUIElement
 {
 public:
-  //    TextField();
     TextField(TextField const& other);
     TextField(TextField&& other);
     TextField& operator=(TextField other);
 
-  TextField(std::string const& text = "", unsigned int = 0,unsigned int = 0);
-  TextField(gu::Rect<float> const& rect, std::string const& text = "", unsigned int = 0,
-	    unsigned int = 0);
+    TextField(std::string const& text = "", unsigned int = 0,unsigned int = 0);
+    TextField(gu::Rect<float> const& rect, std::string const& text = "",
+              unsigned int = 0, unsigned int = 0);
     virtual ~TextField();
 
     void swap(TextField &other);
 
 public:
-    virtual void draw(sf::RenderWindow&);
+    virtual std::vector<const sf::Drawable *>    getDrawable() const;
 
 public:
     void                    setWidth(float);

@@ -30,11 +30,13 @@ TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsign
 TextField::~TextField()
 { }
 
-void TextField::draw(sf::RenderWindow& window)
+std::vector<const sf::Drawable *>	TextField::getDrawable() const
 {
-  std::cout << "Drawing: " << _str << std::endl;
-  window.draw(_rectShape);
-    window.draw(_text);
+    std::vector<const sf::Drawable *> obj(0);
+
+    obj.push_back(static_cast<const sf::Drawable *>(&_rectShape));
+    obj.push_back(static_cast<const sf::Drawable *>(&_text));
+    return obj;
 }
 
 void TextField::setWidth(float width)

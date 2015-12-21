@@ -13,7 +13,7 @@ public:
     virtual ~Label();
 
 public:
-    virtual void draw(sf::RenderWindow&);
+    virtual std::vector<const sf::Drawable *>   getDrawable() const;
 
 private:
     unsigned int _size;

@@ -1,5 +1,8 @@
 #include "GUIElement.hpp"
 
+GUIElement::GUIElement()
+{}
+
 GUIElement::GUIElement(gu::Rect<float> const& rect) :
   _rect(rect)
 {}
@@ -15,20 +18,11 @@ bool	GUIElement::intersect(int x, int y)
 
 GUIElement::GUIElement(GUIElement const& other):
     _rect(other._rect)
-{
-
-}
+{}
 
 GUIElement::GUIElement(GUIElement&& other) : GUIElement(other)
 {
     swap(other);
-}
-
-GUIElement& GUIElement::operator=(GUIElement other)
-{
-    swap(other);
-
-    return (*this);
 }
 
 void GUIElement::swap(GUIElement& other)
@@ -46,9 +40,3 @@ namespace std
         a.swap(b);
     }
 }
-
-void GUIElement::draw(sf::RenderWindow &)
-{ }
-
-GUIElement::GUIElement()
-{ }

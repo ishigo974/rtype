@@ -9,19 +9,19 @@ GUIManager::~GUIManager()
 
 void    GUIManager::addGUIElement(std::string const& state, GUIElement *gui)
 {
-    std::cout << "Adding an element to : " << state << std::endl;
     this->_scenes.insert(std::make_pair(state, gui));
 }
 
-void    GUIManager::draw(sf::RenderWindow& win, std::string const& state)
+std::vector<GUIElement *>   GUIManager::getGUIElements(std::string const& state)
 {
-  //    std::cout << "Drawing : " << state << std::endl;
+    std::vector<GUIElement *> vec(0);
 
-    for (auto e : _scenes)
+    for (auto obj : _scenes)
     {
-        if (e.first == state)
-            e.second->draw(win);
+        if (obj.first == state)
+            vec.push_back(obj.second);
     }
+    return vec;
 }
 
 void GUIManager::onGUI()
