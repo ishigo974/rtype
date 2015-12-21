@@ -373,6 +373,7 @@ int testSound()
 
 #include "UDPSystem.hpp"
 #include "InGameEvent.hpp"
+#include "World.hpp"
 
 void testNetwork()
 {
@@ -460,23 +461,44 @@ void testNetwork()
 //     return i == 3 ? true : false;
 // }
 
+bool worldTest()
+{
+    EntityManager em;
+    Renderer renderer(&em);
+    Input i(renderer.getWindow());
+    BehaviourSystem bs(&em);
+
+    World w(&em, new CommandSystem(&em, &i), &renderer, &bs);
+
+    GameObject *first = em.createEntity<GameObject>("LePremier", 0);
+    em.attachComponent<SpriteRenderer>(first, "SR", "bg1", gu::Rect<int>(0, 0, 1280, 720));
+
+    w.addEntity(first);
+
+    w.gameLoop();
+
+    return (true);
+}
+
 int main()
 {
-     testNetwork();
-    EntityManager entityManager;
+//     testNetwork();
+//    EntityManager entityManager;
+//
+//    srand(static_cast<unsigned>(time(nullptr)));
+//    if (gameObjectTest(entityManager))
+//        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
+//    if (timeTest())
+//        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
+//    if (stateMachineTest())
+//        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
+////    if (RCSVParserTest())
+////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
+//    // buttonAndLabelsTest();
+//    // menuTest();
+//    backgroundTest();
+//    testSound();
 
-    srand(static_cast<unsigned>(time(nullptr)));
-    if (gameObjectTest(entityManager))
-        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
-    if (timeTest())
-        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
-    if (stateMachineTest())
-        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-//    if (RCSVParserTest())
-//        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
-    // buttonAndLabelsTest();
-    // menuTest();
-    backgroundTest();
-    testSound();
+    worldTest();
     return 0;
 }

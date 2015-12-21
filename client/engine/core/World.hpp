@@ -14,7 +14,7 @@
 class World
 {
 public:
-    World(EntityManager *em);
+    World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs);
 
 public:
     std::vector<GameObject *> const *getEntities() const;
@@ -37,6 +37,7 @@ private:
     BehaviourSystem           *_behaviourSystem;
 
     double _lag;
+    bool   _end;
 };
 
 

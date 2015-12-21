@@ -4,11 +4,12 @@
 
 #include "World.hpp"
 
-World::World(EntityManager *em)
-        : _em(em)
+World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs)
+        : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs)
 {
     BigBen::getElapsedtime();
     _lag = 0.0;
+    _end = false;
 }
 
 std::vector<GameObject *> const *World::getEntities() const
@@ -23,15 +24,18 @@ void World::addEntity(GameObject *entity)
 
 void World::gameLoop()
 {
-    double lag = BigBen::getElapsedtime();
-
-    _cmdSystem->addCommand();
-
-    while (lag >= BigBen::getFixedElapsedtime())
+    while (!_end)
     {
-        _behaviourSystem->process();
-        lag -= BigBen::getFixedElapsedtime();
-    }
+        double lag = BigBen::getElapsedtime();
 
-    _renderer->render();
+        _cmdSystem->addCommand();
+
+        while (lag >= BigBen::getFixedElapsedtime())
+        {
+            _behaviourSystem->process();
+            lag -= BigBen::getFixedElapsedtime();
+        }
+
+        _renderer->render();
+    }
 }
