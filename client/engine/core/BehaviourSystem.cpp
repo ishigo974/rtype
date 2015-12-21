@@ -4,6 +4,9 @@
 
 #include "BehaviourSystem.hpp"
 #include "Behaviour.hpp"
+#include "Collider.hpp"
+#include "Player.hpp"
+#include "Bullet.hpp"
 
 BehaviourSystem::BehaviourSystem(EntityManager *em)
         : _em(em)
@@ -12,12 +15,30 @@ BehaviourSystem::BehaviourSystem(EntityManager *em)
 void BehaviourSystem::process(double elapsed)
 {
     auto tmp = _em->getByMask(ComponentMask::BehaviourMask);
-
     for (auto e : tmp)
     {
         Behaviour *comp = static_cast<GameObject *>(e)->getComponent<Behaviour>();
 
         if (comp->isEnabled())
             comp->update(elapsed);
+    }
+    tmp.clear();
+
+    tmp = _em->getByMask(ComponentMask::PlayerMask);
+    for (auto e : tmp)
+    {
+        Player *comp = static_cast<GameObject *>(e)->getComponent<Player>();
+
+        if (comp->isEnabled())
+            comp->update(elapsed);
+    }
+    tmp.clear();
+
+    tmp = _em->getByMask(ComponentMask::ColliderMask);
+    for (auto e : tmp)
+    {
+        Collider *comp = static_cast<GameObject *>(e)->getComponent<Collider>();
+
+            comp->fixedUpdate(elapsed);
     }
 }

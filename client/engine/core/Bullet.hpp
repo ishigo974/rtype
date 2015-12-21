@@ -30,7 +30,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move();
+    void         move(double elapsedTime) const;
     virtual void update(double elapsedTime);
 
     void swap(Bullet& other);
@@ -41,14 +41,8 @@ public:
   float	getY() const;
   void	setDirection(Bullet::Direction d);
   std::string	toString() const;
-  void	create();
-  void	deleteObj();
   bool	getAvailable() const;
   void	setAvailable(bool a);
-  void	setTransform(Transform * transform);
-
-  static const RTypes::my_uint16_t Mask = ComponentMask::BulletMask;
-  virtual RTypes::my_uint16_t	getMask() const;
 
 protected:
     int _hp;
