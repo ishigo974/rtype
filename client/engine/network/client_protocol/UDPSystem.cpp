@@ -15,6 +15,8 @@ namespace RType
             : _entityManager(em), _addr(addr), _socket(udp)
     {
         _socket.bind();
+        _socket.setTimeoutUsec(1000);
+        _socket.setTimeoutSec(0);
     }
 
     UDPSystem::~UDPSystem()
