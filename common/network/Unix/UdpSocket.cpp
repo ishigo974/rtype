@@ -13,8 +13,8 @@ UdpSocket::UdpSocket(short int port) : BaseSocket()
     _port        = port;
     if ((_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         throw std::runtime_error("socket failed");
-    _tv.tv_sec  = SocketMonitor::defaultSecVal;
-    _tv.tv_usec = SocketMonitor::defaultUsecVal;
+    _tv.tv_sec  = 0;
+    _tv.tv_usec = 1000;
 }
 
 UdpSocket::~UdpSocket()

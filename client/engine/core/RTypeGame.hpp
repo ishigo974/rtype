@@ -30,11 +30,13 @@ public:
 protected:
     void                handleGame();
     void                initGameSample();
+    void                loadMapsFromFile();
 
 public:
     static const double         defaultFixedStep;
     static const std::string    defaultAddr;
     static const short          defaultPort;
+    static const std::string    mapsPath;
 
 protected:
     std::string             _addr;
