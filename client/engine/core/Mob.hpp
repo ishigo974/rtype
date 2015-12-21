@@ -21,7 +21,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move(Transform & transform);
+    void         move();
     virtual void update(double);
 
     void swap(Mob& other);
@@ -34,6 +34,7 @@ protected:
     int _direction;
   int	_type;
   int	_graphicHeight;
+  Transform	*_transform;
 };
 
 #endif /* !MOB_HPP_ */
