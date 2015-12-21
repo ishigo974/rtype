@@ -37,6 +37,8 @@ namespace gu
                     x + w > other.x &&
                     y < other.y + other.h &&
                     h + y > other.y);
+	  // return (abs(x - other.x) * 2 < (w + other.w) &&
+	  // 	  abs(y - other.y) * 2 < (h + other.h));
         }
     };
 }

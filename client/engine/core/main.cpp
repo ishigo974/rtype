@@ -500,6 +500,7 @@ bool worldTest()
 
     em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
     em.attachComponent<Mob>(first, "MobCompo");
+    em.attachComponent<Collider>(first, "collision mob", 32, 21);
 
     em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
