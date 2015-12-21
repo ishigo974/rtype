@@ -250,7 +250,7 @@ void menuTest()
     gm->addGUIElement(initialState.getName(), &l);
     gm->addGUIElement(mainMenu.getName(), &b);
     sm->addState(mainMenu);
-    std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+    // std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
 
     while (e.key != cu::Event::ESCAPE)
     {
@@ -268,54 +268,13 @@ void menuTest()
             sm->move();
         }
         bg->update(BigBen::get().getElapsedtime());
-        std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
-        r.draw(menu);
-        gm->draw(r.getWindow(), sm->getCurrent().getName());
+        // std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+        // r.draw(menu);
+        // gm->draw(r.getWindow(), sm->getCurrent().getName());
         r.render();
     }
     std::cout << "Escape pressed" << std::endl;
 }
-
-// void	buttonAndLabelsTest()
-// {
-//   Renderer r;
-//   Input i(r.getWindow());
-//   Button l(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
-//   cu::Event     e;
-//
-//
-//   r.getWindow().clear();
-//   e.key = cu::Event::LAST_ACTION;
-//   while (e.key != cu::Event::ESCAPE)
-//     {
-//       while (i.pollEvent(e))
-//         {
-// 	  if (e.type == cu::Event::Closed)
-//             {
-// 	      std::cout << "Close button pressed" << std::endl;
-// 	      return;
-//             }
-// 	  if (e.type == cu::Event::MouseButtonReleased)
-// 	    {
-// 	      std::cout << "Button "
-// 			<< e.mouse.button
-// 			<< " released : ["
-// 			<< e.mouse.x
-// 			<< ";"
-// 			<< e.mouse.y
-// 			<< "]"
-// 			<< std::endl;
-// 	    }
-// 	  if (l.intersect(e.mouse.x, e.mouse.y))
-// 	    {
-// 	      std::cout << "Click on button" << std::endl;
-// 	    }
-//         }
-//       l.draw(r.getWindow());
-//       r.render();
-//     }
-//   std::cout << "Escape pressed" << std::endl;
-// }
 
 bool    RCSVParserTest()
 {
@@ -365,10 +324,6 @@ bool    RCSVParserTest()
     return i == 3 ? true : false;
 }
 
-void mapTest()
-{
-}
-
 int main()
 {
     EntityManager entityManager;
@@ -382,8 +337,7 @@ int main()
         std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
     if (RCSVParserTest())
         std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
-    // buttonAndLabelsTest();
-    // menuTest();
+    menuTest();
     backgroundTest();
     RCSVParserTest();
 
