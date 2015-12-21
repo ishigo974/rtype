@@ -18,11 +18,9 @@ std::vector<GUIElement *>   GUIManager::getGUIElements(std::string const& state)
 
     for (auto obj : _scenes)
     {
-        std::cout << "scene : " << obj.first << " Asked state : " << state << std::endl;
         if (obj.first == state)
             vec.push_back(obj.second);
     }
-    std::cout << "returning gui elements" << std::endl;
     return vec;
 }
 
