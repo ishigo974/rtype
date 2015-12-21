@@ -99,11 +99,9 @@ int	Mob::getDamage() const
 
 void		Mob::move()
 {
-  float		speed = 3.0f;
+  float		speed = 0.5f;
 
   _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
-  if (!_enabled)
-    return ;
   switch (_type)
     {
     case 0:

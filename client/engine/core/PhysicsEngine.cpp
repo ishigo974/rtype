@@ -18,7 +18,7 @@ void PhysicsEngine::process(double fixedElapsed)
         auto left = static_cast<GameObject *>(e);
         auto lCol = left->getComponent<Collider>();
 
-        lCol->fixedUpdate();
+        lCol->fixedUpdate(fixedElapsed);
 
         for (auto f : tmp)
         {
@@ -27,7 +27,8 @@ void PhysicsEngine::process(double fixedElapsed)
 
             if (left != right)
             {
-
+                if (lCol->intersects(rCol))
+                    std::cerr << right->toString() << " entered " << left->toString() << std::endl;
             }
         }
     }

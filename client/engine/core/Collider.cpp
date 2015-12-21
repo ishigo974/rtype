@@ -6,7 +6,8 @@
 Collider::Collider() : Component()
 { }
 
-Collider::Collider(unsigned int _id, std::string const& _name) : Component(_id, _name)
+Collider::Collider(unsigned int _id, std::string const& _name, int width, int height)
+        : Component(_id, _name), _bounds(0, 0, width, height)
 { }
 
 Collider::Collider(Collider const& other) : Component(other)
@@ -54,7 +55,7 @@ RTypes::my_uint16_t Collider::getMask() const
 
 std::string Collider::toString() const
 {
-    //TODO : _bounds.toSting()
+    //TODO : _bounds.toString()
     std::stringstream ss;
 
     ss << "Collider {"
@@ -66,9 +67,10 @@ std::string Collider::toString() const
     return (ss.str());
 }
 
-void Collider::fixedUpdate()
+void Collider::fixedUpdate(double)
 {
-
+    _bounds.x = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().X();
+    _bounds.y = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
 }
 
 namespace std
@@ -85,7 +87,7 @@ void Collider::sendMessage(Collider *e)
     static_cast<GameObject *>(parent())->sendMessage(*this, *e);
 }
 
-bool Collider::intersects(Collider& o)
+bool Collider::intersects(Collider *o)
 {
-    return (_bounds.intersects(o._bounds));
+    return (_bounds.intersects(o->_bounds));
 }

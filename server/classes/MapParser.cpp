@@ -1,28 +1,35 @@
 #include <stdexcept>
 #include <sstream>
 #include <vector>
-#include "RCSVParser.hpp"
+#include "MapParser.hpp"
 
 namespace RType
 {
     namespace Map
     {
-        RCSVParser::RCSVParser(std::string const& path) :
+        Parser::Parser(std::string const& path) :
             _path(path), _stream(path)
         {}
 
-        RCSVParser::~RCSVParser()
+        Parser::~Parser()
         {}
 
-        void    RCSVParser::parse(std::multimap<double, Action> &multipass)
+        Parser::Map     Parser::parse()
         {
-            for (std::string s; std::getline(this->_stream, s, '\n');)
-            {
-                this->parseLine(multipass, s);
-            }
+            Map map;
+
+            std::getline(this->_stream, map.first, '\n');
+            parseMap(map.second);
+            return map;
         }
 
-        void    RCSVParser::parseLine(std::multimap<double, Action> &multipass,
+        void    Parser::parseMap(Content& multipass)
+        {
+            for (std::string s; std::getline(this->_stream, s, '\n');)
+                this->parseLine(multipass, s);
+        }
+
+        void    Parser::parseLine(Content& multipass,
                                       std::string& line)
         {
             std::stringstream           ss;
@@ -35,18 +42,14 @@ namespace RType
             ss.str(line);
 
             for (std::string s; std::getline(ss, s, ';');)
-            {
                 tokens.push_back(s);
-            }
 
-            if (tokens.size() != 6)
-                throw std::runtime_error("Syntax Error : " + this->_path);
-
+            if (tokens.size() != 5)
+                throw std::runtime_error("Syntax error");
             multipass.emplace(stod(tokens[0]),
-                              Action(static_cast<Action::Type>(stoi(tokens[1])),
-                              static_cast<MobType>(stoi(tokens[2])),
-                              static_cast<MovementType>(stoi(tokens[3])),
-                              cu::Position(stod(tokens[4]), stod(tokens[5]))));
+                              Element(static_cast<Action>(stoi(tokens[1])),
+                              stoi(tokens[2]),
+                              stod(tokens[3]), stod(tokens[4])));
         }
     }
 }

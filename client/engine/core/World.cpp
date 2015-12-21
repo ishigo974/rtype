@@ -4,11 +4,11 @@
 
 #include "World.hpp"
 
-World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs)
-        : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs)
+World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i)
+  : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs), _input(i)
 {
     BigBen::getElapsedtime();
-    _fixedStep = BigBen::getFixedElapsedtime();
+    _fixedStep = 0.003;
     _lag       = 0.0;
     _end       = false;
 
@@ -25,20 +25,31 @@ void World::addEntity(GameObject *entity)
     _entities.push_back(entity);
 }
 
+#include <unistd.h>
 void World::gameLoop()
 {
-    while (!_end)
+  cu::Event         e;
+  while (!_end)
     {
-        double lag = BigBen::getElapsedtime();
+      double lag = BigBen::getElapsedtime();
 
-        _cmdSystem->addCommand();
+      while (_input->pollEvent(e))
+	{
+	  if (e.type == cu::Event::Closed || e.key == cu::Event::ESCAPE)
+            {
+	      std::cout << "Close button pressed" << std::endl;
+	      return;
+            }
+	}
 
-        while (lag >= _fixedStep)
+      _cmdSystem->process();
+
+      while (lag >= _fixedStep)
         {
-            _behaviourSystem->process(lag / _fixedStep);
-            lag -= _fixedStep;
+	  _behaviourSystem->process(lag / _fixedStep);
+	  lag -= _fixedStep;
         }
 
-        _renderer->render();
+      _renderer->render();
     }
 }

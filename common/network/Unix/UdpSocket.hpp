@@ -37,6 +37,13 @@ public:
     rSocket   getSocket() const;
     short int getPort() const;
     void      setPort(short int port);
+    void      setTimeoutSec(long);
+    void      setTimeoutUsec(long);
+    long      getTimeoutSec() const;
+    long      getTimeoutUsec() const;
+
+private:
+    struct timeval _tv;
 };
 
 #endif //RTYPE_SERVER_UDPSOCKET_HPP

@@ -10,6 +10,7 @@
 # include "SocketMonitor.hpp"
 # include "TcpAcceptor.hpp"
 # include "MobTypeFactory.hpp"
+# include "MapParser.hpp"
 
 namespace RType
 {
@@ -19,7 +20,8 @@ namespace RType
         typedef std::vector<std::string>    ArgsTab;
         typedef void    (Server::*CLICMDHandler)(ArgsTab const& args);
         typedef std::unordered_map<std::string,
-                    std::pair<std::string, CLICMDHandler> >  CLICMDHandlers;
+                    std::pair<std::string, CLICMDHandler> >     CLICMDHandlers;
+        typedef std::vector<Map::Parser::Map>                   MapsCollection;
 
     public:
         Server(short int port = defaultPort);
@@ -37,6 +39,7 @@ namespace RType
     protected:
         void            init();
         void            loadMobTypesFromFile();
+        void            loadMapsFromFile();
         void            onClientConnection();
         void            onCLICommand();
         void            checkDisconnected();
@@ -46,6 +49,7 @@ namespace RType
         void            handleCLIRooms(ArgsTab const& args);
         void            handleCLIMobs(ArgsTab const& args);
         void            handleCLIClients(ArgsTab const& args);
+        void            handleCLIMaps(ArgsTab const& args);
         void            handleCLIQuit(ArgsTab const& args);
 
     public:
@@ -66,6 +70,7 @@ namespace RType
         static const unsigned int   stdinFileNo;
         static const CLICMDHandlers cliCmdHandlers;
         static const std::string    mobTypesPath;
+        static const std::string    mapsPath;
 
     protected:
         short int                   _port;
@@ -76,6 +81,7 @@ namespace RType
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
         MobType::Factory            _mobTypeFactory;
+        MapsCollection              _maps;
     };
 }
 

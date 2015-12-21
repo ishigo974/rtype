@@ -30,7 +30,7 @@ public:
     int getHp() const;
     int getDamage() const;
 
-    void         move();
+    void         move(double elapsedTime) const;
     virtual void update(double elapsedTime);
 
     void swap(Bullet& other);
@@ -43,9 +43,6 @@ public:
   std::string	toString() const;
   bool	getAvailable() const;
   void	setAvailable(bool a);
-
-  static const RTypes::my_uint16_t Mask = ComponentMask::BulletMask;
-  virtual RTypes::my_uint16_t	getMask() const;
 
 protected:
     int _hp;

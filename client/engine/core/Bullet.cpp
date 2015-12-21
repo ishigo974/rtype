@@ -18,9 +18,9 @@ Bullet::Bullet(unsigned int _id, std::string const& _name)
   : Behaviour(_id, _name)
 {
   _direction = Bullet::Direction::DEFAULT;
-  _available = true;
   _hp = 1;
   _damage = 5;
+  _available = true;
   _transform = 0;
 }
 
@@ -79,11 +79,6 @@ namespace std
     {
         a.swap(b);
     }
-}
-
-RTypes::my_uint16_t     Bullet::getMask() const
-{
-  return Mask;
 }
 
 int	Bullet::getHp() const
@@ -152,16 +147,14 @@ void		Bullet::setDirection(Bullet::Direction d)
   _direction = d;
 }
 
-void		Bullet::move()
+void		Bullet::move(double elapsedtime) const
 {
-  float		speed = 10.0f;
+  float		speed = 0.75f;
 
-  if (!_enabled)
-    return ;
-  _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
+  _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * elapsedtime));
 }
 
-void		Bullet::update(double)
+void		Bullet::update(double elapsedtime)
 {
   if (!_transform)
     _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
@@ -169,5 +162,5 @@ void		Bullet::update(double)
     _available = true;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move();
+  this->move(elapsedtime);
 }

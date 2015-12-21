@@ -18,7 +18,7 @@ public:
 
 public:
     Collider();
-    Collider(unsigned int _id, std::string const& _name);
+    Collider(unsigned int _id, std::string const& _name, int width, int height);
 
     Collider(Collider const& other);
     Collider(Collider&& other);
@@ -32,14 +32,14 @@ public:
     void swap(Collider& other);
 
 public:
-    virtual void fixedUpdate();
+    virtual void fixedUpdate(double elapsedtime);
 
     virtual RTypes::my_uint16_t getMask() const;
     virtual std::string         toString() const;
 
 public:
     void sendMessage(Collider *e);
-    bool intersects(Collider &o);
+    bool intersects(Collider *o);
 
 protected:
     gu::Rect<int> _bounds;
