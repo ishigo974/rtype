@@ -38,7 +38,7 @@ private:
   void setupGUIElements();
   void setupStates();
   void refreshRoomList();
-  void createNewRoom();
+  void createNewRoom(std::string const &);
   void ready();
 public:
   bool isReady() const;

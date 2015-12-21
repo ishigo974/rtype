@@ -103,9 +103,9 @@ void Menu::refreshRoomList()
   setupGUIElements();
 }
 
-void Menu::createNewRoom()
+void Menu::createNewRoom(std::string const &roomName)
 {
-  std::cout << "Create new room" << std::endl;
+  std::cout << "Create new room: " << roomName << std::endl;
 }
 
 void Menu::ready()
@@ -184,6 +184,30 @@ void Menu::transitionToStates()
 				    return false;
 				  }, _event, &back, this);
   
+    createRoomState.addTransition("createRoom", [](cu::Event *e, TextField *input)
+				  {
+				    if (e->type == cu::Event::TextEntered)
+				      {
+					input->setText(input->getText() +
+						       static_cast<char>(e->text.unicode));
+					return true;
+				      }
+				    return false;
+				  }, _event, &inputRoomName);
+
+    createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input, Menu *menu)
+				  {
+				    if (e->type == cu::Event::KeyReleased &&
+					e->key == cu::Event::UP &&
+					input->getText().size() > 0)
+				      {
+					menu->createNewRoom(input->getText());
+					input->clearText();
+					return true;
+				      }
+				    return false;
+				  }, _event, &inputRoomName, this);
+
     inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
 			 {
 			   if (e->type == cu::Event::MouseButtonReleased &&
