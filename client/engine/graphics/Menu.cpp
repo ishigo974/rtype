@@ -135,103 +135,104 @@ void Menu::setVisible(bool visible)
 void Menu::transitionToStates()
 {
     _titleState.addTransition("mainMenu", [](cu::Event *e, Menu *menu)
-			      {
-				if (e->type == cu::Event::MouseButtonReleased)
-				  {
-				    menu->refreshRoomList();
-				    return true;
-				  }
-				return false;
-			      }, _event, this);
+    {
+        if (e->type == cu::Event::MouseButtonReleased)
+        {
+            menu->refreshRoomList();
+            return true;
+        }
+        return false;
+    }, _event, this);
 
     mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms,
-				      TextField *rT)
-			   {
-			     if (e->type == cu::Event::MouseButtonReleased)
-			       for (auto it = rooms.begin(); it != rooms.end(); ++it)
-				 if ((*it)->intersect(e->mouse.x, e->mouse.y))
-				   {
-				     rT->setText((*it)->getText());
-				     return (true);
-				   }
-			     return (false);
-			   }, _event, rooms, &roomTitle);
+        TextField *rT)
+        {
+            if (e->type == cu::Event::MouseButtonReleased)
+            for (auto it = rooms.begin(); it != rooms.end(); ++it)
+            if ((*it)->intersect(e->mouse.x, e->mouse.y))
+            {
+                rT->setText((*it)->getText());
+                return (true);
+            }
+            return (false);
+        }, _event, rooms, &roomTitle);
 
     mainMenu.addTransition("createRoom", [](cu::Event *e, TextField *cR)
-			   {
-			     if (e->type == cu::Event::MouseButtonReleased &&
-				 cR->intersect(e->mouse.x, e->mouse.y))
-			       return true;
-			     return false;
-			   }, _event, &createRoom);
+    {
+        if (e->type == cu::Event::MouseButtonReleased &&
+            cR->intersect(e->mouse.x, e->mouse.y))
+            return true;
+        return false;
+    }, _event, &createRoom);
 
     mainMenu.addTransition("mainMenu", [](cu::Event *e, TextField *r, Menu *menu)
-			   {
-			     if (e->type == cu::Event::MouseButtonReleased &&
-				 r->intersect(e->mouse.x, e->mouse.y))
-			       {
-				 menu->refreshRoomList();
-				 return true;
-			       }
-			     return false;
-			   }, _event, &refresh, this);
+    {
+        if (e->type == cu::Event::MouseButtonReleased &&
+            r->intersect(e->mouse.x, e->mouse.y))
+        {
+            menu->refreshRoomList();
+            return true;
+        }
+        return false;
+    }, _event, &refresh, this);
 
     createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
-				  {
-				    if (e->type == cu::Event::MouseButtonReleased &&
-					back->intersect(e->mouse.x, e->mouse.y))
-				      {
-					menu->refreshRoomList();
-					return true;
-				      }
-				    return false;
-				  }, _event, &back, this);
+    {
+        if (e->type == cu::Event::MouseButtonReleased &&
+            back->intersect(e->mouse.x, e->mouse.y))
+        {
+            menu->refreshRoomList();
+            return true;
+        }
+        return false;
+    }, _event, &back, this);
 
     createRoomState.addTransition("createRoom", [](cu::Event *e, TextField *input)
-				  {
-				    if (e->type == cu::Event::TextEntered)
-				      {
-					input->setText(input->getText() +
-						       static_cast<char>(e->text.unicode));
-					return true;
-				      }
-				    return false;
-				  }, _event, &inputRoomName);
+    {
+        if (e->type == cu::Event::TextEntered)
+        {
+            input->setText(input->getText() +
+            static_cast<char>(e->text.unicode));
+
+            return true;
+        }
+        return false;
+    }, _event, &inputRoomName);
 
     createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input, Menu *menu)
-				  {
-				    if (e->type == cu::Event::KeyReleased &&
-					e->key == cu::Event::UP &&
-					input->getText().size() > 0)
-				      {
-					menu->createNewRoom(input->getText());
-					input->clearText();
-					return true;
-				      }
-				    return false;
-				  }, _event, &inputRoomName, this);
+    {
+        if (e->type == cu::Event::KeyReleased &&
+            e->key == cu::Event::UP &&
+            input->getText().size() > 0)
+        {
+            menu->createNewRoom(input->getText());
+            input->clearText();
+            return true;
+        }
+        return false;
+    }, _event, &inputRoomName, this);
 
     inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
-			 {
-			   if (e->type == cu::Event::MouseButtonReleased &&
-			       back->intersect(e->mouse.x, e->mouse.y))
-			     {
-			       menu->refreshRoomList();
-			       return true;
-			     }
-			   return false;
-			 }, _event, &back, this);
+    {
+        if (e->type == cu::Event::MouseButtonReleased &&
+            back->intersect(e->mouse.x, e->mouse.y))
+        {
+            menu->refreshRoomList();
+            return true;
+        }
+        return false;
+    }, _event, &back, this);
 
     inRoom.addTransition("inRoom", [](cu::Event *e, TextField *r, Menu *menu)
-			 {
-			   if (e->type == cu::Event::MouseButtonReleased &&
-			       r->intersect(e->mouse.x, e->mouse.y))
-			     {
-			       menu->ready();
-			       return true;
-			     }
-			   return false;
-			 }, _event, &readyField, this);
+    {
+        if (e->type == cu::Event::MouseButtonReleased &&
+            r->intersect(e->mouse.x, e->mouse.y))
+        {
+            menu->ready();
+            return true;
+        }
+        return false;
+    }, _event, &readyField, this);
 }
 
 void Menu::setupGUIElements()
