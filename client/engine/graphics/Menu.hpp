@@ -9,11 +9,13 @@
 # include "EntityManager.hpp"
 # include "StateMachine.hpp"
 # include "GUIManager.hpp"
+# include "NetworkTCP.hpp"
 
 class Menu : public GameObject
 {
 public:
-    Menu(unsigned int, std::string const&, int, EntityManager *, cu::Event*);
+    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*,
+         RType::NetworkTCP* network);
     Menu(Menu const& other);
     Menu(Menu&& other);
     Menu& operator=(Menu other);
@@ -40,11 +42,12 @@ private:
   void refreshRoomList();
   void createNewRoom(std::string const &);
   void ready();
+  
 public:
   bool isReady() const;
   bool isVisible() const;
   void setVisible(bool);
-  
+
 private:
     std::vector<TextField *> rooms;
     std::vector<TextField *> playersInRoom;
@@ -60,13 +63,14 @@ private:
     State		     mainMenu;
     State		     inRoom;
     State		     createRoomState;
-  
+
     StateMachine *_sm;
 
     cu::Event     *_event;
     EntityManager *_em;
     bool _ready;
     bool _isVisible;
+    RType::NetworkTCP*  _network;
 };
 
 #endif // !MENU_HPP_

@@ -1,6 +1,7 @@
 #include "Menu.hpp"
 
-Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* em, cu::Event* event) :
+Menu::Menu(unsigned int id, std::string const& name, int layer,
+           EntityManager* em, cu::Event* event, RType::NetworkTCP* network) :
         GameObject(id, name, layer),
 	playersInRoom(4),
         mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
@@ -19,7 +20,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer, EntityManager* e
     createRoomState = State("createRoom");
     _ready = false;
     _isVisible = true;
-    
+    _network = network;
+
     refresh.setBackColor(sf::Color(80, 80, 80));
     createRoom.setBackColor(sf::Color(80, 80, 80));
     back.setBackColor(sf::Color(80, 80, 80));
@@ -99,8 +101,9 @@ void Menu::swap(Menu& other)
 void Menu::refreshRoomList()
 {
   std::cout << "Get rooms" << std::endl;
-  rooms.clear();
+  // rooms.clear();
   setupGUIElements();
+  _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
 void Menu::createNewRoom(std::string const &roomName)
@@ -140,7 +143,7 @@ void Menu::transitionToStates()
 				  }
 				return false;
 			      }, _event, this);
-    
+
     mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms,
 				      TextField *rT)
 			   {
@@ -153,7 +156,7 @@ void Menu::transitionToStates()
 				   }
 			     return (false);
 			   }, _event, rooms, &roomTitle);
-  
+
     mainMenu.addTransition("createRoom", [](cu::Event *e, TextField *cR)
 			   {
 			     if (e->type == cu::Event::MouseButtonReleased &&
@@ -161,7 +164,7 @@ void Menu::transitionToStates()
 			       return true;
 			     return false;
 			   }, _event, &createRoom);
-  
+
     mainMenu.addTransition("mainMenu", [](cu::Event *e, TextField *r, Menu *menu)
 			   {
 			     if (e->type == cu::Event::MouseButtonReleased &&
@@ -172,7 +175,7 @@ void Menu::transitionToStates()
 			       }
 			     return false;
 			   }, _event, &refresh, this);
-  
+
     createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
 				  {
 				    if (e->type == cu::Event::MouseButtonReleased &&
@@ -183,7 +186,7 @@ void Menu::transitionToStates()
 				      }
 				    return false;
 				  }, _event, &back, this);
-  
+
     createRoomState.addTransition("createRoom", [](cu::Event *e, TextField *input)
 				  {
 				    if (e->type == cu::Event::TextEntered)
@@ -239,10 +242,10 @@ void Menu::setupGUIElements()
 
     for (auto it = rooms.begin(); it != rooms.end(); ++it)
       gm->addGUIElement(mainMenu.getName(), *it);
-    
+
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
       gm->addGUIElement(inRoom.getName(), *it);
-    
+
     gm->addGUIElement(mainMenu.getName(), &refresh);
     gm->addGUIElement(mainMenu.getName(), &createRoom);
     gm->addGUIElement(createRoomState.getName(), &back);
@@ -285,7 +288,7 @@ void Menu::init()
     _em->attachComponent<SpriteRenderer>(this, "sr", str,
                                        gu::Rect<int>(0, 0, 1280, 720));
     _em->attachComponent<GUIManager>(this, "Manager");
-    
+
     setupGUIElements();
     setupStates();
 }
