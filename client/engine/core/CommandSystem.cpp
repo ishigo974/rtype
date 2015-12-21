@@ -20,7 +20,7 @@ CommandSystem::~CommandSystem()
 {
 }
 
-void    CommandSystem::addCommand()
+void    CommandSystem::process()
 {
     for (auto& a : _actions)
     {

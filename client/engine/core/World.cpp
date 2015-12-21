@@ -42,7 +42,7 @@ void World::gameLoop()
             }
 	}
 
-      _cmdSystem->addCommand();
+      _cmdSystem->process();
 
       while (lag >= _fixedStep)
         {
