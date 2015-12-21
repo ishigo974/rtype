@@ -18,6 +18,7 @@
 #include "AudioEffect.hpp"
 #include "AudioEffectPlayer.hpp"
 #include "Music.hpp"
+#include "UDPSystem.hpp"
 #include "MusicPlayer.hpp"
 #include "PlayerObject.hpp"
 
@@ -94,15 +95,32 @@ bool timeTest()
 
 void backgroundTest()
 {
+
     EntityManager     entityManager;
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
+    RType::NetworkSystem networkSystem(&entityManager);
+    RType::UDPSystem udpSystem(&entityManager);
+    RType::NetworkTCP    *networkTCP;
+    RType::Request       request;
 
+    GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
+
+    entityManager.attachComponent<RType::NetworkTCP>(gameObj, "Network");
+    entityManager.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
+
+    networkTCP = gameObj->getComponent<RType::NetworkTCP>();
     GameObject        *a = entityManager.createEntity<GameObject>("Background", -1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
 
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", "BestRoomEver");
+    networkTCP->pushRequest(request);
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
+    networkSystem.process();
     ss << "bg" << rand() % 4 + 1;
 
     PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 10, &entityManager);
@@ -166,6 +184,7 @@ void backgroundTest()
 
     Player *player = p->getComponent<Player>();
 
+    std::cerr << "tamere" << std::endl;
     while (e.key != cu::Event::ESCAPE)
     {
         while (i.pollEvent(e))
@@ -185,6 +204,7 @@ void backgroundTest()
         for (auto mob : mobs)
 	  mob->update(BigBen::get().getElapsedtime());
         r.render();
+        udpSystem.process();
     }
     std::cout << "Escape pressed" << std::endl;
 }
