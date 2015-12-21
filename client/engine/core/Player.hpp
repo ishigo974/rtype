@@ -27,7 +27,7 @@ public:
   int	getDirection() const;
   void	setAction(ACommand::Action action);
 
-  void		move(Transform & transform);
+  void		move();
   virtual void	update(double);
 
   void swap(Player& other);
@@ -45,6 +45,7 @@ protected:
   ObjectPool<BulletObject, Bullet>	*_bullets;
   std::vector<BulletObject *>		_activeBullets;
   EntityManager			*_entityManager;
+  Transform			*_transform;
   double			_shotTime = 0;
 };
 

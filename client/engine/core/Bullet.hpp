@@ -53,7 +53,7 @@ protected:
     int _hp;
     int _damage;
   Bullet::Direction	_direction;
-  // Transform		*_transform;
+  Transform		*_transform;
   bool			_available;
 };
 

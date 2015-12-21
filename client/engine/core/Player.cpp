@@ -10,7 +10,7 @@ Player::Player()
 }
 
 Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp)
-  : Behaviour(_id, _name), _hp(hp), _entityManager(manager)
+  : Behaviour(_id, _name), _hp(hp), _entityManager(manager), _transform(0)
 {
   _bullets = new ObjectPool<BulletObject, Bullet>(_entityManager);
 }
@@ -22,6 +22,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _multiple = other._multiple;
     _entityManager = other._entityManager;
     _bullets = other._bullets;
+    _transform = other._transform;
     _activeBullets = other._activeBullets;
 }
 
@@ -62,6 +63,7 @@ void Player::swap(Player& other)
     swap(_entityManager, other._entityManager);
     swap(_bullets, other._bullets);
     swap(_activeBullets, other._activeBullets);
+    swap(_transform, other._transform);
 }
 
 namespace std
@@ -81,13 +83,13 @@ RTypes::my_uint16_t     Player::getMask() const
 std::string Player::toString()
 {
     std::stringstream ss;
-    Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
     ss << "Player {"
        << "\n\thp: " << _hp
-       << "\n\tenabled: " << _enabled
-       << "\n\t" << transform.toString()
-       << "\n}" << std::endl;
+       << "\n\tenabled: " << _enabled;
+    if (_transform)
+      ss << "\n\t" << _transform->toString();
+    ss << "\n}" << std::endl;
 
     return (ss.str());
 }
@@ -102,7 +104,7 @@ void	Player::setAction(ACommand::Action action)
   _action.push(action);
 }
 
-void		Player::move(Transform & transform)
+void		Player::move()
 {
   float		speed = 7.5f;
 
@@ -121,16 +123,16 @@ void		Player::move(Transform & transform)
   switch (_action.front())
     {
     case ACommand::UP:
-      transform.getPosition().setY(transform.getPosition().Y() - speed);
+      _transform->getPosition().setY(_transform->getPosition().Y() - speed);
       break;
     case ACommand::DOWN:
-      transform.getPosition().setY(transform.getPosition().Y() + speed);
+      _transform->getPosition().setY(_transform->getPosition().Y() + speed);
       break;
     case ACommand::LEFT:
-      transform.getPosition().setX(transform.getPosition().X() - speed);
+      _transform->getPosition().setX(_transform->getPosition().X() - speed);
       break;
     case ACommand::RIGHT:
-      transform.getPosition().setX(transform.getPosition().X() + speed);
+      _transform->getPosition().setX(_transform->getPosition().X() + speed);
       break;
     default:
       break;
@@ -144,20 +146,18 @@ std::vector<BulletObject *>	Player::getActiveBullets() const
 
 void		Player::update(double elapsedtime)
 {
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
-
+  if (!_transform)
+    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
   _shotTime += elapsedtime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
   for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
-    {
-      if ((*it)->getComponent<Bullet>()->getAvailable())
-  	{
-  	  _bullets->deleteObject(*it);
-  	  _activeBullets.erase(it);
-  	  break;
-  	}
-    }
+    if ((*it)->getComponent<Bullet>()->getAvailable())
+      {
+	_bullets->deleteObject(*it);
+	_activeBullets.erase(it);
+	break;
+      }
   while (_action.size() > 0)
     {
       if (_action.front() == ACommand::SHOOT && _shotTime >= 0.0001)
@@ -165,12 +165,12 @@ void		Player::update(double elapsedtime)
       	  BulletObject *bullet = _bullets->create("Bullet", 12);
       	  _activeBullets.push_back(bullet);
       	  Bullet *b = bullet->getComponent<Bullet>();
-      	  b->setX(transform.getPosition().X());
-      	  b->setY(transform.getPosition().Y());
+      	  b->setX(_transform->getPosition().X());
+      	  b->setY(_transform->getPosition().Y());
 	  _shotTime = 0;
 	}
       else
-	this->move(transform);
+	this->move();
       _action.pop();
     }
   // std::cout << toString() << std::endl;
