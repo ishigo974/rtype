@@ -17,17 +17,18 @@ public:
     Input& operator=(Input const&) = delete;
 
 public:
-    bool pollEvent(cu::Event&);
-    bool isKeyPressed(cu::Event::KeyEvent);
+    bool    pollEvent(cu::Event&);
+    bool    isKeyPressed(cu::Event::KeyEvent);
 
 private:
-    bool key(sf::Event const&, cu::Event&);
-    bool mouse(sf::Event const&, cu::Event&);
+    bool    key(sf::Event const&, cu::Event&);
+    bool    mouse(sf::Event const&, cu::Event&);
+    bool    text(sf::Event const&, cu::Event&);
 
 private:
-    sf::RenderWindow& _win;
-    std::vector<sf::Keyboard::Key> _bindings;
-    bool                           _focus;
+    sf::RenderWindow&               _win;
+    std::vector<sf::Keyboard::Key>  _bindings;
+    bool                            _focus;
 };
 
 #endif		// !INPUT_HPP_
