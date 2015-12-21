@@ -6,6 +6,9 @@
 #include <boost/foreach.hpp>
 #include <fstream>
 #include "Renderer.hpp"
+#include "GUIManager.hpp"
+#include "GUIElement.hpp"
+#include "StateMachine.hpp"
 
 unsigned int const Renderer::width  = 1280;
 unsigned int const Renderer::height = 720;
@@ -41,10 +44,22 @@ void    Renderer::init()
 
 void Renderer::render()
 {
-    auto obj = this->_em->getByMask(128);
+    this->_win.clear();
+
+{
+    auto obj = this->_em->getByMask(DrawableMask);
     std::sort(obj.begin(), obj.end(), &Renderer::comp);
     for (auto i : obj)
         this->draw(static_cast<GameObject *>(i));
+}
+{
+    auto obj = this->_em->getByMask(GUIManagerMask);
+    for (auto i : obj)
+    {
+        this->drawGUI(static_cast<GameObject *>(i));
+    }
+
+}
     this->_win.display();
 }
 
@@ -75,6 +90,23 @@ void Renderer::draw(const GameObject *object)
     sprite.setPosition(tr.getPosition().X(), tr.getPosition().Y());
 
     this->_win.draw(sprite);
+}
+
+void Renderer::drawGUI(const GameObject *object)
+{
+    GUIManager      *gm = object->getComponent<GUIManager>();
+    StateMachine    *sm = object->getComponent<StateMachine>();
+
+    if (gm == nullptr || sm == nullptr)
+        return ;
+
+    auto vec = gm->getGUIElements(sm->getCurrent().getName());
+    for (auto element : vec)
+    {
+        auto tmp = element->getDrawable();
+        for (auto drawable : tmp)
+            this->_win.draw(*drawable);
+    }
 }
 
 Renderer::~Renderer()

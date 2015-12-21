@@ -16,7 +16,10 @@ Label::Label(gu::Rect<int> const& rect, std::string const& str, unsigned int siz
 Label::~Label()
 {}
 
-void	Label::draw(sf::RenderWindow& win)
+std::vector<const sf::Drawable *>    Label::getDrawable() const
 {
-  win.draw(this->_text);
+    std::vector<const sf::Drawable *> obj(0);
+
+    obj.push_back(static_cast<const sf::Drawable *>(&_text));
+    return obj;
 }

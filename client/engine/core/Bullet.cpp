@@ -11,6 +11,7 @@ Bullet::Bullet()
   _hp = 1;
   _damage = 5;
   _available = true;
+  _transform = 0;
 }
 
 Bullet::Bullet(unsigned int _id, std::string const& _name)
@@ -20,6 +21,7 @@ Bullet::Bullet(unsigned int _id, std::string const& _name)
   _available = true;
   _hp = 1;
   _damage = 5;
+  _transform = 0;
 }
 
 Bullet::Bullet(Bullet const& other) : Behaviour(other)
@@ -27,7 +29,9 @@ Bullet::Bullet(Bullet const& other) : Behaviour(other)
     _hp = other._hp;
     _damage = other._damage;
     _direction = other._direction;
+    _enabled = other._enabled;
     _available = other._available;
+    _transform = other._transform;
 }
 
 Bullet::Bullet(Bullet&& other) : Bullet(other)
@@ -65,6 +69,7 @@ void Bullet::swap(Bullet& other)
     swap(_damage, other._damage);
     swap(_direction, other._direction);
     swap(_available, other._available);
+    swap(_transform, other._transform);
 }
 
 namespace std
@@ -81,11 +86,6 @@ RTypes::my_uint16_t     Bullet::getMask() const
   return Mask;
 }
 
-void	Bullet::setTransform(Transform * transform)
-{
-  _transform = transform;
-}
-
 int	Bullet::getHp() const
 {
   return _hp;
@@ -96,7 +96,7 @@ int	Bullet::getDamage() const
   return _damage;
 }
 
-std::string Bullet::toString() const
+std::string Bullet::toString()
 {
     std::stringstream ss;
 
@@ -105,30 +105,35 @@ std::string Bullet::toString() const
        << "\n\tdamage: " << _damage
        << "\n\tdirection: " << _direction
        << "\n\tavailable: " << _available
-       << "\n\tenabled: " << _enabled
-       << "\n\t" << _transform->toString()
-       << "\n}" << std::endl;
+       << "\n\tenabled: " << _enabled;
+    if (_transform)
+      ss << "\n\t" << _transform->toString();
+    ss << "\n}" << std::endl;
 
     return (ss.str());
 }
 
-float		Bullet::getX() const
+float		Bullet::getX()
 {
   return _transform->getPosition().X();
 }
 
-float		Bullet::getY() const
+float		Bullet::getY()
 {
   return _transform->getPosition().Y();
 }
 
 void		Bullet::setX(float x)
 {
+  if (!_transform)
+    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
   _transform->getPosition().setX(x);
 }
 
 void		Bullet::setY(float y)
 {
+  if (!_transform)
+    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
   _transform->getPosition().setY(y);
 }
 
@@ -150,6 +155,7 @@ void		Bullet::setDirection(Bullet::Direction d)
 void		Bullet::move()
 {
   float		speed = 10.0f;
+
   if (!_enabled)
     return ;
   _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
@@ -157,6 +163,8 @@ void		Bullet::move()
 
 void		Bullet::update(double)
 {
+  if (!_transform)
+    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
   if (_transform->getPosition().X() > Renderer::width)
     _available = true;
   if (_hp == 0)
