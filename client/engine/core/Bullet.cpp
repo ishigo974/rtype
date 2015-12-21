@@ -147,7 +147,7 @@ void		Bullet::setDirection(Bullet::Direction d)
   _direction = d;
 }
 
-void		Bullet::move(double elapsedtime)
+void		Bullet::move(double elapsedtime) const
 {
   float		speed = 0.75f;
 
