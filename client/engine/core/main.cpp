@@ -99,28 +99,28 @@ void backgroundTest()
     EntityManager     entityManager;
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
-    // RType::NetworkSystem networkSystem(&entityManager);
-    // RType::UDPSystem udpSystem(&entityManager);
-    // RType::NetworkTCP    *networkTCP;
-    // RType::Request       request;
+     RType::NetworkSystem networkSystem(&entityManager);
+     RType::UDPSystem udpSystem(&entityManager);
+     RType::NetworkTCP    *networkTCP;
+     RType::Request       request;
 
     GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
 
     entityManager.attachComponent<RType::NetworkTCP>(gameObj, "Network");
     entityManager.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
 
-    // networkTCP = gameObj->getComponent<RType::NetworkTCP>();
+     networkTCP = gameObj->getComponent<RType::NetworkTCP>();
     GameObject        *a = entityManager.createEntity<GameObject>("Background", -1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
 
-    // request.setCode(RType::Request::CL_CREATEROOM);
-    // request.push<std::string>("room_name", "BestRoomEver");
-    // networkTCP->pushRequest(request);
-    // networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
-    // networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
-    // networkSystem.process();
+     request.setCode(RType::Request::CL_CREATEROOM);
+     request.push<std::string>("room_name", "BestRoomEver");
+     networkTCP->pushRequest(request);
+     networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+     networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
+     networkSystem.process();
     ss << "bg" << rand() % 4 + 1;
 
     PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 10, &entityManager);
@@ -205,7 +205,7 @@ void backgroundTest()
         for (auto mob : mobs)
 	  mob->update(BigBen::get().getElapsedtime());
         r.render();
-        // udpSystem.process();
+         udpSystem.process();
     }
     std::cout << "Escape pressed" << std::endl;
 }
@@ -530,9 +530,9 @@ int main()
 ////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
 //    // buttonAndLabelsTest();
 //    // menuTest();
-   // backgroundTest();
+    backgroundTest();
 //    testSound();
 
-    worldTest();
+ //   worldTest();
     return 0;
 }

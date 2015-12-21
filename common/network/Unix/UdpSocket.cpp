@@ -126,7 +126,7 @@ void UdpSocket::setTimeoutSec(long i)
 
 void UdpSocket::setTimeoutUsec(long i)
 {
-    _tv.tv_usec = static_cast<__darwin_suseconds_t>(i);
+    _tv.tv_usec = static_cast<suseconds_t>(i);
 }
 
 long UdpSocket::getTimeoutSec() const
