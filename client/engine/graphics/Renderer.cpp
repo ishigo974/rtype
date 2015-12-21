@@ -7,7 +7,7 @@
 #include <fstream>
 #include "Renderer.hpp"
 
-unsigned int const Renderer::width = 1280;
+unsigned int const Renderer::width  = 1280;
 unsigned int const Renderer::height = 720;
 
 Renderer::Renderer(EntityManager *em) :
@@ -26,17 +26,17 @@ void    Renderer::init()
 
     if (!file)
         throw std::runtime_error("Can't retrieve resources paths: No such file: " +
-                                Resources::resFile + "'");
+                                 Resources::resFile + "'");
     buf << file.rdbuf();
     file.close();
     boost::property_tree::read_json(buf, pt);
 
-    BOOST_FOREACH(boost::property_tree::ptree::value_type &v, pt)
-    {
-        this->_res.addTexture(v.first.data(),
-                            v.second.get<std::string>("path"),
-                            v.second.get<bool>("repeated"));
-    }
+    BOOST_FOREACH(boost::property_tree::ptree::value_type& v, pt)
+                {
+                    this->_res.addTexture(v.first.data(),
+                                          v.second.get<std::string>("path"),
+                                          v.second.get<bool>("repeated"));
+                }
 }
 
 void Renderer::render()
@@ -53,15 +53,15 @@ sf::RenderWindow& Renderer::getWindow()
     return _win;
 }
 
-bool      Renderer::comp(Object* a, Object* b)
+bool      Renderer::comp(Object *a, Object *b)
 {
-    GameObject* p = static_cast<GameObject*>(a);
-    GameObject* d = static_cast<GameObject*>(b);
+    GameObject *p = static_cast<GameObject *>(a);
+    GameObject *d = static_cast<GameObject *>(b);
 
     return p->getLayer() < d->getLayer();
 }
 
-void Renderer::draw(const GameObject* object)
+void Renderer::draw(const GameObject *object)
 {
     SpriteRenderer sr = object->renderer();
     Transform      tr = object->transform();

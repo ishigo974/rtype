@@ -8,8 +8,11 @@ World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSyste
         : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs)
 {
     BigBen::getElapsedtime();
-    _lag = 0.0;
-    _end = false;
+    _fixedStep = BigBen::getFixedElapsedtime();
+    _lag       = 0.0;
+    _end       = false;
+
+    _renderer->init();
 }
 
 std::vector<GameObject *> const *World::getEntities() const
@@ -30,10 +33,10 @@ void World::gameLoop()
 
         _cmdSystem->addCommand();
 
-        while (lag >= BigBen::getFixedElapsedtime())
+        while (lag >= _fixedStep)
         {
-            _behaviourSystem->process();
-            lag -= BigBen::getFixedElapsedtime();
+            _behaviourSystem->process(lag / _fixedStep);
+            lag -= _fixedStep;
         }
 
         _renderer->render();

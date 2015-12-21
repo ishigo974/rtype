@@ -13,7 +13,7 @@ public:
     BehaviourSystem(EntityManager *em);
 
 public:
-    void process();
+    void process(double elapsed);
 
 private:
     EntityManager *_em;

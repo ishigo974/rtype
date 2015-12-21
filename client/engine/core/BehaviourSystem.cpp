@@ -9,13 +9,15 @@ BehaviourSystem::BehaviourSystem(EntityManager *em)
         : _em(em)
 { }
 
-void BehaviourSystem::process()
+void BehaviourSystem::process(double elapsed)
 {
-    for (auto e : _em->getByMask(ComponentMask::BehaviourMask))
+    auto tmp = _em->getByMask(ComponentMask::BehaviourMask);
+
+    for (auto e : tmp)
     {
         Behaviour *comp = static_cast<GameObject *>(e)->getComponent<Behaviour>();
 
         if (comp->isEnabled())
-            comp->update();
+            comp->update(elapsed);
     }
 }

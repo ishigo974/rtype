@@ -6,10 +6,10 @@
 # define RTYPE_WORLD_HPP
 
 # include <chrono>
-#include <Renderer.hpp>
+# include <Renderer.hpp>
 # include "EntityManager.hpp"
-#include "CommandSystem.hpp"
-#include "BehaviourSystem.hpp"
+# include "CommandSystem.hpp"
+# include "BehaviourSystem.hpp"
 
 class World
 {
@@ -37,6 +37,7 @@ private:
     BehaviourSystem           *_behaviourSystem;
 
     double _lag;
+    double _fixedStep;
     bool   _end;
 };
 

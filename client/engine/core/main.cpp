@@ -488,12 +488,20 @@ bool worldTest()
     Input i(renderer.getWindow());
     BehaviourSystem bs(&em);
 
+    srand(time(nullptr));
+
     World w(&em, new CommandSystem(&em, &i), &renderer, &bs);
 
     GameObject *first = em.createEntity<GameObject>("LePremier", 0);
-    em.attachComponent<SpriteRenderer>(first, "SR", "bg1", gu::Rect<int>(0, 0, 1280, 720));
+    GameObject *bg = em.createEntity<GameObject>("bg", -1);
+
+    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(0, 0, 1280, 720));
+
+    em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
+    em.attachComponent<ScrollingBackground>(bg, "Background", 60);
 
     w.addEntity(first);
+    w.addEntity(bg);
 
     w.gameLoop();
 
