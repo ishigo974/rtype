@@ -27,10 +27,13 @@ public:
     bool operator==(Bullet const& other);
     bool operator!=(Bullet const& other);
 
-    int getHp() const;
-    int getDamage() const;
 
-    void         move(double elapsedTime) const;
+    int getHp() const;
+  virtual int getDamage() const;
+  void	setHp(int hp);
+  void  setDamage(int damage);
+
+  void         move(double elapsedTime) const;
     virtual void update(double elapsedTime);
 
     void swap(Bullet& other);
@@ -43,6 +46,8 @@ public:
   std::string	toString() const;
   bool	getAvailable() const;
   void	setAvailable(bool a);
+
+    virtual bool handleMessage(Collider *o);
 
 protected:
     int _hp;

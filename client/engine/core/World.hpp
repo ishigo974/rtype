@@ -10,11 +10,12 @@
 # include "EntityManager.hpp"
 # include "CommandSystem.hpp"
 # include "BehaviourSystem.hpp"
+# include "PhysicsEngine.hpp"
 
 class World
 {
 public:
-  World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i);
+    World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, PhysicsEngine *pe);
 
 public:
     std::vector<GameObject *> const *getEntities() const;
@@ -35,7 +36,8 @@ private:
     CommandSystem             *_cmdSystem;
     Renderer                  *_renderer;
     BehaviourSystem           *_behaviourSystem;
-  Input				*_input;
+    Input                     *_input;
+    PhysicsEngine             *_pe;
 
     double _lag;
     double _fixedStep;
