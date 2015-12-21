@@ -32,7 +32,7 @@ public:
 
   void swap(Player& other);
 
-  std::string	toString();
+  std::string	toString() const;
   static const RTypes::my_uint16_t Mask = ComponentMask::PlayerMask;
   virtual RTypes::my_uint16_t	getMask() const;
 

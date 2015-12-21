@@ -257,75 +257,75 @@ bool mobTest()
     return (true);
 }
 
-void menuTest()
-{
-    EntityManager entityManager;
-    Renderer      r(&entityManager);
-    Input         i(r.getWindow());
-    cu::Event     e;
-
-    Label  l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
-    Button b(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
-
-    GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
-
-    std::stringstream ss;
-    ss << "menu" << rand() % 4 + 1;
-
-    entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
-    entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
-                                                  gu::Rect<int>(0, 0, 1280, 720));
-    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
-
-    State initialState("Aeris");
-    State mainMenu("MainMenu");
-
-    initialState.addTransition("MainMenu", [](cu::Event const *e)
-                               {
-                                   return e->type == cu::Event::KeyReleased;
-                               },
-                               &e);
-
-    entityManager.attachComponent<StateMachine>(menu, initialState);
-    entityManager.attachComponent<GUIManager>(menu);
-
-    r.init();
-    e.type = cu::Event::None;
-    e.key  = cu::Event::LAST_ACTION;
-
-    menu->getComponent<ScrollingBackground>()->setEnabled(true);
-    ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
-    StateMachine        *sm = menu->getComponent<StateMachine>();
-    GUIManager          *gm = menu->getComponent<GUIManager>();
-
-    gm->addGUIElement(initialState.getName(), &l);
-    gm->addGUIElement(mainMenu.getName(), &b);
-    sm->addState(mainMenu);
-    std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
-
-    while (e.key != cu::Event::ESCAPE)
-    {
-        while (i.pollEvent(e))
-        {
-            if (e.type == cu::Event::Closed)
-            {
-                std::cout << "Close button pressed" << std::endl;
-                return;
-            }
-            if (e.type == cu::Event::KeyPressed)
-                std::cout << "Key pressed : " << e.key << std::endl;
-            if (e.type == cu::Event::KeyReleased)
-                std::cout << "Key released : " << e.key << std::endl;
-            sm->move();
-        }
-        bg->update(BigBen::get().getElapsedtime());
-        std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
-        r.draw(menu);
-        gm->draw(r.getWindow(), sm->getCurrent().getName());
-        r.render();
-    }
-    std::cout << "Escape pressed" << std::endl;
-}
+//void menuTest()
+//{
+//    EntityManager entityManager;
+//    Renderer      r(&entityManager);
+//    Input         i(r.getWindow());
+//    cu::Event     e;
+//
+//    Label  l(gu::Rect<int>(300, 100, 160, 25), "Le R-Type officiel 2015", 64);
+//    Button b(gu::Rect<int>(100, 100, 160, 25), "LE ZEAUB DE OUF", 16);
+//
+//    GameObject *menu = entityManager.createEntity<GameObject>("menu", 1);
+//
+//    std::stringstream ss;
+//    ss << "menu" << rand() % 4 + 1;
+//
+//    entityManager.attachComponent<Transform>(menu, cu::Position(0, 0));
+//    entityManager.attachComponent<SpriteRenderer>(menu, "sr", ss.str(),
+//                                                  gu::Rect<int>(0, 0, 1280, 720));
+//    entityManager.attachComponent<ScrollingBackground>(menu, "sb", 0);
+//
+//    State initialState("Aeris");
+//    State mainMenu("MainMenu");
+//
+//    initialState.addTransition("MainMenu", [](cu::Event const *e)
+//                               {
+//                                   return e->type == cu::Event::KeyReleased;
+//                               },
+//                               &e);
+//
+//    entityManager.attachComponent<StateMachine>(menu, initialState);
+//    entityManager.attachComponent<GUIManager>(menu);
+//
+//    r.init();
+//    e.type = cu::Event::None;
+//    e.key  = cu::Event::LAST_ACTION;
+//
+//    menu->getComponent<ScrollingBackground>()->setEnabled(true);
+//    ScrollingBackground *bg = menu->getComponent<ScrollingBackground>();
+//    StateMachine        *sm = menu->getComponent<StateMachine>();
+//    GUIManager          *gm = menu->getComponent<GUIManager>();
+//
+//    gm->addGUIElement(initialState.getName(), &l);
+//    gm->addGUIElement(mainMenu.getName(), &b);
+//    sm->addState(mainMenu);
+//    std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+//
+//    while (e.key != cu::Event::ESCAPE)
+//    {
+//        while (i.pollEvent(e))
+//        {
+//            if (e.type == cu::Event::Closed)
+//            {
+//                std::cout << "Close button pressed" << std::endl;
+//                return;
+//            }
+//            if (e.type == cu::Event::KeyPressed)
+//                std::cout << "Key pressed : " << e.key << std::endl;
+//            if (e.type == cu::Event::KeyReleased)
+//                std::cout << "Key released : " << e.key << std::endl;
+//            sm->move();
+//        }
+//        bg->update(BigBen::get().getElapsedtime());
+//        std::cout << "Current : " << sm->getCurrent().getName() << std::endl;
+//        r.draw(menu);
+//        gm->draw(r.getWindow(), sm->getCurrent().getName());
+//        r.render();
+//    }
+//    std::cout << "Escape pressed" << std::endl;
+//}
 
 // Les sf::sleep sont la pour ne pas lancer les sons en meme temps car la sfml joue les sons
 // dans un thread a part; Ils seraient lanc�s en m�me temps sinon...
@@ -419,8 +419,10 @@ void testNetwork()
     networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
     networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
     networkSystem.process();
+
     RType::InGameEvent             event;
     int i = 1;
+
     while (1)
     {
         event.setCode(RType::InGameEvent::CL_PLAYERUP);
@@ -488,14 +490,12 @@ bool worldTest()
     Input i(renderer.getWindow());
     BehaviourSystem bs(&em);
 
-    srand(time(nullptr));
-
     World w(&em, new CommandSystem(&em, &i), &renderer, &bs);
 
     GameObject *first = em.createEntity<GameObject>("LePremier", 0);
     GameObject *bg = em.createEntity<GameObject>("bg", -1);
 
-    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(0, 0, 32, 21));
+    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
 
     em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     em.attachComponent<ScrollingBackground>(bg, "Background", 60);

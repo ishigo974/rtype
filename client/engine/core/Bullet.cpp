@@ -96,7 +96,7 @@ int	Bullet::getDamage() const
   return _damage;
 }
 
-std::string Bullet::toString()
+std::string Bullet::toString() const
 {
     std::stringstream ss;
 
@@ -113,12 +113,12 @@ std::string Bullet::toString()
     return (ss.str());
 }
 
-float		Bullet::getX()
+float		Bullet::getX() const
 {
   return _transform->getPosition().X();
 }
 
-float		Bullet::getY()
+float		Bullet::getY() const
 {
   return _transform->getPosition().Y();
 }
