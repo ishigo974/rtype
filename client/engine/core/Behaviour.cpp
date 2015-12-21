@@ -79,3 +79,8 @@ RTypes::my_uint16_t Behaviour::getMask() const
 {
     return Mask;
 }
+
+int		Behaviour::getDamage() const
+{
+  return 0;
+}

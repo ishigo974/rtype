@@ -9,12 +9,13 @@ GameObject::GameObject()
 { }
 
 GameObject::GameObject(unsigned int _id, std::string const& _name, int _layer)
-        : Object(_id, _name), _layer(_layer)
+  : Object(_id, _name), _layer(_layer), _isVisible(true)
 { }
 
 GameObject::GameObject(GameObject const& other) : Object(other)
 {
     _layer = other.getLayer();
+    _isVisible = other._isVisible;
 }
 
 GameObject::GameObject(GameObject&& other) : GameObject(other)
@@ -73,6 +74,7 @@ void GameObject::swap(GameObject& other)
     using std::swap;
 
     swap(_layer, other._layer);
+    swap(_isVisible, other._isVisible);
 }
 
 namespace std
@@ -115,4 +117,14 @@ SpriteRenderer& GameObject::renderer() const
     if (tmp == nullptr)
         throw std::runtime_error("Renderer not found");
     return (*tmp);
+}
+
+bool		GameObject::isVisible() const
+{
+  return _isVisible;
+}
+
+void		GameObject::setVisible(bool v)
+{
+  _isVisible = v;
 }

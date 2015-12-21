@@ -14,7 +14,7 @@ class Player : public Behaviour
 {
 public:
     Player();
-    Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 100);
+  Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 40, int damage = 5);
     virtual ~Player();
 
     Player(Player const& other);
@@ -25,10 +25,15 @@ public:
     bool operator!=(Player const& other);
 
     int  getHp() const;
+    virtual int  getDamage() const;
     void setAction(ACommand::Action action);
 
     void         move();
     virtual void update(double);
+
+    void	checkDeath();
+    void	checkAvailableBullets();
+    void        shoot();
 
     void swap(Player& other);
 
@@ -41,7 +46,9 @@ public:
     virtual bool handleMessage(Collider *o);
 
 protected:
+  GameObject				*_parent;
     int                              _hp;
+  int				_damage;
     std::queue<ACommand::Action>     _action;
     bool                             _multiple = false;
     ObjectPool<BulletObject, Bullet> *_bullets;

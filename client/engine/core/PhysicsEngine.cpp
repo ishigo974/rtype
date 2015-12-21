@@ -25,7 +25,7 @@ void PhysicsEngine::process(double fixedElapsed)
             auto right = static_cast<GameObject *>(f);
             auto rCol = right->getComponent<Collider>();
 
-            if (left != right)
+            if (left != right && rCol->isEnabled() && lCol->isEnabled())
             {
                 if (lCol->intersects(rCol))
                 {

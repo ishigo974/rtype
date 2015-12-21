@@ -37,6 +37,8 @@ public:
     virtual std::string toString() const;
     int                 getLayer() const;
     void                setLayer(unsigned int _layer);
+  bool	        isVisible() const;
+  void	        setVisible(bool v);
 
 public:
     template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
@@ -72,6 +74,7 @@ public:
 protected:
     int                      _layer;
     std::vector<Component *> _components;
+  bool			_isVisible;
 };
 
 
