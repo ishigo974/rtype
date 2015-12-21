@@ -196,7 +196,7 @@ void backgroundTest()
                 return;
             }
         }
-        cmds.addCommand();
+        cmds.process();
         bg->update(BigBen::get().getElapsedtime());
         player->update(BigBen::get().getElapsedtime());
 	std::vector<BulletObject *> obj = player->getActiveBullets();
@@ -493,12 +493,13 @@ bool worldTest()
 
     World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i);
 
-    PlayerObject *player = em.createEntity<PlayerObject>("Player", 1, &em);
+    PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);
     player->init();
     GameObject *first = em.createEntity<GameObject>("LePremier", 0);
     GameObject *bg = em.createEntity<GameObject>("bg", -1);
 
     em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
+    em.attachComponent<Mob>(first, "MobCompo");
 
     em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
