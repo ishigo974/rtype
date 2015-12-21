@@ -6,17 +6,17 @@
 
 namespace RType
 {
-    namespace Mob
+    namespace MobType
     {
-        class TypeFactory : public Utils::BaseFactory<IMobType>
+        class Factory : public Utils::BaseFactory<IMobType>
         {
         public:
-            TypeFactory();
-            virtual ~TypeFactory();
+            Factory();
+            virtual ~Factory();
 
         private:
-            TypeFactory(TypeFactory const& other) = delete;
-            TypeFactory&     operator=(TypeFactory const& other) = delete;
+            Factory(Factory const& other) = delete;
+            Factory&     operator=(Factory const& other) = delete;
         };
     }
 }

@@ -58,10 +58,11 @@ namespace RType
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
         { "users",  { "list connected users",   &Server::handleCLIClients } },
-        { "rooms",  { "list rooms",             &Server::handleCLIRooms } },
-        { "quit",   { "shutdown server",        &Server::handleCLIQuit } },
+        { "rooms",  { "list rooms",             &Server::handleCLIRooms }   },
+        { "mobs",   { "list mobs types",        &Server::handleCLIMobs }    },
+        { "quit",   { "shutdown server",        &Server::handleCLIQuit }    },
         { "help",   { "displays infos about how to use the server's CLI",
-                      &Server::handleCLIHelp } },
+                      &Server::handleCLIHelp }                              },
     };
 
     /*
@@ -179,18 +180,20 @@ namespace RType
         }
         while (std::getline(file, line))
         {
-            std::ifstream   mobFile(line.c_str());
-            IMobType*       mobType = nullptr;
+            std::ifstream       mobFile(line.c_str());
+            MobType::IMobType*  mobType = nullptr;
 
             if (line.empty())
                 continue ;
             try {
                 if (mobFile.good())
                 {
-                    mobType = DLLoader<IMobType*>::getInstanceOf(line,
-                                                                 "getMobType");
-                    _mobTypeFactory.learn(std::unique_ptr<IMobType>(mobType));
+                    mobType = DLLoader<MobType::IMobType*>::getInstanceOf(line,
+                                                                "getMobType");
+
                     Server::display("Mob '" + mobType->getName() + "' loaded");
+                    _mobTypeFactory
+                        .learn(std::unique_ptr<MobType::IMobType>(mobType));
                 }
                 else
                     Server::display("Can't load mob type: No such file: " +
@@ -288,6 +291,19 @@ namespace RType
                             std::to_string(room->size()) + "/" +
                             std::to_string(Component::Room::nbMaxPlayers) +
                             "\t| " + room->getPlayersNames());
+        }
+    }
+
+    void            Server::handleCLIMobs(ArgsTab const&)
+    {
+        Server::display("Id\t| Name\t\t| Lives\t| Score value\t");
+        for (auto& entry: _mobTypeFactory)
+        {
+            Server::display(std::to_string(entry.second->getId()) + "\t| "
+                            + entry.second->getName() + "\t| "
+                            + std::to_string(entry.second->getNbLives())
+                            + "\t| "
+                            + std::to_string(entry.second->getScoreValue()));
         }
     }
 

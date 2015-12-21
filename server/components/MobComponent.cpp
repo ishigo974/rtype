@@ -19,7 +19,7 @@ namespace RType
         {
         }
 
-        Mob::Mob(IMobType const* type) :
+        Mob::Mob(MobType::IMobType const* type) :
             _id(0), _name(""), _lives(0),
             _scoreValue(0), _spriteFilePath("")
         {
@@ -57,7 +57,7 @@ namespace RType
         /*
         ** Public member functions
         */
-        void            Mob::init(IMobType const* type)
+        void            Mob::init(MobType::IMobType const* type)
         {
             _id = type->getId();
             _name = type->getName();
@@ -109,7 +109,7 @@ namespace RType
             return _spriteFilePath;
         }
 
-        MovePattern const&      Mob::getMovePattern() const
+        MobType::MovePattern const&      Mob::getMovePattern() const
         {
             return _movePattern;
         }
@@ -136,7 +136,7 @@ namespace RType
             _lives = 0;
             _scoreValue = 0;
             _spriteFilePath = "";
-            _movePattern = MovePattern();
+            _movePattern = MobType::MovePattern();
         }
 
         std::string         Mob::toString() const

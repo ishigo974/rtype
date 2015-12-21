@@ -14,7 +14,7 @@ namespace RType
         {
         public:
             Mob();
-            Mob(IMobType const* type);
+            Mob(MobType::IMobType const* type);
             virtual ~Mob();
 
         public:
@@ -22,7 +22,7 @@ namespace RType
             Mob&           operator=(Mob const& other);
 
         public:
-            void            init(IMobType const* type);
+            void            init(MobType::IMobType const* type);
             virtual void    update();
 
         public:
@@ -30,12 +30,12 @@ namespace RType
             void            removeLives(unsigned int nb = 1);
 
         public:
-            unsigned int            getId() const;
-            std::string const&      getMobName() const;
-            unsigned int            getLives() const;
-            unsigned int            getScoreValue() const;
-            std::string const&      getSpriteFilePath() const;
-            MovePattern const&      getMovePattern() const;
+            unsigned int                    getId() const;
+            std::string const&              getMobName() const;
+            unsigned int                    getLives() const;
+            unsigned int                    getScoreValue() const;
+            std::string const&              getSpriteFilePath() const;
+            MobType::MovePattern const&     getMovePattern() const;
 
         public:
             virtual std::string         getName() const;
@@ -48,12 +48,12 @@ namespace RType
             static const ECS::ComponentMask     mask;
 
         protected:
-            unsigned int    _id;
-            std::string     _name;
-            unsigned int    _lives;
-            unsigned int    _scoreValue;
-            std::string     _spriteFilePath;
-            MovePattern     _movePattern;
+            unsigned int            _id;
+            std::string             _name;
+            unsigned int            _lives;
+            unsigned int            _scoreValue;
+            std::string             _spriteFilePath;
+            MobType::MovePattern    _movePattern;
         };
     }
 }

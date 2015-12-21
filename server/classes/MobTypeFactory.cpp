@@ -3,13 +3,13 @@
 
 namespace RType
 {
-    namespace Mob
+    namespace MobType
     {
-        TypeFactory::TypeFactory()
+        Factory::Factory()
         {
         }
 
-        TypeFactory::~TypeFactory()
+        Factory::~Factory()
         {
         }
     }

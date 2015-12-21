@@ -44,6 +44,7 @@ namespace RType
     protected:
         void            handleCLIHelp(ArgsTab const& args);
         void            handleCLIRooms(ArgsTab const& args);
+        void            handleCLIMobs(ArgsTab const& args);
         void            handleCLIClients(ArgsTab const& args);
         void            handleCLIQuit(ArgsTab const& args);
 
@@ -74,7 +75,7 @@ namespace RType
         ECS::EntityManager&         _em;
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
-        Mob::TypeFactory            _mobTypeFactory;
+        MobType::Factory            _mobTypeFactory;
     };
 }
 
