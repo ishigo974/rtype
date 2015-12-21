@@ -18,6 +18,7 @@
 #include "Menu.hpp"
 #include "World.hpp"
 #include "PlayerObject.hpp"
+#include "RTypeGame.hpp"
 
 bool worldTest()
 {
@@ -69,6 +70,8 @@ int main()
    // backgroundTest();
 //    testSound();
 
-    worldTest();
+    // worldTest();
+    RTypeGame game;
+    game.run();
     return 0;
 }
