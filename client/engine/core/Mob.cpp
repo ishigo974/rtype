@@ -9,7 +9,7 @@ Mob::Mob()
 }
 
 Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type)
+  : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type), _transform(0)
 {
   _direction = 1;
 }
@@ -21,6 +21,7 @@ Mob::Mob(Mob const& other) : Behaviour(other)
     _damage = other._damage;
     _direction = other._direction;
     _type = other._type;
+    _transform = other._transform;
 }
 
 Mob::Mob(Mob&& other) : Mob(other)
@@ -58,6 +59,7 @@ void Mob::swap(Mob& other)
     swap(_damage, other._damage);
     swap(_direction, other._direction);
     swap(_type, other._type);
+    swap(_transform, other._transform);
 }
 
 namespace std
@@ -72,15 +74,15 @@ namespace std
 std::string Mob::toString() const
 {
     std::stringstream ss;
-    Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
     ss << "Player {"
        << "\n\thp: " << _hp
        << "\n\tdamage: " << _damage
        << "\n\ttype: " << _type
-       << "\n\tGraphic height: " << _graphicHeight
-       << "\n\t" << transform.toString()
-       << "\n}" << std::endl;
+       << "\n\tGraphic height: " << _graphicHeight;
+    if (_transform)
+      ss << "\n\t" << _transform->toString();
+    ss << "\n}" << std::endl;
 
     return (ss.str());
 }
@@ -95,39 +97,37 @@ int	Mob::getDamage() const
   return _damage;
 }
 
-void		Mob::move(Transform & transform)
+void		Mob::move()
 {
   float		speed = 3.0f;
 
   _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
-  if (!_enabled)
-    return ;
   switch (_type)
     {
     case 0:
-      if (transform.getPosition().Y() <= 0)
+      if (_transform->getPosition().Y() <= 0)
 	_direction = 1;
-      else if (transform.getPosition().Y() >= Renderer::height - _graphicHeight)
+      else if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
 	_direction = -1;
-      transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
+      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
       break;
     case 1:
-      if (transform.getPosition().Y() >= Renderer::height - _graphicHeight)
+      if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
 	_type = 2;
       _direction = -1;
-      transform.getPosition().setY((transform.getPosition().Y() + _direction * -1 * speed));
-      transform.getPosition().setX((transform.getPosition().X() + _direction * speed * 3 / 4));
+      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * -1 * speed));
+      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
       break;
     case 2:
-      if (transform.getPosition().Y() <= 0)
+      if (_transform->getPosition().Y() <= 0)
 	_type = 1;
       _direction = -1;
-      transform.getPosition().setY((transform.getPosition().Y() + _direction * speed));
-      transform.getPosition().setX((transform.getPosition().X() + _direction * speed * 3 / 4));
+      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
+      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
       break;
     case 3:
       _direction = -1;
-      transform.getPosition().setX((transform.getPosition().X() + _direction * speed));
+      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
     default:
       _type = 3;
       break;
@@ -136,9 +136,14 @@ void		Mob::move(Transform & transform)
 
 void		Mob::update(double)
 {
-  Transform	&transform = static_cast<GameObject *>(parent())->transform();
-
+  if (!_transform)
+    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
+  if (_transform->getPosition().X() > Renderer::width + 100
+      || _transform->getPosition().X() < -100
+      || _transform->getPosition().Y() > Renderer::height + 100
+      || _transform->getPosition().Y() < -100)
+    _enabled = false;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
-  this->move(transform);
+  this->move();
 }

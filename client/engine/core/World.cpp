@@ -4,11 +4,11 @@
 
 #include "World.hpp"
 
-World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs)
-        : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs)
+World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, cu::Event* event)
+: _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs), _input(i), _event(event)
 {
     BigBen::getElapsedtime();
-    _fixedStep = BigBen::getFixedElapsedtime();
+    _fixedStep = 0.003;
     _lag       = 0.0;
     _end       = false;
 
@@ -30,6 +30,15 @@ void World::gameLoop()
     while (!_end)
     {
         double lag = BigBen::getElapsedtime();
+
+        while (_input->pollEvent(*_event))
+        {
+            if (_event->type == cu::Event::Closed || _event->key == cu::Event::ESCAPE)
+            {
+                std::cout << "Close button pressed" << std::endl;
+                return;
+            }
+        }
 
         _cmdSystem->addCommand();
 

@@ -8,6 +8,7 @@
 # include "Bullet.hpp"
 # include "BulletObject.hpp"
 # include "EntityManager.hpp"
+# include "Collider.hpp"
 
 class	Player : public Behaviour
 {
@@ -27,7 +28,7 @@ public:
   int	getDirection() const;
   void	setAction(ACommand::Action action);
 
-  void		move(Transform & transform);
+  void		move();
   virtual void	update(double);
 
   void swap(Player& other);
@@ -38,6 +39,19 @@ public:
 
   std::vector<BulletObject *>	getActiveBullets() const;
 
+  template <class ...Args>
+  bool	handleMessage(Args...)
+  {
+    std::cout << "fkiweokfwe1" << std::endl;
+    return false;
+  }
+
+  bool    handleMessage(Collider *, Collider *)
+  {
+    std::cout << "fkiweokfwe2" << std::endl;
+    return false;
+  }
+
 protected:
   int				_hp;
   std::queue<ACommand::Action>	_action;
@@ -45,6 +59,7 @@ protected:
   ObjectPool<BulletObject, Bullet>	*_bullets;
   std::vector<BulletObject *>		_activeBullets;
   EntityManager			*_entityManager;
+  Transform			*_transform;
   double			_shotTime = 0;
 };
 

@@ -11,6 +11,7 @@ public:
   }
   virtual ~ObjectPool() { }
 
+  // TODO
   // static void* operator new (size_t size);
   // static void operator delete (void *p);
 
@@ -36,8 +37,8 @@ public:
     _objects.push(obj);
   }
 
-private:
   std::queue<T *>	_objects;
+private:
   EntityManager		*_entityManager;
 };
 
