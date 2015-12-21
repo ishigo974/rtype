@@ -83,7 +83,7 @@ bool Menu::operator!=(Menu const& other)
     return !Menu::operator==(other);
 }
 
-std::string Menu::toString()
+std::string Menu::toString() const
 {
     return std::string("Menu");
 }

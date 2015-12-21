@@ -27,7 +27,7 @@ public:
     virtual bool operator==(Menu const& other);
     virtual bool operator!=(Menu const& other);
 
-    virtual std::string toString();
+    virtual std::string toString() const;
 
     void swap(Menu& other);
 

@@ -1,14 +1,15 @@
+#include <fstream>
 #include "RTypeGame.hpp"
 #include "Menu.hpp"
 #include "PlayerObject.hpp"
 #include "ScrollingBackground.hpp"
-
 /*
 ** Static variables
 */
 const double        RTypeGame::defaultFixedStep = 0.003;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
+const std::string   RTypeGame::mapsPath        = ".rtypemaps";
 
 /*
 ** Constructor/Destructor
@@ -88,4 +89,35 @@ void        RTypeGame::handleGame()
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
+}
+
+void            RTypeGame::loadMapsFromFile()
+{
+    std::ifstream   file(mapsPath.c_str());
+    std::string     line;
+
+    if (!file)
+        return ;
+    while (std::getline(file, line))
+    {
+        std::ifstream       mapFile(line.c_str());
+
+        if (line.empty())
+            continue ;
+        try {
+            if (mapFile.good())
+            {
+//                Map::Parser         parser(line);
+//                Map::Parser::Map    map;
+//
+//                map = parser.parse();
+//                _maps.push_back(map);
+//
+                ;
+            }
+        } catch (std::runtime_error const& e) {
+        }
+        mapFile.close();
+    }
+    file.close();
 }
