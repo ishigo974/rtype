@@ -28,8 +28,11 @@ void    MoveCommand::execute()
     RType::InGameEvent event;
 
     for (auto obj : objs)
-        static_cast<GameObject *>(obj)->getComponent<Player>()
-                                      ->setAction(_direction);
+      {
+	Player *player = static_cast<GameObject *>(obj)->getComponent<Player>();
+	if (player)
+	  player->setAction(_direction);
+      }
     switch (_direction)
     {
         case UP:
@@ -51,8 +54,8 @@ void    MoveCommand::execute()
                          std::chrono::time_point_cast<std::chrono::milliseconds>
                                  (BigBen::getTimeNow()).time_since_epoch()
                                                        .count());
-    static_cast<GameObject *>(network[0])
-            ->getComponent<RType::NetworkUDP>()->pushRequest(event);
+    // static_cast<GameObject *>(network[0])
+    //         ->getComponent<RType::NetworkUDP>()->pushRequest(event);
 }
 
 void    MoveCommand::undo()
