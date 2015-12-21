@@ -495,7 +495,7 @@ bool worldTest()
     GameObject *first = em.createEntity<GameObject>("LePremier", 0);
     GameObject *bg = em.createEntity<GameObject>("bg", -1);
 
-    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(0, 0, 1280, 720));
+    em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(0, 0, 32, 21));
 
     em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     em.attachComponent<ScrollingBackground>(bg, "Background", 60);
