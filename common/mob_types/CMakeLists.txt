@@ -23,6 +23,7 @@ include_directories( ../utils )
 
 file(GLOB forwardmob_files ForwardMobType.cpp ../utils/Utils.cpp)
 file(GLOB verticalmob_files VerticalMobType.cpp ../utils/Utils.cpp)
+file(GLOB verticalmob_files SinusoidMobType.cpp ../utils/Utils.cpp)
 
 add_library(${FORWARDMOB} MODULE ${forwardmob_files})
 add_library(${VERTICALMOB} MODULE ${verticalmob_files})

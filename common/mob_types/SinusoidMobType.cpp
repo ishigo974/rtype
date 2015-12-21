@@ -1,4 +1,5 @@
-#include "VerticalMobType.hpp"
+#include <cmath>
+#include "SinusoidMobType.hpp"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
@@ -12,7 +13,7 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID)
 extern "C" __declspec(dllexport)
 RType::MobType::IMobType*       getMobType()
 {
-    return new RType::MobType::Vertical();
+    return new RType::MobType::Sinusoid();
 }
 
 #else
@@ -21,7 +22,7 @@ extern "C"
 {
     RType::MobType::IMobType*   getMobType()
     {
-        return new RType::MobType::Vertical();
+        return new RType::MobType::Sinusoid();
     }
 }
 #endif
@@ -33,22 +34,22 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Vertical::Vertical()
+        Sinusoid::Sinusoid()
         {
         }
 
-        Vertical::~Vertical()
+        Sinusoid::~Sinusoid()
         {
         }
 
         /*
         ** Copy constructor and assign operator
         */
-        Vertical::Vertical(Vertical const& other)
+        Sinusoid::Sinusoid(Sinusoid const& other)
         {
         }
 
-        Vertical&      Vertical::operator=(Vertical const& other)
+        Sinusoid&      Sinusoid::operator=(Sinusoid const& other)
         {
             return *this;
         }
@@ -56,56 +57,53 @@ namespace RType
         /*
         ** Public member functions
         */
-        unsigned int    Vertical::getId() const
-        {
-            return 2;
-        }
-
-        std::string     Vertical::getName() const
-        {
-            return "VerticalMob";
-        }
-
-        unsigned int    Vertical::getNbLives() const
+        unsigned int    Sinusoid::getId() const
         {
             return 1;
         }
 
-        unsigned int    Vertical::getScoreValue() const
+        std::string     Sinusoid::getName() const
+        {
+            return "SinusoidMob";
+        }
+
+        unsigned int    Sinusoid::getNbLives() const
+        {
+            return 1;
+        }
+
+        unsigned int    Sinusoid::getScoreValue() const
         {
             return 5;
         }
 
-        std::string     Vertical::getSpriteFilePath() const
+        std::string     Sinusoid::getSpriteFilePath() const
         {
-            return "verticalType.png";
+            return "sinusoidType.png";
         }
 
         /*
         ** Moves forward, following a straight line
         */
-        MovePattern     Vertical::getMovePattern() const
+        MovePattern     Sinusoid::getMovePattern() const
         {
             return [](cu::Position const& pos, double elapsedTime)->cu::Position
             {
-                static const float  speed = 3.0f;
-                static int          direction = -1;
+                static const float   speed = 3.0f;
 
-                if (pos.Y() >= 720 || pos.Y() <= 0)
-                    direction *= -1;
-                return cu::Position(pos.X(), pos.Y()
-                                    + (100 * speed * elapsedTime * direction));
+                return cu::Position(pos.X() - (100 * speed * elapsedTime),
+                                    pos.Y() + (90 * std::sin(pos.X())));
             };
         }
 
-        IMobType*       Vertical::clone() const
+        IMobType*       Sinusoid::clone() const
         {
-            return new Vertical(*this);
+            return new Sinusoid(*this);
         }
 
-        std::string     Vertical::toString() const
+        std::string     Sinusoid::toString() const
         {
-            return "Vertical {"
+            return "Sinusoid {"
                    "\n\tid: " + std::to_string(getId()) +
                    "\n\tname: " + getName() +
                    "\n\tlives: " + std::to_string(getNbLives()) +
