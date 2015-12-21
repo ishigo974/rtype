@@ -39,12 +39,12 @@ void World::gameLoop()
                 std::cout << "Close button pressed" << std::endl;
                 return;
             }
+	    if (!_inGame)
+	      _menu->move();	      
         }
 
 	if (_inGame)
 	  _cmdSystem->addCommand();
-	else
-	  _menu->move();
         while (lag >= _fixedStep)
         {
             _behaviourSystem->process(lag / _fixedStep);
@@ -53,6 +53,9 @@ void World::gameLoop()
 
         _renderer->render();
 	if (_menu->isReady())
-	  _inGame = true;
+	  {
+	    _inGame = true;
+	    _menu->setVisible(false);
+	  }
     }
 }
