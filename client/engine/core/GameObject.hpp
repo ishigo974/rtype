@@ -12,47 +12,66 @@
 
 class GameObject : public Object
 {
-    public:
-        GameObject();
-        GameObject(unsigned int _id, std::string const& _name, int _layer);
+public:
+    GameObject();
+    GameObject(unsigned int _id, std::string const& _name, int _layer);
 
-        GameObject(GameObject const& other);
-        GameObject(GameObject&& other);
-        GameObject& operator=(GameObject other);
+    GameObject(GameObject const& other);
+    GameObject(GameObject&& other);
+    GameObject& operator=(GameObject other);
 
-        virtual ~GameObject();
+    virtual ~GameObject();
 
-        virtual bool operator==(GameObject const& other);
-        virtual bool operator!=(GameObject const& other);
+    virtual bool operator==(GameObject const& other);
+    virtual bool operator!=(GameObject const& other);
 
-        virtual Transform& transform() const;
-        virtual SpriteRenderer& renderer() const;
+    virtual Transform     & transform() const;
+    virtual SpriteRenderer& renderer() const;
 
-        virtual std::string toString();
+    void swap(GameObject& other);
 
-        int  getLayer() const;
-        void setLayer(unsigned int _layer);
+public:
+    virtual bool findMask(RTypes::my_uint16_t mask);
+    void         addComponent(Component *const newComp);
 
-        virtual bool findMask(RTypes::my_uint16_t mask);
+    virtual std::string toString() const;
+    int                 getLayer() const;
+    void                setLayer(unsigned int _layer);
 
-        void addComponent(Component *const newComp);
+public:
+    template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
+    T *getComponent() const
+    {
+        auto selected = std::find_if(_components.begin(), _components.end(), [](auto& e)
+        {
+            return (e->getMask() == T::Mask);
+        });
 
-        template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
-            T *getComponent() const
-            {
-                auto selected = std::find_if(_components.begin(), _components.end(), [](auto& e)
-                        {
-                        return (e->getMask() == T::Mask);
-                        });
+        return ((selected == _components.end()) ? nullptr : static_cast<T *>(*selected));
+    };
 
-                return ((selected == _components.end()) ? nullptr : static_cast<T *>(*selected));
-            };
+    template<class ...Args>
+    void broadcastMessage(Args... args)
+    {
+        for (auto& e : _components)
+        {
+            e->handleMessage(args...);
+        }
+    }
 
-        void swap(GameObject& other);
+    template<class ...Args>
+    void sendMessage(Args... args)
+    {
+        for (auto& e : _components)
+        {
+            if (e->handleMessage(args...))
+                return;
+        }
+    }
 
-    protected:
-        int                      _layer;
-        std::vector<Component *> _components;
+protected:
+    int                      _layer;
+    std::vector<Component *> _components;
 };
 
 

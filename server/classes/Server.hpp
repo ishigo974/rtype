@@ -9,6 +9,7 @@
 # include "SystemManager.hpp"
 # include "SocketMonitor.hpp"
 # include "TcpAcceptor.hpp"
+# include "MobTypeFactory.hpp"
 
 namespace RType
 {
@@ -35,6 +36,7 @@ namespace RType
 
     protected:
         void            init();
+        void            loadMobTypesFromFile();
         void            onClientConnection();
         void            onCLICommand();
         void            checkDisconnected();
@@ -42,6 +44,7 @@ namespace RType
     protected:
         void            handleCLIHelp(ArgsTab const& args);
         void            handleCLIRooms(ArgsTab const& args);
+        void            handleCLIMobs(ArgsTab const& args);
         void            handleCLIClients(ArgsTab const& args);
         void            handleCLIQuit(ArgsTab const& args);
 
@@ -62,6 +65,7 @@ namespace RType
         static const Buffer         responseKO;
         static const unsigned int   stdinFileNo;
         static const CLICMDHandlers cliCmdHandlers;
+        static const std::string    mobTypesPath;
 
     protected:
         short int                   _port;
@@ -71,6 +75,7 @@ namespace RType
         ECS::EntityManager&         _em;
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
+        MobType::Factory            _mobTypeFactory;
     };
 }
 

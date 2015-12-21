@@ -3,14 +3,16 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
+#include "ObjectPool.hpp"
 
 Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, int hp)
-  : Behaviour(_id, _name), _hp(hp)
+Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp)
+  : Behaviour(_id, _name), _hp(hp), _entityManager(manager)
 {
+  _bullets = new ObjectPool<BulletObject, Bullet>(_entityManager);
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -18,6 +20,9 @@ Player::Player(Player const& other) : Behaviour(other)
     _hp = other._hp;
     _action = other._action;
     _multiple = other._multiple;
+    _entityManager = other._entityManager;
+    _bullets = other._bullets;
+    _activeBullets = other._activeBullets;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -54,6 +59,9 @@ void Player::swap(Player& other)
     swap(_hp, other._hp);
     swap(_action, other._action);
     swap(_multiple, other._multiple);
+    swap(_entityManager, other._entityManager);
+    swap(_bullets, other._bullets);
+    swap(_activeBullets, other._activeBullets);
 }
 
 namespace std
@@ -70,13 +78,14 @@ RTypes::my_uint16_t     Player::getMask() const
   return Mask;
 }
 
-std::string Player::toString()
+std::string Player::toString() const
 {
     std::stringstream ss;
     Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
     ss << "Player {"
        << "\n\thp: " << _hp
+       << "\n\tenabled: " << _enabled
        << "\n\t" << transform.toString()
        << "\n}" << std::endl;
 
@@ -95,7 +104,7 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(Transform & transform)
 {
-  float		speed = 5.0f;
+  float		speed = 7.5f;
 
   if (!_enabled)
     return ;
@@ -128,27 +137,43 @@ void		Player::move(Transform & transform)
     }
 }
 
-void		Player::update(double)
+std::vector<BulletObject *>	Player::getActiveBullets() const
+{
+  return _activeBullets;
+}
+
+void		Player::update(double elapsedtime)
 {
   Transform	&transform = static_cast<GameObject *>(parent())->transform();
 
+  _shotTime += elapsedtime;
   if (_hp == 0)
     std::cout << "Mort" << std::endl;
+  for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
+    {
+      if ((*it)->getComponent<Bullet>()->getAvailable())
+  	{
+  	  _bullets->deleteObject(*it);
+  	  _activeBullets.erase(it);
+  	  break;
+  	}
+    }
   while (_action.size() > 0)
     {
-      if (_action.front() == ACommand::SHOOT)
-	{
-	  std::vector<Object *> bullets = EntityManager::getChildrenOf(static_cast<GameObject *>(parent()));
-	  for (auto bullet : bullets)
-	    {
-	      Bullet *b = static_cast<GameObject *>(bullet)->getComponent<Bullet>();
-	      b->setX(transform.getPosition().X());
-	      b->setY(transform.getPosition().Y());
-	      b->setDirection(Bullet::Direction::RIGHT);
-	    }
+      if (_action.front() == ACommand::SHOOT && _shotTime >= 0.0001)
+      	{
+      	  BulletObject *bullet = _bullets->create("Bullet", 12);
+      	  _activeBullets.push_back(bullet);
+      	  Bullet *b = bullet->getComponent<Bullet>();
+      	  b->setX(transform.getPosition().X());
+      	  b->setY(transform.getPosition().Y());
+	  _shotTime = 0;
 	}
       else
 	this->move(transform);
       _action.pop();
     }
+  // std::cout << toString() << std::endl;
+  // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
+  // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }

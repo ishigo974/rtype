@@ -25,6 +25,9 @@ namespace ECS
                      &ECSUT::entityLifeRecyclingSimple);
         registerTest("EntityLifeRecyclingWithComponent",
                      &ECSUT::entityLifeRecyclingWithComponent);
+        registerTest("DynamicComponentAddDel", &ECSUT::dynamicComponentAddDel);
+        registerTest("RetrieveEntityByComponent",
+                     &ECSUT::retrieveEntityByComponent);
         registerTest("SystemProcess", &ECSUT::systemProcess);
         registerTest("SystemManager", &ECSUT::systemManager);
     }
@@ -170,6 +173,51 @@ namespace ECS
             UT_ASSERT(c1->getData() == "Tea est trop fort");
             UT_ASSERT(c2->getData() == "Tea est trop swag");
         }
+        em.clean();
+    }
+
+    void            ECSUT::dynamicComponentAddDel()
+    {
+        EntityManager&      em      = EntityManager::getInstance();
+        Entity*             entity  = nullptr;
+
+        em.registerComponent(std::make_unique<Sample::Component1>());
+        em.registerComponent(std::make_unique<Sample::Component2>());
+        em.registerComponent(std::make_unique<Sample::Component3>());
+        entity = &em.create(Sample::Component1::mask);
+        UT_ASSERT(entity->getComponentMask() == Sample::Component1::mask);
+        entity->addComponent(std::make_unique<Sample::Component2>());
+        UT_ASSERT(entity->getComponentMask() == (Sample::Component1::mask
+                                                | Sample::Component2::mask));
+        entity->removeComponent(Sample::Component1::mask);
+        UT_ASSERT(entity->getComponentMask() == Sample::Component2::mask);
+        entity->addComponent(std::make_unique<Sample::Component1>());
+        entity->addComponent(std::make_unique<Sample::Component3>());
+        UT_ASSERT(entity->getComponentMask() == (Sample::Component1::mask
+                                                | Sample::Component2::mask
+                                                | Sample::Component3::mask));
+        entity->removeComponent(Sample::Component2::mask);
+        UT_ASSERT(entity->getComponentMask() == (Sample::Component1::mask
+                                                | Sample::Component3::mask));
+        em.clean();
+    }
+
+    void            ECSUT::retrieveEntityByComponent()
+    {
+        EntityManager&      em      = EntityManager::getInstance();
+        Entity*             entity  = nullptr;
+        Sample::Component1* cmp1    = nullptr;
+        Sample::Component2* cmp2    = nullptr;
+
+        em.registerComponent(std::make_unique<Sample::Component1>());
+        em.registerComponent(std::make_unique<Sample::Component2>());
+        entity = &em.create((Sample::Component1::mask
+                            | Sample::Component2::mask));
+        em.create((Sample::Component1::mask | Sample::Component2::mask));
+        cmp1 = entity->getComponent<Sample::Component1>();
+        UT_ASSERT(&em.getByCmpnt(cmp1) == entity);
+        cmp2 = entity->getComponent<Sample::Component2>();
+        UT_ASSERT(&em.getByCmpnt(cmp2) == entity);
         em.clean();
     }
 

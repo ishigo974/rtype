@@ -20,6 +20,10 @@ namespace ECS
 
     EntityManager::~EntityManager()
     {
+        _actives.clear();
+        _inactives.clear();
+        _components.clear();
+        _cmpntsEntities.clear();
     }
 
     /*
@@ -28,8 +32,8 @@ namespace ECS
     EntityManager&    EntityManager::getInstance()
     {
         if (EntityManager::instance == nullptr)
-        EntityManager::instance =
-        std::unique_ptr<EntityManager>(new EntityManager());
+            EntityManager::instance =
+                std::unique_ptr<EntityManager>(new EntityManager());
         return *EntityManager::instance;
     }
 
@@ -49,7 +53,7 @@ namespace ECS
             unsigned int    id;
 
             id = it->first;
-            _actives[id] = std::unique_ptr<Entity>(std::move(it->second));
+            _actives[id] = std::move(it->second);
             _inactives.erase(id);
             _actives[id]->clear();
             return *_actives[id];
@@ -92,6 +96,22 @@ namespace ECS
         return *it->second;
     }
 
+    void             EntityManager::addCmpntEntityLink(IComponent const* cmp,
+                                                       Entity const& e)
+    {
+        _cmpntsEntities.insert(std::make_pair(cmp, e.getId()));
+    }
+
+    void             EntityManager::removeCmpntEntityLink(IComponent const* cmp)
+    {
+        _cmpntsEntities.erase(cmp);
+    }
+
+    Entity&           EntityManager::getByCmpnt(IComponent const* cmp) const
+    {
+        return get(_cmpntsEntities.at(cmp));
+    }
+
     EntityCollection  EntityManager::getByMask(ComponentMask mask) const
     {
         EntityCollection  res;
@@ -112,6 +132,7 @@ namespace ECS
     {
         _actives.clear();
         _inactives.clear();
+        _cmpntsEntities.clear();
         _nextId = 0;
     }
 

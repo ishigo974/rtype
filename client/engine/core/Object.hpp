@@ -34,7 +34,7 @@ public:
     std::string const& getName() const;
     void setName(std::string const& _name);
 
-    virtual std::string toString();
+    virtual std::string toString() const;
 
     void swap(Object& other);
 

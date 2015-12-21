@@ -1,5 +1,5 @@
 #ifndef		SCROLLINGBACKGROUND_HPP_
-# define	SCROLLINGBACKGROuND_HPP_
+# define	SCROLLINGBACKGROUND_HPP_
 
 # include	"Behaviour.hpp"
 

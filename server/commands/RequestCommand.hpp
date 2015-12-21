@@ -29,8 +29,8 @@ namespace RType
         public:
             virtual void        initFromRequest(RType::Request const& request,
                                                 ECS::ASystem* system) = 0;
-            virtual Request*        clone() const = 0;
-            virtual std::string     getName() const = 0;
+            virtual Request*    clone() const = 0;
+            virtual std::string getName() const = 0;
 
         protected:
             ECS::Entity*            _entity;

@@ -68,24 +68,21 @@ namespace Utils
 
     void            BaseFactoryUT::generateType()
     {
-        BaseFactory<IClonable>  factory;
-        IClonable*              t;
+        BaseFactory<IClonable>      factory;
+        std::unique_ptr<IClonable>  t;
 
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable2>()) == true);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable3>()) == true);
-        UT_ASSERT((t = factory.generate("Clonable1")) != nullptr);
+        t = factory.generate("Clonable1");
         UT_ASSERT(t->getName() == "Clonable1");
-        UT_ASSERT(t != factory.getType("Clonable1"));
-        delete t;
-        UT_ASSERT((t = factory.generate("Clonable2")) != nullptr);
+        UT_ASSERT(t.get() != factory.getType("Clonable1"));
+        t = factory.generate("Clonable2");
         UT_ASSERT(t->getName() == "Clonable2");
-        UT_ASSERT(t != factory.getType("Clonable2"));
-        delete t;
-        UT_ASSERT((t = factory.generate("Clonable3")) != nullptr);
+        UT_ASSERT(t.get() != factory.getType("Clonable2"));
+        t = factory.generate("Clonable3");
         UT_ASSERT(t->getName() == "Clonable3");
-        UT_ASSERT(t != factory.getType("Clonable3"));
-        delete t;
+        UT_ASSERT(t.get() != factory.getType("Clonable3"));
     }
 
     void            BaseFactoryUT::errors()
@@ -96,8 +93,13 @@ namespace Utils
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>()) == true);
         UT_ASSERT(factory.learn(std::make_unique<Sample::Clonable1>())
                     == false);
-        UT_ASSERT(factory.generate("Clonable2") == nullptr);
-        UT_ASSERT(factory.generate("Clonable3") == nullptr);
+        try {
+            factory.generate("Clonable2");
+            factory.generate("Clonable3");
+            UT_ASSERT(false);
+        } catch (Exception::GenerateTypeError const&) {
+            UT_ASSERT(true);
+        }
         UT_ASSERT(factory.getType("Clonable2") == nullptr);
         UT_ASSERT(factory.getType("Clonable3") == nullptr);
         UT_ASSERT(factory.unlearn("Clonable2") == false);

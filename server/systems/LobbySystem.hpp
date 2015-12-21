@@ -2,12 +2,13 @@
 # define LOBBYSYSTEM_HPP_
 
 # include <string>
+# include <memory>
 # include <unordered_map>
 # include "Entity.hpp"
 # include "ASystem.hpp"
 # include "ComponentMask.hpp"
 # include "RequestCommand.hpp"
-# include "CommandFactory.hpp"
+# include "CommandRequestFactory.hpp"
 # include "RoomComponent.hpp"
 
 namespace RType
@@ -44,15 +45,15 @@ namespace RType
             virtual bool                shouldAutoProcess() const;
 
         protected:
-            Command::Request*           buildCommand(Request const& request,
-                                                     ECS::Entity& entity);
+            std::unique_ptr<Command::Request>
+            buildCommand(Request const& request, ECS::Entity& entity);
 
         protected:
             static const RequestCmdMap  cmdsNames;
 
         protected:
-            RoomsMap            _rooms;
-            Command::Factory    _factory;
+            RoomsMap                    _rooms;
+            Command::RequestFactory     _factory;
         };
     }
 }

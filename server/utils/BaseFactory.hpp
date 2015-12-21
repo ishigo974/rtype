@@ -8,6 +8,7 @@
 # include <sstream>
 # include "IClonable.hpp"
 # include "IStringable.hpp"
+# include "GenerateTypeError.hpp"
 
 namespace Utils
 {
@@ -48,13 +49,14 @@ namespace Utils
             return _book.erase(name) > 0;
         }
 
-        Type*                   generate(std::string const& name) const
+        std::unique_ptr<Type>   generate(std::string const& name) const
         {
             typename TypeBook::const_iterator      it;
 
             if ((it = _book.find(name)) == _book.end())
-                return nullptr;
-            return it->second->clone();
+                throw Exception::GenerateTypeError("No such type: '" +
+                                                   name + "'");
+            return std::unique_ptr<Type>(it->second->clone());
         }
 
         Type const*             getType(std::string const& name) const
@@ -69,6 +71,16 @@ namespace Utils
         void                    clear()
         {
             _book.clear();
+        }
+
+        typename TypeBook::const_iterator    begin() const
+        {
+            return _book.begin();
+        }
+
+        typename TypeBook::const_iterator    end() const
+        {
+            return _book.end();
         }
 
     public:

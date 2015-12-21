@@ -1,4 +1,7 @@
+#include <chrono>
 #include "Collider.hpp"
+#include "GameObject.hpp"
+#include "EntityManager.hpp"
 
 Collider::Collider() : Component()
 { }
@@ -49,7 +52,7 @@ RTypes::my_uint16_t Collider::getMask() const
     return (Mask);
 }
 
-std::string Collider::toString()
+std::string Collider::toString() const
 {
     //TODO : _bounds.toSting()
     std::stringstream ss;
@@ -63,6 +66,17 @@ std::string Collider::toString()
     return (ss.str());
 }
 
+void Collider::fixedUpdate()
+{
+    for (auto &e : EntityManager::getByMask(ComponentMask::ColliderMask))
+    {
+        if (this->_bounds.intersects(static_cast<Collider *>(e)->_bounds))
+        {
+            sendMessage(static_cast<Collider *>(e));
+        }
+    }
+}
+
 namespace std
 {
     template<>
@@ -70,4 +84,9 @@ namespace std
     {
         a.swap(b);
     }
+}
+
+void Collider::sendMessage(Collider *e)
+{
+    static_cast<GameObject *>(parent())->sendMessage(*this, *e);
 }

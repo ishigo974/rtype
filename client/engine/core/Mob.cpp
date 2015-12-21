@@ -69,7 +69,7 @@ namespace std
     }
 }
 
-std::string Mob::toString()
+std::string Mob::toString() const
 {
     std::stringstream ss;
     Transform	&transform = static_cast<GameObject *>(parent())->transform();

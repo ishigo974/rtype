@@ -29,7 +29,6 @@ std::string     NetworkUT::getName() const
 
 void NetworkUT::udpTest()
 {
-    UdpSocket client(4444);
     UdpSocket server(3333);
     Buffer        msg;
     Buffer        rcv;
@@ -38,7 +37,7 @@ void NetworkUT::udpTest()
     UT_ASSERT(server.bind() == true);
     UT_ASSERT(server.receiveFrom(rcv, 42, addr) > 0);
     msg.setData("SALUT", 6);
-    UT_ASSERT(client.sendTo(msg, "127.0.0.1") > 0);
+    UT_ASSERT(server.sendTo(msg, "127.0.0.1") > 0);
 }
 
 void NetworkUT::sendMonitor()

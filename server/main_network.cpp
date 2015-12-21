@@ -1,23 +1,22 @@
 #include <string>
 #include <iostream>
+#include <UdpSocket.hpp>
 #include "Buffer.hpp"
 
 /*
  * TODO Patch Select
  */
-
-union lol
-{
-    int  a;
-    char b[4];
-};
-
 int main()
 {
-    Buffer toto;
+    UdpSocket   server(6668);
+    Buffer      msg;
+    Buffer      rcv;
+    std::string addr;
 
-//    toto.append(" TAMERE", 7);
-    toto.setData<uint32_t>(4042);
-//    toto.append(" TONPERE", 9);
-    std::cout << toto.get<uint32_t>() << std::endl;
+    server.bind();
+    server.receiveFrom(rcv, 42, addr);
+    std::cout << "RECEIVE FROM " << addr << " " << rcv.size() << " length" <<
+            std::endl;
+    msg.setData("CAMARCHEPAS", 12);
+    server.sendTo(msg, addr);
 }

@@ -7,6 +7,7 @@
 # include "Entity.hpp"
 # include "UdpSocket.hpp"
 # include "ComponentMask.hpp"
+# include "CommandEventFactory.hpp"
 
 namespace RType
 {
@@ -16,6 +17,8 @@ namespace RType
         {
         public:
             typedef std::unordered_map<std::string, Buffer>     IpBufferBook;
+            typedef std::unordered_map<InGameEvent::Code, std::string,
+                                       std::hash<uint16_t> >    EventCmdMap;
 
         public:
             InGame(short int port);
@@ -36,11 +39,13 @@ namespace RType
             virtual std::string         toString() const;
 
         public:
-            static const size_t     bufferSize;
+            static const size_t         bufferSize;
+            static const EventCmdMap    cmdsNames;
 
         protected:
             UdpSocket               _socket;
             IpBufferBook            _book;
+            Command::EventFactory   _factory;
         };
     }
 }

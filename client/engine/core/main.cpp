@@ -249,6 +249,8 @@ void menuTest()
     Renderer      r;
     Input         i(r.getWindow());
     EntityManager entityManager;
+    Renderer      r(&entityManager);
+    Input         i(r.getWindow());
     cu::Event     e;
 
 //	Menu menu = Menu(entityManager, e);
@@ -344,6 +346,10 @@ void buttonAndLabelsTest()
     t.setBackColor(sf::Color::White);
     cu::Event e;
 
+    audio->setSoundToPlay("../res/laser2.wav");
+    std::cout << audio->toString() << std::endl;
+    soundPlayer.play(*gameObj);
+    sf::sleep(sf::milliseconds(400));
 
     r.getWindow().clear();
     e.key = cu::Event::LAST_ACTION;
@@ -407,5 +413,6 @@ int main()
     //backgroundTest();
     //RCSVParserTest();
 
+    worldTest();
     return 0;
 }

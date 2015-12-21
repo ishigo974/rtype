@@ -32,7 +32,7 @@ EntityManager::EntityManager()
     _compIds = 0;
 }
 
-Object *EntityManager::getParentOf(Component *component)
+Object *EntityManager::getParentOf(Component const *component)
 {
     auto selected = _compHierarchy.find(component->getId());
 
@@ -46,7 +46,7 @@ void EntityManager::addChild(GameObject *parent, GameObject *child)
     _goHierarchy[child->getId()] = parent->getId();
 }
 
-Object *EntityManager::getParentOf(GameObject *go)
+Object *EntityManager::getParentOf(GameObject const *go)
 {
     auto selected = _goHierarchy.find(go->getId());
 
@@ -76,7 +76,8 @@ void EntityManager::tagObject(Object *o, std::string const& tag)
         _tags[tag] = o;
     else
         throw std::logic_error(std::string("Tag already exists : ")
-                                       .append(tag).append(" for item ").append(o->toString()));
+                                       .append(tag).append(" for item ")
+                                       .append(o->toString()));
 }
 
 Object *EntityManager::getByTag(std::string const& tag)
@@ -86,5 +87,6 @@ Object *EntityManager::getByTag(std::string const& tag)
     if (selected != _tags.end())
         return (_tags[tag]);
     else
-        throw std::logic_error(std::string("Could not find object with tag ").append(tag));
+        throw std::logic_error(
+                std::string("Could not find object with tag ").append(tag));
 }

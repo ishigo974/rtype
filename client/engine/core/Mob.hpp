@@ -26,7 +26,7 @@ public:
 
     void swap(Mob& other);
 
-  std::string	toString();
+  std::string	toString() const;
 
 protected:
     int _hp;

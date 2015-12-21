@@ -4,12 +4,16 @@
 # include <queue>
 # include "Behaviour.hpp"
 # include "ACommand.hpp"
+# include "ObjectPool.hpp"
+# include "Bullet.hpp"
+# include "BulletObject.hpp"
+# include "EntityManager.hpp"
 
 class	Player : public Behaviour
 {
 public:
   Player();
-  Player(unsigned int _id, std::string const& _name, int hp = 100);
+  Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 100);
   virtual ~Player();
 
   Player(Player const& other);
@@ -28,14 +32,20 @@ public:
 
   void swap(Player& other);
 
-  std::string	toString();
+  std::string	toString() const;
   static const RTypes::my_uint16_t Mask = ComponentMask::PlayerMask;
   virtual RTypes::my_uint16_t	getMask() const;
+
+  std::vector<BulletObject *>	getActiveBullets() const;
 
 protected:
   int				_hp;
   std::queue<ACommand::Action>	_action;
   bool				_multiple = false;
+  ObjectPool<BulletObject, Bullet>	*_bullets;
+  std::vector<BulletObject *>		_activeBullets;
+  EntityManager			*_entityManager;
+  double			_shotTime = 0;
 };
 
 #endif /* !PLAYER_HPP_ */

@@ -3,6 +3,8 @@
 
 # include <memory>
 # include <unordered_map>
+# include <algorithm>
+# include <functional>
 # include "Entity.hpp"
 # include "IComponent.hpp"
 # include "ComponentMask.hpp"
@@ -13,11 +15,14 @@ namespace ECS
     class EntityManager
     {
     public:
-        typedef std::unique_ptr<EntityManager>        UniqueEmPtr;
-        typedef std::unique_ptr<Entity>               UniqueEntityPtr;
-        typedef std::unique_ptr<IComponent>           UniqueCompPtr;
+        typedef std::unique_ptr<EntityManager>          UniqueEmPtr;
+        typedef std::unique_ptr<Entity>                 UniqueEntityPtr;
+        typedef std::unique_ptr<IComponent>             UniqueCompPtr;
         typedef std::unordered_map<unsigned int,
-                                    UniqueEntityPtr>   EntityMap;
+                                    UniqueEntityPtr>    EntityMap;
+        typedef std::unordered_map<IComponent const*,
+                                   unsigned int,
+                                   std::hash<IComponent const*> >        ComponentIdMap;
 
     protected:
         EntityManager();
@@ -38,8 +43,12 @@ namespace ECS
         bool                    destroy(Entity const& entity);
         Entity&                 get(unsigned int id) const;
         EntityCollection        getByMask(ComponentMask mask) const;
+        Entity&                 getByCmpnt(IComponent const* cmp) const;
         void                    updateAll();
         void                    clean();
+        void                    addCmpntEntityLink(IComponent const* cmpnt,
+                                                   Entity const& e);
+        void                    removeCmpntEntityLink(IComponent const*);
 
     public:
         void        registerComponent(UniqueCompPtr component);
@@ -53,6 +62,7 @@ namespace ECS
         EntityMap                   _actives;
         EntityMap                   _inactives;
         ComponentMap                _components;
+        ComponentIdMap              _cmpntsEntities;
 
     protected:
         static UniqueEmPtr          instance;
