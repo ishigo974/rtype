@@ -66,7 +66,7 @@ std::string Collider::toString() const
     return (ss.str());
 }
 
-void Collider::fixedUpdate()
+void Collider::fixedUpdate(double)
 {
     for (auto &e : EntityManager::getByMask(ComponentMask::ColliderMask))
     {

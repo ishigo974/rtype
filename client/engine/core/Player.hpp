@@ -8,6 +8,7 @@
 # include "Bullet.hpp"
 # include "BulletObject.hpp"
 # include "EntityManager.hpp"
+# include "Collider.hpp"
 
 class	Player : public Behaviour
 {
@@ -37,6 +38,19 @@ public:
   virtual RTypes::my_uint16_t	getMask() const;
 
   std::vector<BulletObject *>	getActiveBullets() const;
+
+  template <class ...Args>
+  bool	handleMessage(Args...)
+  {
+    std::cout << "fkiweokfwe1" << std::endl;
+    return false;
+  }
+
+  bool    handleMessage(Collider *, Collider *)
+  {
+    std::cout << "fkiweokfwe2" << std::endl;
+    return false;
+  }
 
 protected:
   int				_hp;

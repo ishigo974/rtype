@@ -102,8 +102,6 @@ void		Mob::move()
   float		speed = 3.0f;
 
   _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
-  if (!_enabled)
-    return ;
   switch (_type)
     {
     case 0:

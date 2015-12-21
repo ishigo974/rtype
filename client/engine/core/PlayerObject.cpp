@@ -78,6 +78,7 @@ void	PlayerObject::init()
 {
   _entityManager->attachComponent<SpriteRenderer>(this, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
   _entityManager->attachComponent<Player>(this, "Player", _entityManager, 100);
+  _entityManager->attachComponent<Collider>(this, "collider");
 
   Transform *t = this->getComponent<Transform>();
   t->getPosition().setX(100);

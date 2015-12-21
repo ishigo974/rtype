@@ -61,20 +61,11 @@ void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
 
 void ScrollingBackground::update(double elapsedTime)
 {
-  static double deltaPix = 0;
-  if (!_enabled)
-    return ;
-
   SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
   if (sr == nullptr)
     return;
 
   auto rect = sr->getRect();
-  deltaPix += this->_speed * elapsedTime;
-  if (deltaPix >= 1)
-  {
-    rect.x += static_cast<int>(deltaPix);
-    deltaPix = deltaPix - static_cast<int>(deltaPix);
-  }
+  rect.x += static_cast<int>(this->_speed * elapsedTime);
   sr->setRect(rect);
 }

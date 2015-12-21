@@ -108,8 +108,6 @@ void		Player::move()
 {
   float		speed = 7.5f;
 
-  if (!_enabled)
-    return ;
   if (_multiple)
     {
       _multiple = false;
@@ -154,13 +152,14 @@ void		Player::update(double elapsedtime)
   for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
     if ((*it)->getComponent<Bullet>()->getAvailable())
       {
+	std::cout << "delete bullet" << std::endl;
 	_bullets->deleteObject(*it);
 	_activeBullets.erase(it);
 	break;
       }
   while (_action.size() > 0)
     {
-      if (_action.front() == ACommand::SHOOT && _shotTime >= 0.0001)
+      if (_action.front() == ACommand::SHOOT && _shotTime >= 200)
       	{
       	  BulletObject *bullet = _bullets->create("Bullet", 12);
       	  _activeBullets.push_back(bullet);
@@ -173,8 +172,9 @@ void		Player::update(double elapsedtime)
 	this->move();
       _action.pop();
     }
+  static_cast<GameObject *>(parent())->getComponent<Collider>()->fixedUpdate(elapsedtime);
   // TODO remove debug comments
   // std::cout << toString() << std::endl;
-  // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
-  // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
+  //std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
+  //std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
