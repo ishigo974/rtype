@@ -11,16 +11,15 @@ public:
     GUIElement(gu::Rect<float> const& rect);
     GUIElement(GUIElement const& other);
     GUIElement(GUIElement&& other);
-    GUIElement& operator=(GUIElement other);
     virtual ~GUIElement();
 
     void    swap(GUIElement &other);
 public:
-    virtual void draw(sf::RenderWindow&);
-    bool         intersect(int x, int y);
+    virtual std::vector<const sf::Drawable *>   getDrawable() const = 0;
+    bool    intersect(int x, int y);
 
 protected:
-    gu::Rect<float> _rect;
+    gu::Rect<float>	_rect;
 };
 
 #endif // !GUIELEMENT_HPP_

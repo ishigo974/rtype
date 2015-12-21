@@ -1,7 +1,8 @@
 #ifndef GUIMANAGER_HPP_
 # define GUIMANAGER_HPP_
 
-# include <unordered_map>
+# include <map>
+# include <vector>
 # include "Component.hpp"
 # include "GUIElement.hpp"
 # include "Event.hpp"
@@ -22,8 +23,8 @@ public:
     void swap(GUIManager& other);
 
 public:
-    void                        addGUIElement(std::string const& state, GUIElement *gui);
-    void                        draw(sf::RenderWindow&, std::string const& state);
+    void addGUIElement(std::string const& state, GUIElement *gui);
+    std::vector<GUIElement *> getGUIElements(std::string const& state);
     virtual RTypes::my_uint16_t getMask() const;
     void                        onGUI();
 

@@ -5,6 +5,7 @@
 # include "EntityManager.hpp"
 # include "GameObject.hpp"
 # include "Resources.hpp"
+# include "Menu.hpp"
 
 
 class Renderer
@@ -28,9 +29,9 @@ public:
 	sf::RenderWindow& getWindow();
     static bool         comp(Object *, Object *);
 
-public:
-    // It souldn't stay public, really
+private:
     void draw(const GameObject*);
+    void drawGUI(const Menu *);
 
 private:
     sf::RenderWindow    _win;

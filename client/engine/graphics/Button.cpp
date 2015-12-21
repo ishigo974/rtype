@@ -14,8 +14,11 @@ Button::Button(gu::Rect<float> const& rect, std::string const& label, unsigned i
 Button::~Button()
 { }
 
-void    Button::draw(sf::RenderWindow& win)
+std::vector<const sf::Drawable *>	Button::getDrawable() const
 {
-    win.draw(this->_rect);
-    this->_label.draw(win);
+    std::vector<const sf::Drawable *> obj(0);
+
+    obj.push_back(static_cast<const sf::Drawable *>(&_rect));
+    obj.push_back(_label.getDrawable()[0]);
+    return obj;
 }
