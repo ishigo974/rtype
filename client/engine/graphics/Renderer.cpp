@@ -97,21 +97,14 @@ void Renderer::drawGUI(const GameObject *object)
     StateMachine    *sm = object->getComponent<StateMachine>();
 
     if (gm == nullptr || sm == nullptr)
-    {
-        std::cout << "Why ?" << std::endl;
         return ;
-    }
 
     auto vec = gm->getGUIElements(sm->getCurrent().getName());
     for (auto element : vec)
     {
-        std::cout << "Getting gui elements" << std::endl;
         auto tmp = element->getDrawable();
         for (auto drawable : tmp)
-        {
-            std::cout << "Getting drawables" << std::endl;
             this->_win.draw(*drawable);
-        }
     }
 }
 
