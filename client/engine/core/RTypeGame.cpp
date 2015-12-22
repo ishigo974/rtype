@@ -32,6 +32,16 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
     _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
+// tmp
+    RType::NetworkTCP* tcp = entity->getComponent<RType::NetworkTCP>();
+
+    RType::Request request;
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", "BestRoomEver");
+    tcp->pushRequest(request);
+    tcp->pushRequest(RType::Request(RType::Request::CL_READY));
+// end tmp
+
     loadMobTypesFromFile();
 
     // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
@@ -97,6 +107,7 @@ void        RTypeGame::handleGame()
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
+    _udpsys.process();
 }
 
 void            RTypeGame::loadMapsFromFile()

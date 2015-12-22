@@ -26,13 +26,14 @@ void    ShootCommand::execute()
         static_cast<GameObject *>(obj)->getComponent<Player>()->setAction(ACommand::SHOOT);
 
     // TODO
-//    event.setCode(RType::InGameEvent::CL_SHOTSTART);
-//    event.push<uint32_t>("time",
-//                         std::chrono::time_point_cast<std::chrono::milliseconds>
-//                                 (BigBen::getTimeNow()).time_since_epoch()
-//                                                       .count());
-//    static_cast<GameObject *>(network[0])
-//            ->getComponent<RType::NetworkUDP>()->pushRequest(event);
+   event.setCode(RType::InGameEvent::CL_SHOTSTART);
+   event.push<uint32_t>("time",
+                        std::chrono::time_point_cast<std::chrono::milliseconds>
+                                (BigBen::getTimeNow()).time_since_epoch()
+                                                      .count());
+    event.push<uint8_t>("shot_type", 0);
+   static_cast<GameObject *>(network[0])
+           ->getComponent<RType::NetworkUDP>()->pushRequest(event);
 }
 
 void    ShootCommand::undo()
