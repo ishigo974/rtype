@@ -4,6 +4,7 @@
 #include "PlayerObject.hpp"
 #include "ScrollingBackground.hpp"
 #include "DLLoader.hpp"
+
 /*
 ** Static variables
 */
@@ -11,14 +12,14 @@ const double        RTypeGame::defaultFixedStep = 0.003;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
-const std::string   RTypeGame::mobTypesPath        = ".rtypemobs";
+const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 
 /*
 ** Constructor/Destructor
 */
 RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
-    _quit(false), _isPlaying(false), _em(), _renderer(&_em),
+    _quit(false), _isPlaying(true), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
     _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep)
@@ -33,9 +34,10 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 
     loadMobTypesFromFile();
 
-    _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
-                                    entity->getComponent<RType::NetworkTCP>());
-    _menu->init();
+    // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
+                                    // entity->getComponent<RType::NetworkTCP>());
+    // _menu->init();
+    // _menu->setVisible(false);
     _renderer.init();
 }
 
@@ -48,7 +50,7 @@ RTypeGame::~RTypeGame()
 */
 void        RTypeGame::run()
 {
-    // initGameSample();
+    initGameSample();
     while (!_quit)
     {
         while (_input.pollEvent(_event))
