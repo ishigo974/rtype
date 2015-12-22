@@ -24,7 +24,8 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _quit(false), _isPlaying(true), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
     _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
-    _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep)
+    _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
+    _ms(&_em, &_chrono)
 {
     GameObject*     entity;
 
@@ -34,7 +35,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
     _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
-// tmp
+    // tmp
     RType::NetworkTCP* tcp = entity->getComponent<RType::NetworkTCP>();
 
     RType::Request request;
@@ -42,7 +43,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     request.push<std::string>("room_name", "BestRoomEver");
     tcp->pushRequest(request);
     tcp->pushRequest(RType::Request(RType::Request::CL_READY));
-// end tmp
+    // end tmp
 
     loadMobTypesFromFile();
     loadMapsFromFile();
@@ -98,17 +99,23 @@ void        RTypeGame::initGameSample()
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
 
     _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
-    _em.attachComponent<Mob>(first, "SR compo");
+    // _em.attachComponent<Mob>(first, "SR compo", );
     _em.attachComponent<Collider>(first, "SR compo", 32, 21);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+    if (_maps.empty())
+        throw std::runtime_error("No maps loaded");
+    _ms.setMap(_maps[0].second);
+    _chrono.start();
 }
 
 void        RTypeGame::handleGame()
 {
+
     _lag = BigBen::getElapsedtime();
     _cs.process();
+    _ms.process();
     while (_lag >= _fixedStep)
     {
         _bs.process(_lag / _fixedStep);
@@ -142,6 +149,8 @@ void            RTypeGame::loadMapsFromFile()
 
                map = parser.parse();
                _maps.push_back(map);
+               std::cout << "Map '" << map.first
+                         << "' loaded" << std::endl;
             }
             else
             {
