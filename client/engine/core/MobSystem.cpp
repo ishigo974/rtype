@@ -1,7 +1,11 @@
 #include "MobSystem.hpp"
+#include "RTypeGame.hpp"
+#include "Mob.hpp"
+#include "Collider.hpp"
 
-MobSystem::MobSystem(EntityManager *em, Time::HRChrono const* chrono) :
-    _em(em), _chrono(chrono)
+MobSystem::MobSystem(EntityManager *em, Time::HRChrono const* chrono,
+                     RTypeGame::MobTypeMap* mobTypes) :
+    _em(em), _chrono(chrono), _mobTypes(mobTypes)
 {
 }
 
@@ -17,6 +21,11 @@ void            MobSystem::process()
     {
         if ((it->first * 1000000) <= _chrono->getElapsedTime())
         {
+            GameObject *first = _em->createEntity<GameObject>("LePremier", 0);
+
+            _em->attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
+            _em->attachComponent<Mob>(first, "SR compo", _mobTypes->begin()->second.get());
+            _em->attachComponent<Collider>(first, "SR compo", 32, 21);
             if ((it = _map.erase(it)) == _map.end())
                 break ;
         }

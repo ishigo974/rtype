@@ -20,6 +20,8 @@
 # include "MapParser.hpp"
 # include "HRChrono.hpp"
 
+class MobSystem;
+
 class RTypeGame
 {
 public:

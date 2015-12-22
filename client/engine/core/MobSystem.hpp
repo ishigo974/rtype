@@ -4,11 +4,21 @@
 # include "HRChrono.hpp"
 # include "EntityManager.hpp"
 # include "MapParser.hpp"
+# include "IMobType.hpp"
 
+/*
+** tmp ; will be moved to the server
+*/
 class MobSystem
 {
 public:
-    MobSystem(EntityManager *em, Time::HRChrono const* chrono);
+    typedef std::unique_ptr<RType::MobType::IMobType>   UniqueMobType; // tmp
+    typedef std::unordered_map<unsigned int,
+                               UniqueMobType>           MobTypeMap; // tmp
+
+public:
+    MobSystem(EntityManager *em, Time::HRChrono const* chrono,
+              MobTypeMap* mobTypes);
     virtual ~MobSystem();
 
 private:
@@ -26,6 +36,7 @@ protected:
     Time::HRChrono const*       _chrono;
     RType::Map::Parser::Content _map;
     RType::Map::Parser::Content _current;
+    MobTypeMap*                 _mobTypes;
 };
 
 #endif /* !MOBSYSTEM_HPP_ */
