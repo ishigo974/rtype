@@ -10,7 +10,6 @@
 # include "StateMachine.hpp"
 # include "GUIManager.hpp"
 # include "NetworkTCP.hpp"
-//# include "Request.hpp"
 
 class Menu : public GameObject
 {
@@ -42,6 +41,7 @@ private:
     void setupStates();
     void refreshRoomList();
     void createNewRoom(std::string const &);
+    void changeUserName(std::string const &);
     void joinRoom(RType::Request::Room);
     void joinRoom(std::string const &);
     void ready();
@@ -50,33 +50,39 @@ public:
     bool isReady() const;
     void addRoom(RType::Request::Room);
     void addRoomList(RType::Request::RoomsTab const &);
+    void addPlayer(RType::Request::Player);
+    void addPlayerList(RType::Request::PlayersTab const &);
     bool isVisible() const;
     void setVisible(bool);
 
 private:
-    std::vector<TextField *> roomsTextField;
-    std::vector<TextField *> playersInRoom;
-    TextField                mainTitle;
-    TextField                createRoom;
-    TextField                refresh;
-    TextField                back;
-    TextField                roomTitle;
-    TextField                readyField;
-    TextField                inputRoomName;
+    std::vector<TextField *>    roomsTextField;
+    std::vector<TextField *>    playersInRoom;
+    TextField                   mainTitle;
+    TextField                   changeName;
+    TextField                   createRoom;
+    TextField                   refresh;
+    TextField                   back;
+    TextField                   roomTitle;
+    TextField                   readyField;
+    TextField                   inputRoomName;
+    TextField                   inputUserName;
 
-    State		                 _titleState;
-    State		                 mainMenu;
-    State		                 inRoom;
-    State		                 createRoomState;
+    State		                _titleState;
+    State		                mainMenu;
+    State		                inRoom;
+    State		                createRoomState;
+    State                       changeNameState;
 
-    StateMachine	           *_sm;
+    StateMachine	            *_sm;
 
-    cu::Event		             *_event;
-    EntityManager	           *_em;
-    bool		                 _ready;
-    bool		                 _isVisible;
-    RType::NetworkTCP*	     _network;
-    RType::Request::RoomsTab _roomsList;
+    cu::Event		            *_event;
+    EntityManager	            *_em;
+    bool		                _ready;
+    bool		                _isVisible;
+    RType::NetworkTCP*	        _network;
+    RType::Request::RoomsTab    _roomsList;
+    RType::Request::PlayersTab  _playersList;
 };
 
 #endif // !MENU_HPP_
