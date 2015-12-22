@@ -17,7 +17,7 @@ public:
     CommandSystem(EntityManager *entityManager, Input *i);
     virtual ~CommandSystem();
 
-    void          addCommand();
+    void          process();
     std::string   toString();
     unsigned long getSize() const;
     ACommand      *getByTimestamp(timestamp time);

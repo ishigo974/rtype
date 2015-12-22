@@ -13,13 +13,14 @@ public:
     GUIElement(GUIElement&& other);
     virtual ~GUIElement();
 
-    void    swap(GUIElement &other);
+    void swap(GUIElement& other);
+
 public:
-    virtual std::vector<const sf::Drawable *>   getDrawable() const = 0;
-    bool    intersect(int x, int y);
+    virtual std::vector<const sf::Drawable *> getDrawable() const = 0;
+    bool                                      intersect(int x, int y);
 
 protected:
-    gu::Rect<float>	_rect;
+    gu::Rect<float> _rect;
 };
 
 #endif // !GUIELEMENT_HPP_

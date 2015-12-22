@@ -29,8 +29,7 @@ public:
     void                        onGUI();
 
 private:
-    unsigned int                             _id;
-    std::multimap<std::string, GUIElement *> _scenes;
+    std::multimap<std::string, GUIElement *>    _scenes;
 };
 
 #endif // !GUIMANAGER_HPP_

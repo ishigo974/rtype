@@ -67,9 +67,9 @@ namespace RType
         void parseData(Buffer const& raw);
 
     public:
-        static const EventMap    inGameEvents;
-        static const DataSizeMap dataSizes;
-        static const size_t      headerSize;
+        static const EventMap       inGameEvents;
+        static const DataSizeMap    dataSizes;
+        static const size_t         headerSize;
 
     protected:
         uint32_t _id;

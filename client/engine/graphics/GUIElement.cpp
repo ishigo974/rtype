@@ -1,3 +1,4 @@
+#include <utility>
 #include "GUIElement.hpp"
 
 GUIElement::GUIElement()
@@ -35,7 +36,7 @@ void GUIElement::swap(GUIElement& other)
 namespace std
 {
     template<>
-    void swap<GUIElement>(GUIElement& a, GUIElement& b)
+    inline void swap<GUIElement>(GUIElement& a, GUIElement& b)
     {
         a.swap(b);
     }
