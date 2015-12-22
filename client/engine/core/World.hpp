@@ -7,6 +7,8 @@
 
 # include <chrono>
 # include <Renderer.hpp>
+#include <NetworkSystem.hpp>
+#include <UDPSystem.hpp>
 # include "EntityManager.hpp"
 # include "CommandSystem.hpp"
 # include "BehaviourSystem.hpp"
@@ -15,7 +17,9 @@
 class World
 {
 public:
-    World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, PhysicsEngine *pe);
+    World(EntityManager *em, CommandSystem *cmd, Renderer *re,
+          BehaviourSystem *bs, Input *i, PhysicsEngine *pe,
+          RType::NetworkSystem *r, RType::UDPSystem *f);
 
 public:
     std::vector<GameObject *> const *getEntities() const;
@@ -38,6 +42,8 @@ private:
     BehaviourSystem           *_behaviourSystem;
     Input                     *_input;
     PhysicsEngine             *_pe;
+    RType::NetworkSystem *_tcpSystem;
+    RType::UDPSystem *_udpSystem;
 
     double _lag;
     double _fixedStep;

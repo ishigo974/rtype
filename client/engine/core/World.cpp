@@ -4,8 +4,10 @@
 
 #include "World.hpp"
 
-World::World(EntityManager *em, CommandSystem *cmd, Renderer *re, BehaviourSystem *bs, Input *i, PhysicsEngine *pe)
-        : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs), _input(i), _pe(pe)
+World::World(EntityManager *em, CommandSystem *cmd, Renderer *re,
+             BehaviourSystem *bs, Input *i, PhysicsEngine *pe, RType::NetworkSystem *r, RType::UDPSystem *f)
+        : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs),
+          _input(i), _pe(pe), _tcpSystem(r), _udpSystem(f)
 {
     BigBen::getElapsedtime();
     _fixedStep = 0.003;
@@ -34,6 +36,8 @@ void World::gameLoop()
     {
         double lag = BigBen::getElapsedtime();
 
+        _f->process();
+        _r->process();
         while (_input->pollEvent(e))
         {
             if (e.type == cu::Event::Closed || e.key == cu::Event::ESCAPE)
@@ -50,7 +54,6 @@ void World::gameLoop()
             _behaviourSystem->process(lag / _fixedStep);
             lag -= _fixedStep;
         }
-
         _pe->process(BigBen::getFixedElapsedtime());
         _renderer->render();
     }

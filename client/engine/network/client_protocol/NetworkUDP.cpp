@@ -35,7 +35,7 @@ namespace RType
 
     void NetworkUDP::pushRequest(InGameEvent const& request)
     {
-        _send.append(request.toBuffer());
+        _send.append<Buffer>(request.toBuffer());
     }
 
     InGameEvent NetworkUDP::popRequest()

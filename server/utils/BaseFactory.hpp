@@ -10,6 +10,7 @@
 # include "IStringable.hpp"
 # include "GenerateTypeError.hpp"
 
+#include <iostream>
 namespace Utils
 {
     /*

@@ -99,28 +99,28 @@ void backgroundTest()
     EntityManager     entityManager;
     Renderer          r(&entityManager);
     Input             i(r.getWindow());
-    // RType::NetworkSystem networkSystem(&entityManager);
-    // RType::UDPSystem udpSystem(&entityManager);
-    // RType::NetworkTCP    *networkTCP;
-    // RType::Request       request;
+     RType::NetworkSystem networkSystem(&entityManager);
+     RType::UDPSystem udpSystem(&entityManager);
+     RType::NetworkTCP    *networkTCP;
+     RType::Request       request;
 
     GameObject *gameObj = entityManager.createEntity<GameObject>("Test", 1);
 
     entityManager.attachComponent<RType::NetworkTCP>(gameObj, "Network");
     entityManager.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
 
-    // networkTCP = gameObj->getComponent<RType::NetworkTCP>();
+     networkTCP = gameObj->getComponent<RType::NetworkTCP>();
     GameObject        *a = entityManager.createEntity<GameObject>("Background", -1);
     cu::Event         e;
     std::stringstream ss;
     CommandSystem     cmds(&entityManager, &i);
 
-    // request.setCode(RType::Request::CL_CREATEROOM);
-    // request.push<std::string>("room_name", "BestRoomEver");
-    // networkTCP->pushRequest(request);
-    // networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
-    // networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
-    // networkSystem.process();
+     request.setCode(RType::Request::CL_CREATEROOM);
+     request.push<std::string>("room_name", "BestRoomEver");
+     networkTCP->pushRequest(request);
+     networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+     networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
+     networkSystem.process();
     ss << "bg" << rand() % 4 + 1;
 
     PlayerObject *p   = entityManager.createEntity<PlayerObject>("Player", 10, &entityManager);
@@ -205,7 +205,7 @@ void backgroundTest()
         for (auto mob : mobs)
 	  mob->update(BigBen::get().getElapsedtime());
         r.render();
-        // udpSystem.process();
+         udpSystem.process();
     }
     std::cout << "Escape pressed" << std::endl;
 }
@@ -492,7 +492,15 @@ bool worldTest()
     BehaviourSystem bs(&em);
     PhysicsEngine pe(&em);
 
-    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &pe);
+    RType::NetworkSystem networkSystem(&em);
+    RType::NetworkTCP    *networkTCP;
+    RType::Request       request;
+    RType::Request       tmp;
+    RType::NetworkUDP *networkUDP;
+    RType::UDPSystem udpSystem(&em);
+
+    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &pe,
+            &networkSystem, &udpSystem);
 
     PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);
     player->init();
@@ -507,6 +515,19 @@ bool worldTest()
     GameObject *first7 = em.createEntity<GameObject>("LePremier", 0);
     GameObject *first8 = em.createEntity<GameObject>("LePremier", 0);
     GameObject *first9 = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *gameObj = em.createEntity<GameObject>("Test", 1);
+
+    em.attachComponent<RType::NetworkTCP>(gameObj, "Network");
+    em.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
+
+    networkTCP = gameObj->getComponent<RType::NetworkTCP>();
+    networkUDP = gameObj->getComponent<RType::NetworkUDP>();
+
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", "BestRoomEver");
+    networkTCP->pushRequest(request);
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
 
     em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
     em.attachComponent<Mob>(first, "MobCompo");
@@ -590,7 +611,7 @@ int main()
 ////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
 //    // buttonAndLabelsTest();
 //    // menuTest();
-   // backgroundTest();
+ //   backgroundTest();
 //    testSound();
 
     worldTest();

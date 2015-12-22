@@ -1,4 +1,5 @@
 #include <iostream>
+#include "ShipComponent.hpp"
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
@@ -105,8 +106,10 @@ player/network component");
                     );
                 test.second.first
                     ->addComponent(std::make_unique<Component::Position>(
-                        Component::Room::defaultPositions.at(test.first)
+                            Component::Room::defaultPositions.at(test.first)
                     ));
+                test.second.first
+                    ->addComponent(std::make_unique<Component::Ship>());
             }
             Server::display("Room '" + room->getRoomName() + "' is launching");
         }
