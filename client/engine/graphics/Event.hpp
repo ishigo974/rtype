@@ -26,6 +26,7 @@ namespace cu
             LEFT,
             SHOOT,
             ESCAPE,
+            ENTER,
             LAST_ACTION
         };
 

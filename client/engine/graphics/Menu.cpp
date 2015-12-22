@@ -180,41 +180,63 @@ void Menu::transitionToStates()
         return false;
     }, _event, &refresh, this);
 
-    createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
+    // createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
+    // {
+    //     if (e->type == cu::Event::MouseButtonReleased &&
+    //         back->intersect(e->mouse.x, e->mouse.y))
+    //     {
+    //         menu->refreshRoomList();
+    //         return true;
+    //     }
+    //     return false;
+    // }, _event, &back, this);
+
+#include <iostream>
+    createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input,
+                                                 TextField *back, Menu *menu)
     {
-        if (e->type == cu::Event::MouseButtonReleased &&
+        std::string tmp = input->getText();
+        if (e->type == cu::Event::TextEntered)
+        {
+            if (e->text.unicode == '\b')
+            {
+                input->setText(tmp.substr(0, tmp.size() - 1));
+                return false;
+            }
+            else
+                input->setText(input->getText() +
+                               static_cast<char>(e->text.unicode));
+            return false;
+        }
+        else if (e->type == cu::Event::KeyReleased
+                 && e->key == cu::Event::ENTER)
+        {
+            menu->createNewRoom(tmp);
+            input->clearText();
+            return true;
+        }
+        else if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
             menu->refreshRoomList();
             return true;
         }
-        return false;
-    }, _event, &back, this);
 
-    createRoomState.addTransition("createRoom", [](cu::Event *e, TextField *input)
-    {
-        if (e->type == cu::Event::TextEntered)
-        {
-            input->setText(input->getText() +
-            static_cast<char>(e->text.unicode));
-
-            return true;
-        }
         return false;
-    }, _event, &inputRoomName);
+    }, _event, &inputRoomName, &back, this);
 
-    createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input, Menu *menu)
-    {
-        if (e->type == cu::Event::KeyReleased &&
-            e->key == cu::Event::UP &&
-            input->getText().size() > 0)
-        {
-            menu->createNewRoom(input->getText());
-            input->clearText();
-            return true;
-        }
-        return false;
-    }, _event, &inputRoomName, this);
+    // createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input, Menu *menu)
+    // {
+    //     if (e->type == cu::Event::KeyReleased &&
+    //         e->key == cu::Event::UP &&
+    //         input->getText().size() > 0)
+    //     {
+    //         menu->createNewRoom(input->getText());
+    //         input->clearText();
+    //         return true;
+    //     }
+    //     return false;
+    // }, _event, &inputRoomName, this);
 
     inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
     {
