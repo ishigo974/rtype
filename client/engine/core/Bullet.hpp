@@ -3,6 +3,7 @@
 
 # include "Behaviour.hpp"
 # include "Transform.hpp"
+# include "GameObject.hpp"
 
 class Bullet : public Behaviour
 {
@@ -17,7 +18,7 @@ public:
 
 public:
     Bullet();
-  Bullet(unsigned int _id, std::string const& _name);
+    Bullet(unsigned int _id, std::string const& _name);
     virtual ~Bullet();
 
     Bullet(Bullet const& other);
@@ -27,34 +28,36 @@ public:
     bool operator==(Bullet const& other);
     bool operator!=(Bullet const& other);
 
-
     int getHp() const;
-  virtual int getDamage() const;
-  void	setHp(int hp);
-  void  setDamage(int damage);
-
-  void         move(double elapsedTime) const;
+    virtual int getDamage() const;
+    void	setHp(int hp);
+    void    setDamage(int damage);
     virtual void update(double elapsedTime);
 
     void swap(Bullet& other);
 
-  void	setX(float x);
-  void	setY(float y);
-  float	getX() const;
-  float	getY() const;
-  void	setDirection(Bullet::Direction d);
-  std::string	toString() const;
-  bool	getAvailable() const;
-  void	setAvailable(bool a);
+    void	setX(float x);
+    void	setY(float y);
+    float	getX() const;
+    float	getY() const;
+    void	setDirection(Bullet::Direction d);
+    std::string	toString() const;
+    bool	getAvailable() const;
+    void	setAvailable(bool a);
+    void    init();
 
     virtual bool handleMessage(Collider *o);
 
 protected:
-    int _hp;
-    int _damage;
-  Bullet::Direction	_direction;
-  Transform		*_transform;
-  bool			_available;
+    void         move(double elapsedTime) const;
+
+protected:
+    int                 _hp;
+    int                 _damage;
+    Bullet::Direction	_direction;
+    Transform		    *_transform;
+    GameObject          *_parent;
+    bool		     	_available;
 };
 
 #endif /* !BULLET_HPP_ */

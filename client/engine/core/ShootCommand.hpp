@@ -6,11 +6,11 @@
 class	ShootCommand : public ACommand
 {
 public:
-  ShootCommand(EntityManager *entityManager);
-  virtual ~ShootCommand();
+    ShootCommand(EntityManager *entityManager);
+    virtual ~ShootCommand();
 
-  virtual void	execute();
-  virtual void	undo();
+    virtual void	execute();
+    virtual void	undo();
 };
 
 #endif /* !RTYPE_SHOOTCOMMAND_HPP_ */

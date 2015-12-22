@@ -121,10 +121,10 @@ SpriteRenderer& GameObject::renderer() const
 
 bool		GameObject::isVisible() const
 {
-  return _isVisible;
+    return _isVisible;
 }
 
 void		GameObject::setVisible(bool v)
 {
-  _isVisible = v;
+    _isVisible = v;
 }
