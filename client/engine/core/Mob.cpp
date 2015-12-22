@@ -81,8 +81,8 @@ bool        Mob::handleMessage(Collider *o)
 {
     GameObject	*otherParent = static_cast<GameObject *>(o->parent());
 
-    if (otherParent->getComponent<Player>() != nullptr
-        || otherParent->getComponent<Behaviour>() != nullptr)
+    if ((otherParent->getComponent<Player>() != nullptr
+        || otherParent->getComponent<Behaviour>() != nullptr) && _lives != 0)
         _lives -= 1;
     return (true);
 }
