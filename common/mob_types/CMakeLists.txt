@@ -18,11 +18,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 set(FORWARDMOB "rtype_forwardmob")
 set(VERTICALMOB "rtype_verticalmob")
+set(SINUSOIDMOB "rtype_sinusoidmob")
 
 include_directories( ../utils )
 
 file(GLOB forwardmob_files ForwardMobType.cpp ../utils/Utils.cpp)
 file(GLOB verticalmob_files VerticalMobType.cpp ../utils/Utils.cpp)
+file(GLOB sinusoidmob_files SinusoidMobType.cpp ../utils/Utils.cpp)
 
 add_library(${FORWARDMOB} MODULE ${forwardmob_files})
 add_library(${VERTICALMOB} MODULE ${verticalmob_files})
+add_library(${SINUSOIDMOB} MODULE ${sinusoidmob_files})

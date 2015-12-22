@@ -86,16 +86,15 @@ namespace RType
         */
         MovePattern     Vertical::getMovePattern() const
         {
-            return [](cu::Position const& pos, double elapsedtime)->cu::Position
+            return [](cu::Position const& pos, double elapsedTime)->cu::Position
             {
-                static const float   speed = 0.20f;
-                static int           direction = 0;
+                static const float  speed = 1.0f;
+                static int          direction = -1;
 
-                if (pos.Y() <= 0)
-                    direction = 1;
-                else if (pos.Y() >= 720 - 32) // TODO renderer::height - graphicHeight
-                    direction = -1;
-                return cu::Position(pos.X(), pos.Y() + direction * speed * elapsedtime);
+                if (pos.Y() >= 720 || pos.Y() <= 0)
+                    direction *= -1;
+                return cu::Position(pos.X(), pos.Y()
+                                    + (0.25 * speed * elapsedTime * direction));
             };
         }
 
