@@ -19,6 +19,10 @@
     "path": "../res/bg4.jpg",
     "repeated": true
   },
+  "pr1": {
+      "path": "../res/pr1.png",
+      "repeated": true
+  },
   "menu1": {
     "path": "../res/menu1.jpg",
     "repeated": false

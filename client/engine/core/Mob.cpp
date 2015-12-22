@@ -64,6 +64,11 @@ bool Mob::operator!=(Mob const& other)
     return (!Mob::operator==(other));
 }
 
+RTypes::my_uint16_t     Mob::getMask() const
+{
+    return Mask;
+}
+
 /*
 ** Public member functions
 */
@@ -82,7 +87,8 @@ bool        Mob::handleMessage(Collider *o)
     GameObject	*otherParent = static_cast<GameObject *>(o->parent());
 
     if ((otherParent->getComponent<Player>() != nullptr
-        || otherParent->getComponent<Behaviour>() != nullptr) && _lives != 0)
+        || otherParent->getComponent<Behaviour>() != nullptr
+        || otherParent->getComponent<Bullet>()) && _lives != 0)
         _lives -= 1;
     return (true);
 }
