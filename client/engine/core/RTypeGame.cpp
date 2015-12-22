@@ -25,7 +25,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
     _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
-    _ms(&_em, &_chrono, &_mobTypes)
+    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em)
 {
     GameObject*     entity;
 
@@ -113,6 +113,7 @@ void        RTypeGame::handleGame()
     _lag = BigBen::getElapsedtime();
     _cs.process();
     _ms.process();
+    _physics.process(_fixedStep);
     while (_lag >= _fixedStep)
     {
         _bs.process(_lag / _fixedStep);

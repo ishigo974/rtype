@@ -12,6 +12,7 @@
 # include "Renderer.hpp"
 # include "BehaviourSystem.hpp"
 # include "CommandSystem.hpp"
+# include "PhysicsEngine.hpp"
 # include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
@@ -75,6 +76,7 @@ protected:
     MapCollection               _maps;
     Time::HRChrono              _chrono;
     MobSystem                   _ms;
+    PhysicsEngine               _physics;
 };
 
 #endif /* !RTYPEGAME_HPP_ */
