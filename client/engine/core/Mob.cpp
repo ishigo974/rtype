@@ -10,16 +10,16 @@ Mob::Mob()
 {
 }
 
-Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type), _transform(0)
+Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type) :
+    Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type), _transform(0)
 {
-  _enabled = true;
-  _direction = 1;
+    _enabled = true;
+    _direction = 1;
 }
 
 Mob::Mob(Mob const& other) : Behaviour(other)
 {
-  _enabled = other._enabled;
+    _enabled = other._enabled;
     _hp = other._hp;
     _damage = other._damage;
     _direction = other._direction;
@@ -79,12 +79,12 @@ std::string Mob::toString() const
     std::stringstream ss;
 
     ss << "Player {"
-       << "\n\thp: " << _hp
-       << "\n\tdamage: " << _damage
-       << "\n\ttype: " << _type
-       << "\n\tGraphic height: " << _graphicHeight;
+    << "\n\thp: " << _hp
+    << "\n\tdamage: " << _damage
+    << "\n\ttype: " << _type
+    << "\n\tGraphic height: " << _graphicHeight;
     if (_transform)
-      ss << "\n\t" << _transform->toString();
+    ss << "\n\t" << _transform->toString();
     ss << "\n}" << std::endl;
 
     return (ss.str());
@@ -92,78 +92,79 @@ std::string Mob::toString() const
 
 int	Mob::getHp() const
 {
-  return _hp;
+    return _hp;
 }
 
 int	Mob::getDamage() const
 {
-  return _damage;
+    return _damage;
 }
 
 void		Mob::move()
 {
-  float		speed = 0.5f;
+    float		speed = 0.5f;
 
-  _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
-  switch (_type)
+    _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
+    switch (_type)
     {
-    case 0:
-      if (_transform->getPosition().Y() <= 0)
-	_direction = 1;
-      else if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
-	_direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
-      break;
-    case 1:
-      if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
-	_type = 2;
-      _direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * -1 * speed));
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
-      break;
-    case 2:
-      if (_transform->getPosition().Y() <= 0)
-	_type = 1;
-      _direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
-      break;
-    case 3:
-      _direction = -1;
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
-    default:
-      _type = 3;
-      break;
+        case 0:
+            if (_transform->getPosition().Y() <= 0)
+                _direction = 1;
+        else if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
+            _direction = -1;
+            _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
+            break;
+        case 1:
+            if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
+                _type = 2;
+            _direction = -1;
+            _transform->getPosition().setY((_transform->getPosition().Y() + _direction * -1 * speed));
+            _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
+            break;
+        case 2:
+            if (_transform->getPosition().Y() <= 0)
+                _type = 1;
+            _direction = -1;
+            _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
+            _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
+            break;
+        case 3:
+            _direction = -1;
+            _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
+            break;
+        default:
+            _type = 3;
+            break;
     }
 }
 
 void		Mob::update(double)
 {
-  GameObject	*p = static_cast<GameObject *>(parent());
+    GameObject	*p = static_cast<GameObject *>(parent());
 
-  if (_hp <= 0)
+    if (_hp <= 0)
     {
-      std::cout << "Mob Mort" << std::endl;
-      _enabled = false;
-      p->setVisible(false);
-      p->getComponent<Collider>()->setEnabled(false);
+        std::cout << "Mob Mort" << std::endl;
+        _enabled = false;
+        p->setVisible(false);
+        p->getComponent<Collider>()->setEnabled(false);
     }
-  if (!_transform)
-    _transform = p->getComponent<Transform>();
-  if (_transform->getPosition().X() > Renderer::width + 100
-      || _transform->getPosition().X() < -100
-      || _transform->getPosition().Y() > Renderer::height + 100
-      || _transform->getPosition().Y() < -100)
-    _enabled = false;
-  this->move();
+    if (!_transform)
+        _transform = p->getComponent<Transform>();
+    if (_transform->getPosition().X() > Renderer::width + 100
+    || _transform->getPosition().X() < -100
+    || _transform->getPosition().Y() > Renderer::height + 100
+    || _transform->getPosition().Y() < -100)
+        _enabled = false;
+    this->move();
 }
 
 bool Mob::handleMessage(Collider *o)
 {
-  GameObject	*otherParent = static_cast<GameObject *>(o->parent());
-  if (otherParent->getComponent<Player>() != nullptr)
-    _hp -= otherParent->getComponent<Player>()->getDamage();
-  else if (otherParent->getComponent<Behaviour>() != nullptr)
-    _hp -= otherParent->getComponent<Behaviour>()->getDamage();
-  return (true);
+    GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+    if (otherParent->getComponent<Player>() != nullptr)
+        _hp -= otherParent->getComponent<Player>()->getDamage();
+    else if (otherParent->getComponent<Behaviour>() != nullptr)
+        _hp -= otherParent->getComponent<Behaviour>()->getDamage();
+    return (true);
 }
