@@ -3,6 +3,7 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
+#include "Mob.hpp"
 #include "ObjectPool.hpp"
 
 Player::Player()
@@ -212,8 +213,11 @@ void		Player::update(double elapsedtime)
     // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
 
-bool Player::handleMessage(Collider *)
+bool Player::handleMessage(Collider *o)
 {
-    _hp -= 1;
+    GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+
+    if (otherParent->getComponent<Mob>() != nullptr)
+        _hp -= 1;
     return (true);
 }
