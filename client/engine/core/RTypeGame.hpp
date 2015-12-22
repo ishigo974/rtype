@@ -4,6 +4,7 @@
 # include <memory>
 # include <string>
 # include <unordered_map>
+# include <vector>
 # include "EntityManager.hpp"
 # include "Behaviour.hpp"
 # include "Input.hpp"
@@ -15,6 +16,7 @@
 # include "NetworkSystem.hpp"
 # include "UDPSystem.hpp"
 # include "IMobType.hpp"
+# include "MapParser.hpp"
 
 class RTypeGame
 {
@@ -22,6 +24,7 @@ public:
     typedef std::unique_ptr<RType::MobType::IMobType>   UniqueMobType;
     typedef std::unordered_map<unsigned int,
                                UniqueMobType>           MobTypeMap;
+    typedef std::vector<RType::Map::Parser::Map>        MapCollection;
 
 public:
     RTypeGame(std::string const& addr = defaultAddr,
@@ -65,6 +68,7 @@ protected:
     double                  _lag;
     double                  _fixedStep;
     MobTypeMap              _mobTypes;
+    MapCollection           _maps;
 };
 
 #endif /* !RTYPEGAME_HPP_ */

@@ -32,7 +32,18 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
     _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
+// tmp
+    RType::NetworkTCP* tcp = entity->getComponent<RType::NetworkTCP>();
+
+    RType::Request request;
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", "BestRoomEver");
+    tcp->pushRequest(request);
+    tcp->pushRequest(RType::Request(RType::Request::CL_READY));
+// end tmp
+
     loadMobTypesFromFile();
+    loadMapsFromFile();
 
     // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
                                     // entity->getComponent<RType::NetworkTCP>());
@@ -66,6 +77,8 @@ void        RTypeGame::run()
             else
                 handleGame();
         }
+        if (_isPlaying)
+            handleGame();
         _tcpsys.process();
         _renderer.render();
         _event.type = cu::Event::None;
@@ -97,6 +110,7 @@ void        RTypeGame::handleGame()
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
+    _udpsys.process();
 }
 
 void            RTypeGame::loadMapsFromFile()
@@ -105,7 +119,11 @@ void            RTypeGame::loadMapsFromFile()
     std::string     line;
 
     if (!file)
+    {
+        std::cerr << "Warning: Map configuration file wasn't found"
+                  << std::endl;
         return ;
+    }
     while (std::getline(file, line))
     {
         std::ifstream       mapFile(line.c_str());
@@ -115,15 +133,22 @@ void            RTypeGame::loadMapsFromFile()
         try {
             if (mapFile.good())
             {
-//                Map::Parser         parser(line);
-//                Map::Parser::Map    map;
-//
-//                map = parser.parse();
-//                _maps.push_back(map);
-//
-                ;
+               RType::Map::Parser         parser(line);
+               RType::Map::Parser::Map    map;
+
+               map = parser.parse();
+               _maps.push_back(map);
+            }
+            else
+            {
+                std::cerr   << "Can't load map: no such file: "
+                            << line << std::endl;
+                mapFile.close();
             }
         } catch (std::runtime_error const& e) {
+            mapFile.close();
+            file.close();
+            throw ;
         }
         mapFile.close();
     }

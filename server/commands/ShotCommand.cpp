@@ -1,8 +1,8 @@
+#include "PlayerComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "ShotCommand.hpp"
 #include "ShipComponent.hpp"
 #include "RoomComponent.hpp"
-#include "PositionComponent.hpp"
 
 namespace RType
 {
@@ -40,6 +40,7 @@ namespace RType
             return *this;
         }
 
+#include <iostream>
         /*
         ** Public member functions
         */
@@ -65,14 +66,16 @@ namespace RType
         {
             Component::Ship*    ship =
                 _entity->getComponent<Component::Ship>();
-            Component::Room*    room =
-                _entity->getComponent<Component::Room>();
+            Component::Player*  player =
+                _entity->getComponent<Component::Player>();
+            Component::Room*    room;
             InGameEvent         event(_isFiring ? InGameEvent::SE_SHOTSTART :
                                                   InGameEvent::SE_SHOTSTOP);
 
-            if (ship == nullptr)
+            if (ship == nullptr || player == nullptr || (room =
+                                                                 player->getRoom()) == nullptr)
                 throw std::runtime_error("Entity does not have a "
-                                         "Ship component");
+                                         "Ship/Room/Player component");
             ship->setIsFiring(_isFiring);
             ship->setShotType(_type);
             event.push<uint8_t>("player_id", room->getPlayerId(*_entity));

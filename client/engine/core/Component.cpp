@@ -79,3 +79,8 @@ Object *Component::parent() const
 {
     return (EntityManager::getParentOf(this));
 }
+
+bool Component::handleMessage(Collider *)
+{
+    return (false);
+}

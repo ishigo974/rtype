@@ -9,7 +9,7 @@ Bullet::Bullet()
 {
   _direction = Bullet::Direction::DEFAULT;
   _hp = 1;
-  _damage = 5;
+  _damage = 1;
   _available = true;
   _transform = 0;
 }
@@ -79,6 +79,16 @@ namespace std
     {
         a.swap(b);
     }
+}
+
+void	Bullet::setHp(int hp)
+{
+  _hp = hp;
+}
+
+void	Bullet::setDamage(int damage)
+{
+  _damage = damage;
 }
 
 int	Bullet::getHp() const
@@ -156,11 +166,17 @@ void		Bullet::move(double elapsedtime) const
 
 void		Bullet::update(double elapsedtime)
 {
+  GameObject	*p = static_cast<GameObject *>(parent());
+
   if (!_transform)
-    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
-  if (_transform->getPosition().X() > Renderer::width)
+    _transform = p->getComponent<Transform>();
+  if (_hp <= 0 || _transform->getPosition().X() > Renderer::width)
     _available = true;
-  if (_hp == 0)
-    std::cout << "Mort" << std::endl;
   this->move(elapsedtime);
+}
+
+bool Bullet::handleMessage(Collider *)
+{
+  _hp = 0;
+    return (true);
 }

@@ -24,15 +24,15 @@ void    MoveCommand::execute()
                                           ComponentMask::PlayerMask);
     std::vector<Object *> network = _entityManager
             ->getByMask(ComponentMask::UDPMask);
-
     RType::InGameEvent event;
+    RType::NetworkUDP* udp;
 
     for (auto obj : objs)
-      {
-	Player *player = static_cast<GameObject *>(obj)->getComponent<Player>();
-	if (player)
-	  player->setAction(_direction);
-      }
+    {
+        Player *player = static_cast<GameObject *>(obj)->getComponent<Player>();
+        if (player)
+            player->setAction(_direction);
+    }
     switch (_direction)
     {
         case UP:
@@ -52,14 +52,11 @@ void    MoveCommand::execute()
     }
     event.push<uint32_t>("time",
                          std::chrono::time_point_cast<std::chrono::milliseconds>
-                                 (BigBen::getTimeNow()).time_since_epoch()
-                                                       .count());
-    // TODO dynamic cast pour check NULL
-    // static_cast<GameObject *>(network[0])
-    //         ->getComponent<RType::NetworkUDP>()->pushRequest(event);
+                                 (BigBen::getTimeNow()).time_since_epoch().count());
+    if ((udp = static_cast<GameObject *>(network[0])->getComponent<RType::NetworkUDP>()) != NULL)
+        udp->pushRequest(event);
 }
 
 void    MoveCommand::undo()
 {
-
 }

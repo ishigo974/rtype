@@ -77,7 +77,8 @@ std::string	PlayerObject::toString() const
 void	PlayerObject::init()
 {
   _entityManager->attachComponent<SpriteRenderer>(this, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-  _entityManager->attachComponent<Player>(this, "Player", _entityManager, 100);
+  _entityManager->attachComponent<Player>(this, "Player", _entityManager);
+  this->getComponent<Player>()->init();
   _entityManager->attachComponent<Collider>(this, "collider", 32, 12);
 
   Transform *t = this->getComponent<Transform>();
