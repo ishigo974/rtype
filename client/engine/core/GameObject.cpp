@@ -54,6 +54,7 @@ std::string GameObject::toString() const
     << "\n\tid: " << _id
     << "\n\tname: " << _name
     << "\n\tlayer: " << _layer
+    << "\n\tTransform: " << getComponent<Transform>()->toString()
     << "\n}" << std::endl;
 
     return (ss.str());

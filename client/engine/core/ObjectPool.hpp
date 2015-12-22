@@ -15,7 +15,7 @@ public:
         {
             obj = _entityManager->createEntity<T>(name, layer, _entityManager);
             obj->init();
-            obj->reset();
+            obj->deleteObject();
             _objects.push(obj);
         }
     }
