@@ -1,3 +1,4 @@
+#include <AudioEffect.hpp>
 #include "NetworkUDP.hpp"
 #include "ShootCommand.hpp"
 #include "Player.hpp"
@@ -20,6 +21,7 @@ void    ShootCommand::execute()
             _entityManager->getByMask(ComponentMask::PlayerMask);
     std::vector<Object *> network = _entityManager
             ->getByMask(ComponentMask::UDPMask);
+    std::vector<Object *>sound = _entityManager->getByMask(SoundMask);
 
     for (auto obj : objs)
         static_cast<GameObject *>(obj)->getComponent<Player>()
@@ -37,6 +39,15 @@ void    ShootCommand::execute()
         if ((tmp = static_cast<GameObject *>(network[0])
                 ->getComponent<RType::NetworkUDP>()) != NULL)
             tmp->pushRequest(event);
+    }
+    for (auto play : sound)
+    {
+        if (static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+            ->getName() == "Shot")
+        {
+            static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                           ->setSoundToPlay("../res/laser1.wav");
+        }
     }
 }
 

@@ -13,13 +13,14 @@
 # include "CommandSystem.hpp"
 # include "BehaviourSystem.hpp"
 # include "PhysicsEngine.hpp"
+# include "AudioEffectPlayer.hpp"
 
 class World
 {
 public:
     World(EntityManager *em, CommandSystem *cmd, Renderer *re,
           BehaviourSystem *bs, Input *i, PhysicsEngine *pe,
-          RType::NetworkSystem *r, RType::UDPSystem *f);
+          RType::NetworkSystem *r, RType::UDPSystem *f, AudioEffectPlayer *);
 
 public:
     std::vector<GameObject *> const *getEntities() const;
@@ -44,6 +45,7 @@ private:
     PhysicsEngine             *_pe;
     RType::NetworkSystem *_tcpSystem;
     RType::UDPSystem *_udpSystem;
+    AudioEffectPlayer *_audioSystem;
 
     double _lag;
     double _fixedStep;

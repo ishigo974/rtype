@@ -5,9 +5,11 @@
 #include "World.hpp"
 
 World::World(EntityManager *em, CommandSystem *cmd, Renderer *re,
-             BehaviourSystem *bs, Input *i, PhysicsEngine *pe, RType::NetworkSystem *r, RType::UDPSystem *f)
+             BehaviourSystem *bs, Input *i, PhysicsEngine *pe,
+             RType::NetworkSystem *r, RType::UDPSystem *f, AudioEffectPlayer
+             *audio)
         : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs),
-          _input(i), _pe(pe), _tcpSystem(r), _udpSystem(f)
+          _input(i), _pe(pe), _tcpSystem(r), _udpSystem(f), _audioSystem(audio)
 {
     BigBen::getElapsedtime();
     _fixedStep = 0.003;
@@ -27,17 +29,16 @@ void World::addEntity(GameObject *entity)
     _entities.push_back(entity);
 }
 
-#include <unistd.h>
-
 void World::gameLoop()
 {
     cu::Event e;
+    _audioSystem->init();
     while (!_end)
     {
         double lag = BigBen::getElapsedtime();
 
-        _f->process();
-        _r->process();
+        _udpSystem->process();
+        _tcpSystem->process();
         while (_input->pollEvent(e))
         {
             if (e.type == cu::Event::Closed || e.key == cu::Event::ESCAPE)
@@ -55,6 +56,7 @@ void World::gameLoop()
             lag -= _fixedStep;
         }
         _pe->process(BigBen::getFixedElapsedtime());
+        _audioSystem->process();
         _renderer->render();
     }
 }

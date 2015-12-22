@@ -14,6 +14,8 @@ namespace RType
     UDPSystem::UDPSystem(EntityManager *em, std::string const& addr, short udp)
             : _entityManager(em), _addr(addr), _socket(udp)
     {
+        _socket.setTimeoutSec(0);
+        _socket.setTimeoutUsec(1000);
         _socket.bind();
     }
 

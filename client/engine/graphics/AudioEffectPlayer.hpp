@@ -3,20 +3,31 @@
 
 #include <list>
 #include <SFML/Audio.hpp>
+#include "EntityManager.hpp"
 #include "GameObject.hpp"
 
 class AudioEffectPlayer
 {
 public:
-	AudioEffectPlayer() {};
-	~AudioEffectPlayer() {};
+    AudioEffectPlayer(EntityManager *em)
+    : _em(em)
+    {
+        _backgroundStart = false;
+    }
+
+    ~AudioEffectPlayer()
+    { }
 
 public:
-	void	play(const GameObject&);
-	void	refreshSoundList();
+    void play(GameObject*);
+    void refreshSoundList();
+    void process();
+    void init();
 
 private:
-	std::list<sf::Sound>	_sounds;
+    EntityManager *_em;
+    std::list<sf::Sound> _sounds;
+    bool                _backgroundStart;
 };
 
 #endif // !AUDIOEFFECTPLAYER_HPP_
