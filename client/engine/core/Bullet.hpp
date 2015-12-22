@@ -48,6 +48,9 @@ public:
 
     virtual bool handleMessage(Collider *o);
 
+    static const RTypes::my_uint16_t Mask      = ComponentMask::BulletMask;
+    virtual RTypes::my_uint16_t      getMask() const;
+
 protected:
     void         move(double elapsedTime) const;
 

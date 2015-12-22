@@ -4,6 +4,7 @@
 # include "Behaviour.hpp"
 # include "Transform.hpp"
 # include "IMobType.hpp"
+# include "REnums.hpp"
 
 class Mob : public Behaviour
 {
@@ -33,13 +34,15 @@ public:
     void            removeLives(unsigned int nb = 1);
 
 public:
-    unsigned int                    getId() const;
+    unsigned int                    getMobId() const;
     std::string const&              getMobName() const;
     unsigned int                    getLives() const;
     unsigned int                    getScoreValue() const;
     std::string const&              getSpriteFilePath() const;
     RType::MobType::MovePattern const&     getMovePattern() const;
     std::string                     toString() const;
+    virtual RTypes::my_uint16_t      getMask() const;
+    static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
 
 protected:
     void                    move(double elapsedTime);

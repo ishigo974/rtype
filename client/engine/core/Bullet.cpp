@@ -118,6 +118,11 @@ std::string Bullet::toString() const
     return (ss.str());
 }
 
+RTypes::my_uint16_t     Bullet::getMask() const
+{
+    return Mask;
+}
+
 float		Bullet::getX() const
 {
     return _transform->getPosition().X();
