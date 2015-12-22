@@ -89,10 +89,10 @@ bool Collider::intersects(Collider *o)
 
 bool		Collider::isEnabled() const
 {
-  return _enabled;
+    return _enabled;
 }
 
 void		Collider::setEnabled(bool e)
 {
-  _enabled = e;
+    _enabled = e;
 }

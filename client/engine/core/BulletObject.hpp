@@ -23,6 +23,8 @@ public:
     void init();
     void deleteObject();
     void swap(BulletObject& other);
+    void reset();
+
 
 private:
     EntityManager *_entityManager;

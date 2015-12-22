@@ -206,7 +206,7 @@ void		Player::update(double elapsedtime)
             this->move(elapsedtime);
         _action.pop();
     }
-    _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
+    // TODO enlever ? _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
     // TODO remove debug comments
     // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
     // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;

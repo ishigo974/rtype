@@ -18,17 +18,18 @@ public:
     bool operator==(Mob const& other);
     bool operator!=(Mob const& other);
 
-    int getHp() const;
-    virtual int getDamage() const;
-
-    void         move();
-    virtual void update(double);
-
     void swap(Mob& other);
 
-    virtual bool handleMessage(Collider *o);
+    virtual int     getDamage() const;
 
-    std::string	toString() const;
+protected:
+    virtual bool    handleMessage(Collider *o);
+    int             getHp() const;
+
+    void            move();
+    virtual void    update(double);
+
+    std::string	    toString() const;
 
 protected:
     int _hp;

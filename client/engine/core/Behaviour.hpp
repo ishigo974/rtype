@@ -24,7 +24,7 @@ public:
     virtual void update(double elapsedTime);
     virtual void update();
 
-  virtual int getDamage() const;
+    virtual int getDamage() const;
 
     bool isEnabled() const;
     void setEnabled(bool _enabled);

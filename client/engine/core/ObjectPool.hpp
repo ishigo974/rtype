@@ -7,42 +7,47 @@ template <typename T, typename U>
 class	ObjectPool : Object
 {
 public:
-  ObjectPool(std::string const & name, int layer, EntityManager *manager)
-  {
-      _entityManager = manager;
-      T *obj;
-      for (int i = 0; i < 10; ++i)
-      {
-          obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-          _objects.push(obj);
-      }
-  }
+    ObjectPool(std::string const & name, int layer, EntityManager *manager)
+    {
+        _entityManager = manager;
+        T *obj;
+        for (int i = 0; i < 10; ++i)
+        {
+            obj = _entityManager->createEntity<T>(name, layer, _entityManager);
+            obj->init();
+            obj->reset();
+            _objects.push(obj);
+        }
+    }
 
-  virtual ~ObjectPool()
-  {
-      while (!_objects.empty())
-        _objects.pop();
-  }
+    virtual ~ObjectPool()
+    {
+        while (!_objects.empty())
+            _objects.pop();
+    }
 
-  T	*create(std::string const & name, int layer)
-  {
-      T *obj;
-      if (_objects.empty())
-      obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-      else
-      {
-          obj = _objects.front();
-          _objects.pop();
-      }
-      obj->init();
-      return obj;
-  }
+    T	*create(std::string const & name, int layer)
+    {
+        T *obj;
+        if (_objects.empty())
+        {
+            obj = _entityManager->createEntity<T>(name, layer, _entityManager);
+            obj->init();
+        }
+        else
+        {
+            obj = _objects.front();
+            _objects.pop();
+        }
+        obj->reset();
+        return obj;
+    }
 
-  void	deleteObject(T *obj)
-  {
-      obj->deleteObject();
-      _objects.push(obj);
-  }
+    void	deleteObject(T *obj)
+    {
+        obj->deleteObject();
+        _objects.push(obj);
+    }
 
 private:
     EntityManager       *_entityManager;

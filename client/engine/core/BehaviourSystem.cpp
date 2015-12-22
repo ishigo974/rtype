@@ -39,7 +39,7 @@ void BehaviourSystem::process(double elapsed)
     {
         Collider *comp = static_cast<GameObject *>(e)->getComponent<Collider>();
 
-	if (comp->isEnabled())
+        if (comp->isEnabled())
             comp->fixedUpdate(elapsed);
     }
 }
