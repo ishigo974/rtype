@@ -4,10 +4,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-#include <fstream>
 #include "Renderer.hpp"
 #include "GUIManager.hpp"
-#include "GUIElement.hpp"
 #include "StateMachine.hpp"
 
 unsigned int const Renderer::width  = 1280;

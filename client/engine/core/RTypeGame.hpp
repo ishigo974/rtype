@@ -16,9 +16,9 @@
 # include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
-# include "UDPSystem.hpp"
 # include "IMobType.hpp"
 # include "MapParser.hpp"
+# include "AudioEffectPlayer.hpp"
 # include "HRChrono.hpp"
 
 class MobSystem;
@@ -65,9 +65,8 @@ protected:
     Renderer                    _renderer;
     Input                       _input;
     BehaviourSystem             _bs;
+    RType::NetworkSystem        _network;
     CommandSystem               _cs;
-    RType::NetworkSystem        _tcpsys;
-    RType::UDPSystem            _udpsys;
     cu::Event                   _event;
     Menu*                       _menu;
     double                      _lag;
@@ -77,6 +76,7 @@ protected:
     Time::HRChrono              _chrono;
     MobSystem                   _ms;
     PhysicsEngine               _physics;
+    AudioEffectPlayer           _audio;
 };
 
 #endif /* !RTYPEGAME_HPP_ */

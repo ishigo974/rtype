@@ -8,8 +8,7 @@
 
 namespace RType
 {
-    NetworkUDP::NetworkUDP(unsigned id, std::string const& name)
-            : Component(id, name)
+    NetworkUDP::NetworkUDP()
     { }
 
     NetworkUDP::~NetworkUDP()

@@ -1,3 +1,4 @@
+#include "NotImplemented.hpp"
 #include "AudioEffect.hpp"
 
 AudioEffect::AudioEffect(unsigned id, std::string const &name)
@@ -59,9 +60,11 @@ sf::Sound &AudioEffect::soundToPlay()
 
 	for (std::map<std::string, bool>::const_iterator s = _sounds.begin(); s != _sounds.end(); ++s)
 	{
-		if (s->second == true)
+		if (s->second)
 			selected = s->first;
 	}
+	if (selected == "NoSound")
+		throw Exception::NotImplemented("NoSound");
 	_playSound.setBuffer(_res[selected]);
 	return 	_playSound;
 }
@@ -70,7 +73,7 @@ bool AudioEffect::addSound(std::string const &path)
 {
 	if (!_res.addSound(path))
 		return false;
-	_sounds[path] = false;
+	_sounds[path] = true;
 	return true;
 }
 
@@ -84,9 +87,10 @@ void AudioEffect::setSoundToPlay(std::string const &path)
 	catch (const std::out_of_range& exc)
 	{
 		std::cerr << exc.what() << std::endl;
-		_sounds["NoSound"] = true;
+		_sounds["NoSound"] = false;
 	}
 }
+
 
 RTypes::my_uint16_t AudioEffect::getMask() const
 {
@@ -99,4 +103,9 @@ void	AudioEffect::clearSounds()
 	{
 		s->second = false;
 	}
+}
+
+void AudioEffect::restartBackgroud()
+{
+	_sounds["../res/music.wav"] = true;
 }

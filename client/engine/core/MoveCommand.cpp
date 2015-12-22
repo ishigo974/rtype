@@ -21,11 +21,10 @@ MoveCommand::~MoveCommand()
 void    MoveCommand::execute()
 {
     std::vector<Object *> objs    = _entityManager->getByMask(
-                                          ComponentMask::PlayerMask);
+            ComponentMask::PlayerMask);
     std::vector<Object *> network = _entityManager
             ->getByMask(ComponentMask::UDPMask);
     RType::InGameEvent event;
-    RType::NetworkUDP* udp;
 
     for (auto obj : objs)
     {
@@ -50,11 +49,8 @@ void    MoveCommand::execute()
         default:
             break;
     }
-    event.push<uint32_t>("time",
-                         std::chrono::time_point_cast<std::chrono::milliseconds>
-                                 (BigBen::getTimeNow()).time_since_epoch().count());
-    if ((udp = static_cast<GameObject *>(network[0])->getComponent<RType::NetworkUDP>()) != NULL)
-        udp->pushRequest(event);
+    //TODO: Change 1 to timestamp
+    event.push<uint32_t>("time", 1);
 }
 
 void    MoveCommand::undo()

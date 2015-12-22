@@ -6,6 +6,8 @@
 #include "DLLoader.hpp"
 #include "Mob.hpp"
 #include "Collider.hpp"
+#include "AudioEffect.hpp"
+#include "TCPView.hpp"
 
 /*
 ** Static variables
@@ -22,27 +24,19 @@ const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
     _quit(false), _isPlaying(true), _em(), _renderer(&_em),
-    _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
-    _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
+    _input(_renderer.getWindow()), _bs(&_em),
+    _network(&_em, addr, port), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
-    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em)
+    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em), _audio(&_em)
 {
-    GameObject*     entity;
-
     BigBen::getElapsedtime();
-    entity = _em.createEntity<GameObject>("Network", 1);
-
-    _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
-    _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
     // tmp
-    RType::NetworkTCP* tcp = entity->getComponent<RType::NetworkTCP>();
-
     RType::Request request;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", "BestRoomEver");
-    tcp->pushRequest(request);
-    tcp->pushRequest(RType::Request(RType::Request::CL_READY));
+    _network.pushTCP(request);
+    _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
 
     loadMobTypesFromFile();
@@ -82,7 +76,8 @@ void        RTypeGame::run()
         }
         if (_isPlaying)
             handleGame();
-        _tcpsys.process();
+        _network.processTCP();
+        _network.processUDP();
         _renderer.render();
         _event.type = cu::Event::None;
     }
@@ -97,6 +92,7 @@ void        RTypeGame::initGameSample()
     player->init();
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
+    AudioEffect*    audio;
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
@@ -105,6 +101,11 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+    _em.attachComponent<AudioEffect>(player, "Audio");
+    audio = player->getComponent<AudioEffect>();
+    audio->addSound("../res/music.wav");
+    audio->addSound("../res/laser1.wav");
+    audio->addSound("../res/laser2.wav");
 
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
@@ -115,15 +116,16 @@ void        RTypeGame::initGameSample()
 void        RTypeGame::handleGame()
 {
     _lag = BigBen::getElapsedtime();
-    _cs.process();
+    _cs.processInput();
+    _cs.processNetwork();
     _ms.process();
     _physics.process(_fixedStep);
+    _audio.process();
     while (_lag >= _fixedStep)
     {
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
-    _udpsys.process();
 }
 
 void            RTypeGame::loadMapsFromFile()

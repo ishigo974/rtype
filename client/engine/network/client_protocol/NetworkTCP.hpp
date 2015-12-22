@@ -20,17 +20,20 @@ namespace RType
         static RTypes::my_uint16_t const Mask = ComponentMask::TCPMask;
 
     public:
-        NetworkTCP(unsigned _id, std::string const& _name);
+        NetworkTCP();
         virtual ~NetworkTCP();
 
     public:
         virtual RTypes::my_uint16_t getMask() const;
 
     public:
-        Buffer toSend();
-        void   receive(Buffer const& buffer);
-        void   pushRequest(Request const& request);
+        Buffer  toSend();
+        void    receive(Buffer const& buffer);
+        void    pushRequest(Request const& request);
         Request popRequest();
+
+    public:
+        size_t inSize() const;
 
     private:
         NetworkTCP(NetworkTCP const&) = delete;

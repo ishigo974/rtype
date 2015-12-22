@@ -9,17 +9,16 @@
 #include "Component.hpp"
 #include "Buffer.hpp"
 #include "InGameEvent.hpp"
-#include "NetworkSystem.hpp"
 
 namespace RType
 {
-    class NetworkUDP : public Component
+    class NetworkUDP
     {
     public:
         static RTypes::my_uint16_t const Mask = ComponentMask::UDPMask;
 
     public:
-        NetworkUDP(unsigned _id, std::string const& _name);
+        NetworkUDP();
         virtual ~NetworkUDP();
 
     public:

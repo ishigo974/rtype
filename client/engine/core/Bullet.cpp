@@ -12,6 +12,7 @@ Bullet::Bullet()
     _damage = 1;
     _available = true;
     _transform = 0;
+    _parent = nullptr;
 }
 
 Bullet::Bullet(unsigned int _id, std::string const& _name)
@@ -22,6 +23,7 @@ Bullet::Bullet(unsigned int _id, std::string const& _name)
     _damage = 5;
     _available = true;
     _transform = 0;
+    _parent = nullptr;
 }
 
 Bullet::Bullet(Bullet const& other) : Behaviour(other)

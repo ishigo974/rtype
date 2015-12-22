@@ -3,11 +3,13 @@
 #include "CommandSystem.hpp"
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
+#include "TCPView.hpp"
 
-CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
+CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
 {
     _input         = i;
     _entityManager = entityManager;
+    _ns            = ns;
 
     _actions[cu::Event::UP]    = ACommand::UP;
     _actions[cu::Event::DOWN]  = ACommand::DOWN;
@@ -17,10 +19,9 @@ CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
 }
 
 CommandSystem::~CommandSystem()
-{
-}
+{ }
 
-void    CommandSystem::process()
+void    CommandSystem::processInput()
 {
     for (auto& a : _actions)
     {
@@ -69,4 +70,22 @@ std::string    CommandSystem::toString()
     << "\n\tqueue size: " << _commands.size()
     << "\n}";
     return (ss.str());
+}
+
+void CommandSystem::processNetwork()
+{
+    _ns->processTCP();
+    _ns->processUDP();
+
+    auto tcpObjs = _entityManager->getByMask(ComponentMask::TCPMask);
+
+    for (auto e : tcpObjs)
+    {
+        auto tmpComp = static_cast<GameObject *>(e)->getComponent<TCPView>();
+
+        while (_ns->tcpSize() > 0)
+            tmpComp->push(_ns->popTCP());
+        while (tmpComp->size() > 0)
+            _ns->pushTCP(tmpComp->pop());
+    }
 }
