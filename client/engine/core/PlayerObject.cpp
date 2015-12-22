@@ -69,6 +69,7 @@ std::string	PlayerObject::toString() const
      << "\n\tname: " << _name
      << "\n\tlayer: " << _layer
      << "\n\tnbComponents: " << _components.size()
+     << "\n\tTransform: " << getComponent<Transform>()->toString()
      << "\n}" << std::endl;
 
   return (ss.str());
