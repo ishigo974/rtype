@@ -100,36 +100,40 @@ void Menu::swap(Menu& other)
 
 void Menu::refreshRoomList()
 {
-  std::cout << "Get rooms" << std::endl;
-  // rooms.clear();
-  setupGUIElements();
-  _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    std::cout << "Get rooms" << std::endl;
+    // rooms.clear();
+    setupGUIElements();
+    _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
 void Menu::createNewRoom(std::string const &roomName)
 {
-  std::cout << "Create new room: " << roomName << std::endl;
+    RType::Request     request;
+
+    request.setCode(RType::Request::CL_CREATEROOM);
+    request.push<std::string>("room_name", roomName);
+    _network->pushRequest(request);
 }
 
 void Menu::ready()
 {
-  _ready = true;
-  std::cout << "Ready" << std::endl;
+    _ready = true;
+    _network->pushRequest(RType::Request(RType::Request::CL_READY));
 }
 
 bool Menu::isReady() const
 {
-  return _ready;
+    return _ready;
 }
 
 bool Menu::isVisible() const
 {
-  return _isVisible;
+    return _isVisible;
 }
 
 void Menu::setVisible(bool visible)
 {
-  _isVisible = visible;
+    _isVisible = visible;
 }
 
 void Menu::transitionToStates()

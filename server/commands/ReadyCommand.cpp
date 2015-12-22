@@ -54,8 +54,8 @@ namespace RType
             Component::Room*        room;
 
             if (player == nullptr || network == nullptr)
-                throw std::runtime_error("Entity does not have a \
-player/network component");
+                throw std::runtime_error("Entity does not have a "
+                                         "player/network component");
             if ((room = player->getRoom()) == nullptr
                 || !room->setPlayerReadiness(*_entity, true))
                 network->send(Server::responseKO);
