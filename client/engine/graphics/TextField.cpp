@@ -7,10 +7,10 @@ TextField::TextField(std::string const& str, unsigned int padding, unsigned int 
     setSize();
     setPosition();
     _backColor = sf::Color::Transparent;
-    _rectShape.setFillColor(sf::Color::Transparent);
+    _rectShape.setFillColor(_backColor);
     _text.setFont(_font);
     _foreColor = sf::Color::Black;
-    _text.setColor(sf::Color::Black);
+    _text.setColor(_foreColor);
     setText(str);
     //_text.setString(str);
 }
@@ -22,9 +22,11 @@ TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsign
     _font.loadFromFile("../res/cs_regular.ttf");
     setSize();
     setPosition();
-    _rectShape.setFillColor(sf::Color::Transparent);
+    _backColor = sf::Color::Transparent;
+    _rectShape.setFillColor(_backColor);
     _text.setFont(_font);
-    _text.setColor(sf::Color::Black);
+    _foreColor = sf::Color::Black;
+    _text.setColor(_foreColor);
     setText(str);
     //_text.setString(str);
 }

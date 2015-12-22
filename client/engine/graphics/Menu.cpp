@@ -195,13 +195,15 @@ void Menu::transitionToStates()
         {
             if (e->type == cu::Event::MouseButtonReleased)
                 for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                    if ((*it)->getBackColor() != sf::Color::Transparent &&
+                {
+                  if ((*it)->getBackColor() != sf::Color::Transparent &&
                         (*it)->intersect(e->mouse.x, e->mouse.y))
                     {
                         rT->setText((*it)->getText());
                         menu->joinRoom((*it)->getText());
                         return (true);
                     }
+                }
             return (false);
         }, _event, roomsTextField, &roomTitle, this);
 
