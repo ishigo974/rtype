@@ -14,7 +14,7 @@ class Player : public Behaviour
 {
 public:
     Player();
-    Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 40, int damage = 5);
+    Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp = 10, int damage = 5);
     virtual ~Player();
 
     Player(Player const& other);

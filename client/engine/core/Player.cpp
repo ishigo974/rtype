@@ -212,9 +212,8 @@ void		Player::update(double elapsedtime)
     // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
 
-bool Player::handleMessage(Collider *o)
+bool Player::handleMessage(Collider *)
 {
-    _hp -= static_cast<GameObject *>(o->parent())->getComponent<Behaviour>()->getDamage();
-    std::cout << _hp << std::endl;
+    _hp -= 1;
     return (true);
 }
