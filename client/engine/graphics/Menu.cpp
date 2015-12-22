@@ -32,10 +32,9 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     for (int i = 0; i < 10; ++i)
     {
       if (i >= 5)
-        roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "qqqqqqqqqqqqqqqq", 10);
+        roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
       else
-        roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "aaaaaaaaaaaaaaaa", 10);
-      roomsTextField[i]->setBackColor(sf::Color::White);
+        roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
     }
 
     for (int i = 0; i < 4; ++i)
@@ -111,7 +110,6 @@ void Menu::swap(Menu& other)
 void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
-    setupGUIElements();
     _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
@@ -156,6 +154,13 @@ void Menu::addRoom(RType::Request::Room room)
 void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
 {
     _roomsList = listRoom;
+    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+      (*it)->setBackColor(sf::Color::Transparent);
+    for (int nb = 0; nb != 10; ++nb)
+    {
+        roomsTextField[nb]->setText(_roomsList[nb].name);
+        roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
+    }
 }
 
 bool Menu::isReady() const
@@ -190,7 +195,8 @@ void Menu::transitionToStates()
         {
             if (e->type == cu::Event::MouseButtonReleased)
                 for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                    if ((*it)->intersect(e->mouse.x, e->mouse.y))
+                    if ((*it)->getBackColor() != sf::Color::Transparent &&
+                        (*it)->intersect(e->mouse.x, e->mouse.y))
                     {
                         rT->setText((*it)->getText());
                         menu->joinRoom((*it)->getText());

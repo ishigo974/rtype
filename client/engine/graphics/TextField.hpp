@@ -33,9 +33,11 @@ public:
     std::pair<float, float> getPosition() const;
     void                    setText(const std::string&);
     std::string             getText() const;
-    void		    clearText();
+    void		                clearText();
     void                    setBackColor(const sf::Color&);
+    sf::Color               getBackColor() const;
     void                    setForeColor(const sf::Color&);
+    sf::Color               getForeColor() const;
     void                    setPadding(unsigned int);
     unsigned int            getPadding() const;
 
@@ -50,7 +52,8 @@ private:
     std::string        _str;
     sf::RectangleShape _rectShape;
     sf::Font           _font;
-
+    sf::Color          _backColor;
+    sf::Color          _foreColor;
 };
 
 #endif // !TEXTFIELD_HPP_
