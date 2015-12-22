@@ -1,6 +1,9 @@
 #include <iostream>
 #include "GUIManager.hpp"
 
+GUIManager::GUIManager()
+{ }
+
 GUIManager::GUIManager(unsigned int id, std::string const& name) : Component(id, name)
 { }
 
@@ -67,6 +70,3 @@ namespace std
         a.swap(b);
     }
 }
-
-GUIManager::GUIManager()
-{ }
