@@ -9,7 +9,8 @@
 const double        RTypeGame::defaultFixedStep = 0.003;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
-const std::string   RTypeGame::mapsPath        = ".rtypemaps";
+const std::string   RTypeGame::mapsPath         = ".rtypemaps";
+const std::string   RTypeGame::mobTypesPath        = ".rtypemobs";
 
 /*
 ** Constructor/Destructor
@@ -121,6 +122,37 @@ void            RTypeGame::loadMapsFromFile()
         } catch (std::runtime_error const& e) {
         }
         mapFile.close();
+    }
+    file.close();
+}
+
+void            RTypeGame::loadMobTypesFromFile()
+{
+    std::ifstream   file(mobTypesPath.c_str());
+    std::string     line;
+
+    if (!file)
+        return ;
+    while (std::getline(file, line))
+    {
+        std::ifstream       mobFile(line.c_str());
+//        MobType::IMobType*  mobType = nullptr;
+//
+        if (line.empty())
+            continue ;
+        try {
+            if (mobFile.good())
+            {
+//                mobType = DLLoader<MobType::IMobType*>::getInstanceOf(line,
+//                                                                      "getMobType");
+//
+//                _mobTypeFactory
+//                        .learn(std::unique_ptr<MobType::IMobType>(mobType));
+            }
+            else
+            mobFile.close();
+        } catch (std::runtime_error const&) {
+        }
     }
     file.close();
 }

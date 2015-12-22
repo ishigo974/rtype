@@ -26,14 +26,18 @@ namespace RType
         /*
         ** Copy constructor and assign operator
         */
-        Player::Player(Player const& other) : _username(other._username)
+        Player::Player(Player const& other) :
+            _username(other._username), _room(other._room)
         {
         }
 
         Player&             Player::operator=(Player const& other)
         {
             if (this != &other)
+            {
                 _username = other._username;
+                _room = other._room;
+            }
             return *this;
         }
 
@@ -77,17 +81,17 @@ namespace RType
 
         void                Player::clear()
         {
-            _username.clear();
+            _username = defaultUsername;
+            _room = nullptr;
         }
 
         std::string         Player::toString() const
         {
-            std::ostringstream  ss;
-
-            ss << "Player {"
-                << "\n\t_username: " << _username
-                << "\n}\n";
-            return ss.str();
+            return "Player {"
+                  "\n\t_username: " + _username +
+                  "\n\t_room: " +
+                  (_room == nullptr ? "N/A" : _room->getRoomName()) +
+                  "\n}\n";
         }
     }
 }
