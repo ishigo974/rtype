@@ -96,12 +96,16 @@ void        RTypeGame::initGameSample()
     PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
     player->init();
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
+    GameObject *pr = _em.createEntity<GameObject>("pr", 2);
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+    _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
     _ms.setMap(_maps[0].second);
