@@ -31,11 +31,13 @@ protected:
     void                handleGame();
     void                initGameSample();
     void                loadMapsFromFile();
+    void                loadMobTypesFromFile();
 
 public:
     static const double         defaultFixedStep;
     static const std::string    defaultAddr;
     static const short          defaultPort;
+    static const std::string    mobTypesPath;
     static const std::string    mapsPath;
 
 protected:
