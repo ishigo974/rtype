@@ -61,6 +61,7 @@ void        RTypeGame::run()
             handleGame();
         _tcpsys.process();
         _renderer.render();
+        _event.type = cu::Event::None;
     }
 }
 
