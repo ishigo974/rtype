@@ -33,7 +33,7 @@ public:
     void            removeLives(unsigned int nb = 1);
 
 public:
-    unsigned int                    getId() const;
+    unsigned int                    getMobId() const;
     std::string const&              getMobName() const;
     unsigned int                    getLives() const;
     unsigned int                    getScoreValue() const;

@@ -130,7 +130,7 @@ void            Mob::removeLives(unsigned int nb)
         _lives -= nb;
 }
 
-unsigned int            Mob::getId() const
+unsigned int            Mob::getMobId() const
 {
     return _id;
 }
