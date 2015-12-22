@@ -28,7 +28,7 @@ public:
     virtual int  getDamage() const;
     void setAction(ACommand::Action action);
 
-    void         move();
+    void         move(double elapsedtime);
     virtual void update(double);
     void init();
 
