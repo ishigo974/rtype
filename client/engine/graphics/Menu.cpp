@@ -124,21 +124,21 @@ void Menu::createNewRoom(std::string const &roomName)
     _network->pushRequest(request);
 }
 
-void Menu::joinRoom(std::string const &room)
-{
-    RType::Request      request;
-
-    request.setCode(RType::Request::CL_JOINROOM);
-    request.push<std::string>("room_name", room);
-    _network->pushRequest(request);
-}
-
 void Menu::joinRoom(RType::Request::Room room)
 {
     RType::Request      request;
 
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<std::string>("room_name", room.name);
+    _network->pushRequest(request);
+}
+
+void Menu::joinRoom(std::string const &room)
+{
+    RType::Request      request;
+
+    request.setCode(RType::Request::CL_JOINROOM);
+    request.push<std::string>("room_name", room);
     _network->pushRequest(request);
 }
 

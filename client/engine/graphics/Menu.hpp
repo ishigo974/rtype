@@ -43,6 +43,7 @@ private:
     void refreshRoomList();
     void createNewRoom(std::string const &);
     void joinRoom(RType::Request::Room);
+    void joinRoom(std::string const &);
     void ready();
 
 public:
