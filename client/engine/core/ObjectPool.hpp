@@ -9,44 +9,44 @@ class	ObjectPool : Object
 public:
   ObjectPool(std::string const & name, int layer, EntityManager *manager)
   {
-    _entityManager = manager;
-    T *obj;
-    for (int i = 0; i < 10; ++i)
+      _entityManager = manager;
+      T *obj;
+      for (int i = 0; i < 10; ++i)
       {
-	obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-	_objects.push(obj);
+          obj = _entityManager->createEntity<T>(name, layer, _entityManager);
+          _objects.push(obj);
       }
   }
 
   virtual ~ObjectPool()
   {
-    while (!_objects.empty())
-      _objects.pop();
+      while (!_objects.empty())
+        _objects.pop();
   }
 
   T	*create(std::string const & name, int layer)
   {
-    T *obj;
-    if (_objects.empty())
+      T *obj;
+      if (_objects.empty())
       obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-    else
+      else
       {
-	obj = _objects.front();
-	_objects.pop();
+          obj = _objects.front();
+          _objects.pop();
       }
-    obj->init();
-    return obj;
+      obj->init();
+      return obj;
   }
 
   void	deleteObject(T *obj)
   {
-    obj->deleteObject();
-    _objects.push(obj);
+      obj->deleteObject();
+      _objects.push(obj);
   }
 
-  std::queue<T *>	_objects;
 private:
-  EntityManager		*_entityManager;
+    EntityManager       *_entityManager;
+    std::queue<T *>     _objects;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */
