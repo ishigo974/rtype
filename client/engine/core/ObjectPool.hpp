@@ -24,10 +24,6 @@ public:
       _objects.pop();
   }
 
-  // TODO
-  // static void* operator new (size_t size);
-  // static void operator delete (void *p);
-
   T	*create(std::string const & name, int layer)
   {
     T *obj;
