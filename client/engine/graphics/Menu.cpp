@@ -152,12 +152,12 @@ void Menu::transitionToStates()
         TextField *rT)
         {
             if (e->type == cu::Event::MouseButtonReleased)
-            for (auto it = rooms.begin(); it != rooms.end(); ++it)
-            if ((*it)->intersect(e->mouse.x, e->mouse.y))
-            {
-                rT->setText((*it)->getText());
-                return (true);
-            }
+                for (auto it = rooms.begin(); it != rooms.end(); ++it)
+                    if ((*it)->intersect(e->mouse.x, e->mouse.y))
+                    {
+                        rT->setText((*it)->getText());
+                        return (true);
+                    }
             return (false);
         }, _event, rooms, &roomTitle);
 

@@ -1,7 +1,9 @@
 #ifndef RTYPEGAME_HPP_
 # define RTYPEGAME_HPP_
 
+# include <memory>
 # include <string>
+# include <unordered_map>
 # include "EntityManager.hpp"
 # include "Behaviour.hpp"
 # include "Input.hpp"
@@ -12,9 +14,15 @@
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
 # include "UDPSystem.hpp"
+# include "IMobType.hpp"
 
 class RTypeGame
 {
+public:
+    typedef std::unique_ptr<RType::MobType::IMobType>   UniqueMobType;
+    typedef std::unordered_map<unsigned int,
+                               UniqueMobType>           MobTypeMap;
+
 public:
     RTypeGame(std::string const& addr = defaultAddr,
               short port = defaultPort);
@@ -56,6 +64,7 @@ protected:
     Menu*                   _menu;
     double                  _lag;
     double                  _fixedStep;
+    MobTypeMap              _mobTypes;
 };
 
 #endif /* !RTYPEGAME_HPP_ */

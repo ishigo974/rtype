@@ -3,6 +3,7 @@
 #include "Menu.hpp"
 #include "PlayerObject.hpp"
 #include "ScrollingBackground.hpp"
+#include "DLLoader.hpp"
 /*
 ** Static variables
 */
@@ -30,11 +31,12 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
     _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
+    loadMobTypesFromFile();
+
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
                                     entity->getComponent<RType::NetworkTCP>());
     _menu->init();
     _renderer.init();
-
 }
 
 RTypeGame::~RTypeGame()
@@ -132,26 +134,39 @@ void            RTypeGame::loadMobTypesFromFile()
     std::string     line;
 
     if (!file)
+    {
+        std::cerr << "Warning: Mob types configuration file wasn't found"
+                  << std::endl;
         return ;
+    }
     while (std::getline(file, line))
     {
         std::ifstream       mobFile(line.c_str());
-//        MobType::IMobType*  mobType = nullptr;
-//
+        RType::MobType::IMobType*  mobType = nullptr;
+
         if (line.empty())
             continue ;
         try {
             if (mobFile.good())
             {
-//                mobType = DLLoader<MobType::IMobType*>::getInstanceOf(line,
-//                                                                      "getMobType");
-//
-//                _mobTypeFactory
-//                        .learn(std::unique_ptr<MobType::IMobType>(mobType));
+                mobType =
+                    DLLoader<RType::MobType::IMobType*>::getInstanceOf(line,
+                                                                "getMobType");
+                std::cout << "Mob '" << mobType->getName()
+                          << "' loaded" << std::endl;
+                _mobTypes.insert(std::make_pair(mobType->getId(),
+                                                UniqueMobType(mobType)));
             }
             else
-            mobFile.close();
+            {
+                std::cerr   << "Can't load mob type: no such file: "
+                            << line << std::endl;
+                mobFile.close();
+            }
         } catch (std::runtime_error const&) {
+            mobFile.close();
+            file.close();
+            throw ;
         }
     }
     file.close();
