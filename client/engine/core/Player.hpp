@@ -30,6 +30,7 @@ public:
 
     void         move();
     virtual void update(double);
+    void init();
 
     void	checkDeath();
     void	checkAvailableBullets();

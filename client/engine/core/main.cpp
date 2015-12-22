@@ -1,27 +1,15 @@
 #include <SFML/Graphics.hpp>
-#include <assert.h>
 #include "GameObject.hpp"
-#include "StateMachine.hpp"
 #include "CommandSystem.hpp"
-#include "Behaviour.hpp"
 #include "Renderer.hpp"
 #include "ScrollingBackground.hpp"
 #include "Mob.hpp"
 #include "Player.hpp"
-#include "Label.hpp"
-#include "Button.hpp"
-#include "Bullet.hpp"
-#include "GUIManager.hpp"
-#include "ObjectPool.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkSystem.hpp"
 #include "AudioEffect.hpp"
 #include "AudioEffectPlayer.hpp"
-#include "Music.hpp"
-#include "UDPSystem.hpp"
-#include "MusicPlayer.hpp"
 #include "PlayerObject.hpp"
-#include "UDPSystem.hpp"
 #include "InGameEvent.hpp"
 #include "World.hpp"
 //
@@ -484,27 +472,24 @@
 //
 //     return i == 3 ? true : false;
 // }
-
+#include "BehaviourSystem.hpp"
+#include "PhysicsEngine.hpp"
+#include "World.hpp"
 bool worldTest()
 {
-    EntityManager em;
-    Renderer renderer(&em);
-    Input i(renderer.getWindow());
+    EntityManager   em;
+    Renderer        renderer(&em);
+    Input           i(renderer.getWindow());
     BehaviourSystem bs(&em);
     PhysicsEngine pe(&em);
     AudioEffectPlayer audio(&em);
 
     RType::NetworkSystem networkSystem(&em);
-    RType::NetworkTCP    *networkTCP;
     RType::Request       request;
-    RType::Request       tmp;
-    RType::NetworkUDP *networkUDP;
-    RType::UDPSystem udpSystem(&em);
 
-    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &pe,
-            &networkSystem, &udpSystem, &audio);
-
-    PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);
+    World w(&em, new CommandSystem(&em, &i, &networkSystem), &renderer, &bs,
+          &i, &pe,
+            &networkSystem, &audio);    PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);
     player->init();
     em.attachComponent<AudioEffect>(player, "Shot");
     AudioEffect* toPlay = player->getComponent<AudioEffect>();
@@ -513,29 +498,19 @@ bool worldTest()
     toPlay->addSound("../res/laser2.wav");
 
     GameObject *first = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *bg = em.createEntity<GameObject>("bg", -1);
+    GameObject *bg    = em.createEntity<GameObject>("bg", -1);
 
-    GameObject *first2 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first3 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first4 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first5 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first6 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first7 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first8 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *first9 = em.createEntity<GameObject>("LePremier", 0);
-    GameObject *gameObj = em.createEntity<GameObject>("Test", 1);
-
-    em.attachComponent<RType::NetworkTCP>(gameObj, "Network");
-    em.attachComponent<RType::NetworkUDP>(gameObj, "UDP");
-
-    networkTCP = gameObj->getComponent<RType::NetworkTCP>();
-    networkUDP = gameObj->getComponent<RType::NetworkUDP>();
+    GameObject *first2  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first3  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first4  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first5  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first6  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first7  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first8  = em.createEntity<GameObject>("LePremier", 0);
+    GameObject *first9  = em.createEntity<GameObject>("LePremier", 0);
 
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", "BestRoomEver");
-    networkTCP->pushRequest(request);
-    networkTCP->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
-    networkTCP->pushRequest(RType::Request(RType::Request::CL_READY));
 
     em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
     em.attachComponent<Mob>(first, "MobCompo");
@@ -605,23 +580,6 @@ bool worldTest()
 
 int main()
 {
-//     testNetwork();
-//    EntityManager entityManager;
-//
-//    srand(static_cast<unsigned>(time(nullptr)));
-//    if (gameObjectTest(entityManager))
-//        std::cout << "\e[32mgameObjectTest passed -> OK\e[0m" << std::endl << std::endl;
-//    if (timeTest())
-//        std::cout << "\e[32mtimeTest passed -> OK\e[0m" << std::endl << std::endl;
-//    if (stateMachineTest())
-//        std::cout << "\e[32mstateMachineTest passed -> OK\e[0m" << std::endl << std::endl;
-////    if (RCSVParserTest())
-////        std::cout << "\e[32mRCSVParserTest passed -> OK\e[0m" << std::endl;
-//    // buttonAndLabelsTest();
-//    // menuTest();
- //   backgroundTest();
-//    testSound();
-
     worldTest();
     return 0;
 }

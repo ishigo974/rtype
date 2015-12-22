@@ -6,10 +6,10 @@
 
 World::World(EntityManager *em, CommandSystem *cmd, Renderer *re,
              BehaviourSystem *bs, Input *i, PhysicsEngine *pe,
-             RType::NetworkSystem *r, RType::UDPSystem *f, AudioEffectPlayer
+             RType::NetworkSystem *r, AudioEffectPlayer
              *audio)
         : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs),
-          _input(i), _pe(pe), _tcpSystem(r), _udpSystem(f), _audioSystem(audio)
+          _input(i), _pe(pe), _tcpSystem(r), _audioSystem(audio)
 {
     BigBen::getElapsedtime();
     _fixedStep = 0.003;
@@ -36,9 +36,8 @@ void World::gameLoop()
     while (!_end)
     {
         double lag = BigBen::getElapsedtime();
-
-        _udpSystem->process();
-        _tcpSystem->process();
+_tcpSystem->processTCP();
+_tcpSystem->processUDP();
         while (_input->pollEvent(e))
         {
             if (e.type == cu::Event::Closed || e.key == cu::Event::ESCAPE)
@@ -48,7 +47,7 @@ void World::gameLoop()
             }
         }
 
-        _cmdSystem->process();
+        _cmdSystem->processInput();
 
         while (lag >= _fixedStep)
         {

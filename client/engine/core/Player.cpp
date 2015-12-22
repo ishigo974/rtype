@@ -12,7 +12,6 @@ Player::Player()
 Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage)
   : Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
 {
-  _bullets = new ObjectPool<BulletObject, Bullet>(_entityManager);
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -41,6 +40,8 @@ Player& Player::operator=(Player other)
 
 Player::~Player()
 {
+  if (_bullets)
+    delete _bullets;
 }
 
 bool Player::operator==(Player const& other)
@@ -184,10 +185,14 @@ void	Player::checkAvailableBullets()
     }
 }
 
+void		Player::init()
+{
+  _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
+}
+
 void		Player::update(double elapsedtime)
 {
   _parent = static_cast<GameObject *>(parent());
-
   if (!_transform)
     _transform = _parent->getComponent<Transform>();
 
