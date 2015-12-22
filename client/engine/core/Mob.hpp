@@ -41,10 +41,11 @@ public:
     std::string const&              getSpriteFilePath() const;
     RType::MobType::MovePattern const&     getMovePattern() const;
     std::string                     toString() const;
+    virtual RTypes::my_uint16_t      getMask() const;
+    static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
 
 protected:
     void                    move(double elapsedTime);
-    static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
 
 protected:
     unsigned int            _id;
