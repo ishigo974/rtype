@@ -95,14 +95,10 @@ void        RTypeGame::initGameSample()
 {
     PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
     player->init();
-    GameObject *first = _em.createEntity<GameObject>("LePremier", 0);
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
-    _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
-    _em.attachComponent<Mob>(first, "SR compo", _mobTypes.begin()->second.get());
-    _em.attachComponent<Collider>(first, "SR compo", 32, 21);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);

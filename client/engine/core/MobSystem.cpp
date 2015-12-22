@@ -26,6 +26,8 @@ void            MobSystem::process()
             _em->attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
             _em->attachComponent<Mob>(first, "SR compo", _mobTypes->begin()->second.get());
             _em->attachComponent<Collider>(first, "SR compo", 32, 21);
+            first->getComponent<Transform>()->getPosition().setX(it->second.x);
+            first->getComponent<Transform>()->getPosition().setY(it->second.y);
             if ((it = _map.erase(it)) == _map.end())
                 break ;
         }
