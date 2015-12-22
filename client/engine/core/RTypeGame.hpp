@@ -16,7 +16,6 @@
 # include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
-# include "UDPSystem.hpp"
 # include "IMobType.hpp"
 # include "MapParser.hpp"
 # include "HRChrono.hpp"
@@ -65,9 +64,8 @@ protected:
     Renderer                    _renderer;
     Input                       _input;
     BehaviourSystem             _bs;
+    RType::NetworkSystem        _network;
     CommandSystem               _cs;
-    RType::NetworkSystem        _tcpsys;
-    RType::UDPSystem            _udpsys;
     cu::Event                   _event;
     Menu*                       _menu;
     double                      _lag;

@@ -4,10 +4,11 @@
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
 
-CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
+CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
 {
     _input         = i;
     _entityManager = entityManager;
+    _ns            = ns;
 
     _actions[cu::Event::UP]    = ACommand::UP;
     _actions[cu::Event::DOWN]  = ACommand::DOWN;
@@ -17,10 +18,9 @@ CommandSystem::CommandSystem(EntityManager *entityManager, Input *i)
 }
 
 CommandSystem::~CommandSystem()
-{
-}
+{ }
 
-void    CommandSystem::process()
+void    CommandSystem::processInput()
 {
     for (auto& a : _actions)
     {
@@ -69,4 +69,10 @@ std::string    CommandSystem::toString()
     << "\n\tqueue size: " << _commands.size()
     << "\n}";
     return (ss.str());
+}
+
+void CommandSystem::processNetwork()
+{
+    _ns->processTCP();
+    _ns->processUDP();
 }

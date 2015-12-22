@@ -6,6 +6,7 @@
 #include "DLLoader.hpp"
 #include "Mob.hpp"
 #include "Collider.hpp"
+#include "TCPView.hpp"
 
 /*
 ** Static variables
@@ -22,27 +23,19 @@ const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
     _quit(false), _isPlaying(true), _em(), _renderer(&_em),
-    _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
-    _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
+    _input(_renderer.getWindow()), _bs(&_em),
+    _network(&_em, addr, port), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
     _ms(&_em, &_chrono, &_mobTypes), _physics(&_em)
 {
-    GameObject*     entity;
-
     BigBen::getElapsedtime();
-    entity = _em.createEntity<GameObject>("Network", 1);
-
-    _em.attachComponent<RType::NetworkTCP>(entity, "TCP");
-    _em.attachComponent<RType::NetworkUDP>(entity, "UDP");
 
     // tmp
-    RType::NetworkTCP* tcp = entity->getComponent<RType::NetworkTCP>();
-
     RType::Request request;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", "BestRoomEver");
-    tcp->pushRequest(request);
-    tcp->pushRequest(RType::Request(RType::Request::CL_READY));
+    _network.pushTCP(request);
+    _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
 
     loadMobTypesFromFile();
@@ -82,7 +75,8 @@ void        RTypeGame::run()
         }
         if (_isPlaying)
             handleGame();
-        _tcpsys.process();
+        _network.processTCP();
+        _network.processUDP();
         _renderer.render();
         _event.type = cu::Event::None;
     }
@@ -111,7 +105,8 @@ void        RTypeGame::initGameSample()
 void        RTypeGame::handleGame()
 {
     _lag = BigBen::getElapsedtime();
-    _cs.process();
+    _cs.processInput();
+    _cs.processNetwork();
     _ms.process();
     _physics.process(_fixedStep);
     while (_lag >= _fixedStep)
@@ -119,7 +114,6 @@ void        RTypeGame::handleGame()
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
-    _udpsys.process();
 }
 
 void            RTypeGame::loadMapsFromFile()

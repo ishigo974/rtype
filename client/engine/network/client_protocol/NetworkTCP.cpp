@@ -8,8 +8,7 @@
 
 namespace RType
 {
-    NetworkTCP::NetworkTCP(unsigned id, std::string const& name)
-            : Component(id, name)
+    NetworkTCP::NetworkTCP()
     { }
 
     NetworkTCP::~NetworkTCP()
@@ -43,8 +42,10 @@ namespace RType
     {
         if (_receive.empty())
             throw Exception::IncompleteRequest("Empty buffer");
+
         Request ret(_receive);
         _receive.consume(ret.toBuffer().size());
+
         return ret;
     }
 }
