@@ -1,4 +1,5 @@
-#include "ForwardMobType.hpp"
+#include <cmath>
+#include "SinusoidMobType.hpp"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
@@ -12,7 +13,7 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID)
 extern "C" __declspec(dllexport)
 RType::MobType::IMobType*       getMobType()
 {
-    return new RType::MobType::Forward();
+    return new RType::MobType::Sinusoid();
 }
 
 #else
@@ -21,7 +22,7 @@ extern "C"
 {
     RType::MobType::IMobType*   getMobType()
     {
-        return new RType::MobType::Forward();
+        return new RType::MobType::Sinusoid();
     }
 }
 #endif
@@ -33,22 +34,22 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Forward::Forward()
+        Sinusoid::Sinusoid()
         {
         }
 
-        Forward::~Forward()
+        Sinusoid::~Sinusoid()
         {
         }
 
         /*
         ** Copy constructor and assign operator
         */
-        Forward::Forward(Forward const& other)
+        Sinusoid::Sinusoid(Sinusoid const& other)
         {
         }
 
-        Forward&      Forward::operator=(Forward const& other)
+        Sinusoid&      Sinusoid::operator=(Sinusoid const& other)
         {
             return *this;
         }
@@ -56,52 +57,53 @@ namespace RType
         /*
         ** Public member functions
         */
-        unsigned int    Forward::getId() const
+        unsigned int    Sinusoid::getId() const
         {
             return 1;
         }
 
-        std::string     Forward::getName() const
+        std::string     Sinusoid::getName() const
         {
-            return "ForwardMob";
+            return "SinusoidMob";
         }
 
-        unsigned int    Forward::getNbLives() const
+        unsigned int    Sinusoid::getNbLives() const
         {
             return 1;
         }
 
-        unsigned int    Forward::getScoreValue() const
+        unsigned int    Sinusoid::getScoreValue() const
         {
             return 5;
         }
 
-        std::string     Forward::getSpriteFilePath() const
+        std::string     Sinusoid::getSpriteFilePath() const
         {
-            return "forwardType.png";
+            return "sinusoidType.png";
         }
 
         /*
         ** Moves forward, following a straight line
         */
-        MovePattern     Forward::getMovePattern() const
+        MovePattern     Sinusoid::getMovePattern() const
         {
             return [](cu::Position const& pos, double elapsedTime)->cu::Position
             {
-                static const float   speed = 1.f;
+                static const float   speed = 1.0f;
 
-                return cu::Position(pos.X() - (0.25 * speed * elapsedTime), pos.Y());
+                return cu::Position(pos.X() - (0.25 * speed * elapsedTime),
+                                    pos.Y() + (90 * std::sin(pos.X())));
             };
         }
 
-        IMobType*       Forward::clone() const
+        IMobType*       Sinusoid::clone() const
         {
-            return new Forward(*this);
+            return new Sinusoid(*this);
         }
 
-        std::string     Forward::toString() const
+        std::string     Sinusoid::toString() const
         {
-            return "Forward {"
+            return "Sinusoid {"
                    "\n\tid: " + std::to_string(getId()) +
                    "\n\tname: " + getName() +
                    "\n\tlives: " + std::to_string(getNbLives()) +
