@@ -73,25 +73,10 @@ void Collider::fixedUpdate(double)
 
     _bounds.x = static_cast<GameObject *>(this->parent())->transform().getPosition().X();
     _bounds.y = static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
-    //std::cout << static_cast<GameObject *>(this->parent())->transform().toString() << std::endl;
     for (auto e : tmp)
-      {
-      if (this->_bounds.intersects(static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds))
-        {
-	  std::cout << "FIRST" << std::endl;
-	  std::cout << "x == " << _bounds.x << std::endl;
-	  std::cout << "y == " << _bounds.y << std::endl;
-	  std::cout << "w == " << _bounds.w << std::endl;
-	  std::cout << "h == " << _bounds.h << std::endl;
-
-	  std::cout << "OTHER" << std::endl;
-	  std::cout << "x == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.x << std::endl;
-	  std::cout << "y == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.y << std::endl;
-	  std::cout << "w == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.w << std::endl;
-	  std::cout << "h == " << static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds.h << std::endl;
-	  // std::cout << "Collision" << std::endl;
-	  sendMessage(static_cast<Collider *>(e));
-        }
+    {
+        if (this->_bounds.intersects(static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds))
+            sendMessage(static_cast<Collider *>(e));
     }
 }
 
