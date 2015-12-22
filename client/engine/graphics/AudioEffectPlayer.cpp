@@ -6,7 +6,9 @@ void    AudioEffectPlayer::play(GameObject *obj)
 {
     try
     {
-            if (_sounds.begin()->getStatus() == sf::Sound::Stopped && _backgroundStart)
+        if (!_sounds.empty()
+            && _sounds.begin()->getStatus() == sf::Sound::Stopped
+            && _backgroundStart)
         {
             obj->getComponent<AudioEffect>()->setSoundToPlay("../res/music.wav");
         }
@@ -32,12 +34,12 @@ void    AudioEffectPlayer::play(GameObject *obj)
 void    AudioEffectPlayer::refreshSoundList()
 {
     for (std::list<sf::Sound>::iterator it = _sounds.begin();
-         it != _sounds.end();)
+    it != _sounds.end();)
     {
         if (it->getStatus() != sf::Sound::Playing)
-            it = _sounds.erase(it);
+        it = _sounds.erase(it);
         else
-            ++it;
+        ++it;
     }
 }
 

@@ -33,12 +33,9 @@ void    ShootCommand::execute()
     event.push<uint32_t>("time", 1);
     for (auto play : sound)
     {
-        if (static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-            ->getName() == "Shot")
-        {
-            static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                           ->setSoundToPlay("../res/laser1.wav");
-        }
+
+        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                       ->setSoundToPlay("../res/laser1.wav");
     }
 }
 
