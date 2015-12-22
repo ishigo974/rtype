@@ -86,11 +86,11 @@ namespace RType
         */
         MovePattern     Forward::getMovePattern() const
         {
-            return [](cu::Position const& pos, double)->cu::Position
+            return [](cu::Position const& pos, double elapsedtime)->cu::Position
             {
-                static const float   speed = 3.0f;
+                static const float   speed = 0.20f;
 
-                return cu::Position(pos.X() - (1 * speed), pos.Y());
+                return cu::Position(pos.X() - (1 * speed * elapsedtime), pos.Y());
             };
         }
 
