@@ -49,4 +49,3 @@ protected:
 
 
 #endif /* !RTYPE_COLLIDER_HPP_ */
-

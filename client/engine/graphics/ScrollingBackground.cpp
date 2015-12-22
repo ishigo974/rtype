@@ -10,26 +10,26 @@ ScrollingBackground::ScrollingBackground(unsigned int _id,
 					 double speed) :
   Behaviour(_id, _name), _speed(speed)
 {
-  _enabled = true;
+	_enabled = true;
 }
 
 ScrollingBackground::ScrollingBackground(ScrollingBackground const& other) :
   Behaviour(other)
 {
-  _enabled = other.isEnabled();
+	_enabled = other.isEnabled();
 }
 
 ScrollingBackground::ScrollingBackground(ScrollingBackground&& other) :
   ScrollingBackground(other)
 {
-  swap(other);
+	swap(other);
 }
 
 ScrollingBackground& ScrollingBackground::operator=(ScrollingBackground other)
 {
-  swap(other);
+	swap(other);
 
-  return (*this);
+	return (*this);
 }
 
 ScrollingBackground::~ScrollingBackground()
@@ -37,19 +37,19 @@ ScrollingBackground::~ScrollingBackground()
 
 bool ScrollingBackground::operator==(ScrollingBackground const& other)
 {
-  return (Behaviour::operator==(other));
+	return (Behaviour::operator==(other));
 }
 
 bool ScrollingBackground::operator!=(ScrollingBackground const& other)
 {
-  return (!ScrollingBackground::operator==(other));
+	return (!ScrollingBackground::operator==(other));
 }
 
 void ScrollingBackground::swap(ScrollingBackground& other)
 {
-  using std::swap;
+	using std::swap;
 
-  swap(_enabled, other._enabled);
+	swap(_enabled, other._enabled);
 }
 
 namespace std
@@ -57,17 +57,17 @@ namespace std
 template<>
 void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
 {
-  a.swap(b);
+	a.swap(b);
 }
 }
 
 void ScrollingBackground::update(double elapsedTime)
 {
-  SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
-  if (sr == nullptr)
-    return;
+	SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
+	if (sr == nullptr)
+		return;
 
-  auto rect = sr->getRect();
-  rect.x += static_cast<int>(this->_speed * elapsedTime);
-  sr->setRect(rect);
+	auto rect = sr->getRect();
+	rect.x += static_cast<int>(this->_speed * elapsedTime);
+	sr->setRect(rect);
 }

@@ -2,8 +2,7 @@
 #include <sstream>
 #include "StateMachine.hpp"
 
-StateMachine::StateMachine(unsigned int id, State const& initialState) :
-        Component(id, "StateMachine"),
+StateMachine::StateMachine(State const& initialState) :
         _states{{initialState.getName(), initialState}},
         _current(_states[initialState.getName()])
 { }
@@ -25,7 +24,7 @@ void StateMachine::move()
 
 void StateMachine::addState(State const& state)
 {
-    auto found = std::find_if(_states.begin(), _states.end(), [state](auto&& e)
+    auto found = std::find_if(_states.begin(), _states.end(), [state](auto& e)
     {
         return (e.second.getName() == state.getName());
     });

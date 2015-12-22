@@ -6,25 +6,38 @@
 #include "Collider.hpp"
 #include "Player.hpp"
 
-Mob::Mob()
+/*
+** Constructor/Destructor
+*/
+Mob::Mob() :
+    _id(0), _name(""), _lives(0),
+    _scoreValue(0), _spriteFilePath(""),
+    _movePattern(), _transform(nullptr)
 {
 }
 
-Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type), _transform(0)
+Mob::Mob(unsigned int id, std::string const& name,
+         RType::MobType::IMobType const* mobtype) :
+    Behaviour(id, name),
+    _id(0), _name(""), _lives(0),
+    _scoreValue(0), _spriteFilePath(""),
+    _movePattern(), _transform(nullptr)
 {
-  _enabled = true;
-  _direction = 1;
+    init(mobtype);
 }
 
-Mob::Mob(Mob const& other) : Behaviour(other)
+Mob::~Mob()
 {
-  _enabled = other._enabled;
-    _hp = other._hp;
-    _damage = other._damage;
-    _direction = other._direction;
-    _type = other._type;
-    _transform = other._transform;
+}
+
+/*
+** Copy and swap
+*/
+Mob::Mob(Mob const& other) :
+    Behaviour(other), _id(other._id), _name(other._name), _lives(other._lives),
+    _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
+    _movePattern(other._movePattern), _transform(other._transform)
+{
 }
 
 Mob::Mob(Mob&& other) : Mob(other)
@@ -35,14 +48,12 @@ Mob::Mob(Mob&& other) : Mob(other)
 Mob& Mob::operator=(Mob other)
 {
     swap(other);
-
     return (*this);
 }
 
-Mob::~Mob()
-{
-}
-
+/*
+** Overloaded operators
+*/
 bool Mob::operator==(Mob const& other)
 {
     return (Behaviour::operator==(other));
@@ -53,15 +64,129 @@ bool Mob::operator!=(Mob const& other)
     return (!Mob::operator==(other));
 }
 
+RTypes::my_uint16_t     Mob::getMask() const
+{
+    return Mask;
+}
+
+/*
+** Public member functions
+*/
+void        Mob::init(RType::MobType::IMobType const* type)
+{
+    _id = type->getId();
+    _name = type->getName();
+    _lives = type->getNbLives();
+    _scoreValue = type->getScoreValue();
+    _spriteFilePath = type->getSpriteFilePath();
+    _movePattern = type->getMovePattern();
+}
+
+bool        Mob::handleMessage(Collider *o)
+{
+    GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+
+    if ((otherParent->getComponent<Player>() != nullptr
+        || otherParent->getComponent<Behaviour>() != nullptr
+        || otherParent->getComponent<Bullet>()) && _lives != 0)
+        _lives -= 1;
+    return (true);
+}
+
+void		Mob::move(double elapsedTime)
+{
+    cu::Position    pos =
+        _movePattern(_transform->getPosition(), elapsedTime);
+
+    _transform->getPosition().setX(pos.X());
+    _transform->getPosition().setY(pos.Y());
+}
+
+void		Mob::update(double elapsedTime)
+{
+    GameObject	*p = static_cast<GameObject *>(parent());
+
+    if (_lives <= 0)
+    {
+        std::cout << "Mob Mort" << std::endl;
+        _enabled = false;
+        p->setVisible(false);
+        p->getComponent<Collider>()->setEnabled(false);
+    }
+    if (!_transform)
+        _transform = p->getComponent<Transform>();
+    if (_transform->getPosition().X() > Renderer::width + 100
+        || _transform->getPosition().X() < -100
+        || _transform->getPosition().Y() > Renderer::height + 100
+        || _transform->getPosition().Y() < -100)
+        _enabled = false;
+    this->move(elapsedTime);
+}
+
+void            Mob::addLives(unsigned int nb)
+{
+    _lives += nb;
+}
+
+void            Mob::removeLives(unsigned int nb)
+{
+    if (nb > _lives)
+        _lives = 0;
+    else
+        _lives -= nb;
+}
+
+unsigned int            Mob::getMobId() const
+{
+    return _id;
+}
+
+std::string const&      Mob::getMobName() const
+{
+    return _name;
+}
+
+unsigned int            Mob::getLives() const
+{
+    return _lives;
+}
+
+unsigned int            Mob::getScoreValue() const
+{
+    return _scoreValue;
+}
+
+std::string const&      Mob::getSpriteFilePath() const
+{
+    return _spriteFilePath;
+}
+
+RType::MobType::MovePattern const&      Mob::getMovePattern() const
+{
+    return _movePattern;
+}
+
+std::string Mob::toString() const
+{
+    return "Component::Mob {"
+           "\n\t_id: " + std::to_string(_id) +
+           "\n\t_name: " + _name +
+           "\n\t_lives: " + std::to_string(_lives) +
+           "\n\t_scoreValue: " + std::to_string(_scoreValue) +
+           "\n\t_spriteFilePath: " + _spriteFilePath +
+           "\n}\n";
+}
+
 void Mob::swap(Mob& other)
 {
     using std::swap;
 
-    swap(_enabled, other._enabled);
-    swap(_hp, other._hp);
-    swap(_damage, other._damage);
-    swap(_direction, other._direction);
-    swap(_type, other._type);
+    swap(_id, other._id);
+    swap(_name, other._name);
+    swap(_lives, other._lives);
+    swap(_scoreValue, other._scoreValue);
+    swap(_spriteFilePath, other._spriteFilePath);
+    swap(_movePattern, other._movePattern);
     swap(_transform, other._transform);
 }
 
@@ -72,98 +197,4 @@ namespace std
     {
         a.swap(b);
     }
-}
-
-std::string Mob::toString() const
-{
-    std::stringstream ss;
-
-    ss << "Player {"
-       << "\n\thp: " << _hp
-       << "\n\tdamage: " << _damage
-       << "\n\ttype: " << _type
-       << "\n\tGraphic height: " << _graphicHeight;
-    if (_transform)
-      ss << "\n\t" << _transform->toString();
-    ss << "\n}" << std::endl;
-
-    return (ss.str());
-}
-
-int	Mob::getHp() const
-{
-  return _hp;
-}
-
-int	Mob::getDamage() const
-{
-  return _damage;
-}
-
-void		Mob::move()
-{
-  float		speed = 0.5f;
-
-  _graphicHeight = static_cast<GameObject *>(parent())->renderer().getRect().h;
-  switch (_type)
-    {
-    case 0:
-      if (_transform->getPosition().Y() <= 0)
-	_direction = 1;
-      else if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
-	_direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
-      break;
-    case 1:
-      if (_transform->getPosition().Y() >= Renderer::height - _graphicHeight)
-	_type = 2;
-      _direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * -1 * speed));
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
-      break;
-    case 2:
-      if (_transform->getPosition().Y() <= 0)
-	_type = 1;
-      _direction = -1;
-      _transform->getPosition().setY((_transform->getPosition().Y() + _direction * speed));
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * 3 / 4));
-      break;
-    case 3:
-      _direction = -1;
-      _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed));
-    default:
-      _type = 3;
-      break;
-    }
-}
-
-void		Mob::update(double)
-{
-  GameObject	*p = static_cast<GameObject *>(parent());
-
-  if (_hp <= 0)
-    {
-      std::cout << "Mob Mort" << std::endl;
-      _enabled = false;
-      p->setVisible(false);
-      p->getComponent<Collider>()->setEnabled(false);
-    }
-  if (!_transform)
-    _transform = p->getComponent<Transform>();
-  if (_transform->getPosition().X() > Renderer::width + 100
-      || _transform->getPosition().X() < -100
-      || _transform->getPosition().Y() > Renderer::height + 100
-      || _transform->getPosition().Y() < -100)
-    _enabled = false;
-  this->move();
-}
-
-bool Mob::handleMessage(Collider *o)
-{
-  GameObject	*otherParent = static_cast<GameObject *>(o->parent());
-  if (otherParent->getComponent<Player>() != nullptr)
-    _hp -= otherParent->getComponent<Player>()->getDamage();
-  else if (otherParent->getComponent<Behaviour>() != nullptr)
-    _hp -= otherParent->getComponent<Behaviour>()->getDamage();
-  return (true);
 }

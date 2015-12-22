@@ -5,6 +5,7 @@
 # include "EntityManager.hpp"
 # include "GameObject.hpp"
 # include "Resources.hpp"
+# include "Menu.hpp"
 
 
 class Renderer
@@ -30,7 +31,7 @@ public:
 
 private:
     void draw(const GameObject*);
-    void drawGUI(const GameObject *);
+    void drawGUI(const Menu *);
 
 private:
     sf::RenderWindow    _win;

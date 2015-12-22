@@ -33,7 +33,7 @@ public:
     T *createEntity(Args ...args)
     {
         _ids += 1;
-        _entities[_ids] = std::make_unique<T>(_ids, args...);
+        _entities[_ids] = std::make_shared<T>(_ids, args...);
         attachComponent<Transform>(static_cast<T *>(_entities[_ids].get()));
 
         return (static_cast<T *>(_entities[_ids].get()));
@@ -47,7 +47,7 @@ public:
         if (tmp != _entities.end())
         {
             _compIds += 1;
-            _components[_compIds] = std::make_unique<T>(_compIds, args...);
+            _components[_compIds] = std::make_shared<T>(_compIds, args...);
 
             static_cast<GameObject *>(tmp->second.get())->addComponent(static_cast<T *>(_components[_compIds].get()));
             _compHierarchy[_compIds] = gameObject->getId();
@@ -55,8 +55,8 @@ public:
     }
 
 private:
-    static std::unordered_map<unsigned int, std::unique_ptr<Object> > _entities;
-    std::unordered_map<unsigned int, std::unique_ptr<Component> >     _components;
+    static std::unordered_map<unsigned int, std::shared_ptr<Object> > _entities;
+    std::unordered_map<unsigned int, std::shared_ptr<Component> >     _components;
     static std::map<unsigned int, unsigned int>                       _compHierarchy;
     static std::map<unsigned int, unsigned int>                       _goHierarchy;
     static std::map<std::string, Object *>                            _tags;

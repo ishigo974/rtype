@@ -9,8 +9,8 @@
 /*
 ** Static variables
 */
-const time_t                        SocketMonitor::defaultSecVal  = 0;
-const suseconds_t                   SocketMonitor::defaultUsecVal = 1000;
+const time_t                        SocketMonitor::defaultSecVal  = 2;
+const suseconds_t                   SocketMonitor::defaultUsecVal = 0;
 const unsigned int                  SocketMonitor::noFd           = 0;
 SocketMonitor::UniqueMonitorPtr     SocketMonitor::instance;
 

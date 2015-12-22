@@ -5,7 +5,8 @@
 BulletObject::BulletObject()
 { }
 
-BulletObject::BulletObject(unsigned int _id, std::string const& _name, int _layer, EntityManager *manager)
+BulletObject::BulletObject(unsigned int _id, std::string const& _name,
+                           int _layer, EntityManager *manager)
   : GameObject(_id, _name, _layer), _entityManager(manager)
 {
 }
@@ -63,42 +64,48 @@ BulletObject::~BulletObject()
 
 std::string	BulletObject::toString() const
 {
-  std::stringstream ss;
+    std::stringstream ss;
 
-  ss << "BulletObject {"
-     << "\n\tid: " << _id
-     << "\n\tname: " << _name
-     << "\n\tlayer: " << _layer
-     << "\n\tnbComponents: " << _components.size()
-     << "\n}" << std::endl;
+    ss << "BulletObject {"
+    << "\n\tid: " << _id
+    << "\n\tname: " << _name
+    << "\n\tlayer: " << _layer
+    << "\n\tnbComponents: " << _components.size()
+    << "\n\tTransform: " << getComponent<Transform>()->toString()
+    << "\n}" << std::endl;
 
-  return (ss.str());
+    return (ss.str());
 }
 
 void	BulletObject::deleteObject()
 {
-  Bullet *b = this->getComponent<Bullet>();
-  b->setDirection(Bullet::Direction::DEFAULT);
-  b->setEnabled(false);
-  b->setAvailable(true);
-  setVisible(false);
-  b->setDamage(0);
-  b->setHp(0);
-  getComponent<Collider>()->setEnabled(false);
+    Bullet *b = this->getComponent<Bullet>();
+    b->setDirection(Bullet::Direction::DEFAULT);
+    b->setEnabled(false);
+    b->setAvailable(true);
+    setVisible(false);
+    b->setDamage(0);
+    b->setHp(0);
+    getComponent<Collider>()->setEnabled(false);
 }
 
-void	BulletObject::init()
+void    BulletObject::init()
 {
-  _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
-  _entityManager->attachComponent<Bullet>(this, "Bullet");
-  _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
+    _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1",
+                                                    gu::Rect<int>(249, 105, 16, 8));
+    _entityManager->attachComponent<Bullet>(this, "Bullet");
+    _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
+}
 
-  Bullet *b = this->getComponent<Bullet>();
-  b->setDirection(Bullet::Direction::RIGHT);
-  b->setEnabled(true);
-  b->setAvailable(false);
-  setVisible(true);
-  b->setDamage(1);
-  b->setHp(1);
-  getComponent<Collider>()->setEnabled(true);
+void	BulletObject::reset()
+{
+    Bullet *b = this->getComponent<Bullet>();
+    b->init();
+    b->setDirection(Bullet::Direction::RIGHT);
+    b->setEnabled(true);
+    b->setAvailable(false);
+    setVisible(true);
+    b->setDamage(1);
+    b->setHp(1);
+    getComponent<Collider>()->setEnabled(true);
 }

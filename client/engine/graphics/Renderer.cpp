@@ -4,10 +4,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>
-#include <fstream>
 #include "Renderer.hpp"
 #include "GUIManager.hpp"
-#include "GUIElement.hpp"
 #include "StateMachine.hpp"
 
 unsigned int const Renderer::width  = 1280;
@@ -44,24 +42,26 @@ void    Renderer::init()
 
 void Renderer::render()
 {
-  this->_win.clear();
+    this->_win.clear();
 
-  {
-    auto obj = this->_em->getByMask(DrawableMask);
-    std::sort(obj.begin(), obj.end(), &Renderer::comp);
-    for (auto i : obj)
-      if (static_cast<GameObject *>(i)->isVisible())
-	this->draw(static_cast<GameObject *>(i));
-  }
-  {
-    auto obj = this->_em->getByMask(GUIManagerMask);
-    for (auto i : obj)
-      {
-        this->drawGUI(static_cast<GameObject *>(i));
-      }
-
-  }
-  this->_win.display();
+    {
+        auto obj = this->_em->getByMask(DrawableMask);
+        std::sort(obj.begin(), obj.end(), &Renderer::comp);
+        for (auto i : obj)
+            if (static_cast<GameObject *>(i)->isVisible())
+                this->draw(static_cast<GameObject *>(i));
+    }
+    {
+        auto obj = this->_em->getByMask(GUIManagerMask);
+        for (auto i : obj)
+        {
+            this->drawGUI(static_cast<Menu *>(i));
+        }
+        //   {
+        // this->drawGUI(static_cast<GameObject *>(i));
+        //   }
+    }
+    this->_win.display();
 }
 
 sf::RenderWindow& Renderer::getWindow()
@@ -93,15 +93,16 @@ void Renderer::draw(const GameObject *object)
     this->_win.draw(sprite);
 }
 
-void Renderer::drawGUI(const GameObject *object)
+void Renderer::drawGUI(const Menu *object)
 {
+    if (!object->isVisible())
+        return ;
     GUIManager      *gm = object->getComponent<GUIManager>();
-    StateMachine    *sm = object->getComponent<StateMachine>();
 
-    if (gm == nullptr || sm == nullptr)
+    if (gm == nullptr)
         return ;
 
-    auto vec = gm->getGUIElements(sm->getCurrent().getName());
+    auto vec = gm->getGUIElements(object->getCurrentStateName());
     for (auto element : vec)
     {
         auto tmp = element->getDrawable();

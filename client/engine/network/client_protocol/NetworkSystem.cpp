@@ -18,6 +18,9 @@ namespace RType
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
               _connector(addr, tcp), _udpSock(udpPort)
     {
+        (void)_entityManager;
+        _udpSock.setTimeoutSec(0);
+        _udpSock.setTimeoutUsec(1000);
         _connector.connect();
         SocketMonitor::getInstance().registerSocket(&_connector);
     }

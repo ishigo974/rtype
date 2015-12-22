@@ -14,7 +14,7 @@ class State
 {
 public:
     State();
-    State(std::string const& name);
+    explicit State(std::string const& name);
 
     State(State const& o);
     State(State&& o);

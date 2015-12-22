@@ -14,7 +14,7 @@
 
 namespace RType
 {
-    class NetworkTCP
+    class NetworkTCP : public Component
     {
     public:
         static RTypes::my_uint16_t const Mask = ComponentMask::TCPMask;

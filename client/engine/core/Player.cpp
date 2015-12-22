@@ -9,8 +9,8 @@ Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage)
-  : Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
+Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage) :
+    Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
 {
 }
 
@@ -40,8 +40,8 @@ Player& Player::operator=(Player other)
 
 Player::~Player()
 {
-  if (_bullets)
-    delete _bullets;
+    if (_bullets)
+        delete _bullets;
 }
 
 bool Player::operator==(Player const& other)
@@ -80,7 +80,7 @@ namespace std
 
 RTypes::my_uint16_t     Player::getMask() const
 {
-  return Mask;
+    return Mask;
 }
 
 std::string Player::toString() const
@@ -88,11 +88,11 @@ std::string Player::toString() const
     std::stringstream ss;
 
     ss << "Player {"
-       << "\n\thp: " << _hp
-       << "\n\tdamage: " << _damage
-       << "\n\tenabled: " << _enabled;
+    << "\n\thp: " << _hp
+    << "\n\tdamage: " << _damage
+    << "\n\tenabled: " << _enabled;
     if (_transform)
-      ss << "\n\t" << _transform->toString();
+    ss << "\n\t" << _transform->toString();
     ss << "\n}" << std::endl;
 
     return (ss.str());
@@ -100,123 +100,121 @@ std::string Player::toString() const
 
 int	Player::getDamage() const
 {
-  return _damage;
+    return _damage;
 }
 
 int	Player::getHp() const
 {
-  return _hp;
+    return _hp;
 }
 
 void	Player::setAction(ACommand::Action action)
 {
-  _action.push(action);
+    _action.push(action);
 }
 
-void		Player::move()
+void		Player::move(double elapsedtime)
 {
-  float		speed = 7.5f;
+    float		speed = 0.75f;
 
-  if (_multiple)
+    if (_multiple)
     {
-      _multiple = false;
-      speed = speed * 3 / 4;
+        _multiple = false;
+        speed = speed * 3 / 4;
     }
-  if (_action.size() >= 2)
+    if (_action.size() >= 2)
     {
-      _multiple = true;
-      speed = speed * 3 / 4;
+        _multiple = true;
+        speed = speed * 3 / 4;
     }
-  switch (_action.front())
+    switch (_action.front())
     {
-    case ACommand::UP:
-      _transform->getPosition().setY(_transform->getPosition().Y() - speed);
-      break;
-    case ACommand::DOWN:
-      _transform->getPosition().setY(_transform->getPosition().Y() + speed);
-      break;
-    case ACommand::LEFT:
-      _transform->getPosition().setX(_transform->getPosition().X() - speed);
-      break;
-    case ACommand::RIGHT:
-      _transform->getPosition().setX(_transform->getPosition().X() + speed);
-      break;
-    default:
-      break;
+        case ACommand::UP:
+            _transform->getPosition().setY(_transform->getPosition().Y() - speed * elapsedtime);
+            break;
+        case ACommand::DOWN:
+            _transform->getPosition().setY(_transform->getPosition().Y() + speed * elapsedtime);
+            break;
+        case ACommand::LEFT:
+            _transform->getPosition().setX(_transform->getPosition().X() - speed * elapsedtime);
+            break;
+        case ACommand::RIGHT:
+            _transform->getPosition().setX(_transform->getPosition().X() + speed * elapsedtime);
+            break;
+        default:
+            break;
     }
 }
 
 std::vector<BulletObject *>	Player::getActiveBullets() const
 {
-  return _activeBullets;
+    return _activeBullets;
 }
 
 void		Player::checkDeath()
 {
-  if (_hp <= 0)
+    if (_hp <= 0)
     {
-      std::cout << "Player Mort" << std::endl;
-      _enabled = false;
-      _parent->setVisible(false);
-      _parent->getComponent<Collider>()->setEnabled(false);
+        std::cout << "Player Mort" << std::endl;
+        _enabled = false;
+        _parent->setVisible(false);
+        _parent->getComponent<Collider>()->setEnabled(false);
     }
 }
 
 void	Player::shoot()
 {
-  BulletObject *bullet = _bullets->create("Bullet", 12);
-  _activeBullets.push_back(bullet);
-  Bullet *b = bullet->getComponent<Bullet>();
-  b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
-  b->setY(_transform->getPosition().Y());
-  _shotTime = 0;
+    BulletObject *bullet = _bullets->create("Bullet", 12);
+    _activeBullets.push_back(bullet);
+    Bullet *b = bullet->getComponent<Bullet>();
+    b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
+    b->setY(_transform->getPosition().Y());
+    _shotTime = 0;
 }
 
 void	Player::checkAvailableBullets()
 {
-  for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
+    for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
     {
-      if ((*it)->getComponent<Bullet>()->getAvailable())
-	{
-	  _bullets->deleteObject(*it);
-	  _activeBullets.erase(it);
-	  break;
-	}
+        if ((*it)->getComponent<Bullet>()->getAvailable())
+        {
+            _bullets->deleteObject(*it);
+            _activeBullets.erase(it);
+            break;
+        }
     }
 }
 
 void		Player::init()
 {
-  _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
+    _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
 }
 
 void		Player::update(double elapsedtime)
 {
-  _parent = static_cast<GameObject *>(parent());
-  if (!_transform)
-    _transform = _parent->getComponent<Transform>();
-
-  checkDeath();
-  _shotTime += elapsedtime;
-  checkAvailableBullets();
-
-  while (_action.size() > 0)
+    _parent = static_cast<GameObject *>(parent());
+    if (!_transform)
+        _transform = _parent->getComponent<Transform>();
+    checkDeath();
+    _shotTime += elapsedtime;
+    checkAvailableBullets();
+    while (_action.size() > 0)
     {
-      if (_action.front() == ACommand::SHOOT && _shotTime >= 200)
-	this->shoot();
-      else
-	this->move();
-      _action.pop();
+        if (_action.front() == ACommand::SHOOT && _shotTime >= 200)
+            this->shoot();
+        else
+            this->move(elapsedtime);
+        _action.pop();
     }
-  _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
-  // TODO remove debug comments
-  // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
-  // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
+    // TODO enlever ? _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
+    // TODO remove debug comments
+    // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
+    // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
 
 bool Player::handleMessage(Collider *o)
 {
-  _hp -= static_cast<GameObject *>(o->parent())->getComponent<Behaviour>()->getDamage();
-  std::cout << _hp << std::endl;
-  return (true);
+    _hp -= static_cast<GameObject *>(o->parent())->getComponent<Behaviour>()->getDamage();
+    std::cout << _hp << std::endl;
+    return (true);
 }

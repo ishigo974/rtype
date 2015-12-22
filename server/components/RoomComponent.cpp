@@ -29,7 +29,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Room::Room() : _isPlaying(false)
+        Room::Room() : _name(), _players(), _isPlaying(false)
         {
         }
 

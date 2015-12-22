@@ -54,6 +54,7 @@ std::string GameObject::toString() const
     << "\n\tid: " << _id
     << "\n\tname: " << _name
     << "\n\tlayer: " << _layer
+    << "\n\tTransform: " << getComponent<Transform>()->toString()
     << "\n}" << std::endl;
 
     return (ss.str());
@@ -121,10 +122,10 @@ SpriteRenderer& GameObject::renderer() const
 
 bool		GameObject::isVisible() const
 {
-  return _isVisible;
+    return _isVisible;
 }
 
 void		GameObject::setVisible(bool v)
 {
-  _isVisible = v;
+    _isVisible = v;
 }

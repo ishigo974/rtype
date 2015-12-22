@@ -1,6 +1,6 @@
 #include "Label.hpp"
 
-Label::Label(gu::Rect<int> const& rect, std::string const& str, unsigned int size,
+Label::Label(gu::Rect<float> const& rect, std::string const& str, unsigned int size,
 	     std::string const& font) :
   GUIElement(rect), _size(size)
 {
