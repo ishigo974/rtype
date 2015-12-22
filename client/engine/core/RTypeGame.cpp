@@ -48,17 +48,19 @@ void        RTypeGame::run()
     // initGameSample();
     while (!_quit)
     {
-        _input.pollEvent(_event);
-        if (_event.type == cu::Event::Closed
-            || _event.key == cu::Event::ESCAPE)
+        while (_input.pollEvent(_event))
         {
-            _quit = true;
-            break ;
+            if (_event.type == cu::Event::Closed
+                || _event.key == cu::Event::ESCAPE)
+            {
+                _quit = true;
+                break ;
+            }
+            if (!_isPlaying)
+                _menu->move();
+            else
+                handleGame();
         }
-        if (!_isPlaying)
-            _menu->move();
-        else
-            handleGame();
         _tcpsys.process();
         _renderer.render();
         _event.type = cu::Event::None;
