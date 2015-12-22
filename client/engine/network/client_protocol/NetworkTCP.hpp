@@ -32,6 +32,9 @@ namespace RType
         void    pushRequest(Request const& request);
         Request popRequest();
 
+    public:
+        size_t inSize() const;
+
     private:
         NetworkTCP(NetworkTCP const&) = delete;
         NetworkTCP& operator=(NetworkTCP const&) = delete;

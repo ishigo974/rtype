@@ -48,4 +48,9 @@ namespace RType
 
         return ret;
     }
+
+    size_t NetworkTCP::inSize() const
+    {
+        return (_receive.size());
+    }
 }

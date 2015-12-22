@@ -60,3 +60,13 @@ void TCPView::push(RType::Request const& request)
 {
     _requests.push_back(request);
 }
+
+RTypes::my_uint16_t TCPView::getMask() const
+{
+    return Mask;
+}
+
+size_t TCPView::size() const
+{
+    return (_requests.size());
+}

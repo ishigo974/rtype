@@ -33,6 +33,9 @@ namespace RType
         InGameEvent popUDP();
 
     public:
+        size_t tcpSize() const;
+
+    public:
         static const short int   defaultPortTCP;
         static const std::string defaultAddr;
         static const size_t      buffLen;
