@@ -12,11 +12,13 @@
 # include "Renderer.hpp"
 # include "BehaviourSystem.hpp"
 # include "CommandSystem.hpp"
+# include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
 # include "UDPSystem.hpp"
 # include "IMobType.hpp"
 # include "MapParser.hpp"
+# include "HRChrono.hpp"
 
 class RTypeGame
 {
@@ -52,23 +54,25 @@ public:
     static const std::string    mapsPath;
 
 protected:
-    std::string             _addr;
-    short                   _port;
-    bool                    _quit;
-    bool                    _isPlaying;
-    EntityManager           _em;
-    Renderer                _renderer;
-    Input                   _input;
-    BehaviourSystem         _bs;
-    CommandSystem           _cs;
-    RType::NetworkSystem    _tcpsys;
-    RType::UDPSystem        _udpsys;
-    cu::Event               _event;
-    Menu*                   _menu;
-    double                  _lag;
-    double                  _fixedStep;
-    MobTypeMap              _mobTypes;
-    MapCollection           _maps;
+    std::string                 _addr;
+    short                       _port;
+    bool                        _quit;
+    bool                        _isPlaying;
+    EntityManager               _em;
+    Renderer                    _renderer;
+    Input                       _input;
+    BehaviourSystem             _bs;
+    CommandSystem               _cs;
+    RType::NetworkSystem        _tcpsys;
+    RType::UDPSystem            _udpsys;
+    cu::Event                   _event;
+    Menu*                       _menu;
+    double                      _lag;
+    double                      _fixedStep;
+    MobTypeMap                  _mobTypes;
+    MapCollection               _maps;
+    Time::HRChrono              _chrono;
+    MobSystem                   _ms;
 };
 
 #endif /* !RTYPEGAME_HPP_ */
