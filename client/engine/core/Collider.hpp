@@ -38,15 +38,14 @@ public:
     virtual std::string         toString() const;
 
 public:
-    bool intersects(Collider *o);
-  bool		isEnabled() const;
-  void		setEnabled(bool e);
+    bool        intersects(Collider *o);
+    bool		isEnabled() const;
+    void		setEnabled(bool e);
 
 protected:
     gu::Rect<int> _bounds;
-  bool		_enabled;
+    bool		_enabled;
 };
 
 
 #endif /* !RTYPE_COLLIDER_HPP_ */
-

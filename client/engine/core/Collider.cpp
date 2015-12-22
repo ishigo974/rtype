@@ -69,8 +69,8 @@ std::string Collider::toString() const
 
 void Collider::fixedUpdate(double)
 {
-    _bounds.x = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().X();
-    _bounds.y = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
+    _bounds.x = static_cast<GameObject *>(parent())->transform().getPosition().X();
+    _bounds.y = static_cast<GameObject *>(parent())->transform().getPosition().Y();
 }
 
 namespace std

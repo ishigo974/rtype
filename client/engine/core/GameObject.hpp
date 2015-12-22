@@ -74,7 +74,7 @@ public:
 protected:
     int                      _layer;
     std::vector<Component *> _components;
-  bool			_isVisible;
+    bool			         _isVisible;
 };
 
 

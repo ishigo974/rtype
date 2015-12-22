@@ -43,6 +43,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 // end tmp
 
     loadMobTypesFromFile();
+    loadMapsFromFile();
 
     // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
                                     // entity->getComponent<RType::NetworkTCP>());
@@ -116,7 +117,11 @@ void            RTypeGame::loadMapsFromFile()
     std::string     line;
 
     if (!file)
+    {
+        std::cerr << "Warning: Map configuration file wasn't found"
+                  << std::endl;
         return ;
+    }
     while (std::getline(file, line))
     {
         std::ifstream       mapFile(line.c_str());
@@ -126,15 +131,22 @@ void            RTypeGame::loadMapsFromFile()
         try {
             if (mapFile.good())
             {
-//                Map::Parser         parser(line);
-//                Map::Parser::Map    map;
-//
-//                map = parser.parse();
-//                _maps.push_back(map);
-//
-                ;
+               RType::Map::Parser         parser(line);
+               RType::Map::Parser::Map    map;
+
+               map = parser.parse();
+               _maps.push_back(map);
+            }
+            else
+            {
+                std::cerr   << "Can't load map: no such file: "
+                            << line << std::endl;
+                mapFile.close();
             }
         } catch (std::runtime_error const& e) {
+            mapFile.close();
+            file.close();
+            throw ;
         }
         mapFile.close();
     }
