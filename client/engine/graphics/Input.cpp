@@ -11,6 +11,7 @@ Input::Input(sf::RenderWindow& win) :
     _bindings[cu::Event::LEFT] = sf::Keyboard::Left;
     _bindings[cu::Event::SHOOT] = sf::Keyboard::Space;
     _bindings[cu::Event::ESCAPE] = sf::Keyboard::Escape;
+    _bindings[cu::Event::ENTER] = sf::Keyboard::Return;
 }
 
 Input::~Input() {}
