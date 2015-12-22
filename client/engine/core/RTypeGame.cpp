@@ -192,7 +192,7 @@ void            RTypeGame::loadMobTypesFromFile()
                                                                 "getMobType");
                 std::cout << "Mob '" << mobType->getName()
                           << "' loaded" << std::endl;
-                _mobTypes[mobType->getMobId()] = UniqueMobType(mobType);
+                _mobTypes[mobType->getId()] = UniqueMobType(mobType);
             }
             else
             {

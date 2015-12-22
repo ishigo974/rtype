@@ -4,6 +4,7 @@
 # include "Behaviour.hpp"
 # include "Transform.hpp"
 # include "IMobType.hpp"
+# include "REnums.hpp"
 
 class Mob : public Behaviour
 {
@@ -43,6 +44,7 @@ public:
 
 protected:
     void                    move(double elapsedTime);
+    static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
 
 protected:
     unsigned int            _id;
