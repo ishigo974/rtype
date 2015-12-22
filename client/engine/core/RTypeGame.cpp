@@ -6,6 +6,7 @@
 #include "DLLoader.hpp"
 #include "Mob.hpp"
 #include "Collider.hpp"
+#include "AudioEffect.hpp"
 #include "TCPView.hpp"
 
 /*
@@ -26,7 +27,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _input(_renderer.getWindow()), _bs(&_em),
     _network(&_em, addr, port), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
-    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em)
+    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em), _audio(&_em)
 {
     BigBen::getElapsedtime();
 
@@ -91,6 +92,7 @@ void        RTypeGame::initGameSample()
     player->init();
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
+    AudioEffect*    audio;
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
@@ -99,6 +101,11 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+    _em.attachComponent<AudioEffect>(player, "Audio");
+    audio = player->getComponent<AudioEffect>();
+    audio->addSound("../res/music.wav");
+    audio->addSound("../res/laser1.wav");
+    audio->addSound("../res/laser2.wav");
 
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
@@ -113,6 +120,7 @@ void        RTypeGame::handleGame()
     _cs.processNetwork();
     _ms.process();
     _physics.process(_fixedStep);
+    _audio.process();
     while (_lag >= _fixedStep)
     {
         _bs.process(_lag / _fixedStep);
