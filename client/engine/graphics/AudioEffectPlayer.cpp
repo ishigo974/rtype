@@ -18,6 +18,9 @@ void    AudioEffectPlayer::play(GameObject *obj)
     {
         return;
     }
+    _sounds.back().setVolume(5);
+    if (_sounds.size() > 1)
+        _sounds.back().setVolume(0.5);
     _sounds.back().play();
     obj->getComponent<AudioEffect>()->clearSounds();
     for (std::list<sf::Sound>::iterator it = _sounds.begin();
