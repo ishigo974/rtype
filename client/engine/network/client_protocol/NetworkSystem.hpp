@@ -27,10 +27,10 @@ namespace RType
         std::string toString() const;
 
     public:
-        void pushTCP(Request const& request);
-        void pushUDP(InGameEvent const& request);
-        Request const    & popTCP();
-        InGameEvent const& popUDP();
+        void        pushTCP(Request const& request);
+        void        pushUDP(InGameEvent const& request);
+        Request     popTCP();
+        InGameEvent popUDP();
 
     public:
         static const short int   defaultPortTCP;

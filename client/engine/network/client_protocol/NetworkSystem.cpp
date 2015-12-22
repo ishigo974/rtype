@@ -101,12 +101,12 @@ namespace RType
         _udpObj.pushRequest(request);
     }
 
-    Request const& NetworkSystem::popTCP()
+    Request NetworkSystem::popTCP()
     {
         return (_tcpObj.popRequest());
     }
 
-    InGameEvent const& NetworkSystem::popUDP()
+    InGameEvent NetworkSystem::popUDP()
     {
         return (_udpObj.popRequest());
     }

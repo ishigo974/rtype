@@ -39,12 +39,12 @@ public:
 
 public:
     bool intersects(Collider *o);
-  bool		isEnabled() const;
-  void		setEnabled(bool e);
+    bool isEnabled() const;
+    void setEnabled(bool e);
 
 protected:
     gu::Rect<int> _bounds;
-  bool		_enabled;
+    bool          _enabled;
 };
 
 

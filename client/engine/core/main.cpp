@@ -25,7 +25,7 @@ bool worldTest()
     RType::NetworkSystem networkSystem(&em);
     RType::Request       request;
 
-    World w(&em, new CommandSystem(&em, &i), &renderer, &bs, &i, &pe,
+    World w(&em, new CommandSystem(&em, &i, &networkSystem), &renderer, &bs, &i, &pe,
             &networkSystem);
 
     PlayerObject *player = em.createEntity<PlayerObject>("Player", 2, &em);

@@ -25,7 +25,7 @@ public:
 
 public:
     RType::Request pop();
-    void push(RType::Request const& request);
+    void           push(RType::Request const& request);
 
 private:
     std::deque<RType::Request> _requests;
