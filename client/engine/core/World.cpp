@@ -5,9 +5,9 @@
 #include "World.hpp"
 
 World::World(EntityManager *em, CommandSystem *cmd, Renderer *re,
-             BehaviourSystem *bs, Input *i, PhysicsEngine *pe, RType::NetworkSystem *r, RType::UDPSystem *f)
+             BehaviourSystem *bs, Input *i, PhysicsEngine *pe, RType::NetworkSystem *r)
         : _em(em), _cmdSystem(cmd), _renderer(re), _behaviourSystem(bs),
-          _input(i), _pe(pe), _tcpSystem(r), _udpSystem(f)
+          _input(i), _pe(pe), _netSystem(r)
 {
     BigBen::getElapsedtime();
     _fixedStep = 0.003;
@@ -36,8 +36,6 @@ void World::gameLoop()
     {
         double lag = BigBen::getElapsedtime();
 
-        _f->process();
-        _r->process();
         while (_input->pollEvent(e))
         {
             if (e.type == cu::Event::Closed || e.key == cu::Event::ESCAPE)
@@ -47,7 +45,7 @@ void World::gameLoop()
             }
         }
 
-        _cmdSystem->process();
+        _cmdSystem->processInput();
 
         while (lag >= _fixedStep)
         {

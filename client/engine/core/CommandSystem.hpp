@@ -3,6 +3,7 @@
 
 # include <vector>
 # include <map>
+# include "NetworkSystem.hpp"
 # include "ACommand.hpp"
 # include "Event.hpp"
 # include "EntityManager.hpp"
@@ -13,11 +14,11 @@ typedef std::chrono::time_point<std::chrono::high_resolution_clock> timestamp;
 class CommandSystem
 {
 public:
-
-    CommandSystem(EntityManager *entityManager, Input *i);
+    CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns);
     virtual ~CommandSystem();
 
-    void          process();
+    void          processInput();
+    void          processNetwork();
     std::string   toString();
     unsigned long getSize() const;
     ACommand      *getByTimestamp(timestamp time);
@@ -28,6 +29,7 @@ private:
     EntityManager                                   *_entityManager;
     std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
     Input                                           *_input;
+    RType::NetworkSystem                            *_ns;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

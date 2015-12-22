@@ -27,8 +27,7 @@ SocketMonitor::SocketMonitor() :
 }
 
 SocketMonitor::~SocketMonitor()
-{
-}
+{ }
 
 /*
 ** Static functions

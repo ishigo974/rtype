@@ -23,7 +23,7 @@ void PhysicsEngine::process(double fixedElapsed)
         for (auto f : tmp)
         {
             auto right = static_cast<GameObject *>(f);
-            auto rCol = right->getComponent<Collider>();
+            auto rCol  = right->getComponent<Collider>();
 
             if (left != right && rCol->isEnabled() && lCol->isEnabled())
             {

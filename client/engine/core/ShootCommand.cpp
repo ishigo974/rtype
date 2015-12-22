@@ -28,16 +28,9 @@ void    ShootCommand::execute()
 
     event.setCode(RType::InGameEvent::CL_SHOTSTART);
     event.push<uint8_t>("shot_type", 0);
-    event.push<uint32_t>("time",
-                         std::chrono::time_point_cast<std::chrono::milliseconds>
-                                 (BigBen::getTimeNow()).time_since_epoch().count());
-    RType::NetworkUDP *tmp;
-    if (network.size() > 0)
-    {
-        if ((tmp = static_cast<GameObject *>(network[0])
-                ->getComponent<RType::NetworkUDP>()) != NULL)
-            tmp->pushRequest(event);
-    }
+
+    //TODO: Change 1 to timestamp
+    event.push<uint32_t>("time", 1);
 }
 
 void    ShootCommand::undo()

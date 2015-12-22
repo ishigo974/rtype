@@ -11,12 +11,12 @@ namespace RType
 
     const short NetworkSystem::defaultPortTCP = 6667;
     const std::string NetworkSystem::defaultAddr = "127.0.0.1";
-    const size_t      NetworkSystem::buffLen = 1024;
+    const size_t      NetworkSystem::buffLen        = 1024;
+    const short       NetworkSystem::defaultPortUDP = 6668;
 
-    NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr,
-                                 short tcp)
+    NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr, short int tcp, short int udpPort)
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
-              _connector(addr, tcp)
+              _connector(addr, tcp), _udpSock(udpPort)
     {
         _connector.connect();
         SocketMonitor::getInstance().registerSocket(&_connector);
@@ -27,24 +27,17 @@ namespace RType
         _connector.close();
     }
 
-    void NetworkSystem::process()
+    void NetworkSystem::processTCP()
     {
-        NetworkTCP            *netTcp;
-        std::vector<Object *> components;
-        Buffer                receive;
-
-        components = _entityManager->getByMask(ComponentMask::TCPMask);
-        netTcp     = static_cast<GameObject *>(components[0])
-                ->getComponent<NetworkTCP>();
+        Buffer receive;
 
         try
         {
             _monitor.update();
         }
         catch (std::runtime_error const&)
-        {
+        { }
 
-        }
         if (_monitor.isReadable(&_connector))
         {
             try
@@ -57,10 +50,10 @@ namespace RType
                 _monitor.deleteSocket(&_connector);
                 //TODO Send UI disconnection
             }
-            netTcp->receive(receive);
+            _tcpObj.receive(receive);
         }
         if (_monitor.isWritable(&_connector))
-            _connector.send(netTcp->toSend());
+            _connector.send(_tcpObj.toSend());
     }
 
     std::string NetworkSystem::toString() const
@@ -72,5 +65,49 @@ namespace RType
         << "\n}" << std::endl;
 
         return ss.str();
+    }
+
+    void NetworkSystem::processUDP()
+    {
+        Buffer      receive;
+        std::string addr;
+
+        try
+        {
+            _udpSock.receiveFrom(receive, buffLen, addr);
+        }
+        catch (std::runtime_error const&)
+        {
+            _udpSock.close();
+            //TODO Send UI disconnection
+        }
+        _udpObj.receive(receive);
+
+        try
+        {
+            _udpSock.sendTo(_udpObj.toSend(), _addr);
+        }
+        catch (std::runtime_error const&)
+        { }
+    }
+
+    void NetworkSystem::pushTCP(Request const& request)
+    {
+        _tcpObj.pushRequest(request);
+    }
+
+    void NetworkSystem::pushUDP(InGameEvent const& request)
+    {
+        _udpObj.pushRequest(request);
+    }
+
+    Request const& NetworkSystem::popTCP()
+    {
+        return (_tcpObj.popRequest());
+    }
+
+    InGameEvent const& NetworkSystem::popUDP()
+    {
+        return (_udpObj.popRequest());
     }
 }
