@@ -2,17 +2,18 @@
 
 Menu::Menu(unsigned int id, std::string const& name, int layer,
            EntityManager* em, cu::Event* event, RType::NetworkTCP* network) :
-        GameObject(id, name, layer),
-	playersInRoom(4),
-        mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
-        createRoom(gu::Rect<float>(1000, 540, 250, 50), "CREATE ROOM", 10),
-        refresh(gu::Rect<float>(1000, 600, 200, 50), "REFRESH", 10),
-        back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
-	roomTitle(gu::Rect<float>(300, 0, 640, 70), ""),
-	readyField(gu::Rect<float>(1000, 600, 200, 50), "READY", 10),
-	inputRoomName(gu::Rect<float>(300, 300, 800, 60), "", 10, 16),
-        _event(event),
-        _em(em)
+           GameObject(id, name, layer),
+           roomsTextField(10),
+           playersInRoom(4),
+           mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
+           createRoom(gu::Rect<float>(1000, 540, 250, 50), "CREATE ROOM", 10),
+           refresh(gu::Rect<float>(1000, 600, 200, 50), "REFRESH", 10),
+           back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
+           roomTitle(gu::Rect<float>(300, 0, 640, 70), ""),
+           readyField(gu::Rect<float>(1000, 600, 200, 50), "READY", 10),
+           inputRoomName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
+           _event(event),
+           _em(em)
 {
     _titleState     = State("title");
     mainMenu        = State("mainMenu");
@@ -28,16 +29,20 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     readyField.setBackColor(sf::Color(80, 80, 80));
     inputRoomName.setBackColor(sf::Color(80, 80, 80));
 
-    rooms.push_back(new TextField(gu::Rect<float>(100, 100, 300, 50), "test", 10));
+    for (int i = 0; i < 10; ++i)
+    {
+      if (i >= 5)
+        roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
+      else
+        roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
+    }
 
-    playersInRoom[0] = new TextField(gu::Rect<float>(200, 150, 300, 50), "tata", 10);
-    playersInRoom[0]->setForeColor(sf::Color::Red);
-    playersInRoom[1] = new TextField(gu::Rect<float>(200, 250, 300, 50), "titi", 10);
-    playersInRoom[1]->setForeColor(sf::Color::Red);
-    playersInRoom[2] = new TextField(gu::Rect<float>(200, 350, 300, 50), "toto", 10);
-    playersInRoom[2]->setForeColor(sf::Color::Red);
-    playersInRoom[3] = new TextField(gu::Rect<float>(200, 450, 300, 50), "tutu", 10);
-    playersInRoom[3]->setForeColor(sf::Color::Red);
+    for (int i = 0; i < 4; ++i)
+    {
+        playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "", 10);
+        playersInRoom[i]->setForeColor(sf::Color::Red);
+        playersInRoom[i]->setBackColor(sf::Color::White);
+    }
 
     transitionToStates();
 
@@ -49,7 +54,7 @@ Menu::Menu(Menu const& other) :
         mainTitle(other.mainTitle),
         refresh(other.refresh),
         back(other.back),
-	roomTitle(other.roomTitle),
+	      roomTitle(other.roomTitle),
         _event(other._event)
 {
 }
@@ -69,7 +74,11 @@ Menu& Menu::operator=(Menu other)
 
 Menu::~Menu()
 {
-    rooms.clear();
+    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+      delete *it;
+    roomsTextField.clear();
+    for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
+      delete *it;
     playersInRoom.clear();
 }
 
@@ -101,8 +110,6 @@ void Menu::swap(Menu& other)
 void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
-    // rooms.clear();
-    setupGUIElements();
     _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
@@ -115,10 +122,45 @@ void Menu::createNewRoom(std::string const &roomName)
     _network->pushRequest(request);
 }
 
+void Menu::joinRoom(RType::Request::Room room)
+{
+    RType::Request      request;
+
+    request.setCode(RType::Request::CL_JOINROOM);
+    request.push<std::string>("room_name", room.name);
+    _network->pushRequest(request);
+}
+
+void Menu::joinRoom(std::string const &room)
+{
+    RType::Request      request;
+
+    request.setCode(RType::Request::CL_JOINROOM);
+    request.push<std::string>("room_name", room);
+    _network->pushRequest(request);
+}
+
 void Menu::ready()
 {
     _ready = true;
     _network->pushRequest(RType::Request(RType::Request::CL_READY));
+}
+
+void Menu::addRoom(RType::Request::Room room)
+{
+    _roomsList.push_back(room);
+}
+
+void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
+{
+    _roomsList = listRoom;
+    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+      (*it)->setBackColor(sf::Color::Transparent);
+    for (int nb = 0; nb != 10; ++nb)
+    {
+        roomsTextField[nb]->setText(_roomsList[nb].name);
+        roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
+    }
 }
 
 bool Menu::isReady() const
@@ -149,17 +191,19 @@ void Menu::transitionToStates()
     }, _event, this);
 
     mainMenu.addTransition("inRoom", [](cu::Event *e, std::vector<TextField *> rooms,
-        TextField *rT)
+        TextField *rT, Menu *menu)
         {
             if (e->type == cu::Event::MouseButtonReleased)
                 for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                    if ((*it)->intersect(e->mouse.x, e->mouse.y))
+                    if ((*it)->getBackColor() != sf::Color::Transparent &&
+                        (*it)->intersect(e->mouse.x, e->mouse.y))
                     {
                         rT->setText((*it)->getText());
+                        menu->joinRoom((*it)->getText());
                         return (true);
                     }
             return (false);
-        }, _event, rooms, &roomTitle);
+        }, _event, roomsTextField, &roomTitle, this);
 
     mainMenu.addTransition("createRoom", [](cu::Event *e, TextField *cR)
     {
@@ -180,18 +224,6 @@ void Menu::transitionToStates()
         return false;
     }, _event, &refresh, this);
 
-    // createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
-    // {
-    //     if (e->type == cu::Event::MouseButtonReleased &&
-    //         back->intersect(e->mouse.x, e->mouse.y))
-    //     {
-    //         menu->refreshRoomList();
-    //         return true;
-    //     }
-    //     return false;
-    // }, _event, &back, this);
-
-#include <iostream>
     createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input,
                                                  TextField *back, Menu *menu)
     {
@@ -219,24 +251,12 @@ void Menu::transitionToStates()
             back->intersect(e->mouse.x, e->mouse.y))
         {
             menu->refreshRoomList();
+            input->clearText();
             return true;
         }
 
         return false;
     }, _event, &inputRoomName, &back, this);
-
-    // createRoomState.addTransition("mainMenu", [](cu::Event *e, TextField *input, Menu *menu)
-    // {
-    //     if (e->type == cu::Event::KeyReleased &&
-    //         e->key == cu::Event::UP &&
-    //         input->getText().size() > 0)
-    //     {
-    //         menu->createNewRoom(input->getText());
-    //         input->clearText();
-    //         return true;
-    //     }
-    //     return false;
-    // }, _event, &inputRoomName, this);
 
     inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
     {
@@ -267,7 +287,7 @@ void Menu::setupGUIElements()
 
     gm->addGUIElement(_titleState.getName(), &mainTitle);
 
-    for (auto it = rooms.begin(); it != rooms.end(); ++it)
+    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
       gm->addGUIElement(mainMenu.getName(), *it);
 
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)

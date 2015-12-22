@@ -1,8 +1,5 @@
-#include <utility>
 #include "GUIElement.hpp"
 
-GUIElement::GUIElement()
-{}
 
 GUIElement::GUIElement(gu::Rect<float> const& rect) :
   _rect(rect)
@@ -17,27 +14,3 @@ bool	GUIElement::intersect(int x, int y)
 	  && y >= _rect.y && y <= _rect.y + _rect.h);
 }
 
-GUIElement::GUIElement(GUIElement const& other):
-    _rect(other._rect)
-{}
-
-GUIElement::GUIElement(GUIElement&& other) : GUIElement(other)
-{
-    swap(other);
-}
-
-void GUIElement::swap(GUIElement& other)
-{
-    using std::swap;
-
-    swap(_rect, other._rect);
-}
-
-namespace std
-{
-    template<>
-    inline void swap<GUIElement>(GUIElement& a, GUIElement& b)
-    {
-        a.swap(b);
-    }
-}

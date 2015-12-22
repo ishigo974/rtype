@@ -7,14 +7,9 @@
 class GUIElement
 {
 public:
-    GUIElement();
     GUIElement(gu::Rect<float> const& rect);
-    GUIElement(GUIElement const& other);
-    GUIElement(GUIElement&& other);
     virtual ~GUIElement();
-
-    void swap(GUIElement& other);
-
+    
 public:
     virtual std::vector<const sf::Drawable *> getDrawable() const = 0;
     bool                                      intersect(int x, int y);

@@ -6,8 +6,10 @@ TextField::TextField(std::string const& str, unsigned int padding, unsigned int 
     _font.loadFromFile("../res/cs_regular.ttf");
     setSize();
     setPosition();
+    _backColor = sf::Color::Transparent;
     _rectShape.setFillColor(sf::Color::Transparent);
     _text.setFont(_font);
+    _foreColor = sf::Color::Black;
     _text.setColor(sf::Color::Black);
     setText(str);
     //_text.setString(str);
@@ -109,12 +111,24 @@ void TextField::clearText()
 
 void TextField::setBackColor(const sf::Color& color)
 {
+    _backColor = color;
     _rectShape.setFillColor(color);
+}
+
+sf::Color TextField::getBackColor() const
+{
+    return _backColor;
 }
 
 void TextField::setForeColor(const sf::Color& color)
 {
+    _foreColor = color;
     _text.setColor(color);
+}
+
+sf::Color TextField::getForeColor() const
+{
+    return _foreColor;
 }
 
 void TextField::setPadding(unsigned int padding)
