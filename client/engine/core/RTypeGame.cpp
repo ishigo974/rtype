@@ -4,6 +4,8 @@
 #include "PlayerObject.hpp"
 #include "ScrollingBackground.hpp"
 #include "DLLoader.hpp"
+#include "Mob.hpp"
+#include "Collider.hpp"
 
 /*
 ** Static variables
@@ -96,6 +98,8 @@ void        RTypeGame::initGameSample()
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
 
     _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
+    _em.attachComponent<Mob>(first, "SR compo");
+    _em.attachComponent<Collider>(first, "SR compo", 32, 21);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
