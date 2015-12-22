@@ -34,6 +34,7 @@ namespace RType
 
     public:
         size_t tcpSize() const;
+        size_t udpSize() const;
 
     public:
         static const short int   defaultPortTCP;

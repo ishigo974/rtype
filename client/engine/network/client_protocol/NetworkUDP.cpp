@@ -45,4 +45,9 @@ namespace RType
         _receive.consume(ret.toBuffer().size());
         return ret;
     }
+
+    size_t NetworkUDP::inSize() const
+    {
+        return (_receive.size());
+    }
 }

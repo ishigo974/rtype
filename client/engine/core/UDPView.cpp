@@ -60,3 +60,13 @@ void UDPView::push(RType::InGameEvent const& request)
 {
     _requests.push_back(request);
 }
+
+RTypes::my_uint16_t UDPView::getMask() const
+{
+    return (Mask);
+}
+
+size_t UDPView::size() const
+{
+    return (_requests.size());
+}

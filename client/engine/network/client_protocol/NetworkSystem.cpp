@@ -118,4 +118,9 @@ namespace RType
     {
         return (_tcpObj.inSize());
     }
+
+    size_t NetworkSystem::udpSize() const
+    {
+        return (_udpObj.inSize());
+    }
 }

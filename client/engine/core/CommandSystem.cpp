@@ -4,6 +4,7 @@
 #include "MoveCommand.hpp"
 #include "ShootCommand.hpp"
 #include "TCPView.hpp"
+#include "UDPView.hpp"
 
 CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
 {
@@ -37,6 +38,7 @@ void    CommandSystem::processInput()
 
 ACommand *CommandSystem::getByTimestamp(timestamp time)
 {
+    //TODO: Nope... Need to undo in reverse order.
     std::chrono::duration<double> diff;
 
     for (auto command : _commands)
@@ -78,6 +80,7 @@ void CommandSystem::processNetwork()
     _ns->processUDP();
 
     auto tcpObjs = _entityManager->getByMask(ComponentMask::TCPMask);
+    auto udpObjs = _entityManager->getByMask(ComponentMask::UDPMask);
 
     for (auto e : tcpObjs)
     {
@@ -87,5 +90,15 @@ void CommandSystem::processNetwork()
             tmpComp->push(_ns->popTCP());
         while (tmpComp->size() > 0)
             _ns->pushTCP(tmpComp->pop());
+    }
+
+    for (auto e : udpObjs)
+    {
+        auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
+
+        while (_ns->udpSize() > 0)
+            tmpComp->push(_ns->popUDP());
+        while (tmpComp->size() > 0)
+            _ns->pushUDP(tmpComp->pop());
     }
 }

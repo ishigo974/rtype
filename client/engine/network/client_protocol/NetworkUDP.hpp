@@ -30,6 +30,9 @@ namespace RType
         void        pushRequest(InGameEvent const& request);
         InGameEvent popRequest();
 
+    public:
+        size_t inSize() const;
+
     private:
         NetworkUDP(NetworkUDP const&) = delete;
         NetworkUDP& operator=(NetworkUDP const&) = delete;

@@ -12,6 +12,8 @@
 class UDPView : public Component
 {
 public:
+    static const RTypes::my_uint16_t Mask = ComponentMask::UDPMask;
+public:
     UDPView();
     UDPView(unsigned int id, std::string const& name);
     UDPView(UDPView const& other);
@@ -26,7 +28,10 @@ public:
 public:
     RType::InGameEvent pop();
     void               push(RType::InGameEvent const& request);
+    size_t      size() const;
 
+
+    virtual RTypes::my_uint16_t getMask() const;
 private:
     std::deque<RType::InGameEvent> _requests;
 };
