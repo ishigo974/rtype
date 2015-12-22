@@ -1,4 +1,5 @@
 #include "RTypeGame.hpp"
+#include "PlayerObject.hpp"
 
 int main(int ac, char **av)
 {

@@ -12,6 +12,9 @@
 class TCPView : public Component
 {
 public:
+    static const RTypes::my_uint16_t Mask = ComponentMask::TCPMask;
+
+public:
     TCPView();
     TCPView(unsigned int id, std::string const& name);
     TCPView(TCPView const& other);
@@ -24,8 +27,10 @@ public:
     void swap(TCPView& other);
 
 public:
-    RType::Request pop();
-    void push(RType::Request const& request);
+    RType::Request              pop();
+    void                        push(RType::Request const& request);
+    virtual RTypes::my_uint16_t getMask() const;
+    size_t                      size() const;
 
 private:
     std::deque<RType::Request> _requests;

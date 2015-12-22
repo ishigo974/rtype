@@ -18,6 +18,7 @@
 # include "NetworkSystem.hpp"
 # include "IMobType.hpp"
 # include "MapParser.hpp"
+# include "AudioEffectPlayer.hpp"
 # include "HRChrono.hpp"
 
 class MobSystem;
@@ -75,6 +76,7 @@ protected:
     Time::HRChrono              _chrono;
     MobSystem                   _ms;
     PhysicsEngine               _physics;
+    AudioEffectPlayer           _audio;
 };
 
 #endif /* !RTYPEGAME_HPP_ */
