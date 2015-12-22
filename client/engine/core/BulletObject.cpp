@@ -1,5 +1,6 @@
 #include "BulletObject.hpp"
 #include "Bullet.hpp"
+#include "Collider.hpp"
 
 BulletObject::BulletObject()
 { }
@@ -80,15 +81,24 @@ void	BulletObject::deleteObject()
   b->setDirection(Bullet::Direction::DEFAULT);
   b->setEnabled(false);
   b->setAvailable(true);
+  setVisible(false);
+  b->setDamage(0);
+  b->setHp(0);
+  getComponent<Collider>()->setEnabled(false);
 }
 
 void	BulletObject::init()
 {
   _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1", gu::Rect<int>(249, 105, 16, 8));
   _entityManager->attachComponent<Bullet>(this, "Bullet");
+  _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
 
   Bullet *b = this->getComponent<Bullet>();
   b->setDirection(Bullet::Direction::RIGHT);
   b->setEnabled(true);
   b->setAvailable(false);
+  setVisible(true);
+  b->setDamage(1);
+  b->setHp(1);
+  getComponent<Collider>()->setEnabled(true);
 }

@@ -8,6 +8,7 @@
 # include <vector>
 # include <string>
 // # include <stdint.h>
+#include <iostream>
 
 class Buffer
 {

@@ -3,6 +3,8 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Renderer.hpp"
+#include "Collider.hpp"
+#include "Player.hpp"
 
 Mob::Mob()
 {
@@ -11,6 +13,7 @@ Mob::Mob()
 Mob::Mob(unsigned int _id, std::string const& _name, int hp, int damage, int type)
   : Behaviour(_id, _name), _hp(hp), _damage(damage), _type(type), _transform(0)
 {
+  _enabled = true;
   _direction = 1;
 }
 
@@ -136,14 +139,31 @@ void		Mob::move()
 
 void		Mob::update(double)
 {
+  GameObject	*p = static_cast<GameObject *>(parent());
+
+  if (_hp <= 0)
+    {
+      std::cout << "Mob Mort" << std::endl;
+      _enabled = false;
+      p->setVisible(false);
+      p->getComponent<Collider>()->setEnabled(false);
+    }
   if (!_transform)
-    _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
+    _transform = p->getComponent<Transform>();
   if (_transform->getPosition().X() > Renderer::width + 100
       || _transform->getPosition().X() < -100
       || _transform->getPosition().Y() > Renderer::height + 100
       || _transform->getPosition().Y() < -100)
     _enabled = false;
-  if (_hp == 0)
-    std::cout << "Mort" << std::endl;
   this->move();
+}
+
+bool Mob::handleMessage(Collider *o)
+{
+  GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+  if (otherParent->getComponent<Player>() != nullptr)
+    _hp -= otherParent->getComponent<Player>()->getDamage();
+  else if (otherParent->getComponent<Behaviour>() != nullptr)
+    _hp -= otherParent->getComponent<Behaviour>()->getDamage();
+  return (true);
 }

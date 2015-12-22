@@ -44,23 +44,26 @@ void    Renderer::init()
 
 void Renderer::render()
 {
-    this->_win.clear();
+  this->_win.clear();
 
-{
+  {
     auto obj = this->_em->getByMask(DrawableMask);
     std::sort(obj.begin(), obj.end(), &Renderer::comp);
     for (auto i : obj)
-        this->draw(static_cast<GameObject *>(i));
-}
-{
+      if (static_cast<GameObject *>(i)->isVisible())
+	this->draw(static_cast<GameObject *>(i));
+  }
+  {
     auto obj = this->_em->getByMask(GUIManagerMask);
     for (auto i : obj)
     {
         this->drawGUI(static_cast<Menu *>(i));
     }
-
-}
-    this->_win.display();
+    //   {
+        // this->drawGUI(static_cast<GameObject *>(i));
+    //   }
+  }
+  this->_win.display();
 }
 
 sf::RenderWindow& Renderer::getWindow()

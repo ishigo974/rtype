@@ -7,7 +7,7 @@ Collider::Collider() : Component()
 { }
 
 Collider::Collider(unsigned int _id, std::string const& _name, int width, int height)
-  : Component(_id, _name), _bounds(0, 0, width, height)
+  : Component(_id, _name), _bounds(0, 0, width, height), _enabled(true)
 { }
 
 Collider::Collider(Collider const& other) : Component(other)
@@ -69,15 +69,8 @@ std::string Collider::toString() const
 
 void Collider::fixedUpdate(double)
 {
-    auto tmp = EntityManager::getByMask(ComponentMask::ColliderMask);
-
-    _bounds.x = static_cast<GameObject *>(this->parent())->transform().getPosition().X();
-    _bounds.y = static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
-    for (auto e : tmp)
-    {
-        if (this->_bounds.intersects(static_cast<GameObject *>(e)->getComponent<Collider>()->_bounds))
-            sendMessage(static_cast<Collider *>(e));
-    }
+    _bounds.x = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().X();
+    _bounds.y = (int) static_cast<GameObject *>(this->parent())->transform().getPosition().Y();
 }
 
 namespace std
@@ -89,7 +82,17 @@ namespace std
     }
 }
 
-void Collider::sendMessage(Collider *e)
+bool Collider::intersects(Collider *o)
 {
-    static_cast<GameObject *>(parent())->sendMessage(*this, *e);
+    return (_bounds.intersects(o->_bounds));
+}
+
+bool		Collider::isEnabled() const
+{
+  return _enabled;
+}
+
+void		Collider::setEnabled(bool e)
+{
+  _enabled = e;
 }

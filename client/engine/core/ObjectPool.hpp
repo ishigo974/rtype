@@ -7,11 +7,22 @@ template <typename T, typename U>
 class	ObjectPool : Object
 {
 public:
-  ObjectPool(EntityManager *manager)
+  ObjectPool(std::string const & name, int layer, EntityManager *manager)
   {
     _entityManager = manager;
+    T *obj;
+    for (int i = 0; i < 10; ++i)
+      {
+	obj = _entityManager->createEntity<T>(name, layer, _entityManager);
+	_objects.push(obj);
+      }
   }
-  virtual ~ObjectPool() { }
+
+  virtual ~ObjectPool()
+  {
+    while (!_objects.empty())
+      _objects.pop();
+  }
 
   // TODO
   // static void* operator new (size_t size);
@@ -21,9 +32,7 @@ public:
   {
     T *obj;
     if (_objects.empty())
-      {
-	obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-      }
+      obj = _entityManager->createEntity<T>(name, layer, _entityManager);
     else
       {
 	obj = _objects.front();
@@ -39,9 +48,9 @@ public:
     _objects.push(obj);
   }
 
+  std::queue<T *>	_objects;
 private:
   EntityManager		*_entityManager;
-  std::queue<T *>	_objects;
 };
 
 #endif /* !OBJECTPOOL_HPP_ */

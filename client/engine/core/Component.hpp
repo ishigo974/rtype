@@ -5,6 +5,8 @@
 # include "RTypes.hpp"
 # include "REnums.hpp"
 
+class Collider;
+
 class Component : public Object
 {
 public:
@@ -22,11 +24,7 @@ public:
     virtual bool operator!=(Component const& other);
 
 public:
-    template<class ...Args>
-    bool handleMessage(Args ...)
-    {
-        return (false);
-    }
+    virtual bool handleMessage(Collider *o);
 
 public:
     void swap(Component& other);

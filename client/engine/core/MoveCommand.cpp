@@ -52,10 +52,16 @@ void    MoveCommand::execute()
     }
     event.push<uint32_t>("time",
                          std::chrono::time_point_cast<std::chrono::milliseconds>
-                                 (BigBen::getTimeNow()).time_since_epoch()
-                                                       .count());
-    static_cast<GameObject *>(network[0])
-            ->getComponent<RType::NetworkUDP>()->pushRequest(event);
+// <<<<<<< HEAD
+//                                  (BigBen::getTimeNow()).time_since_epoch()
+//                                                        .count());
+//     static_cast<GameObject *>(network[0])
+//             ->getComponent<RType::NetworkUDP>()->pushRequest(event);
+// =======
+                                 (BigBen::getTimeNow()).time_since_epoch().count());
+    RType::NetworkUDP* tmp;
+     if ((tmp = static_cast<GameObject *>(network[0])->getComponent<RType::NetworkUDP>()) != NULL)
+        tmp->pushRequest(event);
 }
 
 void    MoveCommand::undo()

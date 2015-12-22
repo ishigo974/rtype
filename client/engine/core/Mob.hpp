@@ -8,7 +8,7 @@ class Mob : public Behaviour
 {
 public:
     Mob();
-  Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 1, int type = 0);
+  Mob(unsigned int _id, std::string const& _name, int hp = 1, int damage = 5, int type = 0);
     virtual ~Mob();
 
     Mob(Mob const& other);
@@ -19,12 +19,14 @@ public:
     bool operator!=(Mob const& other);
 
     int getHp() const;
-    int getDamage() const;
+  virtual int getDamage() const;
 
     void         move();
     virtual void update(double);
 
     void swap(Mob& other);
+
+    virtual bool handleMessage(Collider *o);
 
   std::string	toString() const;
 
