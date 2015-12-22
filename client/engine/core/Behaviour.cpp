@@ -1,10 +1,10 @@
 #include "Behaviour.hpp"
 
-Behaviour::Behaviour()
+Behaviour::Behaviour() : Component(), _enabled(true)
 { }
 
 Behaviour::Behaviour(unsigned int _id, std::string const& _name)
-  : Component(_id, _name)
+  : Component(_id, _name), _enabled(true)
 { }
 
 Behaviour::Behaviour(Behaviour const& other) : Component(other)

@@ -9,7 +9,8 @@ class Mob : public Behaviour
 {
 public:
     Mob();
-    Mob(RType::MobType::IMobType const* mobtype);
+    Mob(unsigned int id, std::string const& name,
+        RType::MobType::IMobType const* mobtype);
     virtual ~Mob();
 
 public:

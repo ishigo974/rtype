@@ -99,7 +99,9 @@ void        RTypeGame::initGameSample()
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
 
     _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
-    // _em.attachComponent<Mob>(first, "SR compo", );
+    if (_mobTypes.empty())
+        throw std::runtime_error("No mobs types loaded");
+    _em.attachComponent<Mob>(first, "SR compo", _mobTypes.begin()->second.get());
     _em.attachComponent<Collider>(first, "SR compo", 32, 21);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
@@ -112,7 +114,6 @@ void        RTypeGame::initGameSample()
 
 void        RTypeGame::handleGame()
 {
-
     _lag = BigBen::getElapsedtime();
     _cs.process();
     _ms.process();
@@ -194,8 +195,7 @@ void            RTypeGame::loadMobTypesFromFile()
                                                                 "getMobType");
                 std::cout << "Mob '" << mobType->getName()
                           << "' loaded" << std::endl;
-                _mobTypes.insert(std::make_pair(mobType->getId(),
-                                                UniqueMobType(mobType)));
+                _mobTypes[mobType->getId()] = UniqueMobType(mobType);
             }
             else
             {

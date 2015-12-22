@@ -12,11 +12,16 @@
 Mob::Mob() :
     _id(0), _name(""), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
-    _movePattern(), _transform()
+    _movePattern(), _transform(nullptr)
 {
 }
 
-Mob::Mob(RType::MobType::IMobType const* mobtype)
+Mob::Mob(unsigned int id, std::string const& name,
+         RType::MobType::IMobType const* mobtype) :
+    Behaviour(id, name),
+    _id(0), _name(""), _lives(0),
+    _scoreValue(0), _spriteFilePath(""),
+    _movePattern(), _transform(nullptr)
 {
     init(mobtype);
 }
