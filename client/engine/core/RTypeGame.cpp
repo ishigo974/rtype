@@ -25,7 +25,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _input(_renderer.getWindow()), _bs(&_em), _cs(&_em, &_input),
     _tcpsys(&_em, addr, port), _udpsys(&_em, addr, port + 1),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
-    _ms(&_em, &_chrono)
+    _ms(&_em, &_chrono, &_mobTypes)
 {
     GameObject*     entity;
 
@@ -98,9 +98,9 @@ void        RTypeGame::initGameSample()
     GameObject *first = _em.createEntity<GameObject>("LePremier", 0);
     GameObject *bg = _em.createEntity<GameObject>("bg", -1);
 
-    _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
+    _em.attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
     _em.attachComponent<Mob>(first, "SR compo", _mobTypes.begin()->second.get());
     _em.attachComponent<Collider>(first, "SR compo", 32, 21);
 
