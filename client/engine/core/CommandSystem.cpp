@@ -76,28 +76,40 @@ std::string    CommandSystem::toString()
 
 void CommandSystem::processNetwork()
 {
+    std::array<RType::Request>     tcpIn;
+    std::array<RType::InGameEvent> udpIn;
+    int                            i = 0;
+
     _ns->processTCP();
     _ns->processUDP();
 
+    while (_ns->tcpSize() > 0)
+        tcpIn[i++] = _ns->popTCP();
+    i = 0;
+    while (_ns->udpSize() > 0)
+        udpIn[i++] = _ns->popUDP();
+
     auto tcpObjs = _entityManager->getByMask(ComponentMask::TCPMask);
     auto udpObjs = _entityManager->getByMask(ComponentMask::UDPMask);
-
+    
+    i = 0;
     for (auto e : tcpObjs)
     {
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<TCPView>();
 
-        while (_ns->tcpSize() > 0)
-            tmpComp->push(_ns->popTCP());
+        while (i < tcpIn.size())
+            tmpComp->push(tcpIn[i++]);
         while (tmpComp->size() > 0)
             _ns->pushTCP(tmpComp->pop());
     }
 
+    i = 0;
     for (auto e : udpObjs)
     {
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
 
-        while (_ns->udpSize() > 0)
-            tmpComp->push(_ns->popUDP());
+        while (i < udpIn.size())
+            tmpComp->push(udpIn[i++]);
         while (tmpComp->size() > 0)
             _ns->pushUDP(tmpComp->pop());
     }
