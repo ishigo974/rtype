@@ -54,8 +54,11 @@ public:
     void addPlayer(RType::Request::Player player);
     void addPlayerList(RType::Request::PlayersTab const &);
     void userReady(RType::Request player);
+    void deletePlayer(uint8_t);
     bool isVisible() const;
     void setVisible(bool);
+
+    void clearPlayers();
 
 private:
     std::vector<TextField *>    roomsTextField;
