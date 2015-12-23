@@ -32,7 +32,7 @@ public:
         if (_objects.empty())
         {
             obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-            obj->init();
+            obj->create();
         }
         else
         {
