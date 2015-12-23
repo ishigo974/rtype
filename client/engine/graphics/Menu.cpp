@@ -413,7 +413,7 @@ void Menu::transitionToStates()
                 input->setText(tmp.substr(0, tmp.size() - 1));
                 return false;
             }
-            else if (e->text.unicode != '\r')
+            else if (e->text.unicode != '\r' && e->text.unicode != '\n')
                 input->setText(input->getText() +
                                static_cast<char>(e->text.unicode));
             return false;
