@@ -12,14 +12,14 @@ namespace RType
         */
         const size_t                InGame::bufferSize = 65000;
         const InGame::EventCmdMap   InGame::cmdsNames =
-                                            {
-                                                    {InGameEvent::CL_PLAYERUP,   "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERDOWN, "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERLEFT, "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERRIGHT, "MoveCommand"},
-                                                    {InGameEvent::CL_SHOTSTART,  "ShotCommand"},
-                                                    {InGameEvent::CL_SHOTSTOP,   "ShotCommand"}
-                                            };
+        {
+            { InGameEvent::CL_PLAYERUP,     "MoveCommand"   },
+            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"   },
+            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"   },
+            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"   },
+            { InGameEvent::CL_SHOTSTART,    "ShotCommand"   },
+            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"   }
+        };
 
         /*
         ** Constructor/Destructor
@@ -70,7 +70,7 @@ namespace RType
                 cmd->setEntity(e);
                 cmd->initFromEvent(event);
                 cmd->execute();
-                // std::cout << event << std::endl;
+                std::cout << event << std::endl;
             }
             if (udp->isToSend())
                 _socket.sendTo(udp->popToSend(), udp->getIpAddr());

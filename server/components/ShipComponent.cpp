@@ -69,7 +69,7 @@ namespace RType
                     std::make_unique<Component::Shot>(_shotType, &entity));
                 *shotPos = *pos;
                 _chrono.reset();
-                std::cout << "ship fire" << std::endl; // debug
+                // std::cout << "ship fire" << std::endl; // debug
             }
         }
 

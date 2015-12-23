@@ -62,14 +62,13 @@ namespace RType
                 default:
                     break ;
             }
-            std::cout << "Shot moved to " << pos->getX() << pos->getY() << std::endl; // debug
+            // std::cout << "Shot moved to " << pos->getX() << " " << pos->getY() << std::endl; // debug
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
                 ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
                 em.safeDestroy(em.getByCmpnt(this));
-                std::cout << "Shot deleted" << std::endl; // debug
             }
         }
 
