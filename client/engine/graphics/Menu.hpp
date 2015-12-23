@@ -50,8 +50,10 @@ public:
     bool isReady() const;
     void addRoom(RType::Request::Room);
     void addRoomList(RType::Request::RoomsTab const &);
-    void addPlayer(RType::Request::Player);
+    void addPlayer(RType::Request player);
+    void addPlayer(RType::Request::Player player);
     void addPlayerList(RType::Request::PlayersTab const &);
+    void userReady(RType::Request player);
     bool isVisible() const;
     void setVisible(bool);
 
@@ -83,6 +85,8 @@ private:
     TCPView*	                _network;
     RType::Request::RoomsTab    _roomsList;
     RType::Request::PlayersTab  _playersList;
+
+    RType::Request::Player      _user;
 };
 
 #endif // !MENU_HPP_

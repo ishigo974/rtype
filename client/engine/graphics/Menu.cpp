@@ -68,7 +68,11 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     }
 
     for (int i = 0; i < 4; ++i)
-        playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "", 10);
+    {
+        playersInRoom[i] =
+                new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "", 10);
+        playersInRoom[i]->setText("");
+    }
 
     transitionToStates();
 
@@ -142,11 +146,14 @@ void Menu::refreshRoomList()
 void Menu::createNewRoom(std::string const &roomName)
 {
     RType::Request     request;
+    RType::Request::Player user;
 
     std::cout << "Create room: " << roomName << std::endl;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", roomName);
     _network->pushToSend(request);
+
+    addPlayer(_user);
 }
 
 void Menu::changeUserName(std::string const &username)
@@ -157,32 +164,39 @@ void Menu::changeUserName(std::string const &username)
     request.setCode(RType::Request::CL_USERNAME);
     request.push<std::string>("username", username);
     _network->pushToSend(request);
+    _user.username = username;
 }
 
 void Menu::joinRoom(RType::Request::Room room)
 {
     RType::Request      request;
 
-    std::cout << "Join room: " << room.name << std::endl;
+    std::cout << "Join room: " << room.name << "ID: " << room.id  << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<unsigned int>("room_id", room.id);
     _network->pushToSend(request);
 }
 
-void Menu::joinRoom(std::string const &room)
+void Menu::joinRoom(std::string const &roomName)
 {
-    RType::Request      request;
-
-    std::cout << "Join room: " << room << std::endl;
-    request.setCode(RType::Request::CL_JOINROOM);
-    request.push<std::string>("room_name", room);
-    _network->pushToSend(request);
+    for (auto room : _roomsList)
+    {
+        if (room.name == roomName)
+        {
+            joinRoom(room);
+            break ;
+        }
+    }
 }
 
 void Menu::ready()
 {
     _ready = true;
     _network->pushToSend(RType::Request(RType::Request::CL_READY));
+    for (auto &player : _playersList)
+        if (player.id == _user.id)
+            player.isReady = true;
+    addPlayerList(_playersList);
 }
 
 void Menu::addRoom(RType::Request::Room room)
@@ -210,6 +224,19 @@ void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
         }
 }
 
+void Menu::addPlayer(RType::Request player)
+{
+    RType::Request::Player user;
+
+    user.id = player.get<uint8_t>("player_id");
+    user.username = player.get<std::string>("username");
+    user.isReady = false;
+    std::cout << user.username << " join room" << std::endl;
+    _playersList.push_back(user);
+    addPlayerList(_playersList);
+}
+
+
 void Menu::addPlayer(RType::Request::Player player)
 {
     _playersList.push_back(player);
@@ -218,19 +245,36 @@ void Menu::addPlayer(RType::Request::Player player)
 
 void Menu::addPlayerList(RType::Request::PlayersTab const &listPlayer)
 {
-    _playersList = listPlayer;
+    if (_playersList.size() == 0)
+    {
+        _playersList = listPlayer;
+        _playersList.push_back(_user);
+    }
+    else
+        _playersList = listPlayer;
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
     {
+        (*it)->setText("");
         (*it)->setBackColor(sf::Color(0, 0, 0, 128));
-        (*it)->setForeColor(sf::Color::Red);
     }
-    for (int nb = 0; nb != 4; ++nb)
+    for (size_t nb = 0; nb < _playersList.size(); ++nb)
     {
-        std::cout << _playersList[nb].username << std::endl;
         playersInRoom[nb]->setText(_playersList[nb].username);
         if (_playersList[nb].isReady)
             playersInRoom[nb]->setForeColor(sf::Color::Green);
+        else
+            playersInRoom[nb]->setForeColor(sf::Color::Red);
     }
+}
+
+void Menu::userReady(RType::Request req)
+{
+    for (auto &player : _playersList)
+    {
+        if (player.id == req.get<uint8_t>("player_id"))
+            player.isReady = true;
+    }
+    addPlayerList(_playersList);
 }
 
 bool Menu::isReady() const
@@ -454,7 +498,6 @@ namespace std
 
 void Menu::move()
 {
-    _sm->move();
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
@@ -465,16 +508,19 @@ void Menu::move()
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
                 break;
             case RType::Request::SE_JOINROOM :
+                addPlayer(tmp);
                 break;
             case RType::Request::SE_QUITROOM :
                 break;
             case RType::Request::SE_CLIENTRDY :
+                userReady(tmp);
                 break;
             case RType::Request::SE_CLINOTRDY :
                 break;
             case RType::Request::SE_CLIUSRNM :
                 break;
             case RType::Request::SE_ROOMINFO :
+                _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
                 break;
             case RType::Request::SE_GAMESTART :
@@ -487,6 +533,7 @@ void Menu::move()
                 break;
         }
     }
+    _sm->move();
 }
 
 std::string const& Menu::getCurrentStateName() const
@@ -506,4 +553,8 @@ void Menu::init()
     _network = static_cast<GameObject *>(tmp)->getComponent<TCPView>();
     setupGUIElements();
     setupStates();
+
+    _user.id = 1;
+    _user.username = "LocalPlayer";
+    _user.isReady = false;
 }
