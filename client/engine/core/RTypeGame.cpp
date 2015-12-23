@@ -33,11 +33,11 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     BigBen::getElapsedtime();
 
     // tmp
-//    RType::Request request;
-//    request.setCode(RType::Request::CL_CREATEROOM);
-//    request.push<std::string>("room_name", "BestRoomEver");
-//    _network.pushTCP(request);
-//    _network.pushTCP(RType::Request(RType::Request::CL_READY));
+   // RType::Request request;
+   // request.setCode(RType::Request::CL_CREATEROOM);
+   // request.push<std::string>("room_name", "BestRoomEver");
+   // _network.pushTCP(request);
+   // _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
 
     loadMobTypesFromFile();
