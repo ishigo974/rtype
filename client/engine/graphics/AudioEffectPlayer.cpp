@@ -18,7 +18,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
     {
         return;
     }
-    _sounds.back().setVolume(5);
+    _sounds.front().setVolume(5);
     if (_sounds.size() > 1)
         _sounds.back().setVolume(0.5);
     _sounds.back().play();
