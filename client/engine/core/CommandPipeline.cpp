@@ -24,7 +24,7 @@ void CommandPipeline::addCommand(ACommand *cmd)
 
 bool CommandPipeline::validate(ACommand *cmd)
 {
-    return (std::chrono::system_clock::now() - cmd->getTime() <= _maxLag);
+    return (std::chrono::high_resolution_clock::now() - cmd->getTime() <= _maxLag);
 }
 
 CommandPipeline::ms CommandPipeline::getMaxLag() const
