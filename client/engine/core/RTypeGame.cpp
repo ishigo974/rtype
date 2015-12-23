@@ -103,7 +103,7 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
     _em.attachComponent<AudioEffect>(player, "Audio");
     audio = player->getComponent<AudioEffect>();
-    audio->addSound("../res/music.wav");
+    audio->addSound("../res/OnePunch.wav");
     audio->addSound("../res/laser1.wav");
     audio->addSound("../res/laser2.wav");
 
