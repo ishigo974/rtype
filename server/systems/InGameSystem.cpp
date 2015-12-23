@@ -71,7 +71,7 @@ namespace RType
                 cmd->setEntity(e);
                 cmd->initFromEvent(event);
                 cmd->execute();
-                std::cout << event << std::endl;
+                // std::cout << event << std::endl;
             }
             if (udp->isToSend())
                 _socket.sendTo(udp->popToSend(), udp->getIpAddr());

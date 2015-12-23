@@ -22,7 +22,8 @@ namespace ECS
                                     UniqueEntityPtr>    EntityMap;
         typedef std::unordered_map<IComponent const*,
                                    unsigned int,
-                                   std::hash<IComponent const*> >        ComponentIdMap;
+                                   std::hash<IComponent const*> >
+                                                        ComponentIdMap;
 
     protected:
         EntityManager();

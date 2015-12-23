@@ -30,6 +30,7 @@ namespace RType
         public:
             Map::Parser::Map&       retrieveMap();
             void                    start(Map::Parser::Map const& map);
+            void                    addMob(Component::Mob* mob);
             Time::HRChrono const&   getChrono() const;
 
         public:

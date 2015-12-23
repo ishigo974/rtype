@@ -7,6 +7,7 @@
 #include "EntityManager.hpp"
 #include "MapParser.hpp"
 #include "GameComponent.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -43,18 +44,33 @@ namespace RType
             Component::Game*    game = e.getComponent<Component::Game>();
             Map::Parser::Map&   map = game->retrieveMap();
 
+            if (map.second.empty())
+                return ;
             for (auto it = map.second.begin(); it != map.second.end(); ++it)
             {
                 if ((it->first * 1000000) <= game->getChrono().getElapsedTime())
                 {
-                    // GameObject *first = _em->createEntity<GameObject>("LePremier", 0);
+                    auto mobType = _mobTypes.find(it->second.id);
 
-                    // _em->attachComponent<SpriteRenderer>(first, "SR", "mob", gu::Rect<int>(1, 4, 32, 21));
-                    // _em->attachComponent<Mob>(first, "SR compo", _mobTypes->begin()->second.get());
-                    // _em->attachComponent<Collider>(first, "SR compo", 32, 21);
-                    // first->getComponent<Transform>()->getPosition().setX(it->second.x);
-                    // first->getComponent<Transform>()->getPosition().setY(it->second.y);
-                    std::cout << "mob" << std::endl;
+                    if (mobType == _mobTypes.end())
+                    {
+                        Server::display("Warning: No such mob type: "
+                                        + std::to_string(it->second.id));
+                        if ((it = map.second.erase(it)) == map.second.end())
+                            break ;
+                        continue ;
+                    }
+                    ECS::Entity&    eMob = ECS::EntityManager::getInstance()
+                        .create(Component::MASK_MOB | Component::MASK_POSITION); // TODO add collider
+                    std::cout << "create " << eMob.getId() << std::endl;
+                    Component::Mob* cMob = eMob.getComponent<Component::Mob>();
+                    Component::Position* cPos =
+                        eMob.getComponent<Component::Position>();
+
+                    cMob->init(mobType->second.get());
+                    cPos->setX(it->second.x);
+                    cPos->setX(it->second.y);
+                    game->addMob(cMob);
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }
@@ -62,7 +78,9 @@ namespace RType
                     break ;
             }
             if (map.second.empty())
+            {
                 std::cout << "end of map" << std::endl; // TODO end of game
+            }
         }
 
         Game::MobTypeMap const&   Game::getMobsTypes() const

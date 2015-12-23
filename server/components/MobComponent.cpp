@@ -70,16 +70,17 @@ namespace RType
             _movePattern = type->getMovePattern();
         }
 
-        void            Mob::update()
+        void            Mob::move(double elapsedTime)
         {
             Component::Position*    pos = ECS::EntityManager::getInstance()
                 .getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
-                _movePattern(cu::Position(pos->getX(), pos->getY()), 1);
+                _movePattern(cu::Position(pos->getX(), pos->getY()),
+                             elapsedTime);
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            // TODO with elapsed time
+            std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl;
         }
 
         void            Mob::addLives(unsigned int nb)

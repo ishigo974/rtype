@@ -3,14 +3,14 @@
 
 # include <string>
 # include "ComponentMask.hpp"
-# include "IBehaviour.hpp"
+# include "IComponent.hpp"
 # include "IMobType.hpp"
 
 namespace RType
 {
     namespace Component
     {
-        class Mob : public ECS::IBehaviour
+        class Mob : public ECS::IComponent
         {
         public:
             Mob();
@@ -23,7 +23,7 @@ namespace RType
 
         public:
             void            init(MobType::IMobType const* type);
-            virtual void    update();
+            void            move(double elapsedTime);
 
         public:
             void            addLives(unsigned int nb = 1);
