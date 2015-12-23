@@ -29,7 +29,6 @@ public:
     typedef std::unique_ptr<RType::MobType::IMobType>   UniqueMobType;
     typedef std::unordered_map<unsigned int,
                                UniqueMobType>           MobTypeMap;
-    typedef std::vector<RType::Map::Parser::Map>        Map::Collection;
 
 public:
     RTypeGame(std::string const& addr = defaultAddr,
@@ -72,7 +71,7 @@ protected:
     double                      _lag;
     double                      _fixedStep;
     MobTypeMap                  _mobTypes;
-    Map::Collection               _maps;
+    RType::Map::Collection      _maps;
     Time::HRChrono              _chrono;
     MobSystem                   _ms;
     PhysicsEngine               _physics;

@@ -248,7 +248,8 @@ namespace RType
                     Server::display("Can't load mob type: No such file: " +
                                     line);
                 mobFile.close();
-            } catch (std::runtime_error const&) {
+            } catch (std::runtime_error const& e) {
+                Server::display("Warning: " + std::string(e.what()));
             }
         }
         file.close();
