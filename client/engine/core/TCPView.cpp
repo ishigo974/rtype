@@ -29,9 +29,7 @@ TCPView& TCPView::operator=(TCPView other)
 }
 
 TCPView::~TCPView()
-{
-
-}
+{ }
 
 void TCPView::swap(TCPView& other)
 {
