@@ -70,7 +70,7 @@ namespace ECS
 
         if (it == _components.end())
             return false;
-        _mask &= ~mask; // TODO
+        _mask &= ~mask;
         ECS::EntityManager::getInstance()
             .removeCmpntEntityLink(it->second.get());
         return true;
@@ -83,7 +83,7 @@ namespace ECS
             IBehaviour*   b = dynamic_cast<IBehaviour*>(c.second.get());
 
             if (b != nullptr)
-            b->update();
+                b->update();
         }
     }
 

@@ -42,6 +42,7 @@ namespace RType
         void            Game::processEntity(ECS::Entity& e)
         {
             Component::Game*    game = e.getComponent<Component::Game>();
+            Component::Room*    room = e.getComponent<Component::Room>();
             Map::Parser::Map&   map = game->retrieveMap();
 
             if (map.second.empty())
@@ -62,15 +63,22 @@ namespace RType
                     }
                     ECS::Entity&    eMob = ECS::EntityManager::getInstance()
                         .create(Component::MASK_MOB | Component::MASK_POSITION); // TODO add collider
-                    std::cout << "create " << eMob.getId() << std::endl;
                     Component::Mob* cMob = eMob.getComponent<Component::Mob>();
-                    Component::Position* cPos =
+                    Component::Position*    cPos =
                         eMob.getComponent<Component::Position>();
+                    InGameEvent             event(InGameEvent::SE_MOBSPAWNED);
 
                     cMob->init(mobType->second.get());
                     cPos->setX(it->second.x);
                     cPos->setX(it->second.y);
                     game->addMob(cMob);
+
+                    event.push<uint8_t>("mob_id", cMob->getId());
+                    event.push<uint32_t>("x", it->second.x);
+                    event.push<uint32_t>("y", it->second.y);
+                    event.push<uint32_t>("time",
+                                         game->getChrono().getElapsedTime());
+                    room->broadcastUDP(event.toBuffer());
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }
