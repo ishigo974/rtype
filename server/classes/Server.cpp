@@ -116,6 +116,7 @@ namespace RType
                 inGameHandler.join();
                 throw ;
             }
+            // TODO elapsedTime / lag ?
         }
         display("Waiting for InGameHandler thread");
         inGameHandler.join();

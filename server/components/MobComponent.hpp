@@ -3,18 +3,19 @@
 
 # include <string>
 # include "ComponentMask.hpp"
-# include "IComponent.hpp"
+# include "IBehaviour.hpp"
 # include "IMobType.hpp"
+# include "GameComponent.hpp"
 
 namespace RType
 {
     namespace Component
     {
-        class Mob : public ECS::IComponent
+        class Mob : public ECS::IBehaviour
         {
         public:
             Mob();
-            Mob(MobType::IMobType const* type);
+            Mob(MobType::IMobType const* type, Component::Game* game = nullptr);
             virtual ~Mob();
 
         public:
@@ -23,11 +24,12 @@ namespace RType
 
         public:
             void            init(MobType::IMobType const* type);
-            void            move(double elapsedTime);
+            void            update();
 
         public:
             void            addLives(unsigned int nb = 1);
             void            removeLives(unsigned int nb = 1);
+            void            setGame(Component::Game* game);
 
         public:
             unsigned int                    getId() const;
@@ -36,6 +38,7 @@ namespace RType
             unsigned int                    getScoreValue() const;
             std::string const&              getSpriteFilePath() const;
             MobType::MovePattern const&     getMovePattern() const;
+            Component::Game*                getGame() const;
 
         public:
             virtual std::string         getName() const;
@@ -54,6 +57,7 @@ namespace RType
             unsigned int            _scoreValue;
             std::string             _spriteFilePath;
             MobType::MovePattern    _movePattern;
+            Component::Game*        _game;
         };
     }
 }

@@ -86,6 +86,11 @@ namespace ECS
         return destroy(entity.getId());
     }
 
+    void              EntityManager::safeDestroy(Entity const& entity)
+    {
+        _toDestroy.push_back(entity.getId());
+    }
+
     Entity&           EntityManager::get(unsigned int id) const
     {
         EntityMap::const_iterator   it;
@@ -124,6 +129,9 @@ namespace ECS
 
     void                EntityManager::updateAll()
     {
+        for (auto& id: _toDestroy)
+            destroy(id);
+        _toDestroy.clear();
         for (auto& entity: _actives)
             entity.second->update();
     }

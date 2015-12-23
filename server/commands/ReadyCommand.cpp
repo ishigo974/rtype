@@ -68,9 +68,9 @@ namespace RType
                 request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
                 room->broadcastTCP(request.toBuffer(), _entity);
+                if (room->allReady())
+                    startGame(room);
             }
-            if (room->allReady())
-                startGame(room);
         }
 
         void        Ready::undo()

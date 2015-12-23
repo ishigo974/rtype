@@ -5,7 +5,6 @@
 # include <vector>
 # include "ComponentMask.hpp"
 # include "IBehaviour.hpp"
-# include "MobComponent.hpp"
 # include "HRChrono.hpp"
 # include "MapParser.hpp"
 # include "RoomComponent.hpp"
@@ -17,9 +16,6 @@ namespace RType
         class Game : public ECS::IBehaviour
         {
         public:
-            typedef std::vector<Component::Mob*>    MobCollection;
-
-        public:
             Game();
             virtual ~Game();
 
@@ -30,7 +26,6 @@ namespace RType
         public:
             Map::Parser::Map&       retrieveMap();
             void                    start(Map::Parser::Map const& map);
-            void                    addMob(Component::Mob* mob);
             Time::HRChrono const&   getChrono() const;
 
         public:
@@ -48,7 +43,6 @@ namespace RType
 
         protected:
             Time::HRChrono      _chrono;
-            MobCollection       _mobs;
             Component::Room*    _room;
             Map::Parser::Map    _map;
         };

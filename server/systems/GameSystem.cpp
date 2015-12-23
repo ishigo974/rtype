@@ -8,6 +8,7 @@
 #include "MapParser.hpp"
 #include "GameComponent.hpp"
 #include "Server.hpp"
+#include "MobComponent.hpp"
 
 namespace RType
 {
@@ -69,9 +70,9 @@ namespace RType
                     InGameEvent             event(InGameEvent::SE_MOBSPAWNED);
 
                     cMob->init(mobType->second.get());
+                    cMob->setGame(game);
                     cPos->setX(it->second.x);
                     cPos->setX(it->second.y);
-                    game->addMob(cMob);
 
                     event.push<uint8_t>("mob_id", cMob->getId());
                     event.push<uint32_t>("x", it->second.x);
@@ -79,6 +80,7 @@ namespace RType
                     event.push<uint32_t>("time",
                                          game->getChrono().getElapsedTime());
                     room->broadcastUDP(event.toBuffer());
+                    std::cout << "Mob spawned id: " << cMob->getId() << std::endl; // debug
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }

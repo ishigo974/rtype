@@ -53,7 +53,7 @@ namespace RType
 
             if (udp == nullptr)
                 throw std::runtime_error("InGameSystem: Entity has no "
-                                                 "NetworkUDP component");
+                                         "NetworkUDP component");
             if ((it = _book.find(udp->getIpAddr())) != _book.end())
             {
                 udp->pushReceived(it->second);
@@ -62,11 +62,10 @@ namespace RType
             while (udp->isEvent())
             {
                 InGameEvent                     event = udp->popEvent();
-                std::unique_ptr<Command::Event> cmd   = _factory.generate(
-                                                                cmdsNames.at(
-                                                                        static_cast<InGameEvent::Code>(event
-                                                                                .getCode()))
-                                                        );
+                std::unique_ptr<Command::Event> cmd   =
+                    _factory.generate(cmdsNames.at(
+                        static_cast<InGameEvent::Code>(event.getCode()))
+                    );
 
                 cmd->setEntity(e);
                 cmd->initFromEvent(event);

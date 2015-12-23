@@ -20,7 +20,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Game::Game() : _chrono(), _mobs(), _room(nullptr), _map()
+        Game::Game() : _chrono(), _room(nullptr), _map()
         {
         }
 
@@ -32,8 +32,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _mobs(other._mobs),
-            _room(other._room), _map(other._map)
+            _chrono(other._chrono), _room(other._room), _map(other._map)
         {
         }
 
@@ -42,7 +41,6 @@ namespace RType
             if (this != &other)
             {
                 _chrono = other._chrono;
-                _mobs = other._mobs;
                 _room = other._room;
                 _map = other._map;
             }
@@ -55,37 +53,12 @@ namespace RType
 
         void                Game::update()
         {
-            auto it = _mobs.begin();
 
-            while (it != _mobs.end())
-            {
-                ECS::Entity&            e =
-                    ECS::EntityManager::getInstance().getByCmpnt(*it);
-                Component::Position*    pos =
-                    e.getComponent<Component::Position>();
-
-                if (pos->getX() <= 0 || pos->getX() >= Map::width
-                    || pos->getY() <= 0 || pos->getY() >= Map::height)
-                {
-                    it = _mobs.erase(it);
-                    ECS::EntityManager::getInstance().destroy(e);
-                    continue ;
-                }
-                else
-                    (*it)->move(0.2); // TODO elapsedTime
-                ++it;
-            }
         }
 
         Map::Parser::Map&       Game::retrieveMap()
         {
             return _map;
-        }
-
-        void                    Game::addMob(Component::Mob* mob)
-        {
-            _mobs.push_back(mob);
-            std::cout << "mob spawned type " << mob->getId() << std::endl;
         }
 
         void                Game::start(Map::Parser::Map const& map)

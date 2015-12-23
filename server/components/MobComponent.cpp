@@ -3,6 +3,7 @@
 #include "ComponentsMasks.hpp"
 #include "Utils.hpp"
 #include "EntityManager.hpp"
+#include "MapBoundaries.hpp"
 
 namespace RType
 {
@@ -18,13 +19,14 @@ namespace RType
         */
         Mob::Mob() :
             _id(0), _name(""), _lives(0),
-            _scoreValue(0), _spriteFilePath("")
+            _scoreValue(0), _spriteFilePath(""), _game(nullptr)
         {
         }
 
-        Mob::Mob(MobType::IMobType const* type) :
+        Mob::Mob(MobType::IMobType const* type,
+                 Component::Game* game) :
             _id(0), _name(""), _lives(0),
-            _scoreValue(0), _spriteFilePath("")
+            _scoreValue(0), _spriteFilePath(""), _game(game)
         {
             init(type);
         }
@@ -39,7 +41,7 @@ namespace RType
         Mob::Mob(Mob const& other) :
             _id(other._id), _name(other._name), _lives(other._lives),
             _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
-            _movePattern(other._movePattern)
+            _movePattern(other._movePattern), _game(other._game)
         {
         }
 
@@ -53,6 +55,7 @@ namespace RType
                 _scoreValue = other._scoreValue;
                 _spriteFilePath = other._spriteFilePath;
                 _movePattern = other._movePattern;
+                _game = other._game;
             }
             return *this;
         }
@@ -70,17 +73,24 @@ namespace RType
             _movePattern = type->getMovePattern();
         }
 
-        void            Mob::move(double elapsedTime)
+        void            Mob::update()
         {
-            Component::Position*    pos = ECS::EntityManager::getInstance()
-                .getByCmpnt(this).getComponent<Component::Position>();
+            ECS::EntityManager&     em = ECS::EntityManager::getInstance();
+            Component::Position*    pos =
+                em.getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
                 _movePattern(cu::Position(pos->getX(), pos->getY()),
-                             elapsedTime);
+                             0.03); // TODO game->getElapsedTime
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl;
+            std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug
+            if (pos->getX() <= 0 || pos->getX() >= Map::width
+                || pos->getY() <= 0 || pos->getY() >= Map::height)
+            {
+                em.safeDestroy(em.getByCmpnt(this));
+                std::cout << "Mob deleted" << std::endl;
+            }
         }
 
         void            Mob::addLives(unsigned int nb)
@@ -94,6 +104,16 @@ namespace RType
                 _lives = 0;
             else
                 _lives -= nb;
+        }
+
+        void            Mob::setGame(Component::Game* game)
+        {
+            _game = game;
+        }
+
+        Component::Game*        Mob::getGame() const
+        {
+            return _game;
         }
 
         unsigned int            Mob::getId() const
