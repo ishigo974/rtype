@@ -29,7 +29,8 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Room::Room() : _name(), _players(), _isPlaying(false)
+        Room::Room(Map::Parser::Map const* map) :
+            _name(), _players(), _isPlaying(false), _map(map)
         {
         }
 
@@ -42,7 +43,7 @@ namespace RType
         */
         Room::Room(Room const& other) :
             _name(other._name), _players(other._players),
-            _isPlaying(other._isPlaying)
+            _isPlaying(other._isPlaying), _map(other._map)
         {
         }
 
@@ -53,6 +54,7 @@ namespace RType
                 _name = other._name;
                 _players = other._players;
                 _isPlaying = other._isPlaying;
+                _map = other._map;
             }
             return *this;
         }
@@ -164,6 +166,11 @@ namespace RType
             _name = name;
         }
 
+        void                    Room::setMap(Map::Parser::Map const* map)
+        {
+            _map = map;
+        }
+
         std::string const&      Room::getRoomName() const
         {
             return _name;
@@ -266,6 +273,11 @@ namespace RType
         Room::PlayersMap::const_iterator  Room::end() const
         {
             return _players.end();
+        }
+
+        Map::Parser::Map const*     Room::getMap() const
+        {
+            return _map;
         }
 
         /*

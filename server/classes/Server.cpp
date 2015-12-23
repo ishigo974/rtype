@@ -18,6 +18,7 @@
 #include "Server.hpp"
 #include "Request.hpp"
 #include "ITcpSocket.hpp"
+#include "IMobType.hpp"
 
 // Entities related includes
 #include "Entity.hpp"
@@ -28,6 +29,7 @@
 #include "LobbySystem.hpp"
 #include "InGameSystem.hpp"
 #include "ShotFiringSystem.hpp"
+#include "GameSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
@@ -36,6 +38,7 @@
 #include "NetworkUDP.hpp"
 #include "RoomComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "GameComponent.hpp"
 #include "PositionComponent.hpp"
 #include "ShotComponent.hpp"
 #include "MobComponent.hpp"
@@ -148,6 +151,12 @@ namespace RType
     */
     void            Server::init()
     {
+        Map::Collection             maps;
+        MobType::Collection         mobTypes;
+
+        loadMobTypesFromFile(mobTypes);
+        loadMapsFromFile(maps);
+
         _monitor.registerSocket(&_acceptor);
         _monitor.registerRaw(stdinFileNo);
 
@@ -158,19 +167,19 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Position>());
         _em.registerComponent(std::make_unique<Component::Shot>());
         _em.registerComponent(std::make_unique<Component::Mob>());
+        _em.registerComponent(std::make_unique<Component::Game>());
 
-        _sm.registerSystem(std::make_unique<System::Lobby>());
+        _sm.registerSystem(std::make_unique<System::Lobby>(maps));
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
         _sm.registerSystem(std::make_unique<System::ShotFiring>());
+        _sm.registerSystem(std::make_unique<System::Game>(mobTypes));
 
-        loadMobTypesFromFile();
-        loadMapsFromFile();
 
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
     }
 
-    void            Server::loadMapsFromFile()
+    void            Server::loadMapsFromFile(Map::Collection& maps)
     {
         std::ifstream   file(mapsPath.c_str());
         std::string     line;
@@ -194,7 +203,7 @@ namespace RType
                     Map::Parser::Map    map;
 
                     map = parser.parse();
-                    _maps.push_back(map);
+                    maps.push_back(map);
                     Server::display("Map loaded from " + line);
                 }
                 else
@@ -208,7 +217,7 @@ namespace RType
         file.close();
     }
 
-    void            Server::loadMobTypesFromFile()
+    void    Server::loadMobTypesFromFile(MobType::Collection& mobTypes)
     {
         std::ifstream   file(mobTypesPath.c_str());
         std::string     line;
@@ -233,8 +242,7 @@ namespace RType
                                                                 "getMobType");
 
                     Server::display("Mob '" + mobType->getName() + "' loaded");
-                    _mobTypeFactory
-                        .learn(std::unique_ptr<MobType::IMobType>(mobType));
+                    mobTypes.push_back(mobType);
                 }
                 else
                     Server::display("Can't load mob type: No such file: " +
@@ -337,11 +345,15 @@ namespace RType
 
     void            Server::handleCLIMobs(ArgsTab const&)
     {
-        if (_mobTypeFactory.begin() == _mobTypeFactory.end())
+        System::Game::MobTypeMap const&    mobTypes =
+            ECS::SystemManager::getInstance().get<System::Game>("GameSystem")
+                ->getMobsTypes();
+
+        if (mobTypes.empty())
             Server::display("No mobs yet");
         else
             Server::display("Id\t| Name\t\t| Lives\t| Score value\t");
-        for (auto& entry: _mobTypeFactory)
+        for (auto& entry: mobTypes)
         {
             Server::display(std::to_string(entry.second->getId()) + "\t| "
                             + entry.second->getName() + "\t| "
@@ -378,9 +390,13 @@ namespace RType
 
     void            Server::handleCLIMaps(ArgsTab const&)
     {
-        if (_maps.empty())
+        Map::Collection const&  maps =
+            ECS::SystemManager::getInstance().get<System::Lobby>("LobbySystem")
+                ->getMaps();
+
+        if (maps.empty())
             Server::display("No maps yet");
-        for (auto& map: _maps)
+        for (auto& map: maps)
             Server::display(map.first);
     }
 
