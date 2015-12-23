@@ -5,7 +5,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
            GameObject(id, name, layer),
            roomsTextField(15),
            playersInRoom(4),
-           mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
+           mainTitle(gu::Rect<float>(300, 100, 800, 60),
+                     "Le R-Type officiel 2015"),
            changeName(gu::Rect<float>(1000, 0, 250, 50), "CHANGE NAME", 10),
            createRoom(gu::Rect<float>(1000, 590, 250, 50), "CREATE ROOM", 10),
            refresh(gu::Rect<float>(1000, 650, 200, 50), "REFRESH", 10),
@@ -53,23 +54,32 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
 
     for (int i = 0; i < 15; ++i)
     {
-      if (i >= 10)
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
-      else if (i >= 5)
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
-      else
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
+        if (i >= 10)
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(900,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
+        else if (i >= 5)
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(500,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
+        else
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(100,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
     }
 
     for (int i = 0; i < 4; ++i)
     {
-        playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "philips", 10);
+        playersInRoom[i] = new TextField(gu::Rect<float>(200,
+                                                         (i + 1) * 100 + 50,
+                                                         300, 50), "philips",
+                                                         10);
         playersInRoom[i]->setForeColor(sf::Color::Red);
         playersInRoom[i]->setBackColor(sf::Color(0, 0, 0, 128));
     }
@@ -84,10 +94,9 @@ Menu::Menu(Menu const& other) :
         mainTitle(other.mainTitle),
         refresh(other.refresh),
         back(other.back),
-	      roomTitle(other.roomTitle),
+        roomTitle(other.roomTitle),
         _event(other._event)
-{
-}
+{}
 
 Menu::Menu(Menu&& other) :
         Menu(other)
@@ -105,10 +114,10 @@ Menu& Menu::operator=(Menu other)
 Menu::~Menu()
 {
     for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
-      delete *it;
+        delete *it;
     roomsTextField.clear();
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
-      delete *it;
+        delete *it;
     playersInRoom.clear();
 }
 
@@ -263,22 +272,24 @@ void Menu::transitionToStates()
         return false;
     }, _event, this);
 
-    mainMenu.addTransition("inRoom", [](cu::Event *e, RType::Request::RoomsTab roomsList,
-                            std::vector<TextField *> rooms, TextField *rT, Menu *menu)
+    mainMenu.addTransition("inRoom", [](cu::Event *e,
+                           RType::Request::RoomsTab roomsList,
+                           std::vector<TextField *> rooms,
+                           TextField *rT, Menu *menu)
         {
-          (void) roomsList;
+          (void)roomsList;
             if (e->type == cu::Event::MouseButtonReleased)
                 for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                  {
+                {
                     if ((*it)->getBackColor() != sf::Color::Transparent &&
                         (*it)->intersect(e->mouse.x, e->mouse.y))
-                        {
-                            rT->setText((*it)->getText());
-                            // menu->joinRoom(roomsList[it - rooms.begin()]);
-                            menu->joinRoom((*it)->getText());
-                            return (true);
-                        }
-                  }
+                    {
+                        rT->setText((*it)->getText());
+                        // menu->joinRoom(roomsList[it - rooms.begin()]);
+                        menu->joinRoom((*it)->getText());
+                        return (true);
+                    }
+                }
             return (false);
         }, _event, _roomsList, roomsTextField, &roomTitle, this);
 
