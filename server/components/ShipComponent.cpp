@@ -1,5 +1,7 @@
 #include "ShipComponent.hpp"
 #include "ComponentsMasks.hpp"
+#include "PositionComponent.hpp"
+#include "EntityManager.hpp"
 
 namespace RType
 {
@@ -10,6 +12,7 @@ namespace RType
         */
         const ECS::ComponentMask    Ship::mask          = Component::MASK_SHIP;
         const unsigned int          Ship::defaultLives  = 1;
+        const unsigned int          Ship::usecFireDelay = 500000;
 
         /*
         ** Constructor/Destructor
@@ -48,9 +51,32 @@ namespace RType
         /*
         ** Public member functions
         */
+        void                Ship::update()
+        {
+            ECS::Entity&            entity =
+                ECS::EntityManager::getInstance().getByCmpnt(this);
+            Component::Position*    pos =
+                    entity.getComponent<Component::Position>();
+
+            if (_isFiring && _chrono.getElapsedTime() > usecFireDelay)
+            {
+                ECS::Entity&            shot = ECS::EntityManager::getInstance()
+                    .create(Component::MASK_POSITION);
+                Component::Position*    shotPos =
+                    shot.getComponent<Component::Position>();
+
+                shot.addComponent(
+                    std::make_unique<Component::Shot>(_shotType, &entity));
+                *shotPos = *pos;
+                _chrono.reset();
+                std::cout << "ship fire" << std::endl; // debug
+            }
+        }
+
         void                Ship::setIsFiring(bool isFiring)
         {
             _isFiring = isFiring;
+            _chrono.reset();
         }
 
         void                Ship::setShotType(Shot::Type shotType)

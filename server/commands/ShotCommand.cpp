@@ -40,7 +40,6 @@ namespace RType
             return *this;
         }
 
-#include <iostream>
         /*
         ** Public member functions
         */
@@ -72,8 +71,8 @@ namespace RType
             InGameEvent         event(_isFiring ? InGameEvent::SE_SHOTSTART :
                                                   InGameEvent::SE_SHOTSTOP);
 
-            if (ship == nullptr || player == nullptr || (room =
-                                                                 player->getRoom()) == nullptr)
+            if (ship == nullptr || player == nullptr
+                || (room = player->getRoom()) == nullptr)
                 throw std::runtime_error("Entity does not have a "
                                          "Ship/Room/Player component");
             ship->setIsFiring(_isFiring);

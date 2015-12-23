@@ -29,7 +29,7 @@ namespace RType
             Time::HRChrono const&   getChrono() const;
 
         public:
-            virtual void    update();
+            virtual void                update();
 
         public:
             virtual std::string         getName() const;

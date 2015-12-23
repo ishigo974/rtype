@@ -2,6 +2,7 @@
 #include "PositionComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "EntityManager.hpp"
+#include "MapBoundaries.hpp"
 
 namespace RType
 {
@@ -10,7 +11,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Shot::mask  =   Component::MASK_SHOT;
+        const ECS::ComponentMask    Shot::mask      = Component::MASK_SHOT;
+        const float                 Shot::speed     = 0.75f;
 
         /*
         ** Constructor/Destructor
@@ -55,10 +57,19 @@ namespace RType
             switch (_type)
             {
                 case NORMAL:
-                    pos->setX(pos->getX() + 10); // TODO
+                    pos->setX(pos->getX() + speed); // TODO speed * elapsed time
                     break ;
                 default:
                     break ;
+            }
+            std::cout << "Shot moved to " << pos->getX() << pos->getY() << std::endl; // debug
+            if (pos->getX() <= 0 || pos->getX() >= Map::width
+                || pos->getY() <= 0 || pos->getY() >= Map::height)
+            {
+                ECS::EntityManager& em = ECS::EntityManager::getInstance();
+
+                em.safeDestroy(em.getByCmpnt(this));
+                std::cout << "Shot deleted" << std::endl; // debug
             }
         }
 

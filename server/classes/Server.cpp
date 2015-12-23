@@ -28,7 +28,6 @@
 #include "SystemManager.hpp"
 #include "LobbySystem.hpp"
 #include "InGameSystem.hpp"
-#include "ShotFiringSystem.hpp"
 #include "GameSystem.hpp"
 
 // Components related includes
@@ -109,6 +108,7 @@ namespace RType
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
+                display("Received an invalid request", true);
                 // TODO handle
             } catch (...) {
                 _quit = true;
@@ -172,7 +172,6 @@ namespace RType
 
         _sm.registerSystem(std::make_unique<System::Lobby>(maps));
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
-        _sm.registerSystem(std::make_unique<System::ShotFiring>());
         _sm.registerSystem(std::make_unique<System::Game>(mobTypes));
 
 
