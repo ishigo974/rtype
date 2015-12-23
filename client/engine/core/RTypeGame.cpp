@@ -24,7 +24,7 @@ const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 */
 RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
-    _quit(false), _isPlaying(false), _em(), _renderer(&_em),
+    _quit(false), _isPlaying(true), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em),
     _network(&_em, addr, port), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
@@ -33,20 +33,20 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     BigBen::getElapsedtime();
 
     // tmp
-//    RType::Request request;
-//    request.setCode(RType::Request::CL_CREATEROOM);
-//    request.push<std::string>("room_name", "BestRoomEver");
-//    _network.pushTCP(request);
-//    _network.pushTCP(RType::Request(RType::Request::CL_READY));
+   RType::Request request;
+   request.setCode(RType::Request::CL_CREATEROOM);
+   request.push<std::string>("room_name", "BestRoomEver");
+   _network.pushTCP(request);
+   _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
 
     loadMobTypesFromFile();
     loadMapsFromFile();
 
-    _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
-    _em.attachComponent<TCPView>(_menu, "TCP");
-    _em.attachComponent<UDPView>(_menu, "UDP");
-     _menu->init();
+    // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
+    // _em.attachComponent<TCPView>(_menu, "TCP");
+    // _em.attachComponent<UDPView>(_menu, "UDP");
+    //  _menu->init();
 //     _menu->setVisible(false);
     _renderer.init();
 }
