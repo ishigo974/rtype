@@ -75,14 +75,7 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     }
 
     for (int i = 0; i < 4; ++i)
-    {
-        playersInRoom[i] = new TextField(gu::Rect<float>(200,
-                                                         (i + 1) * 100 + 50,
-                                                         300, 50), "philips",
-                                                         10);
-        playersInRoom[i]->setForeColor(sf::Color::Red);
-        playersInRoom[i]->setBackColor(sf::Color(0, 0, 0, 128));
-    }
+        playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "", 10);
 
     transitionToStates();
 
@@ -189,7 +182,7 @@ void Menu::joinRoom(std::string const &room)
     std::cout << "Join room: " << room << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<std::string>("room_name", room);
-    // _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::ready()
@@ -239,6 +232,7 @@ void Menu::addPlayerList(RType::Request::PlayersTab const &listPlayer)
     }
     for (int nb = 0; nb != 4; ++nb)
     {
+        std::cout << _playersList[nb].username << std::endl;
         playersInRoom[nb]->setText(_playersList[nb].username);
         if (_playersList[nb].isReady)
             playersInRoom[nb]->setForeColor(sf::Color::Green);
@@ -283,13 +277,12 @@ void Menu::transitionToStates()
                 {
                     if ((*it)->getBackColor() != sf::Color::Transparent &&
                         (*it)->intersect(e->mouse.x, e->mouse.y))
-                    {
-                        rT->setText((*it)->getText());
-                        // menu->joinRoom(roomsList[it - rooms.begin()]);
-                        menu->joinRoom((*it)->getText());
-                        return (true);
-                    }
-                }
+                        {
+                            rT->setText((*it)->getText());
+                            menu->joinRoom((*it)->getText());
+                            return (true);
+                        }
+                  }
             return (false);
         }, _event, _roomsList, roomsTextField, &roomTitle, this);
 
@@ -305,7 +298,9 @@ void Menu::transitionToStates()
         {
             if (e->type == cu::Event::MouseButtonReleased &&
                 cR->intersect(e->mouse.x, e->mouse.y))
-                  return true;
+            {
+                return true;
+            }
             return false;
         }, _event, &createRoom);
 
@@ -468,9 +463,10 @@ namespace std
 void Menu::move()
 {
     _sm->move();
-    if (_network->sizeReceive() > 0)
+    while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
+        std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
@@ -487,6 +483,7 @@ void Menu::move()
             case RType::Request::SE_CLIUSRNM :
                 break;
             case RType::Request::SE_ROOMINFO :
+                addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
                 break;
             case RType::Request::SE_GAMESTART :
                 break;
