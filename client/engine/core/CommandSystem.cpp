@@ -85,7 +85,6 @@ void CommandSystem::processNetwork()
 
     while (_ns->tcpSize() > 0)
         tcpIn.push_back(_ns->popTCP());
-
     while (_ns->udpSize() > 0)
         udpIn.push_back(_ns->popUDP());
 
@@ -98,9 +97,9 @@ void CommandSystem::processNetwork()
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<TCPView>();
 
         while (i < tcpIn.size())
-            tmpComp->push(tcpIn[i++]);
-        while (tmpComp->size() > 0)
-            _ns->pushTCP(tmpComp->pop());
+            tmpComp->pushReceive(tcpIn[i++]);
+        while (tmpComp->sizeToSend() > 0)
+            _ns->pushTCP(tmpComp->popToSend());
     }
 
     i = 0;

@@ -125,7 +125,7 @@ void Menu::swap(Menu& other)
 void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
-    _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    _network->pushToSend(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
 void Menu::createNewRoom(std::string const &roomName)
@@ -135,7 +135,7 @@ void Menu::createNewRoom(std::string const &roomName)
     std::cout << "Create room: " << roomName << std::endl;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", roomName);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::changeUserName(std::string const &username)
@@ -145,7 +145,7 @@ void Menu::changeUserName(std::string const &username)
     std::cout << "Change name: " << username << std::endl;
     request.setCode(RType::Request::CL_USERNAME);
     request.push<std::string>("username", username);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::joinRoom(RType::Request::Room room)
@@ -155,7 +155,7 @@ void Menu::joinRoom(RType::Request::Room room)
     std::cout << "Join room: " << room.name << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<unsigned int>("room_id", room.id);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::joinRoom(std::string const &room)
@@ -171,7 +171,7 @@ void Menu::joinRoom(std::string const &room)
 void Menu::ready()
 {
     _ready = true;
-    _network->pushRequest(RType::Request(RType::Request::CL_READY));
+    _network->pushToSend(RType::Request(RType::Request::CL_READY));
 }
 
 void Menu::addRoom(RType::Request::Room room)
@@ -430,6 +430,14 @@ namespace std
 void Menu::move()
 {
     _sm->move();
+    if (_network->sizeReceive() > 0)
+    {
+        std::cout << _network->sizeReceive() << std::endl;
+        RType::Request tmp = _network->popReceive();
+
+//            std::cout << tmp.get<RType::Request::RoomsTab>("rooms")[0].name <<
+//                    std::endl;
+    }
 }
 
 std::string const& Menu::getCurrentStateName() const
@@ -445,6 +453,8 @@ void Menu::init()
                                        gu::Rect<int>(0, 0, 1280, 720));
     _em->attachComponent<GUIManager>(this, "Manager");
 
+    auto tmp = _em->getByMask(TCPMask)[0];
+    _network = static_cast<GameObject *>(tmp)->getComponent<TCPView>();
     setupGUIElements();
     setupStates();
 }

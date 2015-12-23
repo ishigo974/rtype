@@ -72,14 +72,15 @@ void        RTypeGame::run()
                 break ;
             }
             if (!_isPlaying)
+            {
                 _menu->move();
+                _cs.processNetwork();
+            }
             else
                 handleGame();
         }
         if (_isPlaying)
             handleGame();
-        _network.processTCP();
-        _network.processUDP();
         _renderer.render();
         _event.type = cu::Event::None;
     }

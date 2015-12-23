@@ -27,13 +27,17 @@ public:
     void swap(TCPView& other);
 
 public:
-    RType::Request              pop();
-    void                        push(RType::Request const& request);
+    RType::Request              popToSend();
+    RType::Request              popReceive();
+    void                        pushToSend(RType::Request const& request);
+    void                        pushReceive(RType::Request const& request);
     virtual RTypes::my_uint16_t getMask() const;
-    size_t                      size() const;
+    size_t                      sizeReceive() const;
+    size_t                      sizeToSend() const;
 
 private:
-    std::deque<RType::Request> _requests;
+    std::deque<RType::Request> _receive;
+    std::deque<RType::Request> _toSend;
 };
 
 
