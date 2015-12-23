@@ -88,7 +88,7 @@ namespace RType
         {
             return [](cu::Position const& pos, double elapsedTime)->cu::Position
             {
-                static const float  speed = 1.0f;
+                static const float  speed = 2.0f;
                 static int          direction = -1;
 
                 if (pos.Y() >= 720 || pos.Y() <= 0)

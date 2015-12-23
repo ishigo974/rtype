@@ -12,7 +12,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.003;
+const double        RTypeGame::defaultFixedStep = 0.005;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -98,9 +98,9 @@ void        RTypeGame::initGameSample()
         throw std::runtime_error("No mobs types loaded");
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.5);
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.5);
     _em.attachComponent<AudioEffect>(player, "Audio");
     audio = player->getComponent<AudioEffect>();
     audio->addSound("../res/OnePunch.wav");

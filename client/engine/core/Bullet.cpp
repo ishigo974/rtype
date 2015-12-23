@@ -137,10 +137,6 @@ float		Bullet::getY() const
 
 void		Bullet::setX(float x)
 {
-    // if (!_parent)
-    //     _parent = static_cast<GameObject *>(parent());
-    // if (!_transform)
-    //     _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
     _transform->getPosition().setX(x);
 }
 
@@ -174,17 +170,13 @@ void		Bullet::setDirection(Bullet::Direction d)
 
 void		Bullet::move(double elapsedtime) const
 {
-    float		speed = 0.75f;
+    float		speed = 2.0f;
 
     _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * static_cast<float>(elapsedtime)));
 }
 
 void		Bullet::update(double elapsedtime)
 {
-    // if (!_parent)
-    //     _parent = static_cast<GameObject *>(parent());
-    // if (!_transform)
-    //     _transform = _parent->getComponent<Transform>();
     if (_hp <= 0 || _transform->getPosition().X() > Renderer::width)
         _available = true;
     this->move(elapsedtime);
