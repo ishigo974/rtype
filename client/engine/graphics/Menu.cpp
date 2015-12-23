@@ -370,7 +370,7 @@ void Menu::transitionToStates()
                 input->setText(tmp.substr(0, tmp.size() - 1));
                 return false;
             }
-            else if (e->text.unicode != '\r')
+            else if (e->text.unicode != '\r' && e->text.unicode != '\n')
                 input->setText(input->getText() +
                                static_cast<char>(e->text.unicode));
             return false;
@@ -438,7 +438,8 @@ void Menu::transitionToStates()
         return false;
     }, _event, &inputUserName, &back, this);
 
-    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
+    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
+                                        TextField *r, Menu *menu)
     {
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
@@ -448,19 +449,11 @@ void Menu::transitionToStates()
             menu->refreshRoomList();
             return true;
         }
-        return false;
-    }, _event, &back, this);
-
-    inRoom.addTransition("inRoom", [](cu::Event *e, TextField *r, Menu *menu)
-    {
         if (e->type == cu::Event::MouseButtonReleased &&
             r->intersect(e->mouse.x, e->mouse.y))
-        {
             menu->ready();
-            return true;
-        }
         return false;
-    }, _event, &readyField, this);
+    }, _event, &back, &readyField, this);
 }
 
 void Menu::setupGUIElements()
