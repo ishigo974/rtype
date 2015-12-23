@@ -181,7 +181,10 @@ void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
 {
     _roomsList = listRoom;
         for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+        {
             (*it)->setBackColor(sf::Color::Transparent);
+            (*it)->clearText();
+        }
         for (int  nb = 0; nb != 10; ++nb)
         {
             if (nb < static_cast<int>(_roomsList.size()))
@@ -368,6 +371,8 @@ void Menu::transitionToStates()
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
+            menu->_network->pushToSend(RType::Request
+                                            (RType::Request::CL_QUITROOM));
             menu->refreshRoomList();
             return true;
         }
@@ -459,8 +464,6 @@ void Menu::move()
             default :
                 break;
         }
-//            std::cout << tmp.get<RType::Request::RoomsTab>("rooms")[0].name <<
-//                    std::endl;
     }
 }
 
