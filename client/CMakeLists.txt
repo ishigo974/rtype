@@ -104,7 +104,6 @@ if(WIN32)
     set(BOOST_INCLUDEDIR "C:/local/boost_1_59_0/boost")
     set(Boost_INCLUDE_DIR "C:/local/boost_1_59_0/")
     set(Boost_LIBRARY_DIR "C:/local/boost_1_59_0/lib32-msvc-14.0")
-	add_definitions(-D_WIN32_WINNT=0x0501)
 endif()
 
 set(Boost_USE_STATIC_LIBS		ON)
