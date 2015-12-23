@@ -499,6 +499,11 @@ namespace std
 
 void Menu::move()
 {
+    _sm->move();
+}
+
+void Menu::update()
+{
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
@@ -534,7 +539,6 @@ void Menu::move()
                 break;
         }
     }
-    _sm->move();
 }
 
 std::string const& Menu::getCurrentStateName() const

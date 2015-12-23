@@ -33,6 +33,7 @@ public:
 
 public:
     void move();
+    void update();
     std::string const& getCurrentStateName() const;
 
 private:

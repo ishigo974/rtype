@@ -73,6 +73,7 @@ void        RTypeGame::run()
             }
             if (!_isPlaying)
             {
+                _menu->update();
                 _menu->move();
                 _cs.processNetwork();
             }
@@ -81,6 +82,11 @@ void        RTypeGame::run()
         }
         if (_isPlaying)
             handleGame();
+        else
+        {
+            _menu->update();
+            _cs.processNetwork();
+        }
         _renderer.render();
         _event.type = cu::Event::None;
     }
