@@ -5,6 +5,7 @@
 #include "Bullet.hpp"
 #include "Mob.hpp"
 #include "ObjectPool.hpp"
+#include "AudioEffect.hpp"
 
 Player::Player()
 {
@@ -165,12 +166,19 @@ void		Player::checkDeath()
 
 void	Player::shoot()
 {
+
     BulletObject *bullet = _bullets->create("Bullet", 12);
     _activeBullets.push_back(bullet);
     Bullet *b = bullet->getComponent<Bullet>();
     b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
     b->setY(_transform->getPosition().Y());
     _shotTime = 0;
+    std::vector<Object *>sound = _entityManager->getByMask(SoundMask);
+    for (auto play : sound)
+    {
+        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                       ->setSoundToPlay("../res/laser1.wav");
+    }
 }
 
 void	Player::checkAvailableBullets()
