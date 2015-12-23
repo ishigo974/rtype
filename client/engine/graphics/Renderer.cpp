@@ -12,8 +12,8 @@ unsigned int const Renderer::width  = 1280;
 unsigned int const Renderer::height = 720;
 
 Renderer::Renderer(EntityManager *em) :
-        _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type",
-             sf::Style::Titlebar | sf::Style::Close),
+        _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type"),
+            //  sf::Style::Titlebar | sf::Style::Close),
         _em(em)
 {
     _win.setFramerateLimit(60);

@@ -92,17 +92,27 @@ void        RTypeGame::initGameSample()
 {
     PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
     player->init();
-    GameObject *bg = _em.createEntity<GameObject>("bg", -1);
+    GameObject *bg = _em.createEntity<GameObject>("bg", -10);
+    GameObject *ds = _em.createEntity<GameObject>("ds", -5);
+    GameObject *df = _em.createEntity<GameObject>("df", -4);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
     AudioEffect*    audio;
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
+    _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.22);
+
+    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
+
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.20);
+
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.40);
+
     _em.attachComponent<AudioEffect>(player, "Audio");
 
     audio = player->getComponent<AudioEffect>();
