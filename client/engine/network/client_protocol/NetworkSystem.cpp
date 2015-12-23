@@ -44,10 +44,12 @@ namespace RType
         if (_monitor.isWritable(&_connector))
         {
             Buffer tmp = _tcpObj.toSend();
-            if (!tmp.empty())
+            while (!tmp.empty())
             {
                 std::cout << Request(tmp).getCode() << std::endl;
                 _connector.send(tmp);
+                tmp.clear();
+                tmp = _tcpObj.toSend();
             }
         }
         if (_monitor.isReadable(&_connector))
