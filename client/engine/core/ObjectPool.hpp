@@ -14,7 +14,7 @@ public:
         for (int i = 0; i < 10; ++i)
         {
             obj = _entityManager->createEntity<T>(name, layer, _entityManager);
-            obj->init();
+            obj->create();
             obj->deleteObject();
             _objects.push(obj);
         }
@@ -39,7 +39,7 @@ public:
             obj = _objects.front();
             _objects.pop();
         }
-        obj->reset();
+        obj->init();
         return obj;
     }
 
