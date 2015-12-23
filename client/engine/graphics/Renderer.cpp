@@ -103,12 +103,16 @@ void Renderer::drawGUI(const Menu *object)
         return ;
 
     auto vec = gm->getGUIElements(object->getCurrentStateName());
-    for (auto element : vec)
-    {
-        auto tmp = element->getDrawable();
-        for (auto drawable : tmp)
-            this->_win.draw(*drawable);
-    }
+    if (!vec.empty())
+      for (auto element : vec)
+       {
+           if (element != nullptr)
+           {
+               auto      tmp = element->getDrawable();
+               for (auto drawable : tmp)
+                   this->_win.draw(*drawable);
+           }
+       }
 }
 
 Renderer::~Renderer()

@@ -37,18 +37,15 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     {
       if (i >= 10)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "toto", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
       else if (i >= 5)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "tata", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
       else
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "titi", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
     }
 
@@ -183,13 +180,16 @@ void Menu::addRoom(RType::Request::Room room)
 void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
 {
     _roomsList = listRoom;
-    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
-        (*it)->setBackColor(sf::Color::Transparent);
-    for (int nb = 0; nb != 10; ++nb)
-    {
-        roomsTextField[nb]->setText(_roomsList[nb].name);
-        roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
-    }
+        for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+            (*it)->setBackColor(sf::Color::Transparent);
+        for (int  nb = 0; nb != 10; ++nb)
+        {
+            if (nb < static_cast<int>(_roomsList.size()))
+            {
+                roomsTextField[nb]->setText(_roomsList[nb].name);
+                roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
+            }
+        }
 }
 
 void Menu::addPlayer(RType::Request::Player player)
@@ -432,9 +432,33 @@ void Menu::move()
     _sm->move();
     if (_network->sizeReceive() > 0)
     {
-        std::cout << _network->sizeReceive() << std::endl;
         RType::Request tmp = _network->popReceive();
-
+        switch (tmp.getCode())
+        {
+            case RType::Request::SE_LISTROOMS :
+                addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
+                break;
+            case RType::Request::SE_JOINROOM :
+                break;
+            case RType::Request::SE_QUITROOM :
+                break;
+            case RType::Request::SE_CLIENTRDY :
+                break;
+            case RType::Request::SE_CLINOTRDY :
+                break;
+            case RType::Request::SE_CLIUSRNM :
+                break;
+            case RType::Request::SE_ROOMINFO :
+                break;
+            case RType::Request::SE_GAMESTART :
+                break;
+            case RType::Request::SE_OK :
+                break;
+            case RType::Request::SE_KO :
+                break;
+            default :
+                break;
+        }
 //            std::cout << tmp.get<RType::Request::RoomsTab>("rooms")[0].name <<
 //                    std::endl;
     }
