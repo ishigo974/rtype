@@ -162,7 +162,7 @@ void            RTypeGame::loadMapsFromFile()
                             << line << std::endl;
                 mapFile.close();
             }
-        } catch (std::runtime_error const& e) {
+        } catch (std::runtime_error const&) {
             mapFile.close();
             file.close();
             throw ;

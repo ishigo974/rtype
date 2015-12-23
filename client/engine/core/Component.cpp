@@ -52,7 +52,7 @@ std::string Component::toString() const
     ss += "\n\tname: ";
     ss += _name;
     ss += "\n\tmask: ";
-    ss += Mask;
+    ss += std::to_string(Mask);
     ss += "\n}\n";
 
     return (ss);

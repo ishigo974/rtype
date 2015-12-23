@@ -112,6 +112,24 @@ void UdpSocket::setPort(short int port)
     _port = port;
 }
 
+void UdpSocket::setTimeoutSec(long)
+{
+}
+
+void UdpSocket::setTimeoutUsec(long)
+{
+}
+
+long UdpSocket::getTimeoutSec() const
+{
+	return 0;
+}
+
+long UdpSocket::getTimeoutUsec() const
+{
+	return 0;
+}
+
 std::string UdpSocket::toString() const
 {
     std::string ss;
@@ -120,7 +138,7 @@ std::string UdpSocket::toString() const
     ss += "\n\tSocket ";
     ss += this->_socket;
     ss += "\n\tPort ";
-    ss += this->_port;
+    ss += std::to_string(_port);
     ss += "\n}\n";
 
     return ss;
