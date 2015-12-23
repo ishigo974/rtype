@@ -197,7 +197,7 @@ void TextField::swap(TextField& other)
 namespace std
 {
     template<>
-    void swap<TextField>(TextField &a, TextField &b)
+    inline void swap<TextField>(TextField &a, TextField &b)
     {
         a.swap(b);
     }

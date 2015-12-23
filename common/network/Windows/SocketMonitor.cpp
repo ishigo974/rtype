@@ -162,9 +162,9 @@ std::string SocketMonitor::toString() const
     ss += "\n\t_fdMax: ";
     ss += _maxFd;
     ss += "\n\t_secValue ";
-    ss += _secValue;
+    ss += std::to_string(_secValue);
     ss += "\n\t_usecValue ";
-    ss += _usecValue;
+    ss += std::to_string(_usecValue);
     ss += "\n}\n";
     return ss;
 }

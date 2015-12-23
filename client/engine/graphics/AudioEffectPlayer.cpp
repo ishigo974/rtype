@@ -24,7 +24,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
         else
             _sounds.push_back(obj->getComponent<AudioEffect>()->soundToPlay());
     }
-    catch (Exception::NotImplemented const&e)
+    catch (Exception::NotImplemented const&)
     {
         return;
     }

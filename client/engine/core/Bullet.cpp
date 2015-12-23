@@ -176,7 +176,7 @@ void		Bullet::move(double elapsedtime) const
 {
     float		speed = 0.75f;
 
-    _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * elapsedtime));
+    _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * static_cast<float>(elapsedtime)));
 }
 
 void		Bullet::update(double elapsedtime)

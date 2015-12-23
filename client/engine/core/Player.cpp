@@ -132,16 +132,16 @@ void		Player::move(double elapsedtime)
     switch (_action.front())
     {
         case ACommand::UP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - speed * elapsedtime);
+            _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::DOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + speed * elapsedtime);
+            _transform->getPosition().setY(_transform->getPosition().Y() + speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::LEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - speed * elapsedtime);
+            _transform->getPosition().setX(_transform->getPosition().X() - speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::RIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + speed * elapsedtime);
+            _transform->getPosition().setX(_transform->getPosition().X() + speed * static_cast<float>(elapsedtime));
             break;
         default:
             break;

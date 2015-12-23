@@ -38,24 +38,24 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     {
       if (i >= 10)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "toto", 10);
+          roomsTextField[i] = new TextField(gu::Rect<float>(900.0f, (i % 5 + 1) * 100.0f, 300.0f, 50.0f), "toto", 10);
           roomsTextField[i]->setBackColor(sf::Color::Red);
       }
       else if (i >= 5)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "tata", 10);
+          roomsTextField[i] = new TextField(gu::Rect<float>(500.0f, (i % 5 + 1) * 100.0f, 300.0f, 50.0f), "tata", 10);
           roomsTextField[i]->setBackColor(sf::Color::Red);
       }
       else
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "titi", 10);
+          roomsTextField[i] = new TextField(gu::Rect<float>(100.0f, (i % 5 + 1) * 100.0f, 300.0f, 50.0f), "titi", 10);
           roomsTextField[i]->setBackColor(sf::Color::Red);
       }
     }
 
     for (int i = 0; i < 4; ++i)
     {
-        playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "philips", 10);
+        playersInRoom[i] = new TextField(gu::Rect<float>(200.0f, (i + 1) * 100 + 50.0f, 300.0f, 50.f), "philips", 10);
         playersInRoom[i]->setForeColor(sf::Color::Red);
         playersInRoom[i]->setBackColor(sf::Color::White);
     }
