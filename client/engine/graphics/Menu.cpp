@@ -25,13 +25,31 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     _ready = false;
     _isVisible = true;
 
-    refresh.setBackColor(sf::Color(80, 80, 80));
-    changeName.setBackColor(sf::Color(80, 80, 80));
-    createRoom.setBackColor(sf::Color(80, 80, 80));
-    back.setBackColor(sf::Color(80, 80, 80));
-    readyField.setBackColor(sf::Color(80, 80, 80));
-    inputRoomName.setBackColor(sf::Color(80, 80, 80));
-    inputUserName.setBackColor(sf::Color(80, 80, 80));
+    // refresh.setBackColor(sf::Color(80, 80, 80));
+    // changeName.setBackColor(sf::Color(80, 80, 80));
+    // createRoom.setBackColor(sf::Color(80, 80, 80));
+    // back.setBackColor(sf::Color(80, 80, 80));
+    // readyField.setBackColor(sf::Color(80, 80, 80));
+    // inputRoomName.setBackColor(sf::Color(80, 80, 80));
+    // inputUserName.setBackColor(sf::Color(80, 80, 80));
+
+    refresh.setBackColor(sf::Color(0, 0, 0, 128));
+    changeName.setBackColor(sf::Color(0, 0, 0, 128));
+    createRoom.setBackColor(sf::Color(0, 0, 0, 128));
+    back.setBackColor(sf::Color(0, 0, 0, 128));
+    readyField.setBackColor(sf::Color(0, 0, 0, 128));
+    inputRoomName.setBackColor(sf::Color(0, 0, 0, 128));
+    inputUserName.setBackColor(sf::Color(0, 0, 0, 128));
+
+    refresh.setForeColor(sf::Color::White);
+    changeName.setForeColor(sf::Color::White);
+    createRoom.setForeColor(sf::Color::White);
+    back.setForeColor(sf::Color::White);
+    readyField.setForeColor(sf::Color::White);
+    inputRoomName.setForeColor(sf::Color::White);
+    inputUserName.setForeColor(sf::Color::White);
+    roomTitle.setForeColor(sf::Color::White);
+    mainTitle.setForeColor(sf::Color::White);
 
     for (int i = 0; i < 15; ++i)
     {
@@ -53,7 +71,7 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     {
         playersInRoom[i] = new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "philips", 10);
         playersInRoom[i]->setForeColor(sf::Color::Red);
-        playersInRoom[i]->setBackColor(sf::Color::White);
+        playersInRoom[i]->setBackColor(sf::Color(0, 0, 0, 128));
     }
 
     transitionToStates();
@@ -190,7 +208,8 @@ void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
             if (nb < static_cast<int>(_roomsList.size()))
             {
                 roomsTextField[nb]->setText(_roomsList[nb].name);
-                roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
+                roomsTextField[nb]->setBackColor(sf::Color(0, 0, 0, 128));
+                roomsTextField[nb]->setForeColor(sf::Color::White);
             }
         }
 }
@@ -205,7 +224,10 @@ void Menu::addPlayerList(RType::Request::PlayersTab const &listPlayer)
 {
     _playersList = listPlayer;
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
+    {
+        (*it)->setBackColor(sf::Color(0, 0, 0, 128));
         (*it)->setForeColor(sf::Color::Red);
+    }
     for (int nb = 0; nb != 4; ++nb)
     {
         playersInRoom[nb]->setText(_playersList[nb].username);
