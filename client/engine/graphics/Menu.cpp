@@ -298,6 +298,20 @@ void Menu::setVisible(bool visible)
     _isVisible = visible;
 }
 
+void Menu::deletePlayer(uint8_t id)
+{
+    (void)id;
+//    for (auto it = _playersList.begin(); it != _playersList.end(); ++it)
+//    {
+//        if (it->id == id)
+//        {
+//            _playersList.erase(it);
+//            return ;
+//        }
+//    }
+//    addPlayerList(_playersList);
+}
+
 void Menu::transitionToStates()
 {
     _titleState.addTransition("mainMenu", [](cu::Event *e, Menu *menu)
@@ -446,6 +460,7 @@ void Menu::transitionToStates()
         {
             menu->_network->pushToSend(RType::Request
                                             (RType::Request::CL_QUITROOM));
+            menu->clearPlayers();
             menu->refreshRoomList();
             return true;
         }
@@ -517,6 +532,7 @@ void Menu::update()
                 addPlayer(tmp);
                 break;
             case RType::Request::SE_QUITROOM :
+                deletePlayer(tmp.get<uint8_t>("player_id"));
                 break;
             case RType::Request::SE_CLIENTRDY :
                 userReady(tmp);
@@ -562,4 +578,8 @@ void Menu::init()
     _user.id = 1;
     _user.username = "LocalPlayer";
     _user.isReady = false;
+}
+void Menu::clearPlayers()
+{
+    _playersList.clear();
 }
