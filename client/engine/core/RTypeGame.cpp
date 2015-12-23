@@ -46,7 +46,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
     _em.attachComponent<UDPView>(_menu, "UDP");
-     _menu->init();
+    _menu->init();
 //     _menu->setVisible(false);
     _renderer.init();
 }

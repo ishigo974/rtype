@@ -5,7 +5,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
            GameObject(id, name, layer),
            roomsTextField(15),
            playersInRoom(4),
-           mainTitle(gu::Rect<float>(300, 100, 800, 60), "Le R-Type officiel 2015"),
+           mainTitle(gu::Rect<float>(300, 100, 800, 60),
+                     "Le R-Type officiel 2015"),
            changeName(gu::Rect<float>(1000, 0, 250, 50), "CHANGE NAME", 10),
            createRoom(gu::Rect<float>(1000, 590, 250, 50), "CREATE ROOM", 10),
            refresh(gu::Rect<float>(1000, 650, 200, 50), "REFRESH", 10),
@@ -53,18 +54,24 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
 
     for (int i = 0; i < 15; ++i)
     {
-      if (i >= 10)
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
-      else if (i >= 5)
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
-      else
-      {
-          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
-      }
+        if (i >= 10)
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(900,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
+        else if (i >= 5)
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(500,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
+        else
+        {
+            roomsTextField[i] = new TextField(gu::Rect<float>(100,
+                                                              (i % 5 + 1) * 100,
+                                                              300, 50), "", 10);
+        }
     }
 
     for (int i = 0; i < 4; ++i)
@@ -84,10 +91,9 @@ Menu::Menu(Menu const& other) :
         mainTitle(other.mainTitle),
         refresh(other.refresh),
         back(other.back),
-	      roomTitle(other.roomTitle),
+        roomTitle(other.roomTitle),
         _event(other._event)
-{
-}
+{}
 
 Menu::Menu(Menu&& other) :
         Menu(other)
@@ -105,10 +111,10 @@ Menu& Menu::operator=(Menu other)
 Menu::~Menu()
 {
     for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
-      delete *it;
+        delete *it;
     roomsTextField.clear();
     for (auto it = playersInRoom.begin(); it != playersInRoom.end(); ++it)
-      delete *it;
+        delete *it;
     playersInRoom.clear();
 }
 
@@ -294,6 +300,7 @@ void Menu::setVisible(bool visible)
 
 void Menu::deletePlayer(uint8_t id)
 {
+    (void)id;
 //    for (auto it = _playersList.begin(); it != _playersList.end(); ++it)
 //    {
 //        if (it->id == id)
@@ -317,13 +324,15 @@ void Menu::transitionToStates()
         return false;
     }, _event, this);
 
-    mainMenu.addTransition("inRoom", [](cu::Event *e, RType::Request::RoomsTab roomsList,
-                            std::vector<TextField *> rooms, TextField *rT, Menu *menu)
+    mainMenu.addTransition("inRoom", [](cu::Event *e,
+                           RType::Request::RoomsTab roomsList,
+                           std::vector<TextField *> rooms,
+                           TextField *rT, Menu *menu)
         {
-          (void) roomsList;
+          (void)roomsList;
             if (e->type == cu::Event::MouseButtonReleased)
                 for (auto it = rooms.begin(); it != rooms.end(); ++it)
-                  {
+                {
                     if ((*it)->getBackColor() != sf::Color::Transparent &&
                         (*it)->intersect(e->mouse.x, e->mouse.y))
                         {
@@ -375,7 +384,7 @@ void Menu::transitionToStates()
                 input->setText(tmp.substr(0, tmp.size() - 1));
                 return false;
             }
-            else if (e->text.unicode != '\r')
+            else if (e->text.unicode != '\r' && e->text.unicode != '\n')
                 input->setText(input->getText() +
                                static_cast<char>(e->text.unicode));
             return false;
@@ -418,7 +427,7 @@ void Menu::transitionToStates()
                 input->setText(tmp.substr(0, tmp.size() - 1));
                 return false;
             }
-            else if (e->text.unicode != '\r')
+            else if (e->text.unicode != '\r' && e->text.unicode != '\n')
                 input->setText(input->getText() +
                                static_cast<char>(e->text.unicode));
             return false;
@@ -443,7 +452,8 @@ void Menu::transitionToStates()
         return false;
     }, _event, &inputUserName, &back, this);
 
-    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back, Menu *menu)
+    inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
+                                        TextField *r, Menu *menu)
     {
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
@@ -454,19 +464,11 @@ void Menu::transitionToStates()
             menu->refreshRoomList();
             return true;
         }
-        return false;
-    }, _event, &back, this);
-
-    inRoom.addTransition("inRoom", [](cu::Event *e, TextField *r, Menu *menu)
-    {
         if (e->type == cu::Event::MouseButtonReleased &&
             r->intersect(e->mouse.x, e->mouse.y))
-        {
             menu->ready();
-            return true;
-        }
         return false;
-    }, _event, &readyField, this);
+    }, _event, &back, &readyField, this);
 }
 
 void Menu::setupGUIElements()
@@ -573,7 +575,6 @@ void Menu::init()
     _user.username = "LocalPlayer";
     _user.isReady = false;
 }
-
 void Menu::clearPlayers()
 {
     _playersList.clear();
