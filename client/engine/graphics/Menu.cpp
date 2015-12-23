@@ -1,7 +1,7 @@
 #include "Menu.hpp"
 
 Menu::Menu(unsigned int id, std::string const& name, int layer,
-           EntityManager* em, cu::Event* event, RType::NetworkTCP* network) :
+           EntityManager* em, cu::Event* event) :
            GameObject(id, name, layer),
            roomsTextField(15),
            playersInRoom(4),
@@ -24,7 +24,6 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     changeNameState = State("changeName");
     _ready = false;
     _isVisible = true;
-    _network = network;
 
     refresh.setBackColor(sf::Color(80, 80, 80));
     changeName.setBackColor(sf::Color(80, 80, 80));
@@ -38,18 +37,15 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     {
       if (i >= 10)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "toto", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(900, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
       else if (i >= 5)
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "tata", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(500, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
       else
       {
-          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "titi", 10);
-          roomsTextField[i]->setBackColor(sf::Color::Red);
+          roomsTextField[i] = new TextField(gu::Rect<float>(100, (i % 5 + 1) * 100, 300, 50), "", 10);
       }
     }
 
@@ -126,7 +122,7 @@ void Menu::swap(Menu& other)
 void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
-    _network->pushRequest(RType::Request(RType::Request::CL_LISTROOMS));
+    _network->pushToSend(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
 void Menu::createNewRoom(std::string const &roomName)
@@ -136,7 +132,7 @@ void Menu::createNewRoom(std::string const &roomName)
     std::cout << "Create room: " << roomName << std::endl;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", roomName);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::changeUserName(std::string const &username)
@@ -146,7 +142,7 @@ void Menu::changeUserName(std::string const &username)
     std::cout << "Change name: " << username << std::endl;
     request.setCode(RType::Request::CL_USERNAME);
     request.push<std::string>("username", username);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::joinRoom(RType::Request::Room room)
@@ -156,7 +152,7 @@ void Menu::joinRoom(RType::Request::Room room)
     std::cout << "Join room: " << room.name << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<unsigned int>("room_id", room.id);
-    _network->pushRequest(request);
+    _network->pushToSend(request);
 }
 
 void Menu::joinRoom(std::string const &room)
@@ -172,7 +168,7 @@ void Menu::joinRoom(std::string const &room)
 void Menu::ready()
 {
     _ready = true;
-    _network->pushRequest(RType::Request(RType::Request::CL_READY));
+    _network->pushToSend(RType::Request(RType::Request::CL_READY));
 }
 
 void Menu::addRoom(RType::Request::Room room)
@@ -184,13 +180,19 @@ void Menu::addRoom(RType::Request::Room room)
 void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
 {
     _roomsList = listRoom;
-    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
-        (*it)->setBackColor(sf::Color::Transparent);
-    for (int nb = 0; nb != 10; ++nb)
-    {
-        roomsTextField[nb]->setText(_roomsList[nb].name);
-        roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
-    }
+        for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+        {
+            (*it)->setBackColor(sf::Color::Transparent);
+            (*it)->clearText();
+        }
+        for (int  nb = 0; nb != 10; ++nb)
+        {
+            if (nb < static_cast<int>(_roomsList.size()))
+            {
+                roomsTextField[nb]->setText(_roomsList[nb].name);
+                roomsTextField[nb]->setBackColor(sf::Color(80, 80, 80));
+            }
+        }
 }
 
 void Menu::addPlayer(RType::Request::Player player)
@@ -369,6 +371,8 @@ void Menu::transitionToStates()
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
+            menu->_network->pushToSend(RType::Request
+                                            (RType::Request::CL_QUITROOM));
             menu->refreshRoomList();
             return true;
         }
@@ -431,6 +435,36 @@ namespace std
 void Menu::move()
 {
     _sm->move();
+    if (_network->sizeReceive() > 0)
+    {
+        RType::Request tmp = _network->popReceive();
+        switch (tmp.getCode())
+        {
+            case RType::Request::SE_LISTROOMS :
+                addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
+                break;
+            case RType::Request::SE_JOINROOM :
+                break;
+            case RType::Request::SE_QUITROOM :
+                break;
+            case RType::Request::SE_CLIENTRDY :
+                break;
+            case RType::Request::SE_CLINOTRDY :
+                break;
+            case RType::Request::SE_CLIUSRNM :
+                break;
+            case RType::Request::SE_ROOMINFO :
+                break;
+            case RType::Request::SE_GAMESTART :
+                break;
+            case RType::Request::SE_OK :
+                break;
+            case RType::Request::SE_KO :
+                break;
+            default :
+                break;
+        }
+    }
 }
 
 std::string const& Menu::getCurrentStateName() const
@@ -446,6 +480,8 @@ void Menu::init()
                                        gu::Rect<int>(0, 0, 1280, 720));
     _em->attachComponent<GUIManager>(this, "Manager");
 
+    auto tmp = _em->getByMask(TCPMask)[0];
+    _network = static_cast<GameObject *>(tmp)->getComponent<TCPView>();
     setupGUIElements();
     setupStates();
 }

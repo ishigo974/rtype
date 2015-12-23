@@ -12,7 +12,8 @@ TCPView::TCPView(unsigned int id, std::string const& name) : Component(id, name)
 
 TCPView::TCPView(TCPView const& other) : Component(other)
 {
-    _requests = other._requests;
+    _receive = other._receive;
+    _toSend  = other._toSend;
 }
 
 TCPView::TCPView(TCPView&& other) : TCPView(other)
@@ -36,29 +37,43 @@ void TCPView::swap(TCPView& other)
 {
     using std::swap;
 
-    swap(_requests, other._requests);
+    swap(_receive, other._receive);
+    swap(_toSend, other._toSend);
 }
 
 namespace std
 {
     template<>
-    void swap<TCPView>(TCPView &a, TCPView &b)
+    void swap<TCPView>(TCPView& a, TCPView& b)
     {
         a.swap(b);
     }
 }
 
-RType::Request TCPView::pop()
+RType::Request TCPView::popToSend()
 {
-    RType::Request tmp = _requests.front();
+    RType::Request tmp = _toSend.front();
 
-    _requests.pop_front();
+    _toSend.pop_front();
     return (tmp);
 }
 
-void TCPView::push(RType::Request const& request)
+void TCPView::pushToSend(RType::Request const& request)
 {
-    _requests.push_back(request);
+    _toSend.push_back(request);
+}
+
+RType::Request TCPView::popReceive()
+{
+    RType::Request tmp = _receive.front();
+
+    _receive.pop_front();
+    return (tmp);
+}
+
+void TCPView::pushReceive(RType::Request const& request)
+{
+    _receive.push_back(request);
 }
 
 RTypes::my_uint16_t TCPView::getMask() const
@@ -66,7 +81,12 @@ RTypes::my_uint16_t TCPView::getMask() const
     return Mask;
 }
 
-size_t TCPView::size() const
+size_t TCPView::sizeToSend() const
 {
-    return (_requests.size());
+    return (_toSend.size());
+}
+
+size_t TCPView::sizeReceive() const
+{
+    return (_receive.size());
 }

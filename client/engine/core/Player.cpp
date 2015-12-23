@@ -3,7 +3,9 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 #include "Bullet.hpp"
+#include "Mob.hpp"
 #include "ObjectPool.hpp"
+#include "AudioEffect.hpp"
 
 Player::Player()
 {
@@ -164,12 +166,19 @@ void		Player::checkDeath()
 
 void	Player::shoot()
 {
+
     BulletObject *bullet = _bullets->create("Bullet", 12);
     _activeBullets.push_back(bullet);
     Bullet *b = bullet->getComponent<Bullet>();
     b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
     b->setY(_transform->getPosition().Y());
     _shotTime = 0;
+    std::vector<Object *>sound = _entityManager->getByMask(SoundMask);
+    for (auto play : sound)
+    {
+        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                       ->setSoundToPlay("../res/laser1.wav");
+    }
 }
 
 void	Player::checkAvailableBullets()
@@ -212,8 +221,11 @@ void		Player::update(double elapsedtime)
     // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
 
-bool Player::handleMessage(Collider *)
+bool Player::handleMessage(Collider *o)
 {
-    _hp -= 1;
+    GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+
+    if (otherParent->getComponent<Mob>() != nullptr)
+        _hp -= 1;
     return (true);
 }

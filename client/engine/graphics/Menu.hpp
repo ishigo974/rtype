@@ -2,6 +2,7 @@
 # define MENU_HPP_
 
 # include <vector>
+# include "TCPView.hpp"
 # include "TextField.hpp"
 # include "GameObject.hpp"
 # include "State.hpp"
@@ -14,8 +15,7 @@
 class Menu : public GameObject
 {
 public:
-    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*,
-         RType::NetworkTCP* network);
+    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*);
     Menu(Menu const& other);
     Menu(Menu&& other);
     Menu& operator=(Menu other);
@@ -80,7 +80,7 @@ private:
     EntityManager	            *_em;
     bool		                _ready;
     bool		                _isVisible;
-    RType::NetworkTCP*	        _network;
+    TCPView*	                _network;
     RType::Request::RoomsTab    _roomsList;
     RType::Request::PlayersTab  _playersList;
 };
