@@ -31,6 +31,10 @@
       "path": "../res/dogfight.png",
       "repeated": true
   },
+  "opm": {
+      "path": "../res/opm.png",
+      "repeated": true
+  },
   "menu1": {
     "path": "../res/menu1.jpg",
     "repeated": false
