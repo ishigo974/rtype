@@ -8,6 +8,7 @@
 #include "Collider.hpp"
 #include "AudioEffect.hpp"
 #include "TCPView.hpp"
+#include "UDPView.hpp"
 
 /*
 ** Static variables
@@ -42,13 +43,12 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     loadMobTypesFromFile();
     loadMapsFromFile();
 
-     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
+    _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
     _em.attachComponent<UDPView>(_menu, "UDP");
      _menu->init();
 //     _menu->setVisible(false);
     _renderer.init();
-    _network.init();
 }
 
 RTypeGame::~RTypeGame()

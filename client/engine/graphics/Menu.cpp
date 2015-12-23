@@ -1,7 +1,7 @@
 #include "Menu.hpp"
 
 Menu::Menu(unsigned int id, std::string const& name, int layer,
-           EntityManager* em, cu::Event* event, RType::NetworkTCP* network) :
+           EntityManager* em, cu::Event* event) :
            GameObject(id, name, layer),
            roomsTextField(15),
            playersInRoom(4),
@@ -24,7 +24,6 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     changeNameState = State("changeName");
     _ready = false;
     _isVisible = true;
-    _network = network;
 
     refresh.setBackColor(sf::Color(80, 80, 80));
     changeName.setBackColor(sf::Color(80, 80, 80));

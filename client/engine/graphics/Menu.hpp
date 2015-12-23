@@ -14,8 +14,7 @@
 class Menu : public GameObject
 {
 public:
-    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*,
-         RType::NetworkTCP* network);
+    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*);
     Menu(Menu const& other);
     Menu(Menu&& other);
     Menu& operator=(Menu other);
