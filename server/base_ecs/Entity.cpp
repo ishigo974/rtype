@@ -31,7 +31,8 @@ namespace ECS
         _id(other._id), _mask(other._mask)
     {
         for (auto&& i : other._components)
-            _components[i.first] = std::unique_ptr<IComponent>(i.second->clone());
+            _components[i.first] =
+                std::unique_ptr<IComponent>(i.second->clone());
     }
 
     Entity&         Entity::operator=(Entity const& other)
@@ -42,7 +43,8 @@ namespace ECS
             _mask = other._mask;
             _components.clear();
             for (auto&& i : other._components)
-                _components[i.first] = std::unique_ptr<IComponent>(i.second->clone());
+                _components[i.first] =
+                    std::unique_ptr<IComponent>(i.second->clone());
         }
         return *this;
     }
