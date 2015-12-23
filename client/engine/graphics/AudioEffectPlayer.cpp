@@ -4,22 +4,6 @@
 
 void    AudioEffectPlayer::play(GameObject *obj)
 {
-    try
-    {
-        if (!_sounds.empty()
-            && _sounds.begin()->getStatus() == sf::Sound::Stopped
-            && _backgroundStart)
-        {
-            obj->getComponent<AudioEffect>()->setSoundToPlay("../res/music.wav");
-        }
-        _sounds.push_back(obj->getComponent<AudioEffect>()->soundToPlay());
-    }
-    catch (Exception::NotImplemented const&e)
-    {
-        return;
-    }
-    _sounds.back().play();
-    obj->getComponent<AudioEffect>()->clearSounds();
     for (std::list<sf::Sound>::iterator it = _sounds.begin();
          it != _sounds.end();)
     {
@@ -28,6 +12,27 @@ void    AudioEffectPlayer::play(GameObject *obj)
         else
             ++it;
     }
+    try
+    {
+        if ((!_sounds.empty()
+            && _sounds.begin()->getStatus() == sf::Sound::Stopped
+            && _backgroundStart) || _sounds.empty())
+        {
+            obj->getComponent<AudioEffect>()->setSoundToPlay("../res/music.wav");
+            _sounds.push_front(obj->getComponent<AudioEffect>()->soundToPlay());
+        }
+        else
+            _sounds.push_back(obj->getComponent<AudioEffect>()->soundToPlay());
+    }
+    catch (Exception::NotImplemented const&e)
+    {
+        return;
+    }
+    _sounds.front().setVolume(5);
+    if (_sounds.size() > 1)
+        _sounds.back().setVolume(0.5);
+    _sounds.back().play();
+    obj->getComponent<AudioEffect>()->clearSounds();
     _backgroundStart = true;
 }
 
