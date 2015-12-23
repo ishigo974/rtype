@@ -1,4 +1,3 @@
-#include <AudioEffect.hpp>
 #include "NetworkUDP.hpp"
 #include "ShootCommand.hpp"
 #include "Player.hpp"
@@ -22,7 +21,6 @@ void    ShootCommand::execute()
     std::vector<Object *> network = _entityManager
             ->getByMask(ComponentMask::UDPMask);
     RType::InGameEvent  event;
-    std::vector<Object *>sound = _entityManager->getByMask(SoundMask);
 
     for (auto obj : objs)
         static_cast<GameObject *>(obj)->getComponent<Player>()
@@ -31,12 +29,6 @@ void    ShootCommand::execute()
 
     //TODO: Change 1 to timestamp
     event.push<uint32_t>("time", 1);
-    for (auto play : sound)
-    {
-
-        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                       ->setSoundToPlay("../res/laser1.wav");
-    }
 }
 
 void    ShootCommand::undo()
