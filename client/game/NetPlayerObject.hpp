@@ -5,7 +5,7 @@
 #ifndef RTYPE_NETPLAYEROBJECT_HPP
 # define RTYPE_NETPLAYEROBJECT_HPP
 
-#include <EntityManager.hpp>
+# include <EntityManager.hpp>
 # include "GameObject.hpp"
 
 class NetPlayerObject : public GameObject

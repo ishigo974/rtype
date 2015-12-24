@@ -39,7 +39,7 @@ ACommand *CommandFactory::createCommand(RType::InGameEvent const& event)
             return (new NetShotCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
                                        false));
         case 307:
-            return (new NetSpawnCommand((*_gm), event.get<RTypes::my_uint8_t>("mob_id"),
+            return (new NetSpawnCommand(_gm, event.get<RTypes::my_uint8_t>("mob_id"),
                                         event.get<RTypes::my_uint32_t>("x"),
                                         event.get<RTypes::my_uint32_t>("y")));
 
