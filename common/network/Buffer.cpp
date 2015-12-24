@@ -40,7 +40,7 @@ uint8_t& Buffer::operator[](size_t index)
 {
     if (index >= _data.size())
         throw std::out_of_range("attempt to reach index " +
-                                std::to_string(index) + ", buffer size is " +
+                                std::to_string(index) + ", buffer sizeRecv is " +
                                 std::to_string(_data.size()));
     return _data[index];
 }

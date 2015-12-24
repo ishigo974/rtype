@@ -90,7 +90,7 @@ namespace RType
             size_t      dataSize;
             Request     request;
 
-            dataSize = test.first.size() + Request::dataSizes.at("size");
+            dataSize = test.first.size() + Request::dataSizes.at("sizeRecv");
             buffer.append<uint16_t>(test.second);
             buffer.append<uint32_t>(dataSize);
             buffer.append<uint32_t>(test.first.size());

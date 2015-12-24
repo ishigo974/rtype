@@ -34,7 +34,7 @@ namespace RType
             {SE_KO,         {}}
     };
     const Request::DataSizeMap      Request::dataSizes     = {
-            {"size",      sizeof(uint32_t)},
+            {"sizeRecv",      sizeof(uint32_t)},
             {"room_name", Request::variableSize},
             {"room_id",   sizeof(uint32_t)},
             {"username",  Request::variableSize},
@@ -197,7 +197,7 @@ namespace RType
             Buffer res;
 
             if (it == dataSizes.end())
-                throw Exception::NotImplemented("Unknown data size: " + arg);
+                throw Exception::NotImplemented("Unknown data sizeRecv: " + arg);
             if (arg == "rooms" || arg == "players")
             {
                 _data.insert(std::make_pair(it->first, tmp));

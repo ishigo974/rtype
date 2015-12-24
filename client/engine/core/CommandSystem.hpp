@@ -8,6 +8,8 @@
 # include "Event.hpp"
 # include "EntityManager.hpp"
 # include "Input.hpp"
+#include "CommandPipeline.hpp"
+#include "CommandFactory.hpp"
 
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> timestamp;
 
@@ -30,6 +32,8 @@ private:
     std::map<cu::Event::KeyEvent, ACommand::Action> _actions;
     Input                                           *_input;
     RType::NetworkSystem                            *_ns;
+    CommandPipeline                                 _pipeline;
+    CommandFactory                                  _factory;
 };
 
 #endif /* !COMMAND_SYSTEM_HPP_ */

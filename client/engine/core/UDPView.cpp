@@ -12,7 +12,7 @@ UDPView::UDPView(unsigned int id, std::string const& name) : Component(id, name)
 
 UDPView::UDPView(UDPView const& other) : Component(other)
 {
-    _requests = other._requests;
+    _receive = other._receive;
 }
 
 UDPView::UDPView(UDPView&& other) : UDPView(other)
@@ -36,29 +36,29 @@ void UDPView::swap(UDPView& other)
 {
     using std::swap;
 
-    swap(_requests, other._requests);
+    swap(_receive, other._receive);
 }
 
 namespace std
 {
     template<>
-    void swap<UDPView>(UDPView &a, UDPView &b)
+    void swap<UDPView>(UDPView& a, UDPView& b)
     {
         a.swap(b);
     }
 }
 
-RType::InGameEvent UDPView::pop()
+UDPView::Action UDPView::popReceive()
 {
-    RType::InGameEvent tmp = _requests.front();
+    UDPView::Action tmp = _receive.front();
 
-    _requests.pop_front();
+    _receive.pop_front();
     return (tmp);
 }
 
-void UDPView::push(RType::InGameEvent const& request)
+void UDPView::pushReceive(UDPView::Action dir)
 {
-    _requests.push_back(request);
+    _receive.push_back(dir);
 }
 
 RTypes::my_uint16_t UDPView::getMask() const
@@ -66,7 +66,25 @@ RTypes::my_uint16_t UDPView::getMask() const
     return (Mask);
 }
 
-size_t UDPView::size() const
+size_t UDPView::sizeRecv() const
 {
-    return (_requests.size());
+    return (_receive.size());
+}
+
+RType::InGameEvent UDPView::popToSend()
+{
+    auto tmp = _toSend.front();
+
+    _toSend.pop_front();
+    return (tmp);
+}
+
+void UDPView::pushToSend(RType::InGameEvent event)
+{
+    _toSend.push_back(event);
+}
+
+size_t UDPView::sizeToSend() const
+{
+    return (_toSend.size());
 }

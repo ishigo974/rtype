@@ -3,11 +3,11 @@
 
 # include "ACommand.hpp"
 
-class	MoveCommand : public ACommand
+class MoveCommand_ : public ACommand
 {
 public:
-    MoveCommand(EntityManager *entityManager, ACommand::Action direction);
-    virtual ~MoveCommand();
+    MoveCommand_(EntityManager *entityManager, ACommand::Action direction);
+    virtual ~MoveCommand_();
 
     virtual void	execute();
     virtual void	undo();
