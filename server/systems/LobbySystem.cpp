@@ -29,7 +29,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Lobby::Lobby()
+        Lobby::Lobby(Map::Collection const& maps) : _maps(maps)
         {
         }
 
@@ -113,6 +113,11 @@ namespace RType
         Lobby::RoomsMap const&     Lobby::getRooms() const
         {
             return _rooms;
+        }
+
+        Map::Collection const&      Lobby::getMaps() const
+        {
+            return _maps;
         }
 
         bool                Lobby::shouldAutoUpdate() const

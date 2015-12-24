@@ -31,7 +31,8 @@ namespace ECS
         _id(other._id), _mask(other._mask)
     {
         for (auto&& i : other._components)
-            _components[i.first] = std::unique_ptr<IComponent>(i.second->clone());
+            _components[i.first] =
+                std::unique_ptr<IComponent>(i.second->clone());
     }
 
     Entity&         Entity::operator=(Entity const& other)
@@ -42,7 +43,8 @@ namespace ECS
             _mask = other._mask;
             _components.clear();
             for (auto&& i : other._components)
-                _components[i.first] = std::unique_ptr<IComponent>(i.second->clone());
+                _components[i.first] =
+                    std::unique_ptr<IComponent>(i.second->clone());
         }
         return *this;
     }
@@ -70,7 +72,7 @@ namespace ECS
 
         if (it == _components.end())
             return false;
-        _mask &= ~mask; // TODO
+        _mask &= ~mask;
         ECS::EntityManager::getInstance()
             .removeCmpntEntityLink(it->second.get());
         return true;
@@ -83,7 +85,7 @@ namespace ECS
             IBehaviour*   b = dynamic_cast<IBehaviour*>(c.second.get());
 
             if (b != nullptr)
-            b->update();
+                b->update();
         }
     }
 

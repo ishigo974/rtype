@@ -3,6 +3,7 @@
 #include "ReadyCommand.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
+#include "GameComponent.hpp"
 #include "PositionComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
@@ -67,9 +68,9 @@ namespace RType
                 request.push<uint8_t>("player_id", room->getPlayerId(*_entity));
                 network->send(Server::responseOK);
                 room->broadcastTCP(request.toBuffer(), _entity);
+                if (room->allReady())
+                    startGame(room);
             }
-            if (room->allReady())
-                startGame(room);
         }
 
         void        Ready::undo()
@@ -92,26 +93,17 @@ namespace RType
         */
         void        Ready::startGame(Component::Room* room) const
         {
+            ECS::Entity&    e =
+                ECS::EntityManager::getInstance().getByCmpnt(room);
+
             room->setIsPlaying(true);
             room->broadcastTCP(RType::Request(RType::Request::SE_GAMESTART)
                             .toBuffer());
-            for (auto& test: *room)
-            {
-                Component::NetworkTCP*  tcp = test.second.first
-                    ->getComponent<Component::NetworkTCP>();
-
-                test.second.first
-                    ->addComponent(std::make_unique<Component::NetworkUDP>(
-                        tcp->getIpAddr())
-                    );
-                test.second.first
-                    ->addComponent(std::make_unique<Component::Position>(
-                            Component::Room::defaultPositions.at(test.first)
-                    ));
-                test.second.first
-                    ->addComponent(std::make_unique<Component::Ship>());
-            }
-            Server::display("Room '" + room->getRoomName() + "' is launching");
+            e.addComponent(std::make_unique<Component::Game>());
+            if (room->getMap() == nullptr) // TODO handle better
+                throw std::runtime_error("Room's map is not set");
+            e.getComponent<Component::Game>()->start(*room->getMap());
+            Server::display("Room '" + room->getRoomName() + "' launched");
         }
     }
 }
