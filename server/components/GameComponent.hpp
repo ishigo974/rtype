@@ -8,6 +8,7 @@
 # include "HRChrono.hpp"
 # include "MapParser.hpp"
 # include "RoomComponent.hpp"
+# include "GameClock.hpp"
 
 namespace RType
 {
@@ -21,12 +22,13 @@ namespace RType
 
         public:
             Game(Game const& other);
-            Game&                   operator=(Game const& other);
+            Game&                       operator=(Game const& other);
 
         public:
-            Map::Parser::Map&       retrieveMap();
-            void                    start(Map::Parser::Map const& map);
-            Time::HRChrono const&   getChrono() const;
+            Map::Parser::Map&           retrieveMap();
+            void                        start(Map::Parser::Map const& map);
+            Time::HRChrono const&       getChrono() const;
+            double                      getLastElapsed() const;
 
         public:
             virtual void                update();
@@ -45,6 +47,8 @@ namespace RType
             Time::HRChrono      _chrono;
             Component::Room*    _room;
             Map::Parser::Map    _map;
+            Time::GameClock     _clock;
+            double              _lag;
         };
     }
 }

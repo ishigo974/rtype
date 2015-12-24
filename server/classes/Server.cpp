@@ -104,6 +104,7 @@ namespace RType
                     onClientConnection();
                 _em.updateAll();
                 _sm.processAll();
+
                 checkDisconnected();
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);

@@ -3,7 +3,7 @@
 #include "ComponentsMasks.hpp"
 #include "Utils.hpp"
 #include "EntityManager.hpp"
-#include "MapBoundaries.hpp"
+#include "GameConfig.hpp"
 
 namespace RType
 {
@@ -80,11 +80,11 @@ namespace RType
                 em.getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
                 _movePattern(cu::Position(pos->getX(), pos->getY()),
-                             0.03); // TODO game->getElapsedTime
+                             _game->getLastElapsed());
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug
+            // std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {

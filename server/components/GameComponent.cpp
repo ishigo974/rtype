@@ -6,7 +6,7 @@
 #include "ShipComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
-#include "MapBoundaries.hpp"
+#include "GameConfig.hpp"
 
 namespace RType
 {
@@ -20,7 +20,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Game::Game() : _chrono(), _room(nullptr), _map()
+        Game::Game() : _chrono(), _room(nullptr), _map(), _lag(0)
         {
         }
 
@@ -32,7 +32,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _room(other._room), _map(other._map)
+            _chrono(other._chrono), _room(other._room),
+            _map(other._map), _clock(other._clock), _lag(other._lag)
         {
         }
 
@@ -43,6 +44,8 @@ namespace RType
                 _chrono = other._chrono;
                 _room = other._room;
                 _map = other._map;
+                _clock = other._clock;
+                _lag = other._lag;
             }
             return *this;
         }
@@ -50,13 +53,12 @@ namespace RType
         /*
         ** Public member functions
         */
-
         void                Game::update()
         {
-
+            _lag = (_clock.updateElapsedTime() * 100000); // tmp, elapsedtime trop petit
         }
 
-        Map::Parser::Map&       Game::retrieveMap()
+        Map::Parser::Map&   Game::retrieveMap()
         {
             return _map;
         }
@@ -89,6 +91,11 @@ namespace RType
             return _chrono;
         }
 
+        double              Game::getLastElapsed() const
+        {
+            return _lag;
+        }
+
         std::string         Game::getName() const
         {
             return "GameComponent";
@@ -106,11 +113,17 @@ namespace RType
 
         void                Game::clear()
         {
+            _chrono = Time::HRChrono();
+            _room = nullptr;
+            _map.first.clear();
+            _map.second.clear();
+            _clock = Time::GameClock();
+            _lag = 0;
         }
 
         std::string         Game::toString() const
         {
-            return ""; // TODO
+            return "Component::Game {}";
         }
     }
 }
