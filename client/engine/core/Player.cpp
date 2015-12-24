@@ -166,8 +166,8 @@ void		Player::checkDeath()
 
 void	Player::shoot()
 {
-
     BulletObject *bullet = _bullets->create("Bullet", 12);
+    bullet->init();
     _activeBullets.push_back(bullet);
     Bullet *b = bullet->getComponent<Bullet>();
     b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
