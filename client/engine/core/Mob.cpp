@@ -16,14 +16,11 @@ Mob::Mob() :
 {
 }
 
-Mob::Mob(unsigned int id, std::string const& name,
-         RType::MobType::IMobType const* mobtype) :
-    Behaviour(id, name),
-    _id(0), _name(""), _lives(0),
+Mob::Mob(unsigned int id, std::string const& name, RType::MobType::IMobType const*) :
+    Behaviour(id, name), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr)
 {
-    init(mobtype);
 }
 
 Mob::~Mob()
@@ -74,6 +71,10 @@ RTypes::my_uint16_t     Mob::getMask() const
 */
 void        Mob::init(RType::MobType::IMobType const* type)
 {
+    if (!_parent)
+        _parent = static_cast<GameObject *>(parent());
+    if (!_transform)
+        _transform = static_cast<GameObject *>(parent())->getComponent<Transform>();
     _id = type->getId();
     _name = type->getName();
     _lives = type->getNbLives();
@@ -90,7 +91,19 @@ bool        Mob::handleMessage(Collider *o)
         || otherParent->getComponent<Behaviour>() != nullptr
         || otherParent->getComponent<Bullet>()) && _lives != 0)
         _lives -= 1;
+    if (_lives == 0)
+        _available = true;
     return (true);
+}
+
+void		Mob::setX(float x)
+{
+    _transform->getPosition().setX(x);
+}
+
+void		Mob::setY(float y)
+{
+    _transform->getPosition().setY(y);
 }
 
 void		Mob::move(double elapsedTime)
@@ -134,6 +147,40 @@ void            Mob::removeLives(unsigned int nb)
         _lives = 0;
     else
         _lives -= nb;
+}
+
+bool                    Mob::getAvailable() const
+{
+    return _available;
+}
+
+void                    Mob::setAvailable(bool a)
+{
+    _available = a;
+}
+void                    Mob::setMovePattern(RType::MobType::MovePattern const & movePattern)
+{
+    _movePattern = movePattern;
+}
+
+void                    Mob::setSpriteFilePath(std::string const & spriteFilePath)
+{
+    _spriteFilePath = spriteFilePath;
+}
+
+void                    Mob::setName(std::string const & name)
+{
+    _name = name;
+}
+
+void                    Mob::setScoreValue(unsigned int scoreValue)
+{
+    _scoreValue = scoreValue;
+}
+
+void                    Mob::setLives(unsigned int lives)
+{
+    _lives = lives;
 }
 
 unsigned int            Mob::getMobId() const

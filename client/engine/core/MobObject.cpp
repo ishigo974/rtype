@@ -62,51 +62,33 @@ MobObject::~MobObject()
     _components.clear();
 }
 
-std::string	MobObject::toString() const
-{
-    std::stringstream ss;
-
-    ss << "MobObject {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tlayer: " << _layer
-    << "\n\tnbComponents: " << _components.size()
-    << "\n\tTransform: " << getComponent<Transform>()->toString()
-    << "\n}" << std::endl;
-
-    return (ss.str());
-}
-
 void	MobObject::deleteObject()
 {
-    Mob *b = this->getComponent<Mob>();
-    // b->setDirection(Bullet::Direction::DEFAULT);
-    // b->setEnabled(false);
-    // b->setAvailable(true);
-    // setVisible(false);
-    // b->setDamage(0);
-    // b->setHp(0);
-    // getComponent<Collider>()->setEnabled(false);
-    // TODO
+    Mob *m = this->getComponent<Mob>();
+    m->setLives(0);
+    m->setScoreValue(0);
+    // m->setSpriteFilePath("");
+    // m->setMovePattern();
+    m->setEnabled(false);
+    m->setAvailable(true);
+    setVisible(false);
+    getComponent<Collider>()->setEnabled(false);
 }
 
-void    MobObject::init()
+void    MobObject::create()
 {
-    // _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1",
-    //                                                 gu::Rect<int>(249, 105, 16, 8));
-    // _entityManager->attachComponent<Bullet>(this, "Bullet");
-    // _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
+    _entityManager->attachComponent<SpriteRenderer>(this, "Mob", "mob",
+                                                    gu::Rect<int>(1, 4, 32, 21));
+    _entityManager->attachComponent<Mob>(this, "Mob");
+    _entityManager->attachComponent<Collider>(this, "Mob collider", 32, 21);
 }
 
-void	MobObject::reset()
+void	MobObject::init(RType::MobType::IMobType const* mobtype)
 {
-    // Bullet *b = this->getComponent<Bullet>();
-    // b->init();
-    // b->setDirection(Bullet::Direction::RIGHT);
-    // b->setEnabled(true);
-    // b->setAvailable(false);
-    // setVisible(true);
-    // b->setDamage(1);
-    // b->setHp(1);
-    // getComponent<Collider>()->setEnabled(true);
+    Mob *m = this->getComponent<Mob>();
+    m->init(mobtype);
+    m->setEnabled(true);
+    m->setAvailable(false);
+    setVisible(true);
+    getComponent<Collider>()->setEnabled(true);
 }

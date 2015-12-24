@@ -7,7 +7,9 @@
 #include "Mob.hpp"
 #include "Collider.hpp"
 #include "AudioEffect.hpp"
+#include "MobSpawner.hpp"
 #include "TCPView.hpp"
+#include "UDPView.hpp"
 
 /*
 ** Static variables
@@ -97,6 +99,11 @@ void        RTypeGame::initGameSample()
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
+    GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
+    _em.attachComponent<UDPView>(mobSpawn, "Spawner UDPView");
+    _em.attachComponent<MobSpawner>(mobSpawn, "MobSpawner", &_em, &_mobTypes);
+    mobSpawn->getComponent<MobSpawner>()->init();
+
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
@@ -118,7 +125,7 @@ void        RTypeGame::handleGame()
     _lag = BigBen::getElapsedtime();
     _cs.processInput();
     _cs.processNetwork();
-    _ms.process();
+    // TODO retirer partout le mobsystem _ms.process();
     _physics.process(_fixedStep);
     _audio.process();
     while (_lag >= _fixedStep)

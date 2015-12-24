@@ -17,6 +17,7 @@ enum ComponentMask : RTypes::my_uint16_t
     UDPMask          = 512,
     MobMask          = 1024,
     SoundMask        = 2048,
+    MobSpawnerMask   = 4096
 };
 
 #endif //RTYPE_RENUMS_HPP

@@ -3,6 +3,7 @@
 
 # include "GameObject.hpp"
 # include "EntityManager.hpp"
+# include "IMobType.hpp"
 
 class MobObject : public GameObject
 {
@@ -18,13 +19,10 @@ public:
     virtual bool operator==(MobObject const& other);
     virtual bool operator!=(MobObject const& other);
 
-    std::string toString() const;
-
-    void init();
+    void init(RType::MobType::IMobType const* mobtype);
     void deleteObject();
     void swap(MobObject& other);
-    void reset();
-
+    void create();
 
 private:
     EntityManager *_entityManager;

@@ -5,13 +5,13 @@
 # include "Transform.hpp"
 # include "IMobType.hpp"
 # include "REnums.hpp"
+# include "GameObject.hpp"
 
 class Mob : public Behaviour
 {
 public:
     Mob();
-    Mob(unsigned int id, std::string const& name,
-        RType::MobType::IMobType const* mobtype);
+    Mob(unsigned int id, std::string const& name, RType::MobType::IMobType const* mobtype = nullptr);
     virtual ~Mob();
 
 public:
@@ -40,6 +40,17 @@ public:
     unsigned int                    getScoreValue() const;
     std::string const&              getSpriteFilePath() const;
     RType::MobType::MovePattern const&     getMovePattern() const;
+    bool                            getAvailable() const;
+
+    void    setName(std::string const & name);
+    void    setLives(unsigned int lives);
+    void    setScoreValue(unsigned int scoreValue);
+    void    setSpriteFilePath(std::string const& spriteFilePath);
+    void    setMovePattern(RType::MobType::MovePattern const& movePattern);
+    void    setAvailable(bool a);
+    void    setX(float x);
+    void    setY(float y);
+
     std::string                     toString() const;
     virtual RTypes::my_uint16_t      getMask() const;
     static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
@@ -55,6 +66,8 @@ protected:
     std::string             _spriteFilePath;
     RType::MobType::MovePattern    _movePattern;
     Transform*              _transform;
+    GameObject*              _parent;
+    bool                     _available;
 };
 
 #endif /* !MOB_HPP_ */
