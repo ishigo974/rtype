@@ -17,11 +17,11 @@ namespace RType
     NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr,
                                  short int tcp, short int udpPort)
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
-              _connector(addr, tcp), _udpSock(udpPort)
+              _connector(addr, tcp), _udpSock(udpPort + 1), _addr(addr)
     {
-        (void) _entityManager;
         _udpSock.setTimeoutSec(0);
         _udpSock.setTimeoutUsec(1000);
+        _udpSock.bind();
         _connector.connect();
         SocketMonitor::getInstance().registerSocket(&_connector);
     }
@@ -88,9 +88,11 @@ namespace RType
         catch (std::runtime_error const&)
         {
             _udpSock.close();
+            // throw std::runtime_error("Receive error");
             //TODO Send UI disconnection
         }
         _udpObj.receive(receive);
+        // std::cout << receive.size() << std::endl;
 
         try
         {

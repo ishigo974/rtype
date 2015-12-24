@@ -7,7 +7,7 @@
 #include "UDPView.hpp"
 
 CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
-        : _factory(static_cast<GameManager *>(entityManager->getByTag("GameManager")))
+        : _factory(entityManager)
 {
     _input         = i;
     _entityManager = entityManager;

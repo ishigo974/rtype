@@ -111,6 +111,8 @@ void        RTypeGame::initGameSample()
     GameObject *df = _em.createEntity<GameObject>("df", -4);
     GameObject *opm = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
+    GameManager *gm = _em.createEntity<GameManager>("gm", 2);
+    _em.tagObject(gm, "GameManager");
     AudioEffect*    audio;
 
     if (_mobTypes.empty())

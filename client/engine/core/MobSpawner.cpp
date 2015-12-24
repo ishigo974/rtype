@@ -114,7 +114,6 @@ void		              MobSpawner::update(double)
     }
     if (_udpView->sizeRecv())
     {
-        std::cout << _udpView->sizeRecv() << std::endl;
         event = _udpView->popReceive();
     }
     try {
