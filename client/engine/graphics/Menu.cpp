@@ -197,11 +197,17 @@ void Menu::joinRoom(std::string const &roomName)
 
 void Menu::ready()
 {
-    _ready = true;
-    _network->pushToSend(RType::Request(RType::Request::CL_READY));
-    for (auto &player : _playersList)
+    bool toSet;
+
+    toSet = (_ready == false);
+    _ready = toSet;
+    if (toSet == true)
+        _network->pushToSend(RType::Request(RType::Request::CL_READY));
+    else
+        _network->pushToSend(RType::Request(RType::Request::CL_NOTREADY));
+    for (auto& player : _playersList)
         if (player.id == _user.id)
-            player.isReady = true;
+            player.isReady = toSet;
     addPlayerList(_playersList);
 }
 
@@ -300,16 +306,15 @@ void Menu::setVisible(bool visible)
 
 void Menu::deletePlayer(uint8_t id)
 {
-    (void)id;
-//    for (auto it = _playersList.begin(); it != _playersList.end(); ++it)
-//    {
-//        if (it->id == id)
-//        {
-//            _playersList.erase(it);
-//            return ;
-//        }
-//    }
-//    addPlayerList(_playersList);
+    for (auto it = _playersList.begin(); it != _playersList.end(); ++it)
+    {
+        if (it->id == id)
+        {
+            _playersList.erase(it);
+            break ;
+        }
+    }
+    addPlayerList(_playersList);
 }
 
 void Menu::transitionToStates()
@@ -538,8 +543,10 @@ void Menu::update()
                 userReady(tmp);
                 break;
             case RType::Request::SE_CLINOTRDY :
+                playerNotReady(tmp.get<uint8_t>("player_id"));
                 break;
             case RType::Request::SE_CLIUSRNM :
+                changePlayerName(tmp);
                 break;
             case RType::Request::SE_ROOMINFO :
                 _user.id = tmp.get<uint8_t>("player_id");
@@ -582,4 +589,30 @@ void Menu::init()
 void Menu::clearPlayers()
 {
     _playersList.clear();
+}
+
+void Menu::changePlayerName(RType::Request request)
+{
+    for (auto &player : _playersList)
+    {
+        if (player.id == request.get<uint8_t>("player_id"))
+        {
+            player.username = request.get<std::string>("username");
+            break ;
+        }
+    }
+    addPlayerList(_playersList);
+}
+
+void Menu::playerNotReady(uint8_t id)
+{
+    for (auto &player : _playersList)
+    {
+        if (player.id == id)
+        {
+            player.isReady = false;
+            break ;
+        }
+    }
+    addPlayerList(_playersList);
 }
