@@ -16,9 +16,9 @@ namespace RType
 
     NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr, short int tcp, short int udpPort)
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
-              _connector(addr, tcp), _udpSock(udpPort)
+              _connector(addr, tcp), _udpSock(udpPort), _addr(addr)
     {
-        (void)_entityManager;
+        (void) _entityManager;
         _udpSock.setTimeoutSec(0);
         _udpSock.setTimeoutUsec(1000);
         _connector.connect();

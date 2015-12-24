@@ -11,8 +11,6 @@ public:
     PlayerObject(unsigned int _id, std::string const& _name, int _layer, EntityManager *manager = nullptr);
     virtual ~PlayerObject();
 
-    PlayerObject(unsigned int _id, std::string const& _name, int _layer);
-
     PlayerObject(PlayerObject const& other);
     PlayerObject(PlayerObject&& other);
     PlayerObject& operator=(PlayerObject other);

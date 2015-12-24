@@ -27,6 +27,7 @@ endif ()
 # -------------- #
 
 include_directories(lib)
+include_directories(game)
 include_directories(engine/core)
 include_directories(engine/graphics)
 include_directories(engine/network/client_protocol)
@@ -43,21 +44,22 @@ if (UNIX)
 endif ()
 
 file(GLOB source_files
+        game/*.cpp
         engine/core/*.cpp
-        engine/core/*.hpp
+#        engine/core/*.hpp
         engine/graphics/*.cpp
-        engine/graphics/*.hpp
+#        engine/graphics/*.hpp
         engine/network/client_protocol/*.cpp
-        engine/network/client_protocol/*.hpp
-        lib/*.hpp
+#        engine/network/client_protocol/*.hpp
+#        lib/*.hpp
         ../common/network/*.cpp
-        ../common/network/*.hpp
+#        ../common/network/*.hpp
         ../common/exceptions/*.cpp
-        ../common/exceptions/*.hpp
+#        ../common/exceptions/*.hpp
         ../common/classes/*.cpp
-        ../common/classes/*.hpp
+#        ../common/classes/*.hpp
         ../common/utils/*.cpp
-        ../common/utils/*.hpp
+#        ../common/utils/*.hpp
         )
 
 if (UNIX)
