@@ -11,7 +11,7 @@ namespace ECS
     virtual ~IBehaviour() {}
 
   public:
-    virtual void    update() = 0;
+    virtual void    update(double lastElapsed) = 0;
   };
 }
 

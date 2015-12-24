@@ -7,6 +7,7 @@
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
 #include "GameConfig.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -20,7 +21,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Game::Game() : _chrono(), _room(nullptr), _map(), _lag(0)
+        Game::Game() : _chrono(), _room(nullptr), _map()
         {
         }
 
@@ -33,7 +34,7 @@ namespace RType
         */
         Game::Game(Game const& other) :
             _chrono(other._chrono), _room(other._room),
-            _map(other._map), _clock(other._clock), _lag(other._lag)
+            _map(other._map)
         {
         }
 
@@ -44,8 +45,6 @@ namespace RType
                 _chrono = other._chrono;
                 _room = other._room;
                 _map = other._map;
-                _clock = other._clock;
-                _lag = other._lag;
             }
             return *this;
         }
@@ -53,9 +52,8 @@ namespace RType
         /*
         ** Public member functions
         */
-        void                Game::update()
+        void                Game::update(double)
         {
-            _lag = (_clock.updateElapsedTime() * 100000); // tmp, elapsedtime trop petit
         }
 
         Map::Parser::Map&   Game::retrieveMap()
@@ -86,14 +84,35 @@ namespace RType
             _chrono.start();
         }
 
+        void                Game::updateElapsedTime()
+        {
+            Component::Room*    room =
+                ECS::EntityManager::getInstance().getByCmpnt(this)
+                    .getComponent<Component::Room>();
+
+            if (room == nullptr)
+                Server::display("Warning: Trying to update a game's elapsed "
+                                "time without room");
+            _elapsedTime = 0;
+            for (auto& entry: *room)
+            {
+                Component::Ship*    ship =
+                    entry.second.first->getComponent<Component::Ship>();
+
+                _elapsedTime += ship->getElapsedTime();
+            }
+            _elapsedTime /= room->size();
+            std::cout << "elapsed " << _elapsedTime << std::endl;
+        }
+
         Time::HRChrono const&   Game::getChrono() const
         {
             return _chrono;
         }
 
-        double              Game::getLastElapsed() const
+        double              Game::getElapsedTime() const
         {
-            return _lag;
+            return _elapsedTime;
         }
 
         std::string         Game::getName() const
@@ -117,8 +136,6 @@ namespace RType
             _room = nullptr;
             _map.first.clear();
             _map.second.clear();
-            _clock = Time::GameClock();
-            _lag = 0;
         }
 
         std::string         Game::toString() const

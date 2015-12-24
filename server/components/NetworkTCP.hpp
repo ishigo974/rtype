@@ -41,7 +41,7 @@ namespace RType
             std::string         getIpAddr() const;
 
         public:
-            virtual void        update();
+            virtual void        update(double lastElapsed);
 
         public:
             virtual std::string         getName() const;

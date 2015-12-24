@@ -62,7 +62,7 @@ namespace RType
         /*
         ** Public member functions
         */
-        void        Room::update()
+        void        Room::update(double)
         {
             auto it = _players.begin();
 

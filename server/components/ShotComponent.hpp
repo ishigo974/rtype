@@ -27,7 +27,7 @@ namespace RType
             Shot&                       operator=(Shot const& other);
 
         public:
-            virtual void                update();
+            virtual void                update(double lastElapsed);
 
         public:
             Type                        getType() const;

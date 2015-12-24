@@ -122,7 +122,7 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.20);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.3);
 
     _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.50);
@@ -145,7 +145,8 @@ void        RTypeGame::initGameSample()
 
 void        RTypeGame::handleGame()
 {
-    _lag = BigBen::getElapsedtime();
+    _lag += BigBen::getElapsedtime();
+    std::cout << _lag << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _ms.process();

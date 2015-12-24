@@ -28,10 +28,11 @@ namespace RType
             Map::Parser::Map&           retrieveMap();
             void                        start(Map::Parser::Map const& map);
             Time::HRChrono const&       getChrono() const;
-            double                      getLastElapsed() const;
+            double                      getElapsedTime() const;
+            void                        updateElapsedTime();
 
         public:
-            virtual void                update();
+            virtual void                update(double lastElapsed);
 
         public:
             virtual std::string         getName() const;
@@ -47,8 +48,7 @@ namespace RType
             Time::HRChrono      _chrono;
             Component::Room*    _room;
             Map::Parser::Map    _map;
-            Time::GameClock     _clock;
-            double              _lag;
+            double              _elapsedTime;
         };
     }
 }

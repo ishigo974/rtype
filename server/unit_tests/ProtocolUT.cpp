@@ -417,6 +417,25 @@ namespace RType
         UT_ASSERT(event.get<uint32_t>("y") == 128);
         UT_ASSERT(event.get<uint32_t>("time") == 123123);
         UT_ASSERT(event.toBuffer() == buffer);
+
+        // elapsed time
+        double  elapsed = 0.0215937;
+
+        buffer.clear();
+        buffer.append<uint32_t>(123);
+        buffer.append<uint16_t>(InGameEvent::CL_ELAPSEDTIME);
+        buffer.append<uint32_t>(sizeof(uint64_t));
+        buffer.append<double>(elapsed);
+        event = InGameEvent(buffer);
+        UT_ASSERT(event.getId() == 123);
+        UT_ASSERT(event.getCode() == InGameEvent::CL_ELAPSEDTIME);
+        UT_ASSERT(event.get<double>("elapsed_time") == elapsed);
+        event.clear();
+        event.setId(123);
+        event.setCode(InGameEvent::CL_ELAPSEDTIME);
+        event.push<double>("elapsed_time", elapsed);
+        UT_ASSERT(event.get<double>("elapsed_time") == elapsed);
+        UT_ASSERT(event.toBuffer() == buffer);
     }
 
     /*

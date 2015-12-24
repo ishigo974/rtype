@@ -7,6 +7,7 @@
 
 # include <vector>
 # include <string>
+# include <cstring>
 // # include <stdint.h>
 #include <iostream>
 
@@ -42,18 +43,7 @@ public:
         T      ret  = 0;
         size_t size = sizeof(T);
 
-        while (size > 0)
-        {
-            ret = ret << 8;
-            if (!isBigEndian())
-            {
-                ret = ret | _data[offset];
-                ++offset;
-            }
-            else
-                ret = ret | _data[offset + size - 1];
-            --size;
-        }
+        std::memcpy(&ret, _data.data() + offset, size);
         return ret;
     }
 
@@ -67,30 +57,17 @@ public:
     template<typename T>
     void append(T const& data)
     {
-        uint8_t tmp;
-        size_t  i = 0;
+        size_t  size = _data.size();
 
-        while (i < sizeof(T))
-        {
-            tmp = (data >> (8 * (i)));
-            _data.push_back(tmp);
-            ++i;
-        }
+        _data.resize(size + sizeof(data));
+        std::memcpy(_data.data() + size, &data, sizeof(T));
     }
 
     template<typename T>
     void setData(T const& data)
     {
-        uint8_t tmp;
-        size_t  i = 0;
-
-        _data.erase(_data.begin(), _data.end());
-        while (i < sizeof(T))
-        {
-            tmp = data >> (8 * (i));
-            _data.push_back(tmp);
-            ++i;
-        }
+        _data.clear();
+        append(data);
     }
 
     template<typename T>
@@ -99,9 +76,6 @@ public:
         _data.clear();
         append(data, size);
     }
-
-protected:
-    bool isBigEndian() const;
 
 private:
     std::vector<uint8_t> _data;

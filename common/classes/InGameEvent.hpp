@@ -25,6 +25,7 @@ namespace RType
             SE_MOBSPAWNED  = 307,
             SE_INPUTERROR  = 501,
             SE_PLYRDISCONN = 502,
+            CL_ELAPSEDTIME = 100,
             CL_PLAYERUP    = 201,
             CL_PLAYERDOWN  = 202,
             CL_PLAYERLEFT  = 203,

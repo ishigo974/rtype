@@ -97,6 +97,8 @@ find_package(SFML 2 REQUIRED audio graphics window system)
 if(UNIX)
     set(Boost_INCLUDE_DIR "/usr/local/include")
     set(Boost_LIBRARY_DIR "/usr/local/lib")
+#    set(Boost_INCLUDE_DIR "/usr/include")
+#    set(Boost_LIBRARY_DIR "/usr/lib")
 endif()
 
 if(WIN32)

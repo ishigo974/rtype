@@ -78,14 +78,14 @@ namespace ECS
         return true;
     }
 
-    void              Entity::update()
+    void              Entity::update(double lastElapsed)
     {
         for (auto& c: _components)
         {
             IBehaviour*   b = dynamic_cast<IBehaviour*>(c.second.get());
 
             if (b != nullptr)
-                b->update();
+                b->update(lastElapsed);
         }
     }
 

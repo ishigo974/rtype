@@ -58,7 +58,7 @@ void                Buffer::consume(size_t size)
     if (size > _data.size())
     {
         _data.erase(_data.begin(), _data.end());
-        return;
+        return ;
     }
     _data.erase(_data.begin(), _data.begin() + size);
 }
@@ -133,13 +133,4 @@ void                Buffer::setData(std::string const& data)
 {
     _data.erase(_data.begin(), _data.end());
     _data.assign(data.begin(), data.end());
-}
-
-bool                Buffer::isBigEndian() const
-{
-    uint16_t i = 1;
-
-    if ((i >> 8) == 0)
-        return true;
-    return false;
 }

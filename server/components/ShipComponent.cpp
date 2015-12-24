@@ -10,16 +10,17 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Ship::mask          = Component::MASK_SHIP;
-        const unsigned int          Ship::defaultLives  = 1;
-        const unsigned int          Ship::usecFireDelay = 500000;
+        const ECS::ComponentMask    Ship::mask              = Component::MASK_SHIP;
+        const unsigned int          Ship::defaultLives      = 1;
+        const unsigned int          Ship::usecFireDelay     = 500000;
+        const double                Ship::dftElapsedTime    = 0.02;
 
         /*
         ** Constructor/Destructor
         */
         Ship::Ship() :
             _isFiring(false), _shotType(Shot::NORMAL),
-            _lives(defaultLives), _score(0)
+            _lives(defaultLives), _score(0), _elapsedTime(dftElapsedTime)
         {
         }
 
@@ -32,7 +33,8 @@ namespace RType
         */
         Ship::Ship(Ship const& other) :
             _isFiring(other._isFiring), _shotType(other._shotType),
-            _lives(other._lives), _score(other._score)
+            _lives(other._lives), _score(other._score),
+            _elapsedTime(other._elapsedTime)
         {
         }
 
@@ -44,6 +46,7 @@ namespace RType
                 _shotType = other._shotType;
                 _lives = other._lives;
                 _score = other._score;
+                _elapsedTime = other._elapsedTime;
             }
             return *this;
         }
@@ -51,7 +54,7 @@ namespace RType
         /*
         ** Public member functions
         */
-        void                Ship::update()
+        void                Ship::update(double)
         {
             ECS::Entity&            entity =
                 ECS::EntityManager::getInstance().getByCmpnt(this);
@@ -110,9 +113,19 @@ namespace RType
                 _score -= nb;
         }
 
+        void                Ship::setElapsedTime(double elapsedTime)
+        {
+            _elapsedTime = elapsedTime;
+        }
+
         bool                Ship::isFiring() const
         {
             return _isFiring;
+        }
+
+        double              Ship::getElapsedTime() const
+        {
+            return _elapsedTime;
         }
 
         Shot::Type          Ship::getShotType() const
@@ -151,6 +164,7 @@ namespace RType
             _shotType = Shot::NORMAL;
             _lives = defaultLives;
             _score = 0;
+            _elapsedTime = dftElapsedTime;
         }
 
         std::string         Ship::toString() const
@@ -160,6 +174,7 @@ namespace RType
                    "\n\t_shotType: " + std::to_string(_shotType) +
                    "\n\t_lives: " + std::to_string(_lives) +
                    "\n\t_score: " + std::to_string(_score) +
+                   "\n\t_elapsedTime: " + std::to_string(_elapsedTime) +
                    "\n}\n";
         }
     }

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "HRChrono.hpp"
 
 namespace Time

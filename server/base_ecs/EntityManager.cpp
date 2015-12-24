@@ -127,13 +127,13 @@ namespace ECS
         return res;
     }
 
-    void                EntityManager::updateAll()
+    void                EntityManager::updateAll(double lastElapsed)
     {
         for (auto& id: _toDestroy)
             destroy(id);
         _toDestroy.clear();
         for (auto& entity: _actives)
-            entity.second->update();
+            entity.second->update(lastElapsed);
     }
 
     void              EntityManager::clean()

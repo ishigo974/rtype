@@ -46,7 +46,7 @@ namespace ECS
         Entity&                 get(unsigned int id) const;
         EntityCollection        getByMask(ComponentMask mask) const;
         Entity&                 getByCmpnt(IComponent const* cmp) const;
-        void                    updateAll();
+        void                    updateAll(double lastElapsed);
         void                    clean();
         void                    addCmpntEntityLink(IComponent const* cmpnt,
                                                    Entity const& e);

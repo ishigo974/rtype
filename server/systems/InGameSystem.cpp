@@ -13,12 +13,13 @@ namespace RType
         const size_t                InGame::bufferSize = 65000;
         const InGame::EventCmdMap   InGame::cmdsNames =
         {
-            { InGameEvent::CL_PLAYERUP,     "MoveCommand"   },
-            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"   },
-            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"   },
-            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"   },
-            { InGameEvent::CL_SHOTSTART,    "ShotCommand"   },
-            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"   }
+            { InGameEvent::CL_PLAYERUP,     "MoveCommand"       },
+            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"       },
+            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"       },
+            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"       },
+            { InGameEvent::CL_SHOTSTART,    "ShotCommand"       },
+            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"       },
+            { InGameEvent::CL_ELAPSEDTIME,  "ElapsedCommand"    }
         };
 
         /*
@@ -73,7 +74,12 @@ namespace RType
                 std::cout << event << std::endl;
             }
             if (udp->isToSend())
-                _socket.sendTo(udp->popToSend(), udp->getIpAddr());
+            {
+                Buffer b = udp->popToSend();
+
+                _socket.sendTo(b, udp->getIpAddr());
+                std::cout << "Send " << b.size() << " to " << udp->getIpAddr() << std::endl;
+            }
         }
 
         ECS::ComponentMask   InGame::getMask() const
