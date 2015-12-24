@@ -8,12 +8,15 @@
 #include "NetShotCommand.hpp"
 #include "NetSpawnCommand.hpp"
 
-CommandFactory::CommandFactory(GameManager *gm)
-        : _gm(gm)
+CommandFactory::CommandFactory(EntityManager *em)
+        : _em(em)
 { }
 
 ACommand *CommandFactory::createCommand(RType::InGameEvent const& event)
 {
+    if ((_gm = static_cast<GameManager *>(_em->getByTag("GameManager"))) == nullptr)
+        throw (std::logic_error("Could not find GameManager"));
+
     switch (event.getCode())
     {
         case 301:
