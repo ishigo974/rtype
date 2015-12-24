@@ -41,7 +41,7 @@ protected:
     int            getHp() const;
     std::string    toString() const;
 
-    std::vector<BulletObject *> getActiveBullets() const;
+    const std::vector<BulletObject *> &getActiveBullets() const;
 
 protected:
     GameObject                          *_parent;

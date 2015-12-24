@@ -5,6 +5,7 @@
 # include "ComponentMask.hpp"
 # include "IBehaviour.hpp"
 # include "IMobType.hpp"
+# include "GameComponent.hpp"
 
 namespace RType
 {
@@ -14,7 +15,7 @@ namespace RType
         {
         public:
             Mob();
-            Mob(MobType::IMobType const* type);
+            Mob(MobType::IMobType const* type, Component::Game* game = nullptr);
             virtual ~Mob();
 
         public:
@@ -23,11 +24,12 @@ namespace RType
 
         public:
             void            init(MobType::IMobType const* type);
-            virtual void    update();
+            void            update();
 
         public:
             void            addLives(unsigned int nb = 1);
             void            removeLives(unsigned int nb = 1);
+            void            setGame(Component::Game* game);
 
         public:
             unsigned int                    getId() const;
@@ -36,6 +38,7 @@ namespace RType
             unsigned int                    getScoreValue() const;
             std::string const&              getSpriteFilePath() const;
             MobType::MovePattern const&     getMovePattern() const;
+            Component::Game*                getGame() const;
 
         public:
             virtual std::string         getName() const;
@@ -54,6 +57,8 @@ namespace RType
             unsigned int            _scoreValue;
             std::string             _spriteFilePath;
             MobType::MovePattern    _movePattern;
+            Component::Game*        _game;
+            int                     _state;
         };
     }
 }

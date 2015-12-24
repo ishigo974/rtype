@@ -107,5 +107,5 @@ void	AudioEffect::clearSounds()
 
 void AudioEffect::restartBackgroud()
 {
-	_sounds["../res/music.wav"] = true;
+	_sounds["../res/OnePunch.wav"] = true;
 }

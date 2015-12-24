@@ -9,6 +9,7 @@
 # include "ComponentMask.hpp"
 # include "Buffer.hpp"
 # include "PositionComponent.hpp"
+# include "MapParser.hpp"
 
 namespace RType
 {
@@ -23,7 +24,7 @@ namespace RType
                                         Component::Position>        PlayerPos; // TODO MOVE
 
         public:
-            Room();
+            Room(Map::Parser::Map const* map = nullptr);
             virtual ~Room();
 
         public:
@@ -43,6 +44,8 @@ namespace RType
                                           ECS::Entity const* except = nullptr);
             bool                        allReady() const;
             void                        setIsPlaying(bool isPlaying);
+            void                        setMap(Map::Parser::Map const* map);
+
 
         public:
             std::string const&          getRoomName() const;
@@ -51,6 +54,7 @@ namespace RType
             std::string                 getPlayersNames() const;
             unsigned int                size() const;
             PlayersMap const&           getPlayersMap() const;
+            Map::Parser::Map const*     getMap() const;
             bool                        isPlaying() const;
             PlayersMap::const_iterator  begin() const;
             PlayersMap::const_iterator  end() const;
@@ -75,6 +79,7 @@ namespace RType
             std::string                 _name;
             PlayersMap                  _players;
             bool                        _isPlaying;
+            Map::Parser::Map const*     _map;
         };
     }
 }

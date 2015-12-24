@@ -117,7 +117,7 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(double elapsedtime)
 {
-    float		speed = 0.75f;
+    float		speed = 1.25f;
 
     if (_multiple)
     {
@@ -132,23 +132,23 @@ void		Player::move(double elapsedtime)
     switch (_action.front())
     {
         case ACommand::UP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - speed * elapsedtime);
+            _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::DOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + speed * elapsedtime);
+            _transform->getPosition().setY(_transform->getPosition().Y() + speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::LEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - speed * elapsedtime);
+            _transform->getPosition().setX(_transform->getPosition().X() - speed * static_cast<float>(elapsedtime));
             break;
         case ACommand::RIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + speed * elapsedtime);
+            _transform->getPosition().setX(_transform->getPosition().X() + speed * static_cast<float>(elapsedtime));
             break;
         default:
             break;
     }
 }
 
-std::vector<BulletObject *>	Player::getActiveBullets() const
+const std::vector<BulletObject *>	&Player::getActiveBullets() const
 {
     return _activeBullets;
 }
@@ -209,7 +209,7 @@ void		Player::update(double elapsedtime)
     checkAvailableBullets();
     while (_action.size() > 0)
     {
-        if (_action.front() == ACommand::SHOOT && _shotTime >= 200)
+        if (_action.front() == ACommand::SHOOT && _shotTime >= 80)
             this->shoot();
         else
             this->move(elapsedtime);

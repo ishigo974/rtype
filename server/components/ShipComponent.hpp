@@ -3,14 +3,15 @@
 
 # include <string>
 # include "ComponentMask.hpp"
-# include "IComponent.hpp"
+# include "IBehaviour.hpp"
 # include "ShotComponent.hpp"
+# include "HRChrono.hpp"
 
 namespace RType
 {
     namespace Component
     {
-        class Ship : public ECS::IComponent
+        class Ship : public ECS::IBehaviour
         {
         public:
             Ship();
@@ -19,6 +20,9 @@ namespace RType
         public:
             Ship(Ship const& other);
             Ship&           operator=(Ship const& other);
+
+        public:
+            virtual void    update();
 
         public:
             void            setIsFiring(bool isFiring);
@@ -44,12 +48,14 @@ namespace RType
         public:
             static const ECS::ComponentMask     mask;
             static const unsigned int           defaultLives;
+            static const unsigned int           usecFireDelay;
 
         protected:
             bool            _isFiring;
             Shot::Type      _shotType;
             unsigned int    _lives;
             unsigned int    _score;
+            Time::HRChrono  _chrono;
         };
     }
 }

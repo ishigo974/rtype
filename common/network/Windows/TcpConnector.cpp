@@ -60,7 +60,7 @@ std::string TcpConnector::toString() const
     ss += "\n\tSocket ";
     ss += this->_socket;
     ss += "\n\tPort ";
-    ss += this->_port;
+    ss += std::to_string(_port);
     ss += "\n}\n";
 
     return ss;

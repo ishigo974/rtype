@@ -60,6 +60,8 @@ namespace RType
             std::string     _path;
             std::ifstream   _stream;
         };
+
+        typedef std::vector<Parser::Map>    Collection;
     }
 }
 

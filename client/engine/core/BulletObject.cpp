@@ -89,7 +89,7 @@ void	BulletObject::deleteObject()
     getComponent<Collider>()->setEnabled(false);
 }
 
-void    BulletObject::init()
+void    BulletObject::create()
 {
     _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1",
                                                     gu::Rect<int>(249, 105, 16, 8));
@@ -97,7 +97,7 @@ void    BulletObject::init()
     _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
 }
 
-void	BulletObject::reset()
+void	BulletObject::init()
 {
     Bullet *b = this->getComponent<Bullet>();
     b->init();

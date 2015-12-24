@@ -36,6 +36,12 @@ namespace ECS
         void                process(ComponentMask mask) const;
         void                update(ComponentMask mask) const;
 
+        template <typename SystemType>
+        SystemType*         get(std::string const& name)
+        {
+            return dynamic_cast<SystemType*>(_systems.at(name).get());
+        }
+
     public:
         void                registerSystem(UniqueSystemPtr system);
         bool                removeSystem(std::string const& name);
