@@ -2,6 +2,7 @@
 # define MENU_HPP_
 
 # include <vector>
+# include "TCPView.hpp"
 # include "TextField.hpp"
 # include "GameObject.hpp"
 # include "State.hpp"
@@ -14,8 +15,7 @@
 class Menu : public GameObject
 {
 public:
-    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*,
-         RType::NetworkTCP* network);
+    Menu(unsigned int, std::string const&, int, EntityManager*, cu::Event*);
     Menu(Menu const& other);
     Menu(Menu&& other);
     Menu& operator=(Menu other);
@@ -33,6 +33,8 @@ public:
 
 public:
     void move();
+    void update();
+    bool done() const;
     std::string const& getCurrentStateName() const;
 
 private:
@@ -50,10 +52,14 @@ public:
     bool isReady() const;
     void addRoom(RType::Request::Room);
     void addRoomList(RType::Request::RoomsTab const &);
-    void addPlayer(RType::Request::Player);
+    void addPlayer(RType::Request player);
+    void addPlayer(RType::Request::Player player);
     void addPlayerList(RType::Request::PlayersTab const &);
-    bool isVisible() const;
-    void setVisible(bool);
+    void userReady(RType::Request player);
+    void deletePlayer(uint8_t);
+    void changePlayerName(RType::Request);
+    void playerNotReady(uint8_t);
+    void clearPlayers();
 
 private:
     std::vector<TextField *>    roomsTextField;
@@ -80,9 +86,13 @@ private:
     EntityManager	            *_em;
     bool		                _ready;
     bool		                _isVisible;
-    RType::NetworkTCP*	        _network;
+    TCPView*	                _network;
     RType::Request::RoomsTab    _roomsList;
     RType::Request::PlayersTab  _playersList;
+
+    RType::Request::Player      _user;
+
+    bool                        _done;
 };
 
 #endif // !MENU_HPP_

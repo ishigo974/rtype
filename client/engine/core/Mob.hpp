@@ -41,6 +41,7 @@ public:
     std::string const&              getSpriteFilePath() const;
     RType::MobType::MovePattern const&     getMovePattern() const;
     bool                            getAvailable() const;
+    int&                            getState();
 
     void    setName(std::string const & name);
     void    setLives(unsigned int lives);
@@ -59,15 +60,16 @@ protected:
     void                    move(double elapsedTime);
 
 protected:
-    unsigned int            _id;
-    std::string             _name;
-    unsigned int            _lives;
-    unsigned int            _scoreValue;
-    std::string             _spriteFilePath;
-    RType::MobType::MovePattern    _movePattern;
-    Transform*              _transform;
-    GameObject*              _parent;
-    bool                     _available;
+    unsigned int                _id;
+    std::string                 _name;
+    unsigned int                _lives;
+    unsigned int                _scoreValue;
+    std::string                 _spriteFilePath;
+    RType::MobType::MovePattern _movePattern;
+    Transform*                  _transform;
+    int                         _state;
+    GameObject*                 _parent;
+    bool                        _available;
 };
 
 #endif /* !MOB_HPP_ */

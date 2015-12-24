@@ -2,6 +2,7 @@
 # define IMOBTYPE_HPP_
 
 # include <functional>
+# include <vector>
 # include "Utils.hpp"
 # include "IStringable.hpp"
 
@@ -15,7 +16,7 @@ namespace RType
         ** Returns the next positions of the mob
         */
         typedef
-        std::function<cu::Position (cu::Position const&, double)>   MovePattern;
+        std::function<cu::Position (cu::Position const&, double, int&)> MovePattern;
 
         class IMobType : public IStringable
         {
@@ -31,6 +32,8 @@ namespace RType
             virtual MovePattern     getMovePattern() const = 0;
             virtual IMobType*       clone() const = 0;
         };
+
+        typedef std::vector<IMobType*>   Collection;
     }
 }
 

@@ -2,6 +2,9 @@
 #include "PositionComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "EntityManager.hpp"
+#include "GameConfig.hpp"
+#include "GameComponent.hpp"
+#include "PlayerComponent.hpp"
 
 namespace RType
 {
@@ -10,7 +13,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Shot::mask  =   Component::MASK_SHOT;
+        const ECS::ComponentMask    Shot::mask      = Component::MASK_SHOT;
+        const float                 Shot::speed     = 0.75f;
 
         /*
         ** Constructor/Destructor
@@ -46,19 +50,31 @@ namespace RType
         */
         void                Shot::update()
         {
+            ECS::EntityManager&     em = ECS::EntityManager::getInstance();
             Component::Position*    pos =
-                ECS::EntityManager::getInstance().getByCmpnt(this)
-                    .getComponent<Component::Position>();
+                em.getByCmpnt(this).getComponent<Component::Position>();
+            Component::Game*        game =
+                em.getByCmpnt(_owner->getComponent<Component::Player>()
+                                    ->getRoom()).getComponent<Component::Game>();
 
             if (pos == nullptr)
                 return ;
             switch (_type)
             {
                 case NORMAL:
-                    pos->setX(pos->getX() + 10); // TODO
+                    pos->setX(pos->getX() + (speed * game->getLastElapsed()));
                     break ;
                 default:
                     break ;
+            }
+            // std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << game->getLastElapsed() << std::endl; // debug
+            if (pos->getX() <= 0 || pos->getX() >= Map::width
+                || pos->getY() <= 0 || pos->getY() >= Map::height)
+            {
+                ECS::EntityManager& em = ECS::EntityManager::getInstance();
+
+                em.safeDestroy(em.getByCmpnt(this));
+                // std::cout << "safedestroy bullet" << std::endl;
             }
         }
 

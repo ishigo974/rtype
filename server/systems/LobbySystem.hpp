@@ -10,6 +10,7 @@
 # include "RequestCommand.hpp"
 # include "CommandRequestFactory.hpp"
 # include "RoomComponent.hpp"
+# include "MapParser.hpp"
 
 namespace RType
 {
@@ -23,7 +24,7 @@ namespace RType
             typedef std::unordered_map<uint32_t, ECS::Entity*>  RoomsMap;
 
         public:
-            Lobby();
+            Lobby(Map::Collection const& maps = Map::Collection());
             virtual ~Lobby();
 
         private:
@@ -34,6 +35,7 @@ namespace RType
             void                        addRoom(ECS::Entity& room);
             RoomsMap const&             getRooms() const;
             Component::Room*            getRoom(unsigned int id) const;
+            Map::Collection const&      getMaps() const;
 
         public:
             virtual void                update();
@@ -54,6 +56,7 @@ namespace RType
         protected:
             RoomsMap                    _rooms;
             Command::RequestFactory     _factory;
+            Map::Collection             _maps;
         };
     }
 }

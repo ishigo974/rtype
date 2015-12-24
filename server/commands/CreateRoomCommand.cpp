@@ -64,13 +64,17 @@ expected LobbySystem"); // TODO
                 _entity->getComponent<Component::Player>();
             Component::NetworkTCP*  network =
                 _entity->getComponent<Component::NetworkTCP>();
+            Map::Collection const&  maps = _lobby->getMaps();
 
             if (room == nullptr || player == nullptr || network == nullptr)
-                throw std::runtime_error("Entity does not have a \
-room/player/network component");
+                throw std::runtime_error("Entity does not have a "
+                                         "room/player/network component");
+            if (maps.empty())
+                throw std::runtime_error("No maps loaded");
             // validation name TODO
             room->addPlayer(*_entity);
             room->setName(_roomName);
+            room->setMap(&maps.at(0));
             _lobby->addRoom(e);
             player->setRoom(room);
             network->send(Server::responseOK);

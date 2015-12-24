@@ -26,7 +26,6 @@ namespace Time
 
     protected:
         HRCTimePoint    _start;
-        // HighResClock    _clock;
     };
 }
 

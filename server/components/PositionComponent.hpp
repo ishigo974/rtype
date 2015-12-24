@@ -12,7 +12,7 @@ namespace RType
         class Position : public ECS::IComponent
         {
         public:
-            Position(unsigned int x = 0, unsigned int y = 0);
+            Position(float x = 0, float y = 0);
             virtual ~Position();
 
         public:
@@ -20,12 +20,12 @@ namespace RType
             Position&               operator=(Position const& other);
 
         public:
-            unsigned int            getX() const;
-            unsigned int            getY() const;
+            float       getX() const;
+            float       getY() const;
 
         public:
-            void                    setX(unsigned int x);
-            void                    setY(unsigned int y);
+            void        setX(float x);
+            void        setY(float y);
 
         public:
             virtual std::string         getName() const;
@@ -38,8 +38,8 @@ namespace RType
             static const ECS::ComponentMask     mask;
 
         protected:
-            unsigned int    _x;
-            unsigned int    _y;
+            float    _x;
+            float    _y;
         };
     }
 }

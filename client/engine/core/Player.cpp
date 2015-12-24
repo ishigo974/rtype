@@ -117,7 +117,7 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(double elapsedtime)
 {
-    float		speed = 0.75f;
+    float		speed = 1.25f;
 
     if (_multiple)
     {
@@ -148,7 +148,7 @@ void		Player::move(double elapsedtime)
     }
 }
 
-std::vector<BulletObject *>	Player::getActiveBullets() const
+const std::vector<BulletObject *>	&Player::getActiveBullets() const
 {
     return _activeBullets;
 }
@@ -209,16 +209,12 @@ void		Player::update(double elapsedtime)
     checkAvailableBullets();
     while (_action.size() > 0)
     {
-        if (_action.front() == ACommand::SHOOT && _shotTime >= 200)
+        if (_action.front() == ACommand::SHOOT && _shotTime >= 80)
             this->shoot();
         else
             this->move(elapsedtime);
         _action.pop();
     }
-    // TODO enlever ? _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
-    // TODO remove debug comments
-    // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
-    // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
 }
 
 bool Player::handleMessage(Collider *o)

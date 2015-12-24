@@ -6,11 +6,25 @@
 # define RTYPE_UDPVIEW_HPP_
 
 # include <deque>
+#include <Utils.hpp>
 # include "InGameEvent.hpp"
 # include "Component.hpp"
 
 class UDPView : public Component
 {
+public:
+    enum Action
+    {
+        MOVE_UP = 0,
+        MOVE_DOWN,
+        MOVE_LEFT,
+        MOVE_RIGHT,
+        SHOT_START,
+        SHOT_STOP,
+        MOB_SPAWN,
+        MOB_DIE
+    };
+
 public:
     static const RTypes::my_uint16_t Mask = ComponentMask::UDPMask;
 public:
@@ -26,14 +40,19 @@ public:
     void swap(UDPView& other);
 
 public:
-    RType::InGameEvent pop();
-    void               push(RType::InGameEvent const& request);
-    size_t      size() const;
+    Action             popReceive();
+    RType::InGameEvent popToSend();
+    void               pushReceive(Action dir);
+    void               pushToSend(RType::InGameEvent event);
 
+    size_t sizeRecv() const;
+    size_t sizeToSend() const;
 
     virtual RTypes::my_uint16_t getMask() const;
+
 private:
-    std::deque<RType::InGameEvent> _requests;
+    std::deque<Action>             _receive;
+    std::deque<RType::InGameEvent> _toSend;
 };
 
 

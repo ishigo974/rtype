@@ -112,8 +112,10 @@ void		              MobSpawner::update(double)
             break;
         }
     }
-    if (_udpView->size())
-        event = _udpView->pop();
+    if (_udpView->sizeRecv())
+    {
+        event = _udpView->popReceive();
+    }
     try {
         spawnMob(event.get<uint8_t>("mob_id"));
     }

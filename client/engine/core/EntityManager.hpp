@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 25/11/15.
-//
-
 #ifndef RTYPE_ENTITYMANAGER_HPP
 # define RTYPE_ENTITYMANAGER_HPP
 
