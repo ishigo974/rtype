@@ -30,7 +30,7 @@ namespace RType
                                                     {InGameEvent::CL_DISCONNECT,  {}}
                                             };
     const InGameEvent::DataSizeMap  InGameEvent::dataSizes    = {
-            {"size",      sizeof(uint32_t)},
+            {"sizeRecv",      sizeof(uint32_t)},
             {"player_id", sizeof(uint8_t)},
             {"time",      sizeof(uint32_t)},
             {"shot_type", sizeof(uint8_t)},
@@ -139,7 +139,7 @@ namespace RType
             Buffer res;
 
             if (it == dataSizes.end())
-                throw Exception::NotImplemented("Unknown data size: " + arg);
+                throw Exception::NotImplemented("Unknown data sizeRecv: " + arg);
             if (it->second > tmp.size())
                 throw Exception::IncompleteRequest("Buffer can't \
                                                     contain argument");

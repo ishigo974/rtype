@@ -217,8 +217,8 @@ void		Player::update(double elapsedtime)
     }
     // TODO enlever ? _parent->getComponent<Collider>()->fixedUpdate(elapsedtime);
     // TODO remove debug comments
-    // std::cout << "ACTIVE BULLETS => " << _activeBullets.size() << std::endl;
-    // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.size() << std::endl;
+    // std::cout << "ACTIVE BULLETS => " << _activeBullets.sizeRecv() << std::endl;
+    // std::cout << "INACTIVE BULLETS => " << _bullets->_objects.sizeRecv() << std::endl;
 }
 
 bool Player::handleMessage(Collider *o)

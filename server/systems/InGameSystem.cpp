@@ -13,10 +13,10 @@ namespace RType
         const size_t                InGame::bufferSize = 65000;
         const InGame::EventCmdMap   InGame::cmdsNames =
                                             {
-                                                    {InGameEvent::CL_PLAYERUP,   "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERDOWN, "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERLEFT, "MoveCommand"},
-                                                    {InGameEvent::CL_PLAYERRIGHT, "MoveCommand"},
+                                                    {InGameEvent::CL_PLAYERUP,   "MoveCommand_"},
+                                                    {InGameEvent::CL_PLAYERDOWN, "MoveCommand_"},
+                                                    {InGameEvent::CL_PLAYERLEFT, "MoveCommand_"},
+                                                    {InGameEvent::CL_PLAYERRIGHT, "MoveCommand_"},
                                                     {InGameEvent::CL_SHOTSTART,  "ShotCommand"},
                                                     {InGameEvent::CL_SHOTSTOP,   "ShotCommand"}
                                             };

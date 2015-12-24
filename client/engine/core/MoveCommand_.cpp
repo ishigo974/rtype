@@ -1,12 +1,12 @@
 #include <ctime>
 #include <chrono>
 #include "InGameEvent.hpp"
-#include "MoveCommand.hpp"
+#include "MoveCommand_.hpp"
 #include "NetworkUDP.hpp"
 #include "Player.hpp"
 
-MoveCommand::MoveCommand(EntityManager *entityManager,
-                         ACommand::Action direction)
+MoveCommand_::MoveCommand_(EntityManager *entityManager,
+                           ACommand::Action direction)
 {
     _entityManager = entityManager;
     _direction     = direction;
@@ -14,10 +14,10 @@ MoveCommand::MoveCommand(EntityManager *entityManager,
     execute();
 }
 
-MoveCommand::~MoveCommand()
+MoveCommand_::~MoveCommand_()
 { }
 
-void    MoveCommand::execute()
+void    MoveCommand_::execute()
 {
     std::vector<Object *> objs    = _entityManager->getByMask(ComponentMask::PlayerMask);
     std::vector<Object *> network = _entityManager->getByMask(ComponentMask::UDPMask);
@@ -52,7 +52,7 @@ void    MoveCommand::execute()
     event.push<uint32_t>("time", 1);
 }
 
-void    MoveCommand::undo()
+void    MoveCommand_::undo()
 {
 
 }

@@ -1,12 +1,13 @@
 #include <cmath>
 #include <float.h>
 #include "CommandSystem.hpp"
-#include "MoveCommand.hpp"
+#include "MoveCommand_.hpp"
 #include "ShootCommand.hpp"
 #include "TCPView.hpp"
 #include "UDPView.hpp"
 
 CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
+        : _factory(static_cast<GameManager *>(entityManager->getByTag("GameManager")))
 {
     _input         = i;
     _entityManager = entityManager;
@@ -31,7 +32,7 @@ void    CommandSystem::processInput()
             if (a.first == cu::Event::SHOOT)
                 _commands.push_back(new ShootCommand(_entityManager));
             else
-                _commands.push_back(new MoveCommand(_entityManager, _actions[a.first]));
+                _commands.push_back(new MoveCommand_(_entityManager, _actions[a.first]));
         }
     }
 }
@@ -69,7 +70,7 @@ std::string    CommandSystem::toString()
     std::stringstream ss;
 
     ss << "CommandSystem {"
-    << "\n\tqueue size: " << _commands.size()
+    << "\n\tqueue sizeRecv: " << _commands.size()
     << "\n}";
     return (ss.str());
 }
@@ -108,8 +109,8 @@ void CommandSystem::processNetwork()
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
 
         while (i < udpIn.size())
-            tmpComp->push(udpIn[i++]);
-        while (tmpComp->size() > 0)
-            _ns->pushUDP(tmpComp->pop());
+            _pipeline.addCommand(_factory.createCommand(udpIn[i++]));
+        while (tmpComp->sizeRecv() > 0)
+            _ns->pushUDP(tmpComp->popReceive());
     }
 }

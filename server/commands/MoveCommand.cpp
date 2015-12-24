@@ -70,7 +70,7 @@ namespace RType
                     _direction = RIGHT;
                     break ;
                 default:
-                    throw std::runtime_error("Can't init MoveCommand: "
+                    throw std::runtime_error("Can't init MoveCommand_: "
                                              "wrong event");
                     break ;
             }
@@ -127,7 +127,7 @@ namespace RType
 
         std::string Move::getName() const
         {
-            return "MoveCommand";
+            return "MoveCommand_";
         }
     }
 }

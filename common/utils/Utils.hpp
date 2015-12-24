@@ -5,6 +5,8 @@
 #ifndef RTYPE_UTILS_HPP
 # define RTYPE_UTILS_HPP
 
+# include <string>
+
 namespace cu
 {
     class Vector2D
