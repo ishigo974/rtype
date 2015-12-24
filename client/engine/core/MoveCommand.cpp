@@ -15,16 +15,13 @@ MoveCommand::MoveCommand(EntityManager *entityManager,
 }
 
 MoveCommand::~MoveCommand()
-{
-}
+{ }
 
 void    MoveCommand::execute()
 {
-    std::vector<Object *> objs    = _entityManager->getByMask(
-            ComponentMask::PlayerMask);
-    std::vector<Object *> network = _entityManager
-            ->getByMask(ComponentMask::UDPMask);
-    RType::InGameEvent event;
+    std::vector<Object *> objs    = _entityManager->getByMask(ComponentMask::PlayerMask);
+    std::vector<Object *> network = _entityManager->getByMask(ComponentMask::UDPMask);
+    RType::InGameEvent    event;
 
     for (auto obj : objs)
     {
@@ -32,6 +29,7 @@ void    MoveCommand::execute()
         if (player)
             player->setAction(_direction);
     }
+
     switch (_direction)
     {
         case UP:
@@ -49,10 +47,12 @@ void    MoveCommand::execute()
         default:
             break;
     }
+
     //TODO: Change 1 to timestamp
     event.push<uint32_t>("time", 1);
 }
 
 void    MoveCommand::undo()
 {
+
 }

@@ -54,6 +54,7 @@ namespace RType
             unsigned int            _scoreValue;
             std::string             _spriteFilePath;
             MobType::MovePattern    _movePattern;
+            int                     _state;
         };
     }
 }

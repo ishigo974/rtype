@@ -15,7 +15,7 @@ namespace RType
         ** Returns the next positions of the mob
         */
         typedef
-        std::function<cu::Position (cu::Position const&, double)>   MovePattern;
+        std::function<cu::Position (cu::Position const&, double, int&)> MovePattern;
 
         class IMobType : public IStringable
         {

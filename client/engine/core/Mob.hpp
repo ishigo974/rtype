@@ -40,6 +40,7 @@ public:
     unsigned int                    getScoreValue() const;
     std::string const&              getSpriteFilePath() const;
     RType::MobType::MovePattern const&     getMovePattern() const;
+    int&                            getState();
     std::string                     toString() const;
     virtual RTypes::my_uint16_t      getMask() const;
     static const RTypes::my_uint16_t Mask      = ComponentMask::MobMask;
@@ -48,13 +49,14 @@ protected:
     void                    move(double elapsedTime);
 
 protected:
-    unsigned int            _id;
-    std::string             _name;
-    unsigned int            _lives;
-    unsigned int            _scoreValue;
-    std::string             _spriteFilePath;
-    RType::MobType::MovePattern    _movePattern;
-    Transform*              _transform;
+    unsigned int                _id;
+    std::string                 _name;
+    unsigned int                _lives;
+    unsigned int                _scoreValue;
+    std::string                 _spriteFilePath;
+    RType::MobType::MovePattern _movePattern;
+    Transform*                  _transform;
+    int                         _state;
 };
 
 #endif /* !MOB_HPP_ */

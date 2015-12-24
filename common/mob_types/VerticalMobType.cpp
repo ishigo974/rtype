@@ -86,15 +86,15 @@ namespace RType
         */
         MovePattern     Vertical::getMovePattern() const
         {
-            return [](cu::Position const& pos, double elapsedTime)->cu::Position
+            return [](cu::Position const& pos, double elapsedTime,
+                      int& state)->cu::Position
             {
-                static const float  speed = 2.0f;
-                static int          direction = -1;
+                static const float  speed = 1.0f;
 
                 if (pos.Y() >= 720 || pos.Y() <= 0)
-                    direction *= -1;
+                    state *= -1;
                 return cu::Position(pos.X(), pos.Y()
-                                    + (0.25 * speed * elapsedTime * direction));
+                                    + (0.25 * speed * elapsedTime * state));
             };
         }
 

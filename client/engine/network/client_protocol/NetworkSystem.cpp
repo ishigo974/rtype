@@ -14,11 +14,12 @@ namespace RType
     const size_t      NetworkSystem::buffLen        = 1024;
     const short       NetworkSystem::defaultPortUDP = 6668;
 
-    NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr, short int tcp, short int udpPort)
+    NetworkSystem::NetworkSystem(EntityManager *em, std::string const& addr,
+                                 short int tcp, short int udpPort)
             : _entityManager(em), _monitor(SocketMonitor::getInstance()),
               _connector(addr, tcp), _udpSock(udpPort)
     {
-        (void)_entityManager;
+        (void) _entityManager;
         _udpSock.setTimeoutSec(0);
         _udpSock.setTimeoutUsec(1000);
         _connector.connect();
@@ -40,7 +41,14 @@ namespace RType
         }
         catch (std::runtime_error const&)
         { }
-
+        if (_monitor.isWritable(&_connector))
+        {
+            Buffer tmp = _tcpObj.toSend();
+            if (!tmp.empty())
+            {
+                _connector.send(tmp);
+            }
+        }
         if (_monitor.isReadable(&_connector))
         {
             try
@@ -55,8 +63,6 @@ namespace RType
             }
             _tcpObj.receive(receive);
         }
-        if (_monitor.isWritable(&_connector))
-            _connector.send(_tcpObj.toSend());
     }
 
     std::string NetworkSystem::toString() const

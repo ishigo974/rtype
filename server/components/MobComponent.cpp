@@ -18,13 +18,13 @@ namespace RType
         */
         Mob::Mob() :
             _id(0), _name(""), _lives(0),
-            _scoreValue(0), _spriteFilePath("")
+            _scoreValue(0), _spriteFilePath(""), _state(1)
         {
         }
 
         Mob::Mob(MobType::IMobType const* type) :
             _id(0), _name(""), _lives(0),
-            _scoreValue(0), _spriteFilePath("")
+            _scoreValue(0), _spriteFilePath(""), _state(1)
         {
             init(type);
         }
@@ -39,7 +39,7 @@ namespace RType
         Mob::Mob(Mob const& other) :
             _id(other._id), _name(other._name), _lives(other._lives),
             _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
-            _movePattern(other._movePattern)
+            _movePattern(other._movePattern), _state(other._state)
         {
         }
 
@@ -53,6 +53,7 @@ namespace RType
                 _scoreValue = other._scoreValue;
                 _spriteFilePath = other._spriteFilePath;
                 _movePattern = other._movePattern;
+                _state = other._state;
             }
             return *this;
         }
@@ -75,7 +76,7 @@ namespace RType
             Component::Position*    pos = ECS::EntityManager::getInstance()
                 .getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
-                _movePattern(cu::Position(pos->getX(), pos->getY()), 1);
+                _movePattern(cu::Position(pos->getX(), pos->getY()), 1.0, _state);
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
@@ -148,6 +149,7 @@ namespace RType
             _scoreValue = 0;
             _spriteFilePath = "";
             _movePattern = MobType::MovePattern();
+            _state = 1;
         }
 
         std::string         Mob::toString() const
@@ -158,6 +160,7 @@ namespace RType
                    "\n\t_lives: " + std::to_string(_lives) +
                    "\n\t_scoreValue: " + std::to_string(_scoreValue) +
                    "\n\t_spriteFilePath: " + _spriteFilePath +
+                   "\n\t_state: " + std::to_string(_state) +
                    "\n}\n";
         }
     }

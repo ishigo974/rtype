@@ -12,8 +12,8 @@ unsigned int const Renderer::width  = 1280;
 unsigned int const Renderer::height = 720;
 
 Renderer::Renderer(EntityManager *em) :
-        _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type",
-             sf::Style::Titlebar | sf::Style::Close),
+        _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type"),
+            //  sf::Style::Titlebar | sf::Style::Close),
         _em(em)
 {
     _win.setFramerateLimit(60);
@@ -54,12 +54,8 @@ void Renderer::render()
     {
         auto obj = this->_em->getByMask(GUIManagerMask);
         for (auto i : obj)
-        {
-            this->drawGUI(static_cast<Menu *>(i));
-        }
-        //   {
-        // this->drawGUI(static_cast<GameObject *>(i));
-        //   }
+            if (static_cast<GameObject *>(i)->isVisible())
+                this->drawGUI(static_cast<Menu *>(i));
     }
     this->_win.display();
 }
@@ -93,22 +89,27 @@ void Renderer::draw(const GameObject *object)
     this->_win.draw(sprite);
 }
 
+#include <iostream>
 void Renderer::drawGUI(const Menu *object)
 {
-    if (!object->isVisible())
-        return ;
+    // if (!object->isVisible())
+    //     return ;
     GUIManager      *gm = object->getComponent<GUIManager>();
 
     if (gm == nullptr)
         return ;
 
     auto vec = gm->getGUIElements(object->getCurrentStateName());
-    for (auto element : vec)
-    {
-        auto tmp = element->getDrawable();
-        for (auto drawable : tmp)
-            this->_win.draw(*drawable);
-    }
+    if (!vec.empty())
+      for (auto element : vec)
+       {
+           if (element != nullptr)
+           {
+               auto      tmp = element->getDrawable();
+               for (auto drawable : tmp)
+                   this->_win.draw(*drawable);
+           }
+       }
 }
 
 Renderer::~Renderer()

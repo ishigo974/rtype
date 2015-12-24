@@ -23,6 +23,18 @@
       "path": "../res/pr1.png",
       "repeated": true
   },
+  "deathstar": {
+      "path": "../res/deathstar.png",
+      "repeated": true
+  },
+  "dogfight": {
+      "path": "../res/dogfight.png",
+      "repeated": true
+  },
+  "opm": {
+      "path": "../res/opm.png",
+      "repeated": true
+  },
   "menu1": {
     "path": "../res/menu1.jpg",
     "repeated": false
