@@ -170,7 +170,7 @@ void		Bullet::setDirection(Bullet::Direction d)
 
 void		Bullet::move(double elapsedtime) const
 {
-    float		speed = 0.75f;
+    float		speed = 2.0f;
 
     _transform->getPosition().setX((_transform->getPosition().X() + _direction * speed * static_cast<float>(elapsedtime)));
 }

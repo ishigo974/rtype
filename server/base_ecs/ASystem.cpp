@@ -1,31 +1,32 @@
 #include <algorithm>
 #include <utility>
+#include <iostream>
 #include "ASystem.hpp"
 #include "Entity.hpp"
 #include "EntityManager.hpp"
 
 namespace ECS
 {
-  /*
-  ** Constructor/Destructor
-  */
-  ASystem::ASystem()
-  {
-  }
+    /*
+    ** Constructor/Destructor
+    */
+    ASystem::ASystem()
+    {
+    }
 
-  ASystem::~ASystem()
-  {
-  }
+    ASystem::~ASystem()
+    {
+    }
 
-  /*
-  ** Public member functions
-  */
-  void                  ASystem::process()
-  {
-    EntityCollection    entities =
-      EntityManager::getInstance().getByMask(getMask());
+    /*
+    ** Public member functions
+    */
+    void                  ASystem::process()
+    {
+        EntityCollection    entities =
+        EntityManager::getInstance().getByMask(getMask());
 
-    for (auto&& entity: entities)
-      processEntity(*entity);
-  }
+        for (auto&& entity: entities)
+            processEntity(*entity);
+    }
 }

@@ -22,7 +22,8 @@ namespace ECS
                                     UniqueEntityPtr>    EntityMap;
         typedef std::unordered_map<IComponent const*,
                                    unsigned int,
-                                   std::hash<IComponent const*> >        ComponentIdMap;
+                                   std::hash<IComponent const*> >
+                                                        ComponentIdMap;
 
     protected:
         EntityManager();
@@ -41,6 +42,7 @@ namespace ECS
         Entity&                 create(ComponentMask mask = 0);
         bool                    destroy(unsigned int id);
         bool                    destroy(Entity const& entity);
+        void                    safeDestroy(Entity const& entity);
         Entity&                 get(unsigned int id) const;
         EntityCollection        getByMask(ComponentMask mask) const;
         Entity&                 getByCmpnt(IComponent const* cmp) const;
@@ -63,6 +65,7 @@ namespace ECS
         EntityMap                   _inactives;
         ComponentMap                _components;
         ComponentIdMap              _cmpntsEntities;
+        std::vector<unsigned int>   _toDestroy;
 
     protected:
         static UniqueEmPtr          instance;

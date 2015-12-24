@@ -59,7 +59,7 @@ namespace RType
         */
         unsigned int    Sinusoid::getId() const
         {
-            return 1;
+            return 3;
         }
 
         std::string     Sinusoid::getName() const
@@ -82,14 +82,11 @@ namespace RType
             return "sinusoidType.png";
         }
 
-        /*
-        ** Moves forward, following a straight line
-        */
         MovePattern     Sinusoid::getMovePattern() const
         {
-            return [](cu::Position const& pos, double elapsedTime)->cu::Position
+            return [](cu::Position const& pos, double elapsedTime, int&)->cu::Position
             {
-                static const float   speed = 1.0f;
+                static const float   speed = 2.0f;
 
                 return cu::Position(pos.X() - (0.25 * speed * elapsedTime),
                                     pos.Y() + (90 * std::sin(pos.X())));

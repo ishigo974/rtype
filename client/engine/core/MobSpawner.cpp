@@ -113,7 +113,10 @@ void		              MobSpawner::update(double)
         }
     }
     if (_udpView->size())
+    {
+        std::cout << _udpView->size() << std::endl;
         event = _udpView->pop();
+    }
     try {
         spawnMob(event.get<uint8_t>("mob_id"));
     }

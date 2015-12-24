@@ -13,7 +13,7 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Position::Position(unsigned int x, unsigned int y) : _x(x), _y(y)
+        Position::Position(float x, float y) : _x(x), _y(y)
         {
         }
 
@@ -41,22 +41,22 @@ namespace RType
         /*
         ** Public member functions
         */
-        unsigned int            Position::getX() const
+        float       Position::getX() const
         {
             return _x;
         }
 
-        unsigned int            Position::getY() const
+        float       Position::getY() const
         {
             return _y;
         }
 
-        void                    Position::setX(unsigned int x)
+        void        Position::setX(float x)
         {
             _x = x;
         }
 
-        void                    Position::setY(unsigned int y)
+        void        Position::setY(float y)
         {
             _y = y;
         }

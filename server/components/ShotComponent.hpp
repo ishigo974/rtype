@@ -44,6 +44,7 @@ namespace RType
 
         public:
             static const ECS::ComponentMask     mask;
+            static const float                  speed;
 
         protected:
             Type            _type;

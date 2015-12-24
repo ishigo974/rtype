@@ -14,7 +14,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.003;
+const double        RTypeGame::defaultFixedStep = 0.005;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -25,7 +25,7 @@ const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 */
 RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
-    _quit(false), _isPlaying(true), _em(), _renderer(&_em),
+    _quit(false), _isPlaying(false), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em),
     _network(&_em, addr, port), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
@@ -34,20 +34,21 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     BigBen::getElapsedtime();
 
     // tmp
-    RType::Request request;
-    request.setCode(RType::Request::CL_CREATEROOM);
-    request.push<std::string>("room_name", "BestRoomEver");
-    _network.pushTCP(request);
-    _network.pushTCP(RType::Request(RType::Request::CL_READY));
+   // RType::Request request;
+   // request.setCode(RType::Request::CL_CREATEROOM);
+   // request.push<std::string>("room_name", "BestRoomEver");
+   // _network.pushTCP(request);
+   // _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
 
     loadMobTypesFromFile();
     loadMapsFromFile();
 
-    // _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event,
-                                    // entity->getComponent<RType::NetworkTCP>());
-    // _menu->init();
-    // _menu->setVisible(false);
+    _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
+    _em.attachComponent<TCPView>(_menu, "TCP");
+    _em.attachComponent<UDPView>(_menu, "UDP");
+    _menu->init();
+//     _menu->setVisible(false);
     _renderer.init();
 }
 
@@ -72,14 +73,27 @@ void        RTypeGame::run()
                 break ;
             }
             if (!_isPlaying)
+            {
+                _menu->update();
                 _menu->move();
+                _cs.processNetwork();
+            }
             else
                 handleGame();
         }
         if (_isPlaying)
             handleGame();
-        _network.processTCP();
-        _network.processUDP();
+        else
+        {
+            _menu->update();
+            _cs.processNetwork();
+            if (_menu->done())
+            {
+                _menu->setVisible(false);
+                std::cout << "TA RACE LA PUTE" << std::endl;
+                _isPlaying = true;
+            }
+        }
         _renderer.render();
         _event.type = cu::Event::None;
     }
@@ -92,7 +106,10 @@ void        RTypeGame::initGameSample()
 {
     PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
     player->init();
-    GameObject *bg = _em.createEntity<GameObject>("bg", -1);
+    GameObject *bg = _em.createEntity<GameObject>("bg", -10);
+    GameObject *ds = _em.createEntity<GameObject>("ds", -5);
+    GameObject *df = _em.createEntity<GameObject>("df", -4);
+    GameObject *opm = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
     AudioEffect*    audio;
 
@@ -104,11 +121,23 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<MobSpawner>(mobSpawn, "MobSpawner", &_em, &_mobTypes);
     mobSpawn->getComponent<MobSpawner>()->init();
 
+    _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.22);
+
+    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
+
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.25);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.20);
+
+    _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.50);
+
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.75);
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.40);
+
     _em.attachComponent<AudioEffect>(player, "Audio");
+
     audio = player->getComponent<AudioEffect>();
     audio->addSound("../res/OnePunch.wav");
     audio->addSound("../res/laser1.wav");
@@ -215,8 +244,8 @@ void            RTypeGame::loadMobTypesFromFile()
             }
         } catch (std::runtime_error const&) {
             mobFile.close();
-            file.close();
-            throw ;
+            std::cout << "load mob failed " << line << std::endl;
+            // throw ;
         }
     }
     file.close();
