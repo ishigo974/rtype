@@ -46,7 +46,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
     _em.attachComponent<UDPView>(_menu, "UDP");
-     _menu->init();
+    _menu->init();
 //     _menu->setVisible(false);
     _renderer.init();
 }
@@ -73,6 +73,7 @@ void        RTypeGame::run()
             }
             if (!_isPlaying)
             {
+                _menu->update();
                 _menu->move();
                 _cs.processNetwork();
             }
@@ -81,6 +82,17 @@ void        RTypeGame::run()
         }
         if (_isPlaying)
             handleGame();
+        else
+        {
+            _menu->update();
+            _cs.processNetwork();
+            if (_menu->done())
+            {
+                _menu->setVisible(false);
+                std::cout << "TA RACE LA PUTE" << std::endl;
+                _isPlaying = true;
+            }
+        }
         _renderer.render();
         _event.type = cu::Event::None;
     }

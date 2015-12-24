@@ -54,12 +54,8 @@ void Renderer::render()
     {
         auto obj = this->_em->getByMask(GUIManagerMask);
         for (auto i : obj)
-        {
-            this->drawGUI(static_cast<Menu *>(i));
-        }
-        //   {
-        // this->drawGUI(static_cast<GameObject *>(i));
-        //   }
+            if (static_cast<GameObject *>(i)->isVisible())
+                this->drawGUI(static_cast<Menu *>(i));
     }
     this->_win.display();
 }
@@ -93,10 +89,11 @@ void Renderer::draw(const GameObject *object)
     this->_win.draw(sprite);
 }
 
+#include <iostream>
 void Renderer::drawGUI(const Menu *object)
 {
-    if (!object->isVisible())
-        return ;
+    // if (!object->isVisible())
+    //     return ;
     GUIManager      *gm = object->getComponent<GUIManager>();
 
     if (gm == nullptr)

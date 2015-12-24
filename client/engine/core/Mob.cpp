@@ -12,7 +12,8 @@
 Mob::Mob() :
     _id(0), _name(""), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
-    _movePattern(), _transform(nullptr)
+    _movePattern(), _transform(nullptr),
+    _state(1)
 {
 }
 
@@ -21,7 +22,8 @@ Mob::Mob(unsigned int id, std::string const& name,
     Behaviour(id, name),
     _id(0), _name(""), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
-    _movePattern(), _transform(nullptr)
+    _movePattern(), _transform(nullptr),
+    _state(1)
 {
     init(mobtype);
 }
@@ -36,7 +38,8 @@ Mob::~Mob()
 Mob::Mob(Mob const& other) :
     Behaviour(other), _id(other._id), _name(other._name), _lives(other._lives),
     _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
-    _movePattern(other._movePattern), _transform(other._transform)
+    _movePattern(other._movePattern), _transform(other._transform),
+    _state(other._state)
 {
 }
 
@@ -95,8 +98,8 @@ bool        Mob::handleMessage(Collider *o)
 
 void		Mob::move(double elapsedTime)
 {
-    cu::Position    pos =
-        _movePattern(_transform->getPosition(), elapsedTime);
+    cu::Position    pos = _movePattern(_transform->getPosition(), elapsedTime,
+                                       _state);
 
     _transform->getPosition().setX(pos.X());
     _transform->getPosition().setY(pos.Y());
@@ -166,6 +169,11 @@ RType::MobType::MovePattern const&      Mob::getMovePattern() const
     return _movePattern;
 }
 
+int&                    Mob::getState()
+{
+    return _state;
+}
+
 std::string Mob::toString() const
 {
     return "Component::Mob {"
@@ -188,6 +196,7 @@ void Mob::swap(Mob& other)
     swap(_spriteFilePath, other._spriteFilePath);
     swap(_movePattern, other._movePattern);
     swap(_transform, other._transform);
+    swap(_state, other._state);
 }
 
 namespace std

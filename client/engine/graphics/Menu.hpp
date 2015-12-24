@@ -33,6 +33,8 @@ public:
 
 public:
     void move();
+    void update();
+    bool done() const;
     std::string const& getCurrentStateName() const;
 
 private:
@@ -50,10 +52,14 @@ public:
     bool isReady() const;
     void addRoom(RType::Request::Room);
     void addRoomList(RType::Request::RoomsTab const &);
-    void addPlayer(RType::Request::Player);
+    void addPlayer(RType::Request player);
+    void addPlayer(RType::Request::Player player);
     void addPlayerList(RType::Request::PlayersTab const &);
-    bool isVisible() const;
-    void setVisible(bool);
+    void userReady(RType::Request player);
+    void deletePlayer(uint8_t);
+    void changePlayerName(RType::Request);
+    void playerNotReady(uint8_t);
+    void clearPlayers();
 
 private:
     std::vector<TextField *>    roomsTextField;
@@ -83,6 +89,10 @@ private:
     TCPView*	                _network;
     RType::Request::RoomsTab    _roomsList;
     RType::Request::PlayersTab  _playersList;
+
+    RType::Request::Player      _user;
+
+    bool                        _done;
 };
 
 #endif // !MENU_HPP_

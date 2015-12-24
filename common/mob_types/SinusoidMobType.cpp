@@ -84,7 +84,7 @@ namespace RType
 
         MovePattern     Sinusoid::getMovePattern() const
         {
-            return [](cu::Position const& pos, double elapsedTime)->cu::Position
+            return [](cu::Position const& pos, double elapsedTime, int&)->cu::Position
             {
                 static const float   speed = 1.0f;
 
