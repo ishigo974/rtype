@@ -57,6 +57,8 @@ public:
     void addPlayerList(RType::Request::PlayersTab const &);
     void userReady(RType::Request player);
     void deletePlayer(uint8_t);
+    void changePlayerName(RType::Request);
+    void playerNotReady(uint8_t);
     void clearPlayers();
 
 private:
