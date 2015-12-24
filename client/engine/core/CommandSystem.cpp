@@ -82,7 +82,7 @@ void CommandSystem::processNetwork()
     std::vector<RType::InGameEvent> udpIn;
 
     _ns->processTCP();
-    //_ns->processUDP();
+    _ns->processUDP();
 
     while (_ns->tcpSize() > 0)
         tcpIn.push_back(_ns->popTCP());
@@ -110,6 +110,6 @@ void CommandSystem::processNetwork()
         while (i < udpIn.size())
             _pipeline.addCommand(_factory.createCommand(udpIn[i++]));
         while (tmpComp->sizeRecv() > 0)
-            _ns->pushUDP(tmpComp->popReceive());
+            _ns->pushUDP(tmpComp->popToSend());
     }
 }
