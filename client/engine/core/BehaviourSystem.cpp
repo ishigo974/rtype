@@ -8,6 +8,7 @@
 #include "Player.hpp"
 #include "Mob.hpp"
 #include "Bullet.hpp"
+#include "MobSpawner.hpp"
 
 BehaviourSystem::BehaviourSystem(EntityManager *em)
         : _em(em)
@@ -54,6 +55,15 @@ void BehaviourSystem::process(double elapsed)
         comp->update(elapsed);
     }
     tmp.clear();
+
+    tmp = _em->getByMask(ComponentMask::MobSpawnerMask);
+    for (auto e : tmp)
+    {
+        MobSpawner *comp = static_cast<GameObject *>(e)->getComponent<MobSpawner>();
+
+        if (comp->isEnabled())
+            comp->update(elapsed);
+    }
 
     tmp = _em->getByMask(ComponentMask::ColliderMask);
     for (auto e : tmp)
