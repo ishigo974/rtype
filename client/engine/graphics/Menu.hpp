@@ -34,6 +34,7 @@ public:
 public:
     void move();
     void update();
+    bool done() const;
     std::string const& getCurrentStateName() const;
 
 private:
@@ -56,9 +57,6 @@ public:
     void addPlayerList(RType::Request::PlayersTab const &);
     void userReady(RType::Request player);
     void deletePlayer(uint8_t);
-    bool isVisible() const;
-    void setVisible(bool);
-
     void clearPlayers();
 
 private:
@@ -91,6 +89,8 @@ private:
     RType::Request::PlayersTab  _playersList;
 
     RType::Request::Player      _user;
+
+    bool                        _done;
 };
 
 #endif // !MENU_HPP_

@@ -16,7 +16,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
            inputRoomName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
            inputUserName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
            _event(event),
-           _em(em)
+           _em(em),
+           _done(false)
 {
     _titleState     = State("title");
     mainMenu        = State("mainMenu");
@@ -25,14 +26,6 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
     changeNameState = State("changeName");
     _ready = false;
     _isVisible = true;
-
-    // refresh.setBackColor(sf::Color(80, 80, 80));
-    // changeName.setBackColor(sf::Color(80, 80, 80));
-    // createRoom.setBackColor(sf::Color(80, 80, 80));
-    // back.setBackColor(sf::Color(80, 80, 80));
-    // readyField.setBackColor(sf::Color(80, 80, 80));
-    // inputRoomName.setBackColor(sf::Color(80, 80, 80));
-    // inputUserName.setBackColor(sf::Color(80, 80, 80));
 
     refresh.setBackColor(sf::Color(0, 0, 0, 128));
     changeName.setBackColor(sf::Color(0, 0, 0, 128));
@@ -92,7 +85,8 @@ Menu::Menu(Menu const& other) :
         refresh(other.refresh),
         back(other.back),
         roomTitle(other.roomTitle),
-        _event(other._event)
+        _event(other._event),
+        _done(other._done)
 {}
 
 Menu::Menu(Menu&& other) :
@@ -286,16 +280,6 @@ void Menu::userReady(RType::Request req)
 bool Menu::isReady() const
 {
     return _ready;
-}
-
-bool Menu::isVisible() const
-{
-    return _isVisible;
-}
-
-void Menu::setVisible(bool visible)
-{
-    _isVisible = visible;
 }
 
 void Menu::deletePlayer(uint8_t id)
@@ -546,6 +530,7 @@ void Menu::update()
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
                 break;
             case RType::Request::SE_GAMESTART :
+                _done = true;
                 break;
             case RType::Request::SE_OK :
                 break;
@@ -555,6 +540,11 @@ void Menu::update()
                 break;
         }
     }
+}
+
+bool Menu::done() const
+{
+    return _done;
 }
 
 std::string const& Menu::getCurrentStateName() const

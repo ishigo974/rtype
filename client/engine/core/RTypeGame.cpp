@@ -86,6 +86,12 @@ void        RTypeGame::run()
         {
             _menu->update();
             _cs.processNetwork();
+            if (_menu->done())
+            {
+                _menu->setVisible(false);
+                std::cout << "TA RACE LA PUTE" << std::endl;
+                _isPlaying = true;
+            }
         }
         _renderer.render();
         _event.type = cu::Event::None;
