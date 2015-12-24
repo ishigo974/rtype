@@ -39,6 +39,10 @@ public:
     short int getPort() const;
 
     void setPort(short int port);
+	void      setTimeoutSec(long);
+	void      setTimeoutUsec(long);
+	long      getTimeoutSec() const;
+	long      getTimeoutUsec() const;
 
 protected:
     static const int defaultTimeout;

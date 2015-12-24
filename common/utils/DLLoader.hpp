@@ -13,7 +13,7 @@ template <typename T>
 class DLLoader
 {
 public:
-  static T GetInstanceOf(std::string const& path, std::string const& entry)
+  static T getInstanceOf(std::string const& path, std::string const& entry)
   {
     T           (*ext_creator)();
     HMODULE     dlhandle;

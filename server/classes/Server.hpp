@@ -7,9 +7,9 @@
 # include <utility>
 # include "EntityManager.hpp"
 # include "SystemManager.hpp"
+# include "GameSystem.hpp"
 # include "SocketMonitor.hpp"
 # include "TcpAcceptor.hpp"
-# include "MobTypeFactory.hpp"
 # include "MapParser.hpp"
 
 namespace RType
@@ -21,7 +21,6 @@ namespace RType
         typedef void    (Server::*CLICMDHandler)(ArgsTab const& args);
         typedef std::unordered_map<std::string,
                     std::pair<std::string, CLICMDHandler> >     CLICMDHandlers;
-        typedef std::vector<Map::Parser::Map>                   MapsCollection;
 
     public:
         Server(short int port = defaultPort);
@@ -38,8 +37,8 @@ namespace RType
 
     protected:
         void            init();
-        void            loadMobTypesFromFile();
-        void            loadMapsFromFile();
+        void            loadMobTypesFromFile(MobType::Collection& mobs);
+        void            loadMapsFromFile(Map::Collection& maps);
         void            onClientConnection();
         void            onCLICommand();
         void            checkDisconnected();
@@ -80,8 +79,6 @@ namespace RType
         ECS::EntityManager&         _em;
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
-        MobType::Factory            _mobTypeFactory;
-        MapsCollection              _maps;
     };
 }
 

@@ -13,7 +13,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.003;
+const double        RTypeGame::defaultFixedStep = 0.005;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -133,7 +133,7 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<AudioEffect>(player, "Audio");
 
     audio = player->getComponent<AudioEffect>();
-    audio->addSound("../res/music.wav");
+    audio->addSound("../res/OnePunch.wav");
     audio->addSound("../res/laser1.wav");
     audio->addSound("../res/laser2.wav");
 
@@ -192,7 +192,7 @@ void            RTypeGame::loadMapsFromFile()
                             << line << std::endl;
                 mapFile.close();
             }
-        } catch (std::runtime_error const& e) {
+        } catch (std::runtime_error const&) {
             mapFile.close();
             file.close();
             throw ;
@@ -238,8 +238,8 @@ void            RTypeGame::loadMobTypesFromFile()
             }
         } catch (std::runtime_error const&) {
             mobFile.close();
-            file.close();
-            throw ;
+            std::cout << "load mob failed " << line << std::endl;
+            // throw ;
         }
     }
     file.close();

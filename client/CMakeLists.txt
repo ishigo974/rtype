@@ -19,7 +19,7 @@ if (WIN32)
 endif ()
 
 if (UNIX)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14 -g3")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Wextra -std=c++14 -g3")
 endif ()
 
 # -------------- #
@@ -92,6 +92,25 @@ endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
 #find_package(Boost 1.55 REQUIRED)
+
+# BOOST
+if(UNIX)
+    set(Boost_INCLUDE_DIR "/usr/local/include")
+    set(Boost_LIBRARY_DIR "/usr/local/lib")
+endif()
+
+if(WIN32)
+    set(BOOST_ROOT "C:/local/boost_1_59_0/")
+    set(BOOST_INCLUDEDIR "C:/local/boost_1_59_0/boost")
+    set(Boost_INCLUDE_DIR "C:/local/boost_1_59_0/")
+    set(Boost_LIBRARY_DIR "C:/local/boost_1_59_0/lib32-msvc-14.0")
+endif()
+
+set(Boost_USE_STATIC_LIBS		ON)
+set(Boost_USE_MULTITHREADED	ON)
+set(Boost_USE_STATIC_RUNTIME	OFF)
+
+find_package(Boost REQUIRED)
 
 if (SFML_FOUND)
     message(STATUS ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
