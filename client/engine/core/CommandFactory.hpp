@@ -7,17 +7,19 @@
 
 # include "ACommand.hpp"
 # include "InGameEvent.hpp"
-#include "GameManager.hpp"
+# include "EntityManager.hpp"
+# include "GameManager.hpp"
 
 class CommandFactory
 {
 public:
-    CommandFactory(GameManager *gm);
+    CommandFactory(EntityManager *em);
 public:
     ACommand *createCommand(RType::InGameEvent const& event);
 
 private:
-    GameManager *_gm;
+    GameManager   *_gm;
+    EntityManager *_em;
 };
 
 
