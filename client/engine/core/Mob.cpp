@@ -125,10 +125,7 @@ void		Mob::update(double elapsedTime)
         || _transform->getPosition().X() < -1000
         || _transform->getPosition().Y() > Renderer::height + 1000
         || _transform->getPosition().Y() < -1000)
-        {
-            std::cout << _transform->toString() << std::endl;
-            _lives = 0;
-        }
+        _lives = 0;
     this->move(elapsedTime);
 }
 
