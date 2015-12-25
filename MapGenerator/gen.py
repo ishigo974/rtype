@@ -15,7 +15,7 @@ def gen_map(map_name, map_duration, spawn_percentage):
     print(map_name);
     while i < map_duration:
         spawn = random.randint(0, 100);
-        if spawn > spawn_percentage:
+        if spawn < spawn_percentage:
             s = str(round(float(repr(i)), 3)) + ';0;1;1300;' + str(random.randint(20, 700))
             print(s);
         i += 0.1;
