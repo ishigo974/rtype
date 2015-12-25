@@ -33,6 +33,7 @@ public:
     void swap(Menu& other);
 
 public:
+    void initTextFields();
     void move();
     void update();
     bool done() const;

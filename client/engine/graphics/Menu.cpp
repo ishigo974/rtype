@@ -24,53 +24,7 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
            _network(nullptr),
            _done(false)
 {
-    _refresh.setBackColor(sf::Color(0, 0, 0, 128));
-    _changeName.setBackColor(sf::Color(0, 0, 0, 128));
-    _createRoom.setBackColor(sf::Color(0, 0, 0, 128));
-    _back.setBackColor(sf::Color(0, 0, 0, 128));
-    _readyField.setBackColor(sf::Color(0, 0, 0, 128));
-    _inputRoomName.setBackColor(sf::Color(0, 0, 0, 128));
-    _inputUserName.setBackColor(sf::Color(0, 0, 0, 128));
-
-    _refresh.setForeColor(sf::Color::White);
-    _changeName.setForeColor(sf::Color::White);
-    _createRoom.setForeColor(sf::Color::White);
-    _back.setForeColor(sf::Color::White);
-    _readyField.setForeColor(sf::Color::White);
-    _inputRoomName.setForeColor(sf::Color::White);
-    _inputUserName.setForeColor(sf::Color::White);
-    _roomTitle.setForeColor(sf::Color::White);
-    _mainTitle.setForeColor(sf::Color::White);
-
-    for (int i = 0; i < 15; ++i)
-    {
-        if (i >= 10)
-        {
-            _roomsTextField[i] = new TextField(gu::Rect<float>(900,
-                                                              (i % 5 + 1) * 100,
-                                                              300, 50), "", 10);
-        }
-        else if (i >= 5)
-        {
-            _roomsTextField[i] = new TextField(gu::Rect<float>(500,
-                                                              (i % 5 + 1) * 100,
-                                                              300, 50), "", 10);
-        }
-        else
-        {
-            _roomsTextField[i] = new TextField(gu::Rect<float>(100,
-                                                              (i % 5 + 1) * 100,
-                                                              300, 50), "", 10);
-        }
-    }
-
-    for (int i = 0; i < 4; ++i)
-    {
-        _playersInRoom[i] =
-                new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50), "", 10);
-        _playersInRoom[i]->setText("");
-    }
-
+    initTextFields();
     transitionToStates();
     _sm = new StateMachine(_titleState);
 }
@@ -133,6 +87,45 @@ void Menu::swap(Menu& other)
     swap(_roomTitle, other._roomTitle);
 }
 
+void Menu::initTextFields()
+{
+    unsigned int    x = 100;
+
+    _refresh.setBackColor(sf::Color(0, 0, 0, 128));
+    _changeName.setBackColor(sf::Color(0, 0, 0, 128));
+    _createRoom.setBackColor(sf::Color(0, 0, 0, 128));
+    _back.setBackColor(sf::Color(0, 0, 0, 128));
+    _readyField.setBackColor(sf::Color(0, 0, 0, 128));
+    _inputRoomName.setBackColor(sf::Color(0, 0, 0, 128));
+    _inputUserName.setBackColor(sf::Color(0, 0, 0, 128));
+
+    _refresh.setForeColor(sf::Color::White);
+    _changeName.setForeColor(sf::Color::White);
+    _createRoom.setForeColor(sf::Color::White);
+    _back.setForeColor(sf::Color::White);
+    _readyField.setForeColor(sf::Color::White);
+    _inputRoomName.setForeColor(sf::Color::White);
+    _inputUserName.setForeColor(sf::Color::White);
+    _roomTitle.setForeColor(sf::Color::White);
+    _mainTitle.setForeColor(sf::Color::White);
+
+    for (int i = 0; i < 15; ++i)
+    {
+        if ((i % 5) == 4)
+            x += 400;
+        _roomsTextField[i] =
+            new TextField(gu::Rect<float>(x, (i % 5 + 1) * 100,
+                                          300, 50), "", 10);
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+        _playersInRoom[i] =
+            new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50),
+                          "", 10);
+        _playersInRoom[i]->setText("");
+    }
+}
+
 void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
@@ -167,7 +160,7 @@ void Menu::joinRoom(RType::Request::Room room)
 {
     RType::Request      request;
 
-    std::cout << "Join room: " << room.name << "ID: " << room.id  << std::endl;
+    std::cout << "Join room: " << room.name << "ID: " << room.id << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<unsigned int>("room_id", room.id);
     _network->pushToSend(request);
