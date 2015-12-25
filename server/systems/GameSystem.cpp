@@ -79,6 +79,7 @@ namespace RType
                     event.push<uint32_t>("y", it->second.y);
                     event.push<uint64_t>("time",
                                          game->getChrono().getElapsedTime());
+                    std::cout << "Send mob spawned with time: " << event.get<uint64_t>("time") << std::endl;
                     room->broadcastUDP(event.toBuffer());
                     std::cout << "Mob spawned id: " << cMob->getId() << std::endl; // debug
                     if ((it = map.second.erase(it)) == map.second.end())

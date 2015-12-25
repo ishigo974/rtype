@@ -80,6 +80,7 @@ void CommandSystem::processNetwork()
     size_t                          i;
     std::vector<RType::Request>     tcpIn;
     std::vector<RType::InGameEvent> udpIn;
+    ACommand*                       command;
 
     _ns->processTCP();
     _ns->processUDP();
@@ -92,9 +93,9 @@ void CommandSystem::processNetwork()
     auto tcpObjs = _entityManager->getByMask(ComponentMask::TCPMask);
     auto udpObjs = _entityManager->getByMask(ComponentMask::UDPMask);
 
-    i = 0;
     for (auto e : tcpObjs)
     {
+        i = 0;
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<TCPView>();
 
         while (i < tcpIn.size())
@@ -102,10 +103,9 @@ void CommandSystem::processNetwork()
         while (tmpComp->sizeToSend() > 0)
             _ns->pushTCP(tmpComp->popToSend());
     }
-    i = 0;
-    ACommand *command;
     for (auto e : udpObjs)
     {
+        i = 0;
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
 
         while (i < udpIn.size())
