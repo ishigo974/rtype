@@ -1,17 +1,19 @@
 #include <cmath>
 #include <float.h>
+#include <HRChrono.hpp>
 #include "CommandSystem.hpp"
 #include "MoveCommand_.hpp"
 #include "ShootCommand.hpp"
 #include "TCPView.hpp"
 #include "UDPView.hpp"
 
-CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns)
+CommandSystem::CommandSystem(EntityManager *entityManager, Input *i, RType::NetworkSystem *ns, Time::HRChrono chrono)
         : _factory(entityManager)
 {
     _input         = i;
     _entityManager = entityManager;
     _ns            = ns;
+    _chrono        = chrono;
 
     _actions[cu::Event::UP]    = ACommand::UP;
     _actions[cu::Event::DOWN]  = ACommand::DOWN;
@@ -30,33 +32,12 @@ void    CommandSystem::processInput()
         if (_input->isKeyPressed(a.first))
         {
             if (a.first == cu::Event::SHOOT)
-                _commands.push_back(new ShootCommand(_entityManager));
+                _commands.push_back(
+                        new ShootCommand(_entityManager, std::chrono::microseconds(_chrono.getElapsedTime())));
             else
-                _commands.push_back(new MoveCommand_(_entityManager, _actions[a.first]));
+                _commands.push_back(new MoveCommand_(_entityManager, _actions[a.first],
+                                                     std::chrono::microseconds(_chrono.getElapsedTime())));
         }
-    }
-}
-
-ACommand *CommandSystem::getByTimestamp(timestamp time)
-{
-    //TODO: Nope... Need to undo in reverse order.
-    std::chrono::duration<double> diff;
-
-    for (auto command : _commands)
-    {
-        diff = command->getTime() - time;
-        if (fabs(diff.count()) <= DBL_EPSILON)
-            return (command);
-    }
-    return NULL;
-}
-
-void        CommandSystem::invalidateCommandAtTimestamp(timestamp time)
-{
-    for (auto cmd : _commands)
-    {
-        if (cmd->getTime() > time)
-            cmd->undo();
     }
 }
 
@@ -103,6 +84,8 @@ void CommandSystem::processNetwork()
         while (tmpComp->sizeToSend() > 0)
             _ns->pushTCP(tmpComp->popToSend());
     }
+    ACommand  *command;
+
     for (auto e : udpObjs)
     {
         i = 0;

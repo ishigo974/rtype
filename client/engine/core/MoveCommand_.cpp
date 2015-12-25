@@ -6,11 +6,12 @@
 #include "Player.hpp"
 
 MoveCommand_::MoveCommand_(EntityManager *entityManager,
-                           ACommand::Action direction)
+                           ACommand::Action direction,
+                           std::chrono::microseconds time)
 {
     _entityManager = entityManager;
     _direction     = direction;
-    _time          = BigBen::getTimeNow();
+    _time          = time;
     execute();
 }
 

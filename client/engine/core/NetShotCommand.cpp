@@ -8,9 +8,11 @@
 NetShotCommand::NetShotCommand()
 { }
 
-NetShotCommand::NetShotCommand(GameObject *target, bool type)
+NetShotCommand::NetShotCommand(GameObject *target, bool type, std::chrono::microseconds time)
         : _target(target), _fire(type)
-{ }
+{
+    _time = time;
+}
 
 NetShotCommand::NetShotCommand(NetShotCommand const& o)
 {

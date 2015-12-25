@@ -31,15 +31,15 @@ public:
         _obj = obj;
     }
 
-    virtual std::chrono::time_point<std::chrono::high_resolution_clock> getTime()
+    virtual std::chrono::microseconds getTime()
     {
         return _time;
     }
 
 protected:
-    std::chrono::time_point<std::chrono::high_resolution_clock> _time;
-    GameObject                                                  *_obj;
-    EntityManager                                               *_entityManager;
+    std::chrono::microseconds _time;
+    GameObject                *_obj;
+    EntityManager             *_entityManager;
 };
 
 #endif /* !RTYPE_ACOMMAND_HPP_ */

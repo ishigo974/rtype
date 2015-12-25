@@ -12,7 +12,7 @@ class NetMoveCommand : public ACommand
 {
 public:
     NetMoveCommand();
-    NetMoveCommand(GameObject *target, ACommand::Action dir);
+    NetMoveCommand(GameObject *target, ACommand::Action dir, std::chrono::microseconds time);
     NetMoveCommand(NetMoveCommand& o);
     NetMoveCommand(NetMoveCommand&& o);
     NetMoveCommand& operator=(NetMoveCommand o);
