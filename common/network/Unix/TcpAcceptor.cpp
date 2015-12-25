@@ -18,8 +18,7 @@ TcpAcceptor::TcpAcceptor(short int port)
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port        = htons(_port);
 
-    if ((_socket = socket(AF_INET, SOCK_STREAM, getprotobyname("TCP")
-            ->p_proto)) == -1)
+    if ((_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
         throw std::runtime_error("socket failed");
     if (::bind(_socket, reinterpret_cast<const struct sockaddr *>(&server),
                sizeof(server)) == -1)
