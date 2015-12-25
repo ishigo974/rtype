@@ -71,7 +71,6 @@ RTypes::my_uint16_t UDPView::getMask() const
 
 size_t UDPView::sizeRecv() const
 {
-    std::cout << "sizerecv " << &_receive << std::endl;
     return (_receive.size());
 }
 

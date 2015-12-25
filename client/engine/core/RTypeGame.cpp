@@ -166,7 +166,6 @@ void        RTypeGame::initGame()
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
-
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
      _chrono.start();

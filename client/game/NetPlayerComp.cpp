@@ -149,12 +149,14 @@ void	NetPlayerComp::checkAvailableBullets()
 
 void		NetPlayerComp::init()
 {
+    _parent = static_cast<GameObject *>(parent());
     _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _em);
+
+    _udp = _parent->getComponent<UDPView>();
 }
 
 void		NetPlayerComp::update(double elapsedtime)
 {
-    _parent = static_cast<GameObject *>(parent());
     if (!_transform)
         _transform = _parent->getComponent<Transform>();
     checkDeath();
