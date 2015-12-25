@@ -7,11 +7,11 @@
 #include "NetPlayerComp.hpp"
 #include "Collider.hpp"
 
-NetPlayerComp::NetPlayerComp()
+NetPlayerComp::NetPlayerComp() : _transform(nullptr)
 { }
 
 NetPlayerComp::NetPlayerComp(unsigned int id, std::string const& name, EntityManager *em, int hp, int dmg)
-        : Behaviour(id, name), _hp(hp), _damage(dmg), _em(em)
+        : Behaviour(id, name), _hp(hp), _damage(dmg), _em(em), _transform(nullptr)
 { }
 
 NetPlayerComp::NetPlayerComp(NetPlayerComp& o) : Behaviour(o)
