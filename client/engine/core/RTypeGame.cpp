@@ -119,6 +119,7 @@ void        RTypeGame::initGameSample()
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
+    _em.tagObject(mobSpawn, "mobSpawn");
     _em.tagObject(gm, "GameManager");
 
     _em.attachComponent<MobSpawner>(mobSpawn, "MobSpawner", &_em, &_mobTypes);
