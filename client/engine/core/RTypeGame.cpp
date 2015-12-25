@@ -13,7 +13,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.005;
+const double        RTypeGame::defaultFixedStep = 0.006;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -106,7 +106,7 @@ void        RTypeGame::initGameSample()
     player->init();
     GameObject *bg = _em.createEntity<GameObject>("bg", -10);
     GameObject *ds = _em.createEntity<GameObject>("ds", -5);
-    GameObject *df = _em.createEntity<GameObject>("df", -4);
+    // GameObject *df = _em.createEntity<GameObject>("df", -4);
     GameObject *opm = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
     AudioEffect*    audio;
@@ -115,19 +115,19 @@ void        RTypeGame::initGameSample()
         throw std::runtime_error("No mobs types loaded");
 
     _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.22);
-
-    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
+    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.3);
+    //
+    // _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
+    // _em.attachComponent<ScrollingBackground>(df, "Background", 0.3);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.3);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.27);
 
     _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.50);
+    _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.55);
 
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.40);
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
     _em.attachComponent<AudioEffect>(player, "Audio");
 
@@ -145,7 +145,7 @@ void        RTypeGame::initGameSample()
 void        RTypeGame::handleGame()
 {
     _lag += BigBen::getElapsedtime();
-    std::cout << _lag << std::endl;
+    // std::cout << _lag << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _ms.process();

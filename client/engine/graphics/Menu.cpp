@@ -456,9 +456,7 @@ void Menu::transitionToStates()
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
-            menu->_network->pushToSend(RType::Request
-                                            (RType::Request::CL_QUITROOM));
-            _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
+            menu->quitRoom();
             menu->clearPlayers();
             menu->refreshRoomList();
             return true;
@@ -518,7 +516,6 @@ void Menu::move()
 
 void Menu::update()
 {
-    std::cout << _lastRequest.size() << std::endl;
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
@@ -526,57 +523,40 @@ void Menu::update()
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
                 break;
             case RType::Request::SE_JOINROOM :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 addPlayer(tmp);
                 break;
             case RType::Request::SE_QUITROOM :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 deletePlayer(tmp.get<uint8_t>("player_id"));
                 break;
             case RType::Request::SE_CLIENTRDY :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 userReady(tmp);
                 break;
             case RType::Request::SE_CLINOTRDY :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 playerNotReady(tmp.get<uint8_t>("player_id"));
                 break;
             case RType::Request::SE_CLIUSRNM :
-                _lastRequest.pop_front();
                 changePlayerName(tmp);
                 break;
             case RType::Request::SE_ROOMINFO :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
                 break;
             case RType::Request::SE_GAMESTART :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 _done = true;
                 break;
             case RType::Request::SE_OK :
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 break;
             case RType::Request::SE_KO :
                 //TODO REVERSE STATE
-                if (!_lastRequest.empty())
-                    _lastRequest.pop_front();
                 break;
             default :
                 break;
         }
+        if (!_lastRequest.empty())
+            _lastRequest.pop_front();
     }
 }
 
@@ -636,4 +616,10 @@ void Menu::playerNotReady(uint8_t id)
         }
     }
     addPlayerList(_playersList);
+}
+
+void Menu::quitRoom()
+{
+    _network->pushToSend(RType::Request(RType::Request::CL_QUITROOM));
+    _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
 }

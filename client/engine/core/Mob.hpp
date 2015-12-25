@@ -5,6 +5,7 @@
 # include "Transform.hpp"
 # include "IMobType.hpp"
 # include "REnums.hpp"
+# include "GameObject.hpp"
 
 class Mob : public Behaviour
 {
@@ -32,6 +33,7 @@ public:
     void            init(RType::MobType::IMobType const* mobtype);
     void            addLives(unsigned int nb = 1);
     void            removeLives(unsigned int nb = 1);
+    void            initTransform();
 
 public:
     unsigned int                    getMobId() const;
@@ -57,6 +59,7 @@ protected:
     RType::MobType::MovePattern _movePattern;
     Transform*                  _transform;
     int                         _state;
+    GameObject*                 _parent;
 };
 
 #endif /* !MOB_HPP_ */

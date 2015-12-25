@@ -47,6 +47,7 @@ private:
     void joinRoom(RType::Request::Room);
     void joinRoom(std::string const &);
     void ready();
+    void quitRoom();
 
 public:
     bool isReady() const;
