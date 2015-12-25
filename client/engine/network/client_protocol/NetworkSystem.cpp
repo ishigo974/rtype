@@ -83,16 +83,14 @@ namespace RType
 
         try
         {
-            _udpSock.receiveFrom(receive, buffLen, addr);
+            if ((_udpSock.receiveFrom(receive, buffLen, addr)) > 0)
+                _udpObj.receive(receive);
         }
         catch (std::runtime_error const&)
         {
             _udpSock.close();
-            // throw std::runtime_error("Receive error");
             //TODO Send UI disconnection
         }
-        _udpObj.receive(receive);
-        // std::cout << receive.size() << std::endl;
 
         try
         {
