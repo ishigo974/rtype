@@ -144,6 +144,10 @@ void Menu::createNewRoom(std::string const &roomName)
     request.push<std::string>("room_name", roomName);
     _network->pushToSend(request);
     addPlayer(_user);
+    _gm->setPlayerId(1);
+    _gm->clearPlayers();
+    (*_gm)[1] = nullptr;
+
 }
 
 void Menu::changeUserName(std::string const &username)

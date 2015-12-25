@@ -106,6 +106,20 @@ void                GameManagerBehaviour::update(double)
             default:
                 break ;
         }
+        while (tcp->sizeToSend() > 0)
+        {
+            RType::Request      request = tcp->popToSend();
+
+            switch (request.getCode())
+            {
+                case RType::Request::CL_CREATEROOM:
+                    break ;
+                case RType::Request::CL_QUITROOM:
+                    goParent->clearPlayers();
+                default:
+                    break ;
+            }
+        }
         std::cout << goParent->toString() << std::endl; // debug
     }
 }
