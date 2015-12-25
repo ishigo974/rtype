@@ -31,6 +31,7 @@ public:
     virtual int     getDamage() const;
     void            init();
     void            swap(Player& other);
+    std::string    toString() const;
 
 protected:
     virtual bool   handleMessage(Collider *o);
@@ -39,7 +40,6 @@ protected:
     void           shoot();
     void           move(double elapsedtime);
     int            getHp() const;
-    std::string    toString() const;
 
     const std::vector<BulletObject *> &getActiveBullets() const;
 
