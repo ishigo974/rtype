@@ -64,7 +64,7 @@ void NetPlayerComp::swap(NetPlayerComp& o)
 namespace std
 {
     template<>
-    void swap<NetPlayerComp>(NetPlayerComp& a, NetPlayerComp& b)
+    inline void swap<NetPlayerComp>(NetPlayerComp& a, NetPlayerComp& b)
     {
         a.swap(b);
     }
