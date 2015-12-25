@@ -96,8 +96,7 @@ namespace RType
 
             if (it == _rooms.end())
                 return nullptr;
-            return it->second
-                        ->getComponent<Component::Room>();
+            return it->second->getComponent<Component::Room>();
         }
 
         ECS::ComponentMask  Lobby::getMask() const

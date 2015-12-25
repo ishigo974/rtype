@@ -83,7 +83,7 @@ namespace RType
                 em.getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
                 _movePattern(cu::Position(pos->getX(), pos->getY()),
-                             _game->getLastElapsed(), _state);
+                             _game->getElapsedTime(), _state);
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
             // std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug

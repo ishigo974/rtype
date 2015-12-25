@@ -31,12 +31,14 @@ namespace RType
             void            removeLives(unsigned int nb = 1);
             void            addScore(unsigned int nb = 1);
             void            removeScore(unsigned int nb = 1);
+            void            setElapsedTime(double elapsedTime);
 
         public:
             bool            isFiring() const;
             Shot::Type      getShotType() const;
             unsigned int    getLives() const;
             unsigned int    getScore() const;
+            double          getElapsedTime() const;
 
         public:
             virtual std::string         getName() const;
@@ -49,6 +51,7 @@ namespace RType
             static const ECS::ComponentMask     mask;
             static const unsigned int           defaultLives;
             static const unsigned int           usecFireDelay;
+            static const double                 dftElapsedTime;
 
         protected:
             bool            _isFiring;
@@ -56,6 +59,7 @@ namespace RType
             unsigned int    _lives;
             unsigned int    _score;
             Time::HRChrono  _chrono;
+            double          _elapsedTime;
         };
     }
 }

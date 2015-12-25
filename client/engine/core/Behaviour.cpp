@@ -63,13 +63,13 @@ void Behaviour::setEnabled(bool _enabled)
     Behaviour::_enabled = _enabled;
 }
 
-void Behaviour::update(double)
+void Behaviour::update()
 {
     if (!_enabled)
         return;
 }
 
-void Behaviour::update()
+void Behaviour::update(double)
 {
     if (!_enabled)
         return;

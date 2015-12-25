@@ -1,4 +1,7 @@
 #include "ShipComponent.hpp"
+#include "ShotComponent.hpp"
+#include "PlayerComponent.hpp"
+#include "RoomComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "PositionComponent.hpp"
 #include "EntityManager.hpp"
@@ -10,16 +13,17 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Ship::mask          = Component::MASK_SHIP;
-        const unsigned int          Ship::defaultLives  = 1;
-        const unsigned int          Ship::usecFireDelay = 500000;
+        const ECS::ComponentMask    Ship::mask              = Component::MASK_SHIP;
+        const unsigned int          Ship::defaultLives      = 1;
+        const unsigned int          Ship::usecFireDelay     = 500000;
+        const double                Ship::dftElapsedTime    = 0.02;
 
         /*
         ** Constructor/Destructor
         */
         Ship::Ship() :
             _isFiring(false), _shotType(Shot::NORMAL),
-            _lives(defaultLives), _score(0)
+            _lives(defaultLives), _score(0), _elapsedTime(dftElapsedTime)
         {
         }
 
@@ -32,7 +36,8 @@ namespace RType
         */
         Ship::Ship(Ship const& other) :
             _isFiring(other._isFiring), _shotType(other._shotType),
-            _lives(other._lives), _score(other._score)
+            _lives(other._lives), _score(other._score),
+            _elapsedTime(other._elapsedTime)
         {
         }
 
@@ -44,6 +49,7 @@ namespace RType
                 _shotType = other._shotType;
                 _lives = other._lives;
                 _score = other._score;
+                _elapsedTime = other._elapsedTime;
             }
             return *this;
         }
@@ -53,20 +59,23 @@ namespace RType
         */
         void                Ship::update()
         {
-            ECS::Entity&            entity =
-                ECS::EntityManager::getInstance().getByCmpnt(this);
+            ECS::EntityManager&     em = ECS::EntityManager::getInstance();
+            ECS::Entity&            entity = em.getByCmpnt(this);
             Component::Position*    pos =
-                    entity.getComponent<Component::Position>();
+                entity.getComponent<Component::Position>();
+            Component::Room*        room =
+                entity.getComponent<Component::Player>()->getRoom();
 
             if (_isFiring && _chrono.getElapsedTime() > usecFireDelay)
             {
-                ECS::Entity&            shot = ECS::EntityManager::getInstance()
-                    .create(Component::MASK_POSITION);
+                ECS::Entity&            shot = em.create(Component::MASK_POSITION);
                 Component::Position*    shotPos =
                     shot.getComponent<Component::Position>();
+                Component::Game*        game =
+                    em.getByCmpnt(room).getComponent<Component::Game>();
 
                 shot.addComponent(
-                    std::make_unique<Component::Shot>(_shotType, &entity));
+                    std::make_unique<Component::Shot>(_shotType, &entity, game));
                 *shotPos = *pos;
                 _chrono.reset();
                 // std::cout << "bullet created" << std::endl; // debug
@@ -110,9 +119,19 @@ namespace RType
                 _score -= nb;
         }
 
+        void                Ship::setElapsedTime(double elapsedTime)
+        {
+            _elapsedTime = elapsedTime;
+        }
+
         bool                Ship::isFiring() const
         {
             return _isFiring;
+        }
+
+        double              Ship::getElapsedTime() const
+        {
+            return _elapsedTime;
         }
 
         Shot::Type          Ship::getShotType() const
@@ -151,6 +170,7 @@ namespace RType
             _shotType = Shot::NORMAL;
             _lives = defaultLives;
             _score = 0;
+            _elapsedTime = dftElapsedTime;
         }
 
         std::string         Ship::toString() const
@@ -160,6 +180,7 @@ namespace RType
                    "\n\t_shotType: " + std::to_string(_shotType) +
                    "\n\t_lives: " + std::to_string(_lives) +
                    "\n\t_score: " + std::to_string(_score) +
+                   "\n\t_elapsedTime: " + std::to_string(_elapsedTime) +
                    "\n}\n";
         }
     }

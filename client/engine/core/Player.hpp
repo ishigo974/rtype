@@ -27,7 +27,7 @@ public:
     static const RTypes::my_uint16_t Mask      = ComponentMask::PlayerMask;
 
     void            setAction(ACommand::Action action);
-    virtual void    update(double);
+    virtual void    update(double elapsed);
     virtual int     getDamage() const;
     void            init();
     void            swap(Player& other);

@@ -11,6 +11,7 @@
 # include "SocketMonitor.hpp"
 # include "TcpAcceptor.hpp"
 # include "MapParser.hpp"
+# include "GameClock.hpp"
 
 namespace RType
 {
@@ -79,6 +80,7 @@ namespace RType
         ECS::EntityManager&         _em;
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
+        Time::GameClock             _clock;
     };
 }
 
