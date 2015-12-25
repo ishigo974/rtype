@@ -89,7 +89,6 @@ void        RTypeGame::run()
             if (_menu->done())
             {
                 _menu->setVisible(false);
-                // std::cout << "TA RACE LA PUTE" << std::endl;
                 _isPlaying = true;
             }
         }
