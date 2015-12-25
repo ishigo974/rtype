@@ -1,5 +1,5 @@
-#ifndef SINUSOIDMOBTYPE_HPP_
-# define SINUSOIDMOBTYPE_HPP_
+#ifndef DIAGONALMOBTYPE_HPP_
+# define DIAGONALMOBTYPE_HPP_
 
 # include <string>
 # include "IMobType.hpp"
@@ -8,18 +8,19 @@ namespace RType
 {
     namespace MobType
     {
-        class Sinusoid : public IMobType
+        class Diagonal : public IMobType
         {
         public:
-            Sinusoid();
-            virtual ~Sinusoid();
+            Diagonal();
+            virtual ~Diagonal();
 
         public:
-            Sinusoid(Sinusoid const& other);
-            Sinusoid&                operator=(Sinusoid const& other);
+            Diagonal(Diagonal const& other);
+            Diagonal&               operator=(Diagonal const& other);
 
         public:
             virtual unsigned int    getId() const;
+            virtual gu::Rect<int>   getRekt() const;
             virtual std::string     getName() const;
             virtual unsigned int    getNbLives() const;
             virtual unsigned int    getScoreValue() const;
@@ -31,4 +32,4 @@ namespace RType
     }
 }
 
-#endif /* !SINUSOIDMOBTYPE_HPP_ */
+#endif /* !DIAGONALMOBTYPE_HPP_ */

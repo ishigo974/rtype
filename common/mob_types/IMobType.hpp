@@ -4,6 +4,7 @@
 # include <functional>
 # include <vector>
 # include "Utils.hpp"
+# include "Rect.hpp"
 # include "IStringable.hpp"
 
 namespace RType
@@ -25,6 +26,7 @@ namespace RType
 
         public:
             virtual unsigned int    getId() const = 0;
+            virtual gu::Rect<int>   getRekt() const = 0;
             virtual std::string     getName() const = 0;
             virtual unsigned int    getNbLives() const = 0;
             virtual unsigned int    getScoreValue() const = 0;
