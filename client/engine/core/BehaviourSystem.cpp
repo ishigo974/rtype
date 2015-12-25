@@ -16,56 +16,28 @@ BehaviourSystem::BehaviourSystem(EntityManager *em)
 
 void BehaviourSystem::process(double elapsed)
 {
-    auto tmp = _em->getByMask(ComponentMask::BehaviourMask);
-    for (auto e : tmp)
+    static const std::vector<ComponentMask>     masks =
     {
-        Behaviour *comp = static_cast<GameObject *>(e)->getComponent<Behaviour>();
+        ComponentMask::BehaviourMask,   ComponentMask::MobMask,
+        ComponentMask::PlayerMask,      ComponentMask::BulletMask,
+        ComponentMask::MobSpawnerMask,  ComponentMask::GMBehaviourMask
+    };
 
-        if (comp->isEnabled())
-            comp->update(elapsed);
-    }
-    tmp.clear();
 
-    tmp = _em->getByMask(ComponentMask::MobMask);
-    for (auto e : tmp)
+    for (auto& mask: masks)
     {
-        Mob *comp = static_cast<GameObject *>(e)->getComponent<Mob>();
+        auto tmp = _em->getByMask(mask);
 
-        if (comp->isEnabled())
-            comp->update(elapsed);
-    }
-    tmp.clear();
+        for (auto e : tmp)
+        {
+            Behaviour *comp = static_cast<GameObject *>(e)->getComponent<Behaviour>(mask);
 
-    tmp = _em->getByMask(ComponentMask::PlayerMask);
-    for (auto e : tmp)
-    {
-        Player *comp = static_cast<GameObject *>(e)->getComponent<Player>();
-
-        if (comp->isEnabled())
-            comp->update(elapsed);
-    }
-    tmp.clear();
-
-    tmp = _em->getByMask(ComponentMask::BulletMask);
-    for (auto e : tmp)
-    {
-        Bullet *comp = static_cast<GameObject *>(e)->getComponent<Bullet>();
-
-        if (comp->isEnabled())
-        comp->update(elapsed);
-    }
-    tmp.clear();
-
-    tmp = _em->getByMask(ComponentMask::MobSpawnerMask);
-    for (auto e : tmp)
-    {
-        MobSpawner *comp = static_cast<GameObject *>(e)->getComponent<MobSpawner>();
-
-        if (comp->isEnabled())
-            comp->update(elapsed);
+            if (comp->isEnabled())
+                comp->update(elapsed);
+        }
     }
 
-    tmp = _em->getByMask(ComponentMask::ColliderMask);
+    auto tmp = _em->getByMask(ComponentMask::ColliderMask);
     for (auto e : tmp)
     {
         Collider *comp = static_cast<GameObject *>(e)->getComponent<Collider>();

@@ -44,6 +44,7 @@ namespace RType
         if (_monitor.isWritable(&_connector))
         {
             Buffer tmp = _tcpObj.toSend();
+
             if (!tmp.empty())
             {
                 _connector.send(tmp);

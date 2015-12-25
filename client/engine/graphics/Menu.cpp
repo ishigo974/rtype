@@ -500,7 +500,7 @@ void Menu::update()
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
-        std::cout << "{CODE} " << tmp.getCode() << std::endl;
+        // std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :

@@ -67,6 +67,16 @@ void    GameManager::setPlayerId(unsigned int id)
     _playerId = id;
 }
 
+GameManager::GameObjectMap::iterator    GameManager::begin()
+{
+    return _targets.begin();
+}
+
+GameManager::GameObjectMap::iterator    GameManager::end()
+{
+    return _targets.end();
+}
+
 GameManager::GameObjectMap::const_iterator    GameManager::begin() const
 {
     return _targets.begin();
