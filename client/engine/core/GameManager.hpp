@@ -28,6 +28,8 @@ public:
 public:
     void                            clearPlayers();
     void                            erasePlayer(unsigned int id);
+    GameObjectMap::iterator         begin();
+    GameObjectMap::iterator         end();
     GameObjectMap::const_iterator   begin() const;
     GameObjectMap::const_iterator   end() const;
 

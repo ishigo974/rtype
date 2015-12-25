@@ -20,7 +20,7 @@ void BehaviourSystem::process(double elapsed)
     {
         ComponentMask::BehaviourMask,   ComponentMask::MobMask,
         ComponentMask::PlayerMask,      ComponentMask::BulletMask,
-        ComponentMask::MobSpawnerMask
+        ComponentMask::MobSpawnerMask,  ComponentMask::GMBehaviourMask
     };
 
 

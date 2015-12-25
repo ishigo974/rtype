@@ -81,10 +81,8 @@ void                GameManagerBehaviour::update(double)
     TCPView*        tcp         = goParent->getComponent<TCPView>();
     unsigned int    id;
 
-    std::cout << "fuck" << std::endl;
     while (tcp->sizeReceive() > 0)
     {
-        std::cout << "YAYAYAYAYAYAY" << std::endl;
         RType::Request      request = tcp->popReceive();
 
         switch (request.getCode())
