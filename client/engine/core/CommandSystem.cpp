@@ -84,8 +84,6 @@ void CommandSystem::processNetwork()
         while (tmpComp->sizeToSend() > 0)
             _ns->pushTCP(tmpComp->popToSend());
     }
-    ACommand  *command;
-
     for (auto e : udpObjs)
     {
         i = 0;

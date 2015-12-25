@@ -86,10 +86,10 @@ void        RTypeGame::run()
             _cs.processNetwork();
             if (_menu->done())
             {
-                _menu->setVisible(false);
-                std::cout << "TA RACE LA PUTE" << std::endl;
                 _isPlaying = true;
+                _menu->setVisible(false);
                 initGame();
+                std::cout << "TA RACE LA PUTE" << std::endl;
             }
         }
         _renderer.render();
@@ -111,24 +111,26 @@ void        RTypeGame::initGame()
     AudioEffect*    audio;
     GameManager* gm = static_cast<GameManager*>(_em.getByTag("GameManager"));
 
-
     for (auto tmp = gm->begin(); tmp != gm->end(); ++tmp)
     {
         if (tmp->first == gm->getId())
         {
-            PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
+	  PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
             player->init();
             tmp->second = player;
+	    _em.attachComponent<AudioEffect>(player, "Audio");
+	    audio = player->getComponent<AudioEffect>();
         }
         else
         {
-            NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", 1, &_em);
+            NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
             player->init();
             tmp->second = player;
         }
     }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
+
 
     _em.tagObject(mobSpawn, "mobSpawn");
 
@@ -151,16 +153,13 @@ void        RTypeGame::initGame()
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.40);
 
-    _em.attachComponent<AudioEffect>(player, "Audio");
-
-    audio = player->getComponent<AudioEffect>();
     audio->addSound("../res/OnePunch.wav");
     audio->addSound("../res/laser1.wav");
     audio->addSound("../res/laser2.wav");
 
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
-    _chrono.start();
+     _chrono.start();
 }
 
 void        RTypeGame::handleGame()
