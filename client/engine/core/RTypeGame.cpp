@@ -8,6 +8,7 @@
 #include "Collider.hpp"
 #include "AudioEffect.hpp"
 #include "MobSpawner.hpp"
+#include "GameManagerBehaviour.hpp"
 #include "TCPView.hpp"
 #include "UDPView.hpp"
 
@@ -33,23 +34,18 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 {
     GameManager *gm = _em.createEntity<GameManager>("gm", 0);
 
-    _em.tagObject(gm, "GameManager");
-    // tmp
-   // RType::Request request;
-   // request.setCode(RType::Request::CL_CREATEROOM);
-   // request.push<std::string>("room_name", "BestRoomEver");
-   // _network.pushTCP(request);
-   // _network.pushTCP(RType::Request(RType::Request::CL_READY));
-    // end tmp
     BigBen::getElapsedtime();
     loadMobTypesFromFile();
     loadMapsFromFile();
+
+    _em.tagObject(gm, "GameManager");
+    _em.attachComponent<TCPView>(gm, "TCP");
+    _em.attachComponent<GameManagerBehaviour>(gm, "GMB");
 
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
     _em.attachComponent<UDPView>(_menu, "UDP");
     _menu->init();
-//     _menu->setVisible(false);
     _renderer.init();
 }
 
@@ -93,7 +89,7 @@ void        RTypeGame::run()
                 _menu->setVisible(false);
                 std::cout << "TA RACE LA PUTE" << std::endl;
                 _isPlaying = true;
-                // init game ici
+                // initGame();
             }
         }
         _renderer.render();
@@ -104,6 +100,10 @@ void        RTypeGame::run()
 /*
 ** Protected member functions
 */
+void        RTypeGame::initGame()
+{
+}
+
 void        RTypeGame::initGameSample()
 {
     PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);

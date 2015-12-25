@@ -44,6 +44,7 @@ public:
 
 protected:
     void                handleGame();
+    void                initGame();
     void                initGameSample();
     void                loadMapsFromFile();
     void                loadMobTypesFromFile();

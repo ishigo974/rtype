@@ -46,9 +46,49 @@ void GameManager::swap(GameManager& o)
 
 namespace std
 {
-    template<>
+    template <>
     void swap<GameManager>(GameManager &a, GameManager &b)
     {
         a.swap(b);
     }
+}
+void    GameManager::erasePlayer(unsigned int id)
+{
+    _targets.erase(id);
+}
+
+void    GameManager::clearPlayers()
+{
+    _targets.clear();
+}
+
+void    GameManager::setPlayerId(unsigned int id)
+{
+    _playerId = id;
+}
+
+GameManager::GameObjectMap::const_iterator    GameManager::begin() const
+{
+    return _targets.begin();
+}
+
+GameManager::GameObjectMap::const_iterator    GameManager::end() const
+{
+    return _targets.end();
+}
+
+unsigned int        GameManager::getPlayerId() const
+{
+    return _playerId;
+}
+
+std::string    GameManager::toString() const
+{
+    std::string res = std::string("GameManager {") +
+                       "\n\t_playerId: " + std::to_string(_playerId) +
+                       "\n\tplayers id: ";
+
+    for (auto& target: _targets)
+        res += std::to_string(target.first) + " ";
+    return res + "\n}\n";
 }
