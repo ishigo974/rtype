@@ -9,7 +9,6 @@
 #include "Collider.hpp"
 #include "AudioEffect.hpp"
 #include "MobSpawner.hpp"
-#include "GameManagerBehaviour.hpp"
 #include "TCPView.hpp"
 #include "UDPView.hpp"
 
@@ -39,9 +38,11 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     loadMobTypesFromFile();
     loadMapsFromFile();
 
+
     _em.tagObject(gm, "GameManager");
     _em.attachComponent<TCPView>(gm, "TCP");
     _em.attachComponent<GameManagerBehaviour>(gm, "GMB");
+    _gmb = gm->getComponent<GameManagerBehaviour>();
 
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
@@ -90,6 +91,10 @@ void        RTypeGame::run()
                 _menu->setVisible(false);
                 initGame();
             }
+            else
+            {
+                _gmb->update(0);
+            }
         }
         _renderer.render();
         _event.type = cu::Event::None;
@@ -110,26 +115,32 @@ void        RTypeGame::initGame()
     AudioEffect*    audio;
     GameManager* gm = static_cast<GameManager*>(_em.getByTag("GameManager"));
 
+    std::cout << "____ init game" << std::endl;
+    std::cout << gm->toString() << std::endl;
+    std::cout << "____ loop start" << std::endl;
     for (auto& entry: *gm)
     {
         if (entry.first == gm->getId())
         {
+            std::cout << "init main player" << std::endl;
 	        PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
             player->init();
             entry.second = player;
-	    _em.attachComponent<AudioEffect>(player, "Audio");
-	    audio = player->getComponent<AudioEffect>();
-	    audio->addSound("../res/OnePunch.wav");
-	    audio->addSound("../res/laser1.wav");
-	    audio->addSound("../res/laser2.wav");
+    	    _em.attachComponent<AudioEffect>(player, "Audio");
+    	    audio = player->getComponent<AudioEffect>();
+    	    audio->addSound("../res/OnePunch.wav");
+    	    audio->addSound("../res/laser1.wav");
+    	    audio->addSound("../res/laser2.wav");
         }
         else
         {
+            std::cout << "init other player" << std::endl;
             NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
             player->init();
             entry.second = player;
         }
     }
+    std::cout << "____ loop end" << std::endl;
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
@@ -155,10 +166,9 @@ void        RTypeGame::initGame()
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
-    
+
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
-        std::cout << gm->toString() << std::endl;
      _chrono.start();
 }
 

@@ -20,6 +20,8 @@
 # include "MapParser.hpp"
 # include "AudioEffectPlayer.hpp"
 # include "HRChrono.hpp"
+# include "GameManagerBehaviour.hpp"
+
 
 class MobSystem;
 
@@ -76,6 +78,7 @@ protected:
     Time::HRChrono              _chrono;
     PhysicsEngine               _physics;
     AudioEffectPlayer           _audio;
+    GameManagerBehaviour*       _gmb;
 };
 
 #endif /* !RTYPEGAME_HPP_ */
