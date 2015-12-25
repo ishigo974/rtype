@@ -123,8 +123,11 @@ void        RTypeGame::initGame()
 	        PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
             player->init();
             entry.second = player;
-	        _em.attachComponent<AudioEffect>(player, "Audio");
-	        audio = player->getComponent<AudioEffect>();
+	    _em.attachComponent<AudioEffect>(player, "Audio");
+	    audio = player->getComponent<AudioEffect>();
+	    audio->addSound("../res/OnePunch.wav");
+	    audio->addSound("../res/laser1.wav");
+	    audio->addSound("../res/laser2.wav");
         }
         else
         {
@@ -158,10 +161,7 @@ void        RTypeGame::initGame()
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
-    audio->addSound("../res/OnePunch.wav");
-    audio->addSound("../res/laser1.wav");
-    audio->addSound("../res/laser2.wav");
-
+    
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
      _chrono.start();
