@@ -103,13 +103,15 @@ void CommandSystem::processNetwork()
             _ns->pushTCP(tmpComp->popToSend());
     }
     i = 0;
+    ACommand *command;
     for (auto e : udpObjs)
     {
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
 
         while (i < udpIn.size())
-            _pipeline.addCommand(_factory.createCommand(udpIn[i++]));
-        while (tmpComp->sizeRecv() > 0)
+            if ((command = _factory.createCommand(udpIn[i++])))
+                _pipeline.addCommand(command);
+        while (tmpComp->sizeToSend() > 0)
             _ns->pushUDP(tmpComp->popToSend());
     }
 }

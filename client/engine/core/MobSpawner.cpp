@@ -79,6 +79,7 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
 
 void	MobSpawner::spawnMob(unsigned int id)
 {
+    std::cout << "On spawn un mob" << std::endl;
     // std::cout << "inactive mobs => " << _mobs->_objects.size() << std::endl;
     // std::cout << "Active mobs => " << _activeMobs.size() << std::endl;
 
