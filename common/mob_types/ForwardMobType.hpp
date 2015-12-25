@@ -20,6 +20,7 @@ namespace RType
 
         public:
             virtual unsigned int    getId() const;
+            virtual gu::Rect<int>   getRekt() const;
             virtual std::string     getName() const;
             virtual unsigned int    getNbLives() const;
             virtual unsigned int    getScoreValue() const;
