@@ -66,6 +66,7 @@ public:
 private:
     std::vector<TextField *>    _roomsTextField;
     std::vector<TextField *>    _playersInRoom;
+    
     TextField                   _mainTitle;
     TextField                   _changeName;
     TextField                   _createRoom;

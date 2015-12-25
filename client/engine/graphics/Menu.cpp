@@ -2,31 +2,34 @@
 
 Menu::Menu(unsigned int id, std::string const& name, int layer,
            EntityManager* em, cu::Event* event) :
-           GameObject(id, name, layer),
-           _roomsTextField(15), _playersInRoom(4),
-           _mainTitle(gu::Rect<float>(300, 100, 800, 60),
-                     "Le R-Type officiel 2015"),
-           _changeName(gu::Rect<float>(1000, 0, 250, 50), "CHANGE NAME", 10),
-           _createRoom(gu::Rect<float>(1000, 590, 250, 50), "CREATE ROOM", 10),
-           _refresh(gu::Rect<float>(1000, 650, 200, 50), "REFRESH", 10),
-           _back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
-           _roomTitle(gu::Rect<float>(300, 0, 640, 70), ""),
-           _readyField(gu::Rect<float>(1000, 600, 200, 50), "READY", 10),
-           _inputRoomName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
-           _inputUserName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
-           _titleState("title"), _mainMenu("mainMenu"), _inRoom("inRoom"),
-           _createRoomState("createRoom"), _changeNameState("changeName"),
-           _sm(nullptr),
-           _event(event),
-           _em(em),
-           _gm(nullptr),
-           _ready(false), _isVisible(true),
-           _network(nullptr),
-           _done(false)
+   GameObject(id, name, layer),
+   _roomsTextField(15), _playersInRoom(4),
+   _mainTitle(gu::Rect<float>(300, 100, 800, 60),
+             "Le R-Type officiel 2015"),
+   _changeName(gu::Rect<float>(1000, 0, 250, 50), "CHANGE NAME", 10),
+   _createRoom(gu::Rect<float>(1000, 590, 250, 50), "CREATE ROOM", 10),
+   _refresh(gu::Rect<float>(1000, 650, 200, 50), "REFRESH", 10),
+   _back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
+   _roomTitle(gu::Rect<float>(300, 0, 640, 70), ""),
+   _readyField(gu::Rect<float>(1000, 600, 200, 50), "READY", 10),
+   _inputRoomName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
+   _inputUserName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
+   _titleState("title"), _mainMenu("mainMenu"), _inRoom("inRoom"),
+   _createRoomState("createRoom"), _changeNameState("changeName"),
+   _sm(nullptr),
+   _event(event),
+   _em(em),
+   _gm(nullptr),
+   _ready(false), _isVisible(true),
+   _network(nullptr),
+   _done(false)
 {
     initTextFields();
     transitionToStates();
     _sm = new StateMachine(_titleState);
+    if ((_gm = static_cast<GameManager *>(_em->getByTag("GameManager")))
+            == nullptr)
+        throw std::logic_error("Could not find GameManager");
 }
 
 Menu::Menu(Menu const& other) :
@@ -74,7 +77,7 @@ bool Menu::operator!=(Menu const& other)
 
 std::string Menu::toString() const
 {
-    return std::string("Menu");
+    return "Menu";
 }
 
 void Menu::swap(Menu& other)
@@ -85,6 +88,7 @@ void Menu::swap(Menu& other)
     swap(_refresh, other._refresh);
     swap(_back, other._back);
     swap(_roomTitle, other._roomTitle);
+    // TODO: swap les autres attributs
 }
 
 void Menu::initTextFields()
@@ -128,7 +132,6 @@ void Menu::initTextFields()
 
 void Menu::refreshRoomList()
 {
-    std::cout << "Get rooms" << std::endl;
     _network->pushToSend(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
@@ -137,11 +140,9 @@ void Menu::createNewRoom(std::string const &roomName)
     RType::Request     request;
     RType::Request::Player user;
 
-    std::cout << "Create room: " << roomName << std::endl;
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", roomName);
     _network->pushToSend(request);
-
     addPlayer(_user);
 }
 
@@ -149,7 +150,6 @@ void Menu::changeUserName(std::string const &username)
 {
     RType::Request     request;
 
-    std::cout << "Change name: " << username << std::endl;
     request.setCode(RType::Request::CL_USERNAME);
     request.push<std::string>("username", username);
     _network->pushToSend(request);

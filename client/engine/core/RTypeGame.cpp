@@ -31,8 +31,9 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
     _physics(&_em), _audio(&_em)
 {
-    BigBen::getElapsedtime();
+    GameManager *gm = _em.createEntity<GameManager>("gm", 0);
 
+    _em.tagObject(gm, "GameManager");
     // tmp
    // RType::Request request;
    // request.setCode(RType::Request::CL_CREATEROOM);
@@ -40,7 +41,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
    // _network.pushTCP(request);
    // _network.pushTCP(RType::Request(RType::Request::CL_READY));
     // end tmp
-
+    BigBen::getElapsedtime();
     loadMobTypesFromFile();
     loadMapsFromFile();
 
@@ -112,7 +113,6 @@ void        RTypeGame::initGameSample()
     GameObject *df = _em.createEntity<GameObject>("df", -4);
     GameObject *opm = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
-    GameManager *gm = _em.createEntity<GameManager>("gm", 2);
     GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
     AudioEffect*    audio;
 
@@ -120,7 +120,6 @@ void        RTypeGame::initGameSample()
         throw std::runtime_error("No mobs types loaded");
 
     _em.tagObject(mobSpawn, "mobSpawn");
-    _em.tagObject(gm, "GameManager");
 
     _em.attachComponent<MobSpawner>(mobSpawn, "MobSpawner", &_em, &_mobTypes);
     _em.attachComponent<UDPView>(mobSpawn, "Spawner UDPView");
