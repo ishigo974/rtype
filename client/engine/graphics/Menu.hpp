@@ -7,6 +7,7 @@
 # include "GameObject.hpp"
 # include "State.hpp"
 # include "Event.hpp"
+# include "GameManager.hpp"
 # include "EntityManager.hpp"
 # include "StateMachine.hpp"
 # include "GUIManager.hpp"
@@ -62,28 +63,29 @@ public:
     void clearPlayers();
 
 private:
-    std::vector<TextField *>    roomsTextField;
-    std::vector<TextField *>    playersInRoom;
-    TextField                   mainTitle;
-    TextField                   changeName;
-    TextField                   createRoom;
-    TextField                   refresh;
-    TextField                   back;
-    TextField                   roomTitle;
-    TextField                   readyField;
-    TextField                   inputRoomName;
-    TextField                   inputUserName;
+    std::vector<TextField *>    _roomsTextField;
+    std::vector<TextField *>    _playersInRoom;
+    TextField                   _mainTitle;
+    TextField                   _changeName;
+    TextField                   _createRoom;
+    TextField                   _refresh;
+    TextField                   _back;
+    TextField                   _roomTitle;
+    TextField                   _readyField;
+    TextField                   _inputRoomName;
+    TextField                   _inputUserName;
 
     State		                _titleState;
-    State		                mainMenu;
-    State		                inRoom;
-    State		                createRoomState;
-    State                       changeNameState;
+    State		                _mainMenu;
+    State		                _inRoom;
+    State		                _createRoomState;
+    State                       _changeNameState;
 
-    StateMachine	            *_sm;
+    StateMachine*               _sm;
 
-    cu::Event		            *_event;
-    EntityManager	            *_em;
+    cu::Event*                  _event;
+    EntityManager*              _em;
+    GameManager*                _gm;
     bool		                _ready;
     bool		                _isVisible;
     TCPView*	                _network;
