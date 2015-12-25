@@ -49,6 +49,7 @@ private:
     void joinRoom(RType::Request::Room);
     void joinRoom(std::string const &);
     void ready();
+    void quitRoom();
 
 public:
     bool isReady() const;
@@ -95,6 +96,7 @@ private:
     RType::Request::PlayersTab  _playersList;
 
     RType::Request::Player      _user;
+    std::deque<RType::Request>  _lastRequest;
 
     bool                        _done;
 };

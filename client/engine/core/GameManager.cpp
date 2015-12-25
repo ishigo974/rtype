@@ -31,9 +31,6 @@ GameManager& GameManager::operator=(GameManager o)
 
 GameObject *& GameManager::operator[](unsigned int id)
 {
-    if (_targets.find(id) == _targets.end())
-        throw (std::logic_error(std::string("Could not find target with id ").append(std::to_string(id))));
-
     return (_targets[id]);
 }
 

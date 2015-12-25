@@ -16,7 +16,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.005;
+const double        RTypeGame::defaultFixedStep = 0.006;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -61,6 +61,7 @@ void        RTypeGame::run()
 {
     while (!_quit)
     {
+        std::cout << "before pollevent" << std::endl;
         while (_input.pollEvent(_event))
         {
             if (_event.type == cu::Event::Closed
@@ -78,6 +79,7 @@ void        RTypeGame::run()
             else
                 handleGame();
         }
+        std::cout << "after poll event" << std::endl;
         if (_isPlaying)
             handleGame();
         else
@@ -88,11 +90,14 @@ void        RTypeGame::run()
             {
                 _isPlaying = true;
                 _menu->setVisible(false);
+                std::cout << "init game" << std::endl;
                 initGame();
-                std::cout << "TA RACE LA PUTE" << std::endl;
+                std::cout << "start game" << std::endl;
             }
         }
+        std::cout << "befoore render" << std::endl;
         _renderer.render();
+        std::cout << "after render" << std::endl;
         _event.type = cu::Event::None;
     }
 }
@@ -111,21 +116,21 @@ void        RTypeGame::initGame()
     AudioEffect*    audio;
     GameManager* gm = static_cast<GameManager*>(_em.getByTag("GameManager"));
 
-    for (auto tmp = gm->begin(); tmp != gm->end(); ++tmp)
+    for (auto& entry: *gm)
     {
-        if (tmp->first == gm->getId())
+        if (entry.first == gm->getId())
         {
-	  PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
+	        PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
             player->init();
-            tmp->second = player;
-	    _em.attachComponent<AudioEffect>(player, "Audio");
-	    audio = player->getComponent<AudioEffect>();
+            entry.second = player;
+	        _em.attachComponent<AudioEffect>(player, "Audio");
+	        audio = player->getComponent<AudioEffect>();
         }
         else
         {
             NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
             player->init();
-            tmp->second = player;
+            entry.second = player;
         }
     }
     if (_mobTypes.empty())
@@ -139,19 +144,19 @@ void        RTypeGame::initGame()
     mobSpawn->getComponent<MobSpawner>()->init();
 
     _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.22);
-
+    _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.3);
+    //
     _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
+    _em.attachComponent<ScrollingBackground>(df, "Background", 0.3);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.30);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.27);
 
     _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.50);
+    _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.55);
 
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.40);
+    _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
     audio->addSound("../res/OnePunch.wav");
     audio->addSound("../res/laser1.wav");
@@ -164,16 +169,19 @@ void        RTypeGame::initGame()
 
 void        RTypeGame::handleGame()
 {
-    _lag += BigBen::getElapsedtime();
+    std::cout << "start handle game" << std::endl;
+    _lag += (BigBen::getElapsedtime() / 1000000000);
     _cs.processInput();
     _cs.processNetwork();
     _physics.process(_fixedStep);
     _audio.process();
     while (_lag >= _fixedStep)
     {
+        std::cout << _lag << "/" << _fixedStep << std::endl;
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
+    std::cout << "end handle game" << std::endl;
 }
 
 void            RTypeGame::loadMapsFromFile()

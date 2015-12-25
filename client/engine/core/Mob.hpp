@@ -32,6 +32,7 @@ public:
     void            init(RType::MobType::IMobType const* mobtype);
     void            addLives(unsigned int nb = 1);
     void            removeLives(unsigned int nb = 1);
+    void            initTransform();
 
 public:
     unsigned int                    getMobId() const;

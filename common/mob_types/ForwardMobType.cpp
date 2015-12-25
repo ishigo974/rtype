@@ -61,6 +61,11 @@ namespace RType
             return 1;
         }
 
+        gu::Rect<int>   Forward::getRekt() const
+        {
+            return (gu::Rect<int>(1, 4, 32, 21));
+        }
+
         std::string     Forward::getName() const
         {
             return "ForwardMob";
@@ -78,7 +83,7 @@ namespace RType
 
         std::string     Forward::getSpriteFilePath() const
         {
-            return "forwardType.png";
+            return "mob";
         }
 
         /*

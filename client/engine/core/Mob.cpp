@@ -13,7 +13,7 @@ Mob::Mob() :
     _id(0), _name(""), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr),
-    _state(1)
+    _state(1), _parent(nullptr)
 {
 }
 
@@ -21,7 +21,7 @@ Mob::Mob(unsigned int id, std::string const& name, RType::MobType::IMobType cons
     Behaviour(id, name), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr),
-    _state(1)
+    _state(1), _parent(nullptr)
 {
 }
 
@@ -36,7 +36,7 @@ Mob::Mob(Mob const& other) :
     Behaviour(other), _id(other._id), _name(other._name), _lives(other._lives),
     _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
     _movePattern(other._movePattern), _transform(other._transform),
-    _state(other._state)
+    _state(other._state), _parent(other._parent)
 {
 }
 
@@ -86,13 +86,19 @@ void        Mob::init(RType::MobType::IMobType const* type)
     _movePattern = type->getMovePattern();
 }
 
+void        Mob::initTransform()
+{
+    _parent = static_cast<GameObject *>(parent());
+    _transform = _parent->getComponent<Transform>();
+}
+
 bool        Mob::handleMessage(Collider *o)
 {
     GameObject	*otherParent = static_cast<GameObject *>(o->parent());
 
     if ((otherParent->getComponent<Player>() != nullptr
         || otherParent->getComponent<Behaviour>() != nullptr
-        || otherParent->getComponent<Bullet>()) && _lives != 0)
+        || otherParent->getComponent<Bullet>()) && _lives > 0)
         _lives -= 1;
     if (_lives == 0)
         _available = true;
@@ -120,22 +126,19 @@ void		Mob::move(double elapsedTime)
 
 void		Mob::update(double elapsedTime)
 {
-    GameObject	*p = static_cast<GameObject *>(parent());
 
     if (_lives <= 0)
     {
         std::cout << "Mob Mort" << std::endl;
         _enabled = false;
-        p->setVisible(false);
-        p->getComponent<Collider>()->setEnabled(false);
+        _parent->setVisible(false);
+        _parent->getComponent<Collider>()->setEnabled(false);
     }
-    if (!_transform)
-        _transform = p->getComponent<Transform>();
-    if (_transform->getPosition().X() > Renderer::width + 100
-        || _transform->getPosition().X() < -100
-        || _transform->getPosition().Y() > Renderer::height + 100
-        || _transform->getPosition().Y() < -100)
-        _enabled = false;
+    if (_transform->getPosition().X() > Renderer::width + 1000
+        || _transform->getPosition().X() < -1000
+        || _transform->getPosition().Y() > Renderer::height + 1000
+        || _transform->getPosition().Y() < -1000)
+        _lives = 0;
     this->move(elapsedTime);
 }
 
@@ -244,6 +247,7 @@ void Mob::swap(Mob& other)
     swap(_movePattern, other._movePattern);
     swap(_transform, other._transform);
     swap(_state, other._state);
+    swap(_parent, other._parent);
 }
 
 namespace std

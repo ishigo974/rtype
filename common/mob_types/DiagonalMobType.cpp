@@ -1,4 +1,4 @@
-#include "VerticalMobType.hpp"
+#include "DiagonalMobType.hpp"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
@@ -12,7 +12,7 @@ BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID)
 extern "C" __declspec(dllexport)
 RType::MobType::IMobType*       getMobType()
 {
-    return new RType::MobType::Vertical();
+    return new RType::MobType::Diagonal();
 }
 
 #else
@@ -21,7 +21,7 @@ extern "C"
 {
     RType::MobType::IMobType*   getMobType()
     {
-        return new RType::MobType::Vertical();
+        return new RType::MobType::Diagonal();
     }
 }
 #endif
@@ -33,22 +33,22 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Vertical::Vertical()
+        Diagonal::Diagonal()
         {
         }
 
-        Vertical::~Vertical()
+        Diagonal::~Diagonal()
         {
         }
 
         /*
         ** Copy constructor and assign operator
         */
-        Vertical::Vertical(Vertical const& other)
+        Diagonal::Diagonal(Diagonal const& other)
         {
         }
 
-        Vertical&      Vertical::operator=(Vertical const& other)
+        Diagonal&      Diagonal::operator=(Diagonal const& other)
         {
             return *this;
         }
@@ -56,59 +56,59 @@ namespace RType
         /*
         ** Public member functions
         */
-        unsigned int    Vertical::getId() const
+        unsigned int    Diagonal::getId() const
         {
-            return 2;
+            return 3;
         }
 
-        gu::Rect<int>   Vertical::getRekt() const
+        gu::Rect<int>   Diagonal::getRekt() const
         {
-            return (gu::Rect<int>(2, 2, 176, 144));
+            return (gu::Rect<int>(52, 3, 55, 54));
         }
 
-
-        std::string     Vertical::getName() const
+        std::string     Diagonal::getName() const
         {
-            return "VerticalMob";
+            return "DiagonalMob";
         }
 
-        unsigned int    Vertical::getNbLives() const
+        unsigned int    Diagonal::getNbLives() const
         {
-            return 256;
+            return 1;
         }
 
-        unsigned int    Vertical::getScoreValue() const
+        unsigned int    Diagonal::getScoreValue() const
         {
-            return 256;
+            return 10;
         }
 
-        std::string     Vertical::getSpriteFilePath() const
+        std::string     Diagonal::getSpriteFilePath() const
         {
-            return "r-typesheet38";
+            return "r-typesheet9";
         }
 
-        MovePattern     Vertical::getMovePattern() const
+        MovePattern     Diagonal::getMovePattern() const
         {
             return [](cu::Position const& pos, double elapsedTime,
                       int& state)->cu::Position
             {
-                static const float  speed = 2.0f;
+                static const float  speed = 1.0f;
 
                 if (pos.Y() >= 720 || pos.Y() <= 0)
                     state *= -1;
-                return cu::Position(pos.X(), pos.Y()
-                                    + (0.25 * speed * elapsedTime * state));
+                return cu::Position(pos.X() - (0.25 * speed * elapsedTime),
+                                    pos.Y() +
+                                    (0.25 * speed * elapsedTime * state));
             };
         }
 
-        IMobType*       Vertical::clone() const
+        IMobType*       Diagonal::clone() const
         {
-            return new Vertical(*this);
+            return new Diagonal(*this);
         }
 
-        std::string     Vertical::toString() const
+        std::string     Diagonal::toString() const
         {
-            return "Vertical {"
+            return "Diagonal {"
                    "\n\tid: " + std::to_string(getId()) +
                    "\n\tname: " + getName() +
                    "\n\tlives: " + std::to_string(getNbLives()) +
