@@ -94,10 +94,14 @@ namespace RType
             {
                 static const float  speed = 2.0f;
 
-                if (pos.Y() >= 720 || pos.Y() <= 0)
-                    state *= -1;
-                return cu::Position(pos.X(), pos.Y()
-                                    + (0.25 * speed * elapsedTime * state));
+                if (pos.Y() >= 720 - 144 || pos.Y() <= 0)
+                    state = state ^ 1;
+                if (pos.X() >= 1280 - 176 || pos.X() <= 0)
+                    state = state ^ 2;
+                return cu::Position(pos.X() + (0.25 * speed * elapsedTime
+                                               * (state & 2) ? 1 : -1),
+                                    pos.Y() + (0.25 * speed * elapsedTime
+                                               * (state & 1) ? 1 : -1));
             };
         }
 
