@@ -21,6 +21,9 @@ public:
 
     void swap(NetPlayerObject& o);
 
+public:
+    void init();
+
 private:
     EntityManager *_em;
 };

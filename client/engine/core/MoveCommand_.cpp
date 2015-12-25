@@ -19,8 +19,7 @@ MoveCommand_::~MoveCommand_()
 
 void    MoveCommand_::execute()
 {
-    std::vector<Object *> objs    = _entityManager->getByMask(ComponentMask::PlayerMask);
-    std::vector<Object *> network = _entityManager->getByMask(ComponentMask::UDPMask);
+    std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::PlayerMask);
     RType::InGameEvent    event;
 
     for (auto obj : objs)

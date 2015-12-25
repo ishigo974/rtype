@@ -2,7 +2,9 @@
 // Created by fourdr_b on 24/12/15.
 //
 
+#include <UDPView.hpp>
 #include "NetPlayerObject.hpp"
+#include "NetPlayerComp.hpp"
 
 NetPlayerObject::NetPlayerObject()
 { }
@@ -47,4 +49,11 @@ namespace std
     {
         a.swap(b);
     }
+}
+
+void NetPlayerObject::init()
+{
+    _em->attachComponent<SpriteRenderer>(this, "NetPlayerSprite", "player", gu::Rect<int>(0, 0, 32, 21));
+    _em->attachComponent<UDPView>(this, "NetPlayerUDPView");
+    _em->attachComponent<NetPlayerComp>(this, "NPC", _em, 10, 5);
 }
