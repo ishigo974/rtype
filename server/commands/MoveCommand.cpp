@@ -74,7 +74,7 @@ namespace RType
                                              "wrong event");
                     break ;
             }
-            _time = event.get<uint32_t>("time");
+            _time = event.get<uint64_t>("time");
         }
 
         Event*      Move::clone() const
@@ -117,7 +117,7 @@ namespace RType
             }
             event.setCode(dirCodeMatches.at(_direction));
             event.push<uint8_t>("player_id", room->getPlayerId(*_entity));
-            event.push<uint32_t>("time", _time);
+            event.push<uint64_t>("time", _time);
             room->broadcastUDP(event.toBuffer(), _entity);
         }
 

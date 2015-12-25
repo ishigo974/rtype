@@ -33,7 +33,7 @@ namespace RType
     const InGameEvent::DataSizeMap  InGameEvent::dataSizes    = {
         { "size",           sizeof(uint32_t) },
         { "player_id",      sizeof(uint8_t)  },
-        { "time",           sizeof(uint32_t) },
+        { "time",           sizeof(uint64_t) },
         { "shot_type",      sizeof(uint8_t)  },
         { "mob_id",         sizeof(uint8_t)  },
         { "elapsed_time",   sizeof(uint64_t) },

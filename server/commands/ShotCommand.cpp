@@ -53,7 +53,7 @@ namespace RType
             _isFiring = (event.getCode() == InGameEvent::CL_SHOTSTART);
             _type = static_cast<Component::Shot::Type>(
                 event.get<uint8_t>("shot_type"));
-            _time = event.get<uint32_t>("time");
+            _time = event.get<uint64_t>("time");
         }
 
         Event*          Shot::clone() const
@@ -79,7 +79,7 @@ namespace RType
             ship->setShotType(_type);
             event.push<uint8_t>("player_id", room->getPlayerId(*_entity));
             event.push<uint8_t>("shot_type", _type);
-            event.push<uint32_t>("time", _time);
+            event.push<uint64_t>("time", _time);
             room->broadcastUDP(event.toBuffer(), _entity);
         }
 
