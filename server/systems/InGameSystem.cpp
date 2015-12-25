@@ -2,6 +2,7 @@
 #include "InGameSystem.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkUDP.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -49,8 +50,8 @@ namespace RType
         void            InGame::processEntity(ECS::Entity& e)
         {
             IpBufferBook::iterator it;
-            Component::NetworkUDP *udp = e.getComponent<
-                                                  Component::NetworkUDP>();
+            Component::NetworkUDP *udp =
+                e.getComponent<Component::NetworkUDP>();
 
             if (udp == nullptr)
                 throw std::runtime_error("InGameSystem: Entity has no "
@@ -62,16 +63,21 @@ namespace RType
             }
             while (udp->isEvent())
             {
-                InGameEvent                     event = udp->popEvent();
-                std::unique_ptr<Command::Event> cmd   =
-                    _factory.generate(cmdsNames.at(
-                        static_cast<InGameEvent::Code>(event.getCode()))
-                    );
+                try {
+                    InGameEvent                     event = udp->popEvent();
+                    std::unique_ptr<Command::Event> cmd   =
+                        _factory.generate(cmdsNames.at(
+                            static_cast<InGameEvent::Code>(event.getCode()))
+                        );
 
-                cmd->setEntity(e);
-                cmd->initFromEvent(event);
-                cmd->execute();
-                std::cout << event << std::endl;
+                    cmd->setEntity(e);
+                    cmd->initFromEvent(event);
+                    cmd->execute();
+                    std::cout << event << std::endl;
+                } catch (std::out_of_range const&) {
+                    Server::display("Invalid In Game event received from "
+                                    + udp->getIpAddr());
+                }
             }
             if (udp->isToSend())
             {

@@ -3,6 +3,7 @@
 #include "EntityManager.hpp"
 #include "PlayerComponent.hpp"
 #include "PositionComponent.hpp"
+#include "RoomComponent.hpp"
 #include "ShipComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
@@ -52,7 +53,7 @@ namespace RType
         /*
         ** Public member functions
         */
-        void                Game::update(double)
+        void                Game::update()
         {
         }
 

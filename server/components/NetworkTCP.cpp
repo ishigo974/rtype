@@ -63,7 +63,7 @@ namespace RType
         /*
         ** Public member functions
         */
-        void            NetworkTCP::update(double)
+        void            NetworkTCP::update()
         {
             if (_socket == nullptr)
                 return ;

@@ -24,7 +24,7 @@ namespace RType
 
         public:
             void            init(MobType::IMobType const* type);
-            void            update(double lastElapsed);
+            void            update();
 
         public:
             void            addLives(unsigned int nb = 1);

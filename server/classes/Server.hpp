@@ -81,7 +81,6 @@ namespace RType
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
         Time::GameClock             _clock;
-        double                      _lastElapsed;
     };
 }
 

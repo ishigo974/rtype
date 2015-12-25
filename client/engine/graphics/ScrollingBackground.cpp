@@ -61,7 +61,7 @@ void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
 }
 }
 
-void ScrollingBackground::update(double elapsedTime)
+void ScrollingBackground::update()
 {
 	SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
 	if (sr == nullptr)

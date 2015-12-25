@@ -76,14 +76,14 @@ namespace RType
             _movePattern = type->getMovePattern();
         }
 
-        void            Mob::update(double lastElapsed)
+        void            Mob::update()
         {
             ECS::EntityManager&     em = ECS::EntityManager::getInstance();
             Component::Position*    pos =
                 em.getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
                 _movePattern(cu::Position(pos->getX(), pos->getY()),
-                             lastElapsed, _state);
+                             _game->getElapsedTime(), _state);
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
             // std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug
