@@ -69,7 +69,7 @@ void Behaviour::update()
         return;
 }
 
-void Behaviour::update()
+void Behaviour::update(double)
 {
     if (!_enabled)
         return;
