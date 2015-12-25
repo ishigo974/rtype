@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 24/12/15.
-//
-
 #ifndef RTYPE_NETPLAYERCOMP_HPP
 # define RTYPE_NETPLAYERCOMP_HPP
 

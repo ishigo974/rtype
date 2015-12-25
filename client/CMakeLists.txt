@@ -93,7 +93,7 @@ if (UNIX)
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
-#find_package(Boost 1.55 REQUIRED)
+find_package(Boost 1.59 REQUIRED)
 
 # BOOST
 if(UNIX)
@@ -101,6 +101,11 @@ if(UNIX)
     set(Boost_LIBRARY_DIR "/usr/local/lib")
     set(Boost_INCLUDE_DIR "/usr/include")
     set(Boost_LIBRARY_DIR "/usr/lib")
+endif()
+
+if (APPLE)
+    set(Boost_INCLUDE_DIR "/usr/local/Cellar/boost/1.59.0/include")
+    set(Boost_LIBRARY_DIR "/usr/local/Cellar/boost/1.59.0/lib")
 endif()
 
 if(WIN32)
