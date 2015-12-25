@@ -91,6 +91,7 @@ private:
     RType::Request::PlayersTab  _playersList;
 
     RType::Request::Player      _user;
+    std::deque<RType::Request>  _lastRequest;
 
     bool                        _done;
 };
