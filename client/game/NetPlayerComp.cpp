@@ -85,7 +85,7 @@ void NetPlayerComp::move(double elapsedTime)
         speed     = speed * 3 / 4;
     }
 
-    auto tmp = _udp->popReceive();
+    auto tmp = _udp->popReceive(); // TODO add verif
 
     switch (tmp)
     {

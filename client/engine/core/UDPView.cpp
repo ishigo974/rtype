@@ -4,11 +4,14 @@
 
 #include "UDPView.hpp"
 
-UDPView::UDPView()
+UDPView::UDPView() : _receive(), _toSend()
 { }
 
-UDPView::UDPView(unsigned int id, std::string const& name) : Component(id, name)
-{ }
+UDPView::UDPView(unsigned int id, std::string const& name) :
+    Component(id, name), _receive(), _toSend()
+{
+    std::cout << "constructor " << &_receive << std::endl;
+}
 
 UDPView::UDPView(UDPView const& other) : Component(other)
 {
@@ -68,6 +71,7 @@ RTypes::my_uint16_t UDPView::getMask() const
 
 size_t UDPView::sizeRecv() const
 {
+    std::cout << "sizerecv " << &_receive << std::endl;
     return (_receive.size());
 }
 

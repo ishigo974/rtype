@@ -5,11 +5,11 @@
 #include "GameManager.hpp"
 #include "EntityManager.hpp"
 
-GameManager::GameManager()
+GameManager::GameManager() : GameObject(), _playerId(0)
 { }
 
 GameManager::GameManager(unsigned int id, std::string const& name, int layer)
- : GameObject(id, name, layer)
+ : GameObject(id, name, layer), _playerId(0)
 { }
 
 GameManager::GameManager(GameManager const& o) : GameObject(o)
