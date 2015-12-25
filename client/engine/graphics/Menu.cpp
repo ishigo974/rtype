@@ -141,6 +141,7 @@ void Menu::refreshRoomList()
 {
     std::cout << "Get rooms" << std::endl;
     _network->pushToSend(RType::Request(RType::Request::CL_LISTROOMS));
+    _lastRequest.push_back(RType::Request(RType::Request::CL_LISTROOMS));
 }
 
 void Menu::createNewRoom(std::string const &roomName)
@@ -152,7 +153,7 @@ void Menu::createNewRoom(std::string const &roomName)
     request.setCode(RType::Request::CL_CREATEROOM);
     request.push<std::string>("room_name", roomName);
     _network->pushToSend(request);
-
+    _lastRequest.push_back(request);
     addPlayer(_user);
 }
 
@@ -164,6 +165,7 @@ void Menu::changeUserName(std::string const &username)
     request.setCode(RType::Request::CL_USERNAME);
     request.push<std::string>("username", username);
     _network->pushToSend(request);
+    _lastRequest.push_back(request);
     _user.username = username;
 }
 
@@ -175,6 +177,7 @@ void Menu::joinRoom(RType::Request::Room room)
     request.setCode(RType::Request::CL_JOINROOM);
     request.push<unsigned int>("room_id", room.id);
     _network->pushToSend(request);
+    _lastRequest.push_back(request);
 }
 
 void Menu::joinRoom(std::string const &roomName)
@@ -195,10 +198,16 @@ void Menu::ready()
 
     toSet = (_ready == false);
     _ready = toSet;
-    if (toSet == true)
+    if (toSet)
+    {
         _network->pushToSend(RType::Request(RType::Request::CL_READY));
+        _lastRequest.push_back(RType::Request(RType::Request::CL_READY));
+    }
     else
+    {
         _network->pushToSend(RType::Request(RType::Request::CL_NOTREADY));
+        _lastRequest.push_back(RType::Request(RType::Request::CL_NOTREADY));
+    }
     for (auto& player : _playersList)
         if (player.id == _user.id)
             player.isReady = toSet;
@@ -214,20 +223,20 @@ void Menu::addRoom(RType::Request::Room room)
 void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
 {
     _roomsList = listRoom;
-        for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+    for (auto it = roomsTextField.begin(); it != roomsTextField.end(); ++it)
+    {
+        (*it)->setBackColor(sf::Color::Transparent);
+        (*it)->clearText();
+    }
+    for (int  nb = 0; nb != 10; ++nb)
+    {
+        if (nb < static_cast<int>(_roomsList.size()))
         {
-            (*it)->setBackColor(sf::Color::Transparent);
-            (*it)->clearText();
+            roomsTextField[nb]->setText(_roomsList[nb].name);
+            roomsTextField[nb]->setBackColor(sf::Color(0, 0, 0, 128));
+            roomsTextField[nb]->setForeColor(sf::Color::White);
         }
-        for (int  nb = 0; nb != 10; ++nb)
-        {
-            if (nb < static_cast<int>(_roomsList.size()))
-            {
-                roomsTextField[nb]->setText(_roomsList[nb].name);
-                roomsTextField[nb]->setBackColor(sf::Color(0, 0, 0, 128));
-                roomsTextField[nb]->setForeColor(sf::Color::White);
-            }
-        }
+    }
 }
 
 void Menu::addPlayer(RType::Request player)
@@ -447,8 +456,7 @@ void Menu::transitionToStates()
         if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
-            menu->_network->pushToSend(RType::Request
-                                            (RType::Request::CL_QUITROOM));
+            menu->quitRoom();
             menu->clearPlayers();
             menu->refreshRoomList();
             return true;
@@ -542,10 +550,13 @@ void Menu::update()
             case RType::Request::SE_OK :
                 break;
             case RType::Request::SE_KO :
+                //TODO REVERSE STATE
                 break;
             default :
                 break;
         }
+        if (!_lastRequest.empty())
+            _lastRequest.pop_front();
     }
 }
 
@@ -605,4 +616,10 @@ void Menu::playerNotReady(uint8_t id)
         }
     }
     addPlayerList(_playersList);
+}
+
+void Menu::quitRoom()
+{
+    _network->pushToSend(RType::Request(RType::Request::CL_QUITROOM));
+    _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
 }
