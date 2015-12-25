@@ -28,7 +28,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
     _quit(false), _isPlaying(false), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em),
-    _network(&_em, addr, port, port + 1), _cs(&_em, &_input, &_network),
+    _network(&_em, addr, port, port + 1), _cs(&_em, &_input, &_network, _chrono),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
     _physics(&_em), _audio(&_em)
 {

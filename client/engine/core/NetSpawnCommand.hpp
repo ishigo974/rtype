@@ -11,7 +11,7 @@ class NetSpawnCommand : public ACommand
 {
 public:
     NetSpawnCommand();
-    NetSpawnCommand(GameObject *target, unsigned int id, float x, float y);
+    NetSpawnCommand(GameObject *target, std::chrono::microseconds time, unsigned int id, float x, float y);
     NetSpawnCommand(NetSpawnCommand const& other);
     NetSpawnCommand(NetSpawnCommand&& other);
     NetSpawnCommand& operator=(NetSpawnCommand other);

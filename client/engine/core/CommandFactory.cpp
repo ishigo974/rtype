@@ -22,24 +22,30 @@ ACommand *CommandFactory::createCommand(RType::InGameEvent const& event)
     {
         case 301:
             return (new NetMoveCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       ACommand::Action::UP));
+                                       ACommand::Action::UP,
+                                       std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 302:
             return (new NetMoveCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       ACommand::Action::DOWN));
+                                       ACommand::Action::DOWN,
+                                       std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 303:
             return (new NetMoveCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       ACommand::Action::LEFT));
+                                       ACommand::Action::LEFT,
+                                       std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 304:
             return (new NetMoveCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       ACommand::Action::RIGHT));
+                                       ACommand::Action::RIGHT,
+                                       std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 305:
             return (new NetShotCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       true));
+                                       true, std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 306:
             return (new NetShotCommand((*_gm)[event.get<RTypes::my_uint8_t>("player_id")],
-                                       false));
+                                       false, std::chrono::microseconds(event.get<uint64_t>("time"))));
         case 307:
-            return (new NetSpawnCommand(static_cast<GameObject *>(_em->getByTag("mobSpawn")), event.get<RTypes::my_uint8_t>("mob_id"),
+            return (new NetSpawnCommand(static_cast<GameObject *>(_em->getByTag("mobSpawn")),
+                                        std::chrono::microseconds(event.get<uint64_t>("time")),
+                                        event.get<RTypes::my_uint8_t>("mob_id"),
                                         event.get<RTypes::my_uint32_t>("x"),
                                         event.get<RTypes::my_uint32_t>("y")));
 

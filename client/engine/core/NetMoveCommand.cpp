@@ -9,9 +9,11 @@ NetMoveCommand::NetMoveCommand()
 { }
 
 
-NetMoveCommand::NetMoveCommand(GameObject *target, ACommand::Action dir)
+NetMoveCommand::NetMoveCommand(GameObject *target, ACommand::Action dir, std::chrono::microseconds time)
         : _target(target), _direction(dir)
-{ }
+{
+    _time = time;
+}
 
 NetMoveCommand::NetMoveCommand(NetMoveCommand& o)
 {

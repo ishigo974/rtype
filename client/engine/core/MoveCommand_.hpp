@@ -6,7 +6,7 @@
 class MoveCommand_ : public ACommand
 {
 public:
-    MoveCommand_(EntityManager *entityManager, ACommand::Action direction);
+    MoveCommand_(EntityManager *entityManager, ACommand::Action direction, std::chrono::microseconds time);
     virtual ~MoveCommand_();
 
     virtual void	execute();

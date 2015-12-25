@@ -2,10 +2,10 @@
 #include "ShootCommand.hpp"
 #include "Player.hpp"
 
-ShootCommand::ShootCommand(EntityManager *entityManager)
+ShootCommand::ShootCommand(EntityManager *entityManager, std::chrono::microseconds time)
 {
     _entityManager = entityManager;
-    _time          = BigBen::getTimeNow();
+    _time          = time;
     execute();
 }
 
@@ -27,8 +27,7 @@ void    ShootCommand::execute()
                                       ->setAction(ACommand::SHOOT);
 
 
-    //TODO: Change 1 to timestamp
-    event.push<uint32_t>("time", 1);
+    event.push<uint64_t>("time", _time.count());
 }
 
 void    ShootCommand::undo()

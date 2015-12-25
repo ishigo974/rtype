@@ -8,9 +8,11 @@
 NetSpawnCommand::NetSpawnCommand()
 { }
 
-NetSpawnCommand::NetSpawnCommand(GameObject *target, unsigned int id, float x, float y)
+NetSpawnCommand::NetSpawnCommand(GameObject *target, std::chrono::microseconds time, unsigned int id, float x, float y)
         : _spawner(target), _targetId(id), _targetX(x), _targetY(y)
-{ }
+{
+    _time = time;
+}
 
 NetSpawnCommand::NetSpawnCommand(NetSpawnCommand const& other)
 {

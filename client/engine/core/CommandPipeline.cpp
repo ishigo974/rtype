@@ -5,7 +5,7 @@
 #include "CommandPipeline.hpp"
 
 CommandPipeline::CommandPipeline()
-        : _maxLag(1000)
+        : _maxLag(1000000)
 { }
 
 void CommandPipeline::addCommand(ACommand *cmd)
@@ -24,19 +24,20 @@ void CommandPipeline::addCommand(ACommand *cmd)
 
 bool CommandPipeline::validate(ACommand *cmd)
 {
-    auto diff = std::chrono::high_resolution_clock::now() - cmd->getTime();
+    auto diff = (std::chrono::duration_cast<std::chrono::microseconds>
+            (std::chrono::high_resolution_clock::now().time_since_epoch()).count() - cmd->getTime().count());
 
-    std::cout << "Command lag = " << diff.count() << std::endl;
+    std::cout << "Command lag = " << diff << std::endl;
 
-    return (diff <= _maxLag);
+    return (diff <= _maxLag.count());
 }
 
-CommandPipeline::ms CommandPipeline::getMaxLag() const
+CommandPipeline::timePoint CommandPipeline::getMaxLag() const
 {
     return (_maxLag);
 }
 
-void CommandPipeline::setMaxLag(CommandPipeline::ms newMaxLag)
+void CommandPipeline::setMaxLag(CommandPipeline::timePoint newMaxLag)
 {
     _maxLag = newMaxLag;
 }

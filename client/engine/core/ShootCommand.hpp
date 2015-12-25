@@ -6,7 +6,7 @@
 class	ShootCommand : public ACommand
 {
 public:
-    ShootCommand(EntityManager *entityManager);
+    ShootCommand(EntityManager *entityManager, std::chrono::microseconds time);
     virtual ~ShootCommand();
 
     virtual void	execute();

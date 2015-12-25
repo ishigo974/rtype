@@ -12,9 +12,8 @@
 class CommandPipeline
 {
 public:
-    typedef std::deque<ACommand *>::const_iterator                      cmdIt;
-    typedef std::chrono::time_point<std::chrono::high_resolution_clock> timePoint;
-    typedef std::chrono::milliseconds                                   ms;
+    typedef std::deque<ACommand *>::const_iterator cmdIt;
+    typedef std::chrono::microseconds              timePoint;
 
 public:
     CommandPipeline();
@@ -23,8 +22,8 @@ public:
     void addCommand(ACommand *cmd);
 
 public:
-    ms   getMaxLag() const;
-    void setMaxLag(ms newMaxLag);
+    timePoint getMaxLag() const;
+    void      setMaxLag(timePoint newMaxLag);
 
 private:
     bool        validate(ACommand *cmd);
@@ -36,7 +35,7 @@ private:
 private:
     std::deque<ACommand *> _commands;
     std::deque<ACommand *> _cmdDiff;
-    ms                     _maxLag;
+    timePoint              _maxLag;
     ACommand               *_invalidCmd;
 };
 

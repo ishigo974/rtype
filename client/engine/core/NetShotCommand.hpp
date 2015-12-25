@@ -11,7 +11,7 @@ class NetShotCommand : public ACommand
 {
 public:
     NetShotCommand();
-    NetShotCommand(GameObject *target, bool type);
+    NetShotCommand(GameObject *target, bool type, std::chrono::microseconds time);
     NetShotCommand(NetShotCommand const& o);
     NetShotCommand(NetShotCommand&& o);
     NetShotCommand& operator=(NetShotCommand other);
