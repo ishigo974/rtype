@@ -2,6 +2,7 @@
 #include "InGameSystem.hpp"
 #include "ComponentsMasks.hpp"
 #include "NetworkUDP.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -13,12 +14,13 @@ namespace RType
         const size_t                InGame::bufferSize = 65000;
         const InGame::EventCmdMap   InGame::cmdsNames =
         {
-            { InGameEvent::CL_PLAYERUP,     "MoveCommand"   },
-            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"   },
-            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"   },
-            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"   },
-            { InGameEvent::CL_SHOTSTART,    "ShotCommand"   },
-            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"   }
+            { InGameEvent::CL_PLAYERUP,     "MoveCommand"       },
+            { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"       },
+            { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"       },
+            { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"       },
+            { InGameEvent::CL_SHOTSTART,    "ShotCommand"       },
+            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"       },
+            { InGameEvent::CL_ELAPSEDTIME,  "ElapsedCommand"    }
         };
 
         /*
@@ -48,8 +50,8 @@ namespace RType
         void            InGame::processEntity(ECS::Entity& e)
         {
             IpBufferBook::iterator it;
-            Component::NetworkUDP *udp = e.getComponent<
-                                                  Component::NetworkUDP>();
+            Component::NetworkUDP *udp =
+                e.getComponent<Component::NetworkUDP>();
 
             if (udp == nullptr)
                 throw std::runtime_error("InGameSystem: Entity has no "
@@ -61,19 +63,29 @@ namespace RType
             }
             while (udp->isEvent())
             {
-                InGameEvent                     event = udp->popEvent();
-                std::unique_ptr<Command::Event> cmd   =
-                    _factory.generate(cmdsNames.at(
-                        static_cast<InGameEvent::Code>(event.getCode()))
-                    );
+                try {
+                    InGameEvent                     event = udp->popEvent();
+                    std::unique_ptr<Command::Event> cmd   =
+                        _factory.generate(cmdsNames.at(
+                            static_cast<InGameEvent::Code>(event.getCode()))
+                        );
 
-                cmd->setEntity(e);
-                cmd->initFromEvent(event);
-                cmd->execute();
-                std::cout << event << std::endl;
+                    cmd->setEntity(e);
+                    cmd->initFromEvent(event);
+                    cmd->execute();
+                    std::cout << event << std::endl;
+                } catch (std::out_of_range const&) {
+                    Server::display("Invalid In Game event received from "
+                                    + udp->getIpAddr());
+                }
             }
             if (udp->isToSend())
-                _socket.sendTo(udp->popToSend(), udp->getIpAddr());
+            {
+                Buffer b = udp->popToSend();
+
+                _socket.sendTo(b, udp->getIpAddr());
+                std::cout << "Send " << b.size() << " to " << udp->getIpAddr() << std::endl;
+            }
         }
 
         ECS::ComponentMask   InGame::getMask() const

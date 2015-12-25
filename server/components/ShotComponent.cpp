@@ -19,8 +19,8 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Shot::Shot(Shot::Type type, ECS::Entity* owner) :
-            _type(type), _owner(owner)
+        Shot::Shot(Shot::Type type, ECS::Entity* owner, Component::Game* game) :
+            _type(type), _owner(owner), _game(game)
         {
         }
 
@@ -53,28 +53,25 @@ namespace RType
             ECS::EntityManager&     em = ECS::EntityManager::getInstance();
             Component::Position*    pos =
                 em.getByCmpnt(this).getComponent<Component::Position>();
-            Component::Game*        game =
-                em.getByCmpnt(_owner->getComponent<Component::Player>()
-                                    ->getRoom()).getComponent<Component::Game>();
 
             if (pos == nullptr)
                 return ;
             switch (_type)
             {
                 case NORMAL:
-                    pos->setX(pos->getX() + (speed * game->getLastElapsed()));
+                    pos->setX(pos->getX() + (speed * _game->getElapsedTime()));
                     break ;
                 default:
                     break ;
             }
-            // std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << game->getLastElapsed() << std::endl; // debug
+            std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << _game->getElapsedTime() << std::endl; // debug
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
                 ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
                 em.safeDestroy(em.getByCmpnt(this));
-                // std::cout << "safedestroy bullet" << std::endl;
+                std::cout << "safedestroy bullet" << std::endl;
             }
         }
 
@@ -96,6 +93,16 @@ namespace RType
         void                Shot::setOwner(ECS::Entity* owner)
         {
             _owner = owner;
+        }
+
+        void                Shot::setGame(Component::Game* game)
+        {
+            _game = game;
+        }
+
+        Component::Game*    Shot::getGame() const
+        {
+            return _game;
         }
 
         std::string         Shot::getName() const

@@ -44,18 +44,18 @@ RTypes::my_uint16_t Component::getMask() const
 
 std::string Component::toString() const
 {
-    std::string ss;
+    std::stringstream ss;
 
-    ss += "Component {";
-    ss += "\n\tid: ";
-    ss += _id;
-    ss += "\n\tname: ";
-    ss += _name;
-    ss += "\n\tmask: ";
-    ss += std::to_string(Mask);
-    ss += "\n}\n";
+    ss << "Component {";
+    ss << "\n\tid: ";
+    ss << _id;
+    ss << "\n\tname: ";
+    ss << _name;
+    ss << "\n\tmask: ";
+    ss << std::to_string(Mask);
+    ss << "\n}\n";
 
-    return (ss);
+    return (ss.str());
 }
 
 void Component::swap(Component& other)

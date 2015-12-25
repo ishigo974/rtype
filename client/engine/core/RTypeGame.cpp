@@ -27,9 +27,9 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _addr(addr), _port(port),
     _quit(false), _isPlaying(false), _em(), _renderer(&_em),
     _input(_renderer.getWindow()), _bs(&_em),
-    _network(&_em, addr, port), _cs(&_em, &_input, &_network),
+    _network(&_em, addr, port, port + 1), _cs(&_em, &_input, &_network),
     _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
-    _ms(&_em, &_chrono, &_mobTypes), _physics(&_em), _audio(&_em)
+    _physics(&_em), _audio(&_em)
 {
     BigBen::getElapsedtime();
 
@@ -112,15 +112,16 @@ void        RTypeGame::initGameSample()
     GameObject *opm = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
     GameManager *gm = _em.createEntity<GameManager>("gm", 2);
-    _em.tagObject(gm, "GameManager");
+    GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
     AudioEffect*    audio;
 
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
-    GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
-    _em.attachComponent<UDPView>(mobSpawn, "Spawner UDPView");
+    _em.tagObject(gm, "GameManager");
+
     _em.attachComponent<MobSpawner>(mobSpawn, "MobSpawner", &_em, &_mobTypes);
+    _em.attachComponent<UDPView>(mobSpawn, "Spawner UDPView");
     mobSpawn->getComponent<MobSpawner>()->init();
 
     _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
@@ -130,7 +131,7 @@ void        RTypeGame::initGameSample()
     _em.attachComponent<ScrollingBackground>(df, "Background", 0.27);
 
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
-    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.20);
+    _em.attachComponent<ScrollingBackground>(bg, "Background", 0.30);
 
     _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.50);
@@ -147,16 +148,14 @@ void        RTypeGame::initGameSample()
 
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
-    _ms.setMap(_maps[0].second);
     _chrono.start();
 }
 
 void        RTypeGame::handleGame()
 {
-    _lag = BigBen::getElapsedtime();
+    _lag += BigBen::getElapsedtime();
     _cs.processInput();
     _cs.processNetwork();
-    // TODO retirer partout le mobsystem _ms.process();
     _physics.process(_fixedStep);
     _audio.process();
     while (_lag >= _fixedStep)
@@ -247,7 +246,7 @@ void            RTypeGame::loadMobTypesFromFile()
         } catch (std::runtime_error const&) {
             mobFile.close();
             std::cout << "load mob failed " << line << std::endl;
-            // throw ;
+            // TODO throw ;
         }
     }
     file.close();

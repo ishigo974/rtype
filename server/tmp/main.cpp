@@ -55,14 +55,14 @@ int main(int argc, char **argv)
 
     int i = 1;
 
-    event.setCode(InGameEvent::CL_SHOTSTART);
-    event.push<uint32_t>("time", i);
-    event.push<uint8_t>("shot_type", 0);
-    u.sendTo(event.toBuffer(), std::string(argv[1]));
-    
     while (42)
     {
-        sleep(2);
+
+    event.setCode(InGameEvent::CL_ELAPSEDTIME);
+    event.push<double>("elapsed_time", i);
+    u.sendTo(event.toBuffer(), std::string(argv[1]));
+    
+        sleep(5);
     }
     return 0;
 }

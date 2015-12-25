@@ -25,7 +25,7 @@ public:
 
 public:
     void            swap(Mob& other);
-    virtual void    update(double);
+    virtual void    update(double elapsed);
     virtual bool    handleMessage(Collider *o);
 
 public:

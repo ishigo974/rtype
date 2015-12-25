@@ -19,6 +19,7 @@
 #include "Request.hpp"
 #include "ITcpSocket.hpp"
 #include "IMobType.hpp"
+#include "GameConfig.hpp"
 
 // Entities related includes
 #include "Entity.hpp"
@@ -77,7 +78,8 @@ namespace RType
         _quit(false), _acceptor(port),
         _monitor(SocketMonitor::getInstance()),
         _em(ECS::EntityManager::getInstance()),
-        _sm(ECS::SystemManager::getInstance())
+        _sm(ECS::SystemManager::getInstance()),
+        _clock()
     {
         init();
     }
@@ -104,7 +106,6 @@ namespace RType
                     onClientConnection();
                 _em.updateAll();
                 _sm.processAll();
-
                 checkDisconnected();
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
@@ -117,7 +118,6 @@ namespace RType
                 inGameHandler.join();
                 throw ;
             }
-            // TODO elapsedTime / lag ?
         }
         display("Waiting for InGameHandler thread");
         inGameHandler.join();

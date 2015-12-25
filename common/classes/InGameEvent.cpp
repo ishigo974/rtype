@@ -21,6 +21,7 @@ namespace RType
         { InGameEvent::SE_MOBSPAWNED,   { "mob_id", "x", "y", "time"        } },
         { InGameEvent::SE_INPUTERROR,   { "time"                            } },
         { InGameEvent::SE_PLYRDISCONN,  {                                   } },
+        { InGameEvent::CL_ELAPSEDTIME,  { "elapsed_time"                    } },
         { InGameEvent::CL_PLAYERUP,     { "time"                            } },
         { InGameEvent::CL_PLAYERDOWN,   { "time"                            } },
         { InGameEvent::CL_PLAYERLEFT,   { "time"                            } },
@@ -30,13 +31,14 @@ namespace RType
         { InGameEvent::CL_DISCONNECT,   {                                   } }
     };
     const InGameEvent::DataSizeMap  InGameEvent::dataSizes    = {
-        { "size",      sizeof(uint32_t) },
-        { "player_id", sizeof(uint8_t)  },
-        { "time",      sizeof(uint32_t) },
-        { "shot_type", sizeof(uint8_t)  },
-        { "mob_id",    sizeof(uint8_t)  },
-        { "x",         sizeof(uint32_t) },
-        { "y",         sizeof(uint32_t) }
+        { "size",           sizeof(uint32_t) },
+        { "player_id",      sizeof(uint8_t)  },
+        { "time",           sizeof(uint32_t) },
+        { "shot_type",      sizeof(uint8_t)  },
+        { "mob_id",         sizeof(uint8_t)  },
+        { "elapsed_time",   sizeof(uint64_t) },
+        { "x",              sizeof(uint32_t) },
+        { "y",              sizeof(uint32_t) }
     };
 
     /*

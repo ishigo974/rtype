@@ -13,7 +13,7 @@
 # include "BehaviourSystem.hpp"
 # include "CommandSystem.hpp"
 # include "PhysicsEngine.hpp"
-# include "MobSystem.hpp"
+// # include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
 # include "IMobType.hpp"
@@ -73,7 +73,6 @@ protected:
     MobTypeMap                  _mobTypes;
     RType::Map::Collection      _maps;
     Time::HRChrono              _chrono;
-    MobSystem                   _ms;
     PhysicsEngine               _physics;
     AudioEffectPlayer           _audio;
 };
