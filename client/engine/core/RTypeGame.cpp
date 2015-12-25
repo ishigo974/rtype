@@ -61,7 +61,6 @@ void        RTypeGame::run()
 {
     while (!_quit)
     {
-        std::cout << "before pollevent" << std::endl;
         while (_input.pollEvent(_event))
         {
             if (_event.type == cu::Event::Closed
@@ -79,7 +78,6 @@ void        RTypeGame::run()
             else
                 handleGame();
         }
-        std::cout << "after poll event" << std::endl;
         if (_isPlaying)
             handleGame();
         else
@@ -90,14 +88,10 @@ void        RTypeGame::run()
             {
                 _isPlaying = true;
                 _menu->setVisible(false);
-                std::cout << "init game" << std::endl;
                 initGame();
-                std::cout << "start game" << std::endl;
             }
         }
-        std::cout << "befoore render" << std::endl;
         _renderer.render();
-        std::cout << "after render" << std::endl;
         _event.type = cu::Event::None;
     }
 }
@@ -164,12 +158,12 @@ void        RTypeGame::initGame()
 
     if (_maps.empty())
         throw std::runtime_error("No maps loaded");
+        std::cout << gm->toString() << std::endl;
      _chrono.start();
 }
 
 void        RTypeGame::handleGame()
 {
-    std::cout << "start handle game" << std::endl;
     _lag += (BigBen::getElapsedtime() / 1000000000);
     _cs.processInput();
     _cs.processNetwork();
@@ -177,11 +171,9 @@ void        RTypeGame::handleGame()
     _audio.process();
     while (_lag >= _fixedStep)
     {
-        std::cout << _lag << "/" << _fixedStep << std::endl;
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
-    std::cout << "end handle game" << std::endl;
 }
 
 void            RTypeGame::loadMapsFromFile()
