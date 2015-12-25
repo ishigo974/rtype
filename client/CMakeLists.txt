@@ -93,7 +93,7 @@ if (UNIX)
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
-find_package(Boost 1.59 REQUIRED)
+find_package(Boost REQUIRED)
 
 # BOOST
 if(UNIX)

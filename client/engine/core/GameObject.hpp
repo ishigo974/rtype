@@ -42,14 +42,20 @@ public:
 
 public:
     template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
-    T *getComponent() const
+    T *getComponent(ComponentMask mask) const
     {
-        auto selected = std::find_if(_components.begin(), _components.end(), [](auto& e)
+        auto selected = std::find_if(_components.begin(), _components.end(), [mask](auto& e)
         {
-            return (e->getMask() == T::Mask);
+            return (e->getMask() == mask);
         });
 
         return ((selected == _components.end()) ? nullptr : static_cast<T *>(*selected));
+    };
+
+    template<class T, typename = std::enable_if<std::is_base_of<Component, T>::value> >
+    T *getComponent() const
+    {
+        return getComponent<T>(static_cast<ComponentMask>(T::Mask));
     };
 
     template<class ...Args>
