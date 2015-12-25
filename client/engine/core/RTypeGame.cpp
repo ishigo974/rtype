@@ -13,7 +13,7 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.005;
+const double        RTypeGame::defaultFixedStep = 0.006;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
 const std::string   RTypeGame::mapsPath         = ".rtypemaps";
@@ -89,7 +89,7 @@ void        RTypeGame::run()
             if (_menu->done())
             {
                 _menu->setVisible(false);
-                std::cout << "TA RACE LA PUTE" << std::endl;
+                // std::cout << "TA RACE LA PUTE" << std::endl;
                 _isPlaying = true;
             }
         }
@@ -146,7 +146,7 @@ void        RTypeGame::initGameSample()
 void        RTypeGame::handleGame()
 {
     _lag += BigBen::getElapsedtime();
-    std::cout << _lag << std::endl;
+    // std::cout << _lag << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _ms.process();

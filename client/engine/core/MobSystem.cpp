@@ -27,6 +27,7 @@ void            MobSystem::process()
                 _mobTypes->at(it->second.id).get()->getSpriteFilePath(),
                 _mobTypes->at(it->second.id).get()->getRekt());
             _em->attachComponent<Mob>(first, "SR compo", _mobTypes->at(it->second.id).get());
+            first->getComponent<Mob>()->initTransform();
             _em->attachComponent<Collider>(first, "SR compo",
                 _mobTypes->at(it->second.id).get()->getRekt().w,
                 _mobTypes->at(it->second.id).get()->getRekt().h);
