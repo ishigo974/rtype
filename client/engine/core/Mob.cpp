@@ -105,7 +105,7 @@ void		Mob::move(double elapsedTime)
     _transform->getPosition().setY(pos.Y());
 }
 
-void		Mob::update()
+void		Mob::update(double elapsedTime)
 {
     GameObject	*p = static_cast<GameObject *>(parent());
 
