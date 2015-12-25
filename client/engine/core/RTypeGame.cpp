@@ -1,4 +1,5 @@
 #include <fstream>
+#include <NetPlayerObject.hpp>
 #include "RTypeGame.hpp"
 #include "Menu.hpp"
 #include "PlayerObject.hpp"
@@ -58,7 +59,6 @@ RTypeGame::~RTypeGame()
 */
 void        RTypeGame::run()
 {
-    initGameSample();
     while (!_quit)
     {
         while (_input.pollEvent(_event))
@@ -89,7 +89,7 @@ void        RTypeGame::run()
                 _menu->setVisible(false);
                 std::cout << "TA RACE LA PUTE" << std::endl;
                 _isPlaying = true;
-                // initGame();
+                initGame();
             }
         }
         _renderer.render();
@@ -102,12 +102,6 @@ void        RTypeGame::run()
 */
 void        RTypeGame::initGame()
 {
-}
-
-void        RTypeGame::initGameSample()
-{
-    PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
-    player->init();
     GameObject *bg = _em.createEntity<GameObject>("bg", -10);
     GameObject *ds = _em.createEntity<GameObject>("ds", -5);
     GameObject *df = _em.createEntity<GameObject>("df", -4);
@@ -115,7 +109,24 @@ void        RTypeGame::initGameSample()
     GameObject *pr = _em.createEntity<GameObject>("pr", 2);
     GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
     AudioEffect*    audio;
+    GameManager* gm = static_cast<GameManager*>(_em.getByTag("GameManager"));
 
+
+    for (auto tmp = gm->begin(); tmp != gm->end(); ++tmp)
+    {
+        if (tmp->first == gm->getId())
+        {
+            PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
+            player->init();
+            tmp->second = player;
+        }
+        else
+        {
+            NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", 1, &_em);
+            player->init();
+            tmp->second = player;
+        }
+    }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
 
