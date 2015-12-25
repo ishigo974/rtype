@@ -60,7 +60,7 @@ namespace RType
             PlayersMap::const_iterator  end() const;
 
         public:
-            virtual void                update(double lastElapsed);
+            virtual void                update();
             virtual void                clear();
             virtual ECS::ComponentMask  getMask() const;
             virtual std::string         getName() const;

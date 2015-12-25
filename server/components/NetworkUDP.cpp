@@ -63,7 +63,7 @@ namespace RType
             return !_events.empty();
         }
 
-        void                NetworkUDP::update(double)
+        void                NetworkUDP::update()
         {
             std::lock_guard<std::mutex> lock(_mutex);
 

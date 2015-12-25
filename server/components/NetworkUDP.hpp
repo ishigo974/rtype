@@ -38,7 +38,7 @@ namespace RType
             std::string const&          getIpAddr() const;
 
         public:
-            virtual void                update(double lastElapsed);
+            virtual void                update();
             virtual std::string         getName() const;
             virtual ECS::ComponentMask  getMask() const;
             virtual ECS::IComponent*    clone() const;

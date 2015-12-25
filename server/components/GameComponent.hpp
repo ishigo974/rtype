@@ -32,7 +32,7 @@ namespace RType
             void                        updateElapsedTime();
 
         public:
-            virtual void                update(double lastElapsed);
+            virtual void                update();
 
         public:
             virtual std::string         getName() const;

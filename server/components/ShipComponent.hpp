@@ -22,7 +22,7 @@ namespace RType
             Ship&           operator=(Ship const& other);
 
         public:
-            virtual void    update(double lastElapsed);
+            virtual void    update();
 
         public:
             void            setIsFiring(bool isFiring);

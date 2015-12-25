@@ -27,7 +27,7 @@ namespace ECS
     public:
         void                addComponent(std::unique_ptr<IComponent> component);
         bool                removeComponent(ComponentMask mask);
-        void                update(double lastElapsed);
+        void                update();
 
         template <typename ComponentType>
         ComponentType*      getComponent() const

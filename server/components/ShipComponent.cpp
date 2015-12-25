@@ -1,4 +1,7 @@
 #include "ShipComponent.hpp"
+#include "ShotComponent.hpp"
+#include "PlayerComponent.hpp"
+#include "RoomComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "PositionComponent.hpp"
 #include "EntityManager.hpp"
@@ -54,22 +57,25 @@ namespace RType
         /*
         ** Public member functions
         */
-        void                Ship::update(double)
+        void                Ship::update()
         {
-            ECS::Entity&            entity =
-                ECS::EntityManager::getInstance().getByCmpnt(this);
+            ECS::EntityManager&     em = ECS::EntityManager::getInstance();
+            ECS::Entity&            entity = em.getByCmpnt(this);
             Component::Position*    pos =
-                    entity.getComponent<Component::Position>();
+                entity.getComponent<Component::Position>();
+            Component::Room*        room =
+                entity.getComponent<Component::Player>()->getRoom();
 
             if (_isFiring && _chrono.getElapsedTime() > usecFireDelay)
             {
-                ECS::Entity&            shot = ECS::EntityManager::getInstance()
-                    .create(Component::MASK_POSITION);
+                ECS::Entity&            shot = em.create(Component::MASK_POSITION);
                 Component::Position*    shotPos =
                     shot.getComponent<Component::Position>();
+                Component::Game*        game =
+                    em.getByCmpnt(room).getComponent<Component::Game>();
 
                 shot.addComponent(
-                    std::make_unique<Component::Shot>(_shotType, &entity));
+                    std::make_unique<Component::Shot>(_shotType, &entity, game));
                 *shotPos = *pos;
                 _chrono.reset();
                 // std::cout << "bullet created" << std::endl; // debug
