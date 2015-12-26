@@ -1,6 +1,8 @@
 #include "NetworkUDP.hpp"
 #include "ShootCommand.hpp"
 #include "Player.hpp"
+#include "GameManager.hpp"
+#include "UDPView.hpp"
 
 ShootCommand::ShootCommand(EntityManager *entityManager, std::chrono::microseconds time)
 {
@@ -21,6 +23,10 @@ void    ShootCommand::execute()
     std::vector<Object *> network = _entityManager
             ->getByMask(ComponentMask::UDPMask);
     RType::InGameEvent  event;
+    GameManager* gm = static_cast<GameManager *>(_entityManager->getByTag("GameManager"));
+
+    if (gm == nullptr)
+        throw std::logic_error("Could not find GameManager");
 
     for (auto obj : objs)
         static_cast<GameObject *>(obj)->getComponent<Player>()
@@ -28,6 +34,9 @@ void    ShootCommand::execute()
 
 
     event.push<uint64_t>("time", _time.count());
+    UDPView* send = gm->getComponent<UDPView>();
+    if (send != nullptr)
+        send->pushToSend(event);
 }
 
 void    ShootCommand::undo()
