@@ -88,8 +88,10 @@ void    MobObject::create()
 
 void	MobObject::init(RType::MobType::IMobType const* mobtype)
 {
-    Mob*        m       = getComponent<Mob>();
-    Animation*  anim    = getComponent<Animation>();
+    Mob*            m = getComponent<Mob>();
+    Animation*      anim = getComponent<Animation>();
+    SpriteRenderer* s = getComponent<SpriteRenderer>();
+    Collider*       c = getComponent<Collider>();
 
     m->init(mobtype);
     m->setEnabled(true);
@@ -100,4 +102,7 @@ void	MobObject::init(RType::MobType::IMobType const* mobtype)
     anim->setDuration(mobtype->getDuration());
     anim->setLoop(mobtype->getLoop());
     anim->setEnabled(true);
+    s->setRect(mobtype->getRekt());
+    s->setPath(mobtype->getSpriteFilePath());
+    c->setRect(mobtype->getRekt());
 }

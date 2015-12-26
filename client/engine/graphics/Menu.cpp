@@ -4,12 +4,13 @@
 Menu::Menu(unsigned int id, std::string const& name, int layer,
            EntityManager* em, cu::Event* event) :
    GameObject(id, name, layer),
-   _roomsTextField(15), _playersInRoom(4),
+   _roomsTextField(15), _playersInRoom(4), _scores(4),
    _mainTitle(gu::Rect<float>(300, 100, 800, 60),
              "Le R-Type officiel 2015"),
    _changeName(gu::Rect<float>(1000, 0, 250, 50), "CHANGE NAME", 10),
    _createRoom(gu::Rect<float>(1000, 590, 250, 50), "CREATE ROOM", 10),
    _refresh(gu::Rect<float>(1000, 650, 200, 50), "REFRESH", 10),
+   _continue(gu::Rect<float>(1000, 650, 200, 50), "CONTINUE", 10),
    _back(gu::Rect<float>(0, 0, 150, 50), "BACK", 10),
    _roomTitle(gu::Rect<float>(300, 0, 640, 70), ""),
    _readyField(gu::Rect<float>(1000, 600, 200, 50), "READY", 10),
@@ -17,6 +18,7 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
    _inputUserName(gu::Rect<float>(300, 300, 800, 50), "", 10, 16),
    _titleState("title"), _mainMenu("mainMenu"), _inRoom("inRoom"),
    _createRoomState("createRoom"), _changeNameState("changeName"),
+   _endGameState("endGame"),
    _sm(nullptr),
    _event(event),
    _em(em),
@@ -61,9 +63,12 @@ Menu::~Menu()
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
         delete *it;
     _roomsTextField.clear();
-    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-        delete *it;
-    _playersInRoom.clear();
+	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+		delete *it;
+	_playersInRoom.clear();
+	for (auto it = _scores.begin(); it != _scores.end(); ++it)
+		delete *it;
+	_scores.clear();
 }
 
 bool Menu::operator==(Menu const& other)
@@ -96,7 +101,8 @@ void Menu::initTextFields()
 {
     unsigned int    x = 100;
 
-    _refresh.setBackColor(sf::Color(0, 0, 0, 128));
+	_refresh.setBackColor(sf::Color(0, 0, 0, 128));
+	_continue.setBackColor(sf::Color(0, 0, 0, 128));
     _changeName.setBackColor(sf::Color(0, 0, 0, 128));
     _createRoom.setBackColor(sf::Color(0, 0, 0, 128));
     _back.setBackColor(sf::Color(0, 0, 0, 128));
@@ -104,8 +110,9 @@ void Menu::initTextFields()
     _inputRoomName.setBackColor(sf::Color(0, 0, 0, 128));
     _inputUserName.setBackColor(sf::Color(0, 0, 0, 128));
 
-    _refresh.setForeColor(sf::Color::White);
-    _changeName.setForeColor(sf::Color::White);
+	_refresh.setForeColor(sf::Color::White);
+	_continue.setForeColor(sf::Color::White);
+	_changeName.setForeColor(sf::Color::White);
     _createRoom.setForeColor(sf::Color::White);
     _back.setForeColor(sf::Color::White);
     _readyField.setForeColor(sf::Color::White);
@@ -124,11 +131,16 @@ void Menu::initTextFields()
     }
     for (int i = 0; i < 4; ++i)
     {
-        _playersInRoom[i] =
-            new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 300, 50),
-                          "", 10);
-        _playersInRoom[i]->setText("");
-    }
+		_playersInRoom[i] =
+			new TextField(gu::Rect<float>(200, (i + 1) * 100 + 50, 400, 50),
+				"", 10);
+		_playersInRoom[i]->setText("");
+
+		_scores[i] =
+			new TextField(gu::Rect<float>(600, (i + 1) * 100 + 50, 400, 50),
+				"", 10);
+		_scores[i]->setText("");
+	}
 }
 
 void Menu::refreshRoomList()
@@ -223,7 +235,7 @@ void Menu::addRoomList(RType::Request::RoomsTab const &listRoom)
         (*it)->setBackColor(sf::Color::Transparent);
         (*it)->clearText();
     }
-    for (int  nb = 0; nb != 10; ++nb)
+    for (int  nb = 0; nb != 15; ++nb)
     {
         if (nb < static_cast<int>(_roomsList.size()))
         {
@@ -461,6 +473,21 @@ void Menu::transitionToStates()
             menu->ready();
         return false;
     }, _event, &_back, &_readyField, this);
+
+	_inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
+	{
+		if (menu->done())
+			return true;
+		return false;
+	}, _event, this);
+
+	_endGameState.addTransition("inRoom", [](cu::Event *e, TextField *c)
+	{
+		if (e->type == cu::Event::MouseButtonReleased &&
+			c->intersect(e->mouse.x, e->mouse.y))
+			return true;
+		return false;
+	}, _event, &_continue);
 }
 
 void Menu::setupGUIElements()
@@ -470,12 +497,18 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_titleState.getName(), &_mainTitle);
 
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
-      gm->addGUIElement(_mainMenu.getName(), *it);
+	    gm->addGUIElement(_mainMenu.getName(), *it);
 
-    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-      gm->addGUIElement(_inRoom.getName(), *it);
+	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+	{
+		gm->addGUIElement(_inRoom.getName(), *it);
+		gm->addGUIElement(_endGameState.getName(), *it);
+	}
 
-    gm->addGUIElement(_mainMenu.getName(), &_refresh);
+	for (auto it = _scores.begin(); it != _scores.end(); ++it)
+		gm->addGUIElement(_endGameState.getName(), *it);
+
+	gm->addGUIElement(_mainMenu.getName(), &_refresh);
     gm->addGUIElement(_mainMenu.getName(), &_createRoom);
     gm->addGUIElement(_mainMenu.getName(), &_changeName);
     gm->addGUIElement(_createRoomState.getName(), &_back);
@@ -484,7 +517,8 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_changeNameState.getName(), &_inputUserName);
     gm->addGUIElement(_inRoom.getName(), &_back);
     gm->addGUIElement(_inRoom.getName(), &_roomTitle);
-    gm->addGUIElement(_inRoom.getName(), &_readyField);
+	gm->addGUIElement(_inRoom.getName(), &_readyField);
+	gm->addGUIElement(_endGameState.getName(), &_continue);
 }
 
 void Menu::setupStates()
@@ -492,7 +526,8 @@ void Menu::setupStates()
     _sm->addState(_mainMenu);
     _sm->addState(_inRoom);
     _sm->addState(_createRoomState);
-    _sm->addState(_changeNameState);
+	_sm->addState(_changeNameState);
+	_sm->addState(_endGameState);
 }
 
 namespace std
@@ -585,6 +620,21 @@ void Menu::init()
 void Menu::clearPlayers()
 {
     _playersList.clear();
+}
+
+void Menu::endGame(RType::Request::ScoresTab const &scores)
+{
+	auto player = _playersList.begin();
+	for (size_t nb = 0; nb != scores.size(); ++nb)
+	{
+		for (player = _playersList.begin(); player != _playersList.end(); ++player)
+			if (player->id == scores[nb].id)
+			{
+				_playersInRoom[nb]->setText(player->username);
+				break;
+			}
+		_scores[nb]->setText(std::to_string(scores[nb].score));
+	}
 }
 
 void Menu::changePlayerName(RType::Request request)

@@ -41,6 +41,7 @@ public:
     bool intersects(Collider *o);
     bool isEnabled() const;
     void setEnabled(bool e);
+    void setRect(gu::Rect<int> const&);
 
 protected:
     gu::Rect<int> _bounds;

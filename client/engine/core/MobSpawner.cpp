@@ -78,14 +78,16 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
     return Mask;
 }
 
-void	MobSpawner::spawnMob(unsigned int id)
+void	MobSpawner::spawnMob(RType::InGameEvent const& request)
 {
     MobObject *mob = _mobs->create("Mob", 12);
-    mob->init(_mobTypes->at(id).get());
+    mob->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
-    m->setX(500); // TODO mettre la position donnée dans le fichier _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
-    m->setY(500);
+    m->setX(request.get<uint32_t>("x")); // TODO mettre la position donnée dans"
+                                             // fichier
+    // _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
+    m->setY(request.get<uint32_t>("y"));
     // m->setY(_transform->getPosition().Y());
 }
 
@@ -112,13 +114,13 @@ void		              MobSpawner::update(double)
         }
     }
     if (_udpView->sizeRecv())
-      {
-	event = _udpView->popReceive();
-	try {
-	  spawnMob(event.get<uint8_t>("mob_id"));
-	}
-	catch (Exception::ValueError const & e)
-	  {
-	  }
-      }
+    {
+        try
+        {
+            spawnMob(_udpView->popReceive());
+        }
+        catch (Exception::ValueError const& e)
+        {
+        }
+    }
 }

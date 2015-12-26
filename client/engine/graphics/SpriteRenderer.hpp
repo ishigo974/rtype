@@ -23,6 +23,7 @@ public:
   std::string toString() const;
 
   std::string const&   getPath() const;
+  void                 setPath(std::string const&);
   gu::Rect<int> const& getRect() const;
   void setRect(gu::Rect<int> const&);
   RTypes::my_uint16_t	getMask() const;

@@ -63,15 +63,18 @@ public:
     void changePlayerName(RType::Request);
     void playerNotReady(uint8_t);
     void clearPlayers();
+	void endGame(RType::Request::ScoresTab const &scores);
 
 private:
     std::vector<TextField *>    _roomsTextField;
-    std::vector<TextField *>    _playersInRoom;
+	std::vector<TextField *>    _playersInRoom;
+	std::vector<TextField *>    _scores;
     
     TextField                   _mainTitle;
     TextField                   _changeName;
     TextField                   _createRoom;
-    TextField                   _refresh;
+	TextField                   _refresh;
+	TextField                   _continue;
     TextField                   _back;
     TextField                   _roomTitle;
     TextField                   _readyField;
@@ -82,7 +85,8 @@ private:
     State		                _mainMenu;
     State		                _inRoom;
     State		                _createRoomState;
-    State                       _changeNameState;
+	State                       _changeNameState;
+	State                       _endGameState;
 
     StateMachine*               _sm;
 

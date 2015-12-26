@@ -52,16 +52,18 @@ const
     struct sockaddr_in client;
     int                clientSize = sizeof(client);
     char               address[16];
-    int                timeout;
+    timeval            tv;
 
-    timeout = UdpSocket::defaultTimeout;
+    tv.tv_sec  = 1;
+    tv.tv_usec = 1;
 
     if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO,
-                   reinterpret_cast<char *>(&timeout), sizeof(timeout))
+                   reinterpret_cast<char *>(&tv), sizeof(tv))
         == SOCKET_ERROR)
         throw std::runtime_error("SetSockOpt failed");
     wsabuf.buf = new char[len];
     wsabuf.len = len;
+	std::cout << "toto" << std::endl;
     if (::WSARecvFrom(_socket, &wsabuf, 1, &read_size, &flags,
                       reinterpret_cast<SOCKADDR *>(&client), &clientSize,
                       nullptr, nullptr) == SOCKET_ERROR)
@@ -74,7 +76,8 @@ const
             throw std::runtime_error("WSARecv failed");
         }
     }
-    if (read_size > 0)
+	std::cout << "titi" << std::endl;
+	if (read_size > 0)
     {
         buffer.append(wsabuf.buf, read_size);
         inet_ntop(AF_INET, &(client.sin_addr), address, INET_ADDRSTRLEN);
