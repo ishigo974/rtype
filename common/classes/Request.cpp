@@ -15,32 +15,34 @@ namespace RType
     const size_t                    Request::headerSize   = sizeof(uint16_t) +
                                                             sizeof(uint32_t);
     const Request::LobbyReqMap      Request::lobbyRequests = {
-            {CL_LISTROOMS,  {}},
-            {CL_CREATEROOM, {"room_name"}},
-            {CL_JOINROOM,   {"room_id"}},
-            {CL_QUITROOM,   {}},
-            {CL_READY,      {}},
-            {CL_NOTREADY,   {}},
-            {CL_USERNAME,   {"username"}},
-            {SE_LISTROOMS,  {"rooms"}},
-            {SE_JOINROOM,   {"player_id", "username"}},
-            {SE_CLIUSRNM,   {"player_id", "username"}},
-            {SE_CLIENTRDY,  {"player_id"}},
-            {SE_CLINOTRDY,  {"player_id"}},
-            {SE_GAMESTART,  {}},
-            {SE_ROOMINFO,   {"player_id", "players"}},
-            {SE_QUITROOM,   {"player_id"}},
-            {SE_OK,         {}},
-            {SE_KO,         {}}
+        { CL_LISTROOMS,  {                          } },
+        { CL_CREATEROOM, { "room_name"              } },
+        { CL_JOINROOM,   { "room_id"                } },
+        { CL_QUITROOM,   {                          } },
+        { CL_READY,      {                          } },
+        { CL_NOTREADY,   {                          } },
+        { CL_USERNAME,   { "username"               } },
+        { SE_LISTROOMS,  { "rooms"                  } },
+        { SE_JOINROOM,   { "player_id", "username"  } },
+        { SE_CLIUSRNM,   { "player_id", "username"  } },
+        { SE_CLIENTRDY,  { "player_id"              } },
+        { SE_CLINOTRDY,  { "player_id"              } },
+        { SE_GAMESTART,  {                          } },
+        { SE_ENDOFGAME,  { "scores"                 } },
+        { SE_ROOMINFO,   { "player_id", "players"   } },
+        { SE_QUITROOM,   { "player_id"              } },
+        { SE_OK,         {                          } },
+        { SE_KO,         {                          } }
     };
     const Request::DataSizeMap      Request::dataSizes     = {
-            {"size",      sizeof(uint32_t)},
-            {"room_name", Request::variableSize},
-            {"room_id",   sizeof(uint32_t)},
-            {"username",  Request::variableSize},
-            {"rooms",     Request::variableSize},
-            {"player_id", sizeof(uint8_t)},
-            {"players",   Request::variableSize}
+        { "size",       sizeof(uint32_t)         },
+        { "room_name",  Request::variableSize    },
+        { "room_id",    sizeof(uint32_t)         },
+        { "username",   Request::variableSize    },
+        { "rooms",      Request::variableSize    },
+        { "player_id",  sizeof(uint8_t)          },
+        { "players",    Request::variableSize    },
+        { "scores",     Request::variableSize    }
     };
 
     /*
@@ -136,6 +138,31 @@ namespace RType
         return players;
     }
 
+    template<>
+    Request::ScoresTab Request::get(std::string const& key) const
+    {
+        DataMap::const_iterator it = _data.find(key);
+        ScoresTab               scores;
+        Buffer                  buffer;
+
+        if (_code != SE_ENDOFGAME)
+            throw Exception::ValueError("Trying to retrieve scores tab");
+        if (it == _data.end())
+            throw std::runtime_error("no such data: " + key); // TODO
+        buffer = it->second;
+        while (!buffer.empty())
+        {
+            Score       score;
+
+            score.id = buffer.get<uint8_t>();
+            buffer.consume(sizeof(uint8_t));
+            score.score = buffer.get<uint32_t>();
+            buffer.consume(sizeof(uint32_t));
+            scores.push_back(score);
+        }
+        return scores;
+    }
+
     Buffer          Request::toBuffer() const
     {
         Buffer res;
@@ -167,13 +194,13 @@ namespace RType
 
         clear();
         if (raw.size() < headerSize)
-            throw Exception::IncompleteRequest("Buffer can't contain a \
-                                                request header");
+            throw Exception::IncompleteRequest("Buffer can't contain a "
+                                                "request header");
         _code    = raw.get<uint16_t>();
         dataSize = raw.get<uint32_t>(sizeof(uint16_t));
         if (raw.size() - headerSize < dataSize)
-            throw Exception::IncompleteRequest("Buffer can't contain \
-                                                request's data");
+            throw Exception::IncompleteRequest("Buffer can't contain "
+                                                "request's data");
         parseData(raw, dataSize);
     }
 
@@ -182,14 +209,12 @@ namespace RType
         Buffer                      tmp  = raw;
         size_t                      left = dataSize;
         LobbyReqMap::const_iterator it   =
-                                            lobbyRequests
-                                                    .find(static_cast<Code>(_code));
+            lobbyRequests.find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);
         if (it == lobbyRequests.end())
             throw Exception::NotImplemented("Request '" + std::to_string(_code)
-                                            +
-                                            "' does not exists or is not implemented");
+                                + "' does not exists or is not implemented");
         for (std::string const& arg: it->second)
         {
             auto   it = dataSizes.find(arg);
@@ -198,7 +223,7 @@ namespace RType
 
             if (it == dataSizes.end())
                 throw Exception::NotImplemented("Unknown data size: " + arg);
-            if (arg == "rooms" || arg == "players")
+            if (arg == "rooms" || arg == "players" || arg == "scores")
             {
                 _data.insert(std::make_pair(it->first, tmp));
                 return;
@@ -214,8 +239,8 @@ namespace RType
             if (size > left)
                 throw Exception::InvalidRequest("Request can't fit argument");
             if (size > tmp.size())
-                throw Exception::IncompleteRequest("Buffer can't \
-                                                    contain argument");
+                throw Exception::IncompleteRequest("Buffer can't "
+                                                    "contain argument");
             res.setData(tmp.data(), size);
             tmp.consume(size);
             _data.insert(std::make_pair(it->first, res));

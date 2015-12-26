@@ -35,6 +35,8 @@ namespace RType
                     &ProtocolUT::lobbyRequestParsingWithoutData);
         registerTest("LobbyRequestParsingWithData",
                     &ProtocolUT::lobbyRequestParsingWithData);
+        registerTest("lobbyRequestScoreParsing",
+                    &ProtocolUT::lobbyRequestScoreParsing);
         registerTest("InGameEventParsingWithData",
                     &ProtocolUT::inGameEventParsingWithData);
         registerTest("CreateSingleRoomAndList",
@@ -119,6 +121,34 @@ namespace RType
                       dataSize);
             UT_ASSERT(request.get<uint32_t>("room_id") == test);
         }
+    }
+
+    void            ProtocolUT::lobbyRequestScoreParsing()
+    {
+        static const std::map<unsigned int, unsigned int>    scores =
+        {
+            { 3, 100    },
+            { 4, 305    },
+            { 1, 999    },
+            { 2, 0      }
+        };
+        Buffer              buffer;
+        Request             request;
+        Request::ScoresTab  scoresTab;
+
+        buffer.append<uint16_t>(Request::SE_ENDOFGAME);
+        buffer.append<uint32_t>(scores.size() *
+                                (sizeof(uint8_t) + sizeof(uint32_t)));
+        for (auto& entry: scores)
+        {
+            buffer.append<uint8_t>(entry.first);
+            buffer.append<uint32_t>(entry.second);
+        }
+        request = Request(buffer);
+        UT_ASSERT(request.getCode() == Request::SE_ENDOFGAME);
+        scoresTab = request.get<Request::ScoresTab>("scores");
+        for (auto& score: scoresTab)
+            UT_ASSERT(scores.at(score.id) == score.score);
     }
 
     void            ProtocolUT::createSingleRoomAndList()

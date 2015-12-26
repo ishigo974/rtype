@@ -34,6 +34,7 @@ namespace RType
             SE_CLIUSRNM   = 405,
             SE_ROOMINFO   = 406,
             SE_GAMESTART  = 500,
+            SE_ENDOFGAME  = 501,
             SE_OK         = 601,
             SE_KO         = 602
         };
@@ -53,11 +54,18 @@ namespace RType
             bool         isReady;
         };
 
+        struct Score
+        {
+            unsigned int id;
+            unsigned int score;
+        };
+
     public:
         typedef std::unordered_map<Code, DataArgs,
-                                   std::hash<uint16_t> > LobbyReqMap;
-        typedef std::vector<Room>                        RoomsTab;
-        typedef std::vector<Player>                      PlayersTab;
+                                   std::hash<uint16_t> >    LobbyReqMap;
+        typedef std::vector<Room>                           RoomsTab;
+        typedef std::vector<Player>                         PlayersTab;
+        typedef std::vector<Score>                          ScoresTab;
 
     public:
         Request(uint16_t code = 0);
@@ -95,6 +103,9 @@ namespace RType
 
     template<>
     Request::PlayersTab     Request::get(std::string const& key) const;
+
+    template<>
+    Request::ScoresTab     Request::get(std::string const& key) const;
 }
 
 #endif /* !REQUEST_HPP_ */
