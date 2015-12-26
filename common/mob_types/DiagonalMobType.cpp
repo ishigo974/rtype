@@ -63,7 +63,7 @@ namespace RType
 
         gu::Rect<int>   Diagonal::getRekt() const
         {
-            return (gu::Rect<int>(52, 3, 55, 54));
+            return (gu::Rect<int>(0, 0, 32, 28));
         }
 
         std::string     Diagonal::getName() const
@@ -83,7 +83,7 @@ namespace RType
 
         std::string     Diagonal::getSpriteFilePath() const
         {
-            return "r-typesheet9";
+            return "diagonal";
         }
 
         MovePattern     Diagonal::getMovePattern() const
@@ -116,5 +116,21 @@ namespace RType
                    "\n\tsprite file path: " + getSpriteFilePath() +
                    "\n}\n";
         }
+
+        unsigned int    Diagonal::getNumberFrames() const
+        {
+            return 3;
+        }
+
+        double          Diagonal::getDuration() const
+        {
+            return 64.0;
+        }
+
+        bool            Diagonal::getLoop() const
+        {
+            return true;
+        }
+
     }
 }

@@ -3,12 +3,12 @@
     "path": "../res/r-typesheet1.gif",
     "repeated": false
   },
-  "r-typesheet9": {
-    "path": "../res/r-typesheet9.gif",
+  "diagonal": {
+    "path": "../res/diagonal.png",
     "repeated": false
   },
-  "r-typesheet38": {
-    "path": "../res/r-typesheet38.gif",
+  "boss": {
+    "path": "../res/boss.png",
     "repeated": false
   },
   "bg1": {
@@ -71,8 +71,8 @@
     "path": "../res/player.gif",
     "repeated": false
   },
-  "mob": {
-    "path": "../res/mob.gif",
+  "forward": {
+    "path": "../res/forward.png",
     "repeated": false
   }
 }

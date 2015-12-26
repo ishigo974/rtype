@@ -63,7 +63,7 @@ namespace RType
 
         gu::Rect<int>   Vertical::getRekt() const
         {
-            return (gu::Rect<int>(2, 2, 176, 144));
+            return (gu::Rect<int>(0, 0, 176, 144));
         }
 
 
@@ -84,7 +84,7 @@ namespace RType
 
         std::string     Vertical::getSpriteFilePath() const
         {
-            return "r-typesheet38";
+            return "boss";
         }
 
         MovePattern     Vertical::getMovePattern() const
@@ -119,6 +119,21 @@ namespace RType
                    "\n\tscore value: " + std::to_string(getScoreValue()) +
                    "\n\tsprite file path: " + getSpriteFilePath() +
                    "\n}\n";
+        }
+
+        unsigned int    Vertical::getNumberFrames() const
+        {
+            return 2;
+        }
+
+        double          Vertical::getDuration() const
+        {
+            return 512.0;
+        }
+
+        bool            Vertical::getLoop() const
+        {
+            return true;
         }
     }
 }

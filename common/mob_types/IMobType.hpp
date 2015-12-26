@@ -33,6 +33,9 @@ namespace RType
             virtual std::string     getSpriteFilePath() const = 0;
             virtual MovePattern     getMovePattern() const = 0;
             virtual IMobType*       clone() const = 0;
+            virtual unsigned int    getNumberFrames() const = 0;
+            virtual double          getDuration() const = 0;
+            virtual bool            getLoop() const = 0;
         };
 
         typedef std::vector<IMobType*>   Collection;

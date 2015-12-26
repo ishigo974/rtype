@@ -1,6 +1,7 @@
 #include "MobSystem.hpp"
 #include "RTypeGame.hpp"
 #include "Mob.hpp"
+#include "Animation.hpp"
 #include "Collider.hpp"
 
 MobSystem::MobSystem(EntityManager *em, Time::HRChrono const* chrono,
@@ -26,6 +27,16 @@ void            MobSystem::process()
             _em->attachComponent<SpriteRenderer>(first, "SR",
                 _mobTypes->at(it->second.id).get()->getSpriteFilePath(),
                 _mobTypes->at(it->second.id).get()->getRekt());
+
+            // if (_mobTypes->at(it->second.id).get()->getId() == 1
+            //     || _mobTypes->at(it->second.id).get()->getId() == 2)
+            // {
+                _em->attachComponent<Animation>(first, "AN",
+                    _mobTypes->at(it->second.id).get()->getNumberFrames(),
+                    _mobTypes->at(it->second.id).get()->getDuration(),
+                    _mobTypes->at(it->second.id).get()->getLoop());
+            // }
+
             _em->attachComponent<Mob>(first, "SR compo", _mobTypes->at(it->second.id).get());
             first->getComponent<Mob>()->initTransform();
             _em->attachComponent<Collider>(first, "SR compo",
