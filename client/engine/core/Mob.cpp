@@ -5,6 +5,7 @@
 #include "Renderer.hpp"
 #include "Collider.hpp"
 #include "Player.hpp"
+#include "Animation.hpp"
 
 /*
 ** Constructor/Destructor
@@ -101,7 +102,17 @@ bool        Mob::handleMessage(Collider *o)
         && otherParent->getComponent<Mob>() == nullptr) && _lives > 0)
         _lives -= 1;
     if (_lives == 0)
-        _available = true;
+    {
+        // _available = true;
+        _parent->getComponent<Collider>()->setEnabled(false);
+        _parent->getComponent<SpriteRenderer>()->setPath("explosion");
+        _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
+                                                                      32, 30));
+        _parent->getComponent<Animation>()->setFrames(8);
+        _parent->getComponent<Animation>()->setDuration(256.0);
+        _parent->getComponent<Animation>()->setLoop(false);
+        _parent->getComponent<Animation>()->play();
+    }
     return (true);
 }
 
@@ -129,9 +140,13 @@ void		Mob::update(double elapsedTime)
 
     if (_lives <= 0)
     {
-        _enabled = false;
-        _parent->setVisible(false);
-        _parent->getComponent<Collider>()->setEnabled(false);
+        if (!_parent->getComponent<Animation>()->isPlaying())
+        {
+            _available = true;
+            _enabled = false;
+            _parent->setVisible(false);
+            _parent->getComponent<Collider>()->setEnabled(false);
+        }
     }
     if (_transform->getPosition().X() > Renderer::width + 1000
         || _transform->getPosition().X() < -1000

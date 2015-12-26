@@ -72,7 +72,7 @@ namespace std
 void Animation::update(double elapsedTime)
 {
     SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
-    if (sr == nullptr)
+    if (sr == nullptr || !_playing)
         return;
 
     auto rect = sr->getRect();
@@ -152,4 +152,9 @@ bool            Animation::getLoop() const
 void            Animation::setLoop(bool l)
 {
     _loop = l;
+}
+
+bool            Animation::isPlaying() const
+{
+    return _playing;
 }

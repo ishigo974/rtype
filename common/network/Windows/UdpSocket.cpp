@@ -56,15 +56,7 @@ const
     struct sockaddr_in client;
     int                clientSize = sizeof(client);
     char               address[16];
-    timeval            tv;
 
-    tv.tv_sec  = 1;
-    tv.tv_usec = 1;
-
-    if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO,
-                   reinterpret_cast<char *>(&tv), sizeof(tv))
-        == SOCKET_ERROR)
-        throw std::runtime_error("SetSockOpt failed");
     wsabuf.buf = new char[len];
     wsabuf.len = len;
     if (::WSARecvFrom(_socket, &wsabuf, 1, &read_size, &flags,

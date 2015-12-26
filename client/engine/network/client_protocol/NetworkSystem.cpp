@@ -85,9 +85,9 @@ namespace RType
 
         try
         {
-        if (_monitor.isWritable(&_udpSock))
-            if ((_udpSock.receiveFrom(receive, buffLen, addr)) > 0)
-                _udpObj.receive(receive);
+            if (_monitor.isReadable(&_udpSock))
+                if ((_udpSock.receiveFrom(receive, buffLen, addr)) > 0)
+                    _udpObj.receive(receive);
         }
         catch (std::runtime_error const&)
         {
