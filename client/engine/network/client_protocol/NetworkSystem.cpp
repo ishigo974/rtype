@@ -24,6 +24,7 @@ namespace RType
         _udpSock.bind();
         _connector.connect();
         SocketMonitor::getInstance().registerSocket(&_connector);
+        SocketMonitor::getInstance().registerSocket(&_udpSock);
     }
 
     NetworkSystem::~NetworkSystem()
@@ -84,6 +85,7 @@ namespace RType
 
         try
         {
+        if (_monitor.isWritable(&_udpSock))
             if ((_udpSock.receiveFrom(receive, buffLen, addr)) > 0)
                 _udpObj.receive(receive);
         }

@@ -96,9 +96,9 @@ bool        Mob::handleMessage(Collider *o)
 {
     GameObject	*otherParent = static_cast<GameObject *>(o->parent());
 
-    if ((otherParent->getComponent<Player>() != nullptr
-        || otherParent->getComponent<Behaviour>() != nullptr
-        || otherParent->getComponent<Bullet>() != nullptr) && _lives > 0)
+    if (((otherParent->getComponent<Player>() != nullptr
+        || otherParent->getComponent<Bullet>() != nullptr)
+        && otherParent->getComponent<Mob>() == nullptr) && _lives > 0)
         _lives -= 1;
     if (_lives == 0)
         _available = true;
