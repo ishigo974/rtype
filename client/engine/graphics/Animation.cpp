@@ -125,32 +125,32 @@ void    Animation::resume()
     _playing = true;
 }
 
-unsigned int    getFrames() const
+unsigned int    Animation::getFrames() const
 {
     return _frames;
 }
 
-void            setFrames(unsigned int f)
+void            Animation::setFrames(unsigned int f)
 {
     _frames = f;
 }
 
-double          getDuration() const
+double          Animation::getDuration() const
 {
     return _duration;
 }
 
-void            setDuration(double d)
+void            Animation::setDuration(double d)
 {
     _duration = d;
 }
 
-bool            getLoop() const
+bool            Animation::getLoop() const
 {
     return _loop;
 }
 
-void            setLoop(bool l)
+void            Animation::setLoop(bool l)
 {
     _loop = l;
 }
