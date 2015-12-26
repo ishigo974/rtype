@@ -1,4 +1,8 @@
 {
+  "explosion": {
+    "path": "../res/explosion.png",
+    "repeated": false
+  },
   "r-typesheet1": {
     "path": "../res/r-typesheet1.gif",
     "repeated": false

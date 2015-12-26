@@ -32,6 +32,7 @@ public:
     void            setDuration(double);
     bool            getLoop() const;
     void            setLoop(bool);
+    bool            isPlaying() const;
 
 private:
     unsigned int    _currentFrame;
