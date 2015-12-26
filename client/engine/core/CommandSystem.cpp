@@ -84,6 +84,13 @@ void CommandSystem::processNetwork()
         while (tmpComp->sizeToSend() > 0)
             _ns->pushTCP(tmpComp->popToSend());
     }
+if (udpIn.size() > 0)
+{
+    std::cout << "------------- RECEIVE FROM NET ------------" << std::endl;
+    for (auto tmp : udpIn)
+      std::cout << "NETPLAYER MOVE REQUEST" << tmp.getCode() << std::endl;
+    std::cout << "------------- RECEIVE END ------------" << std::endl;
+}
     for (auto e : udpObjs)
     {
         i = 0;

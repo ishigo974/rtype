@@ -59,7 +59,7 @@ void NetMoveCommand::execute()
 
     if (!_target && !_target->getComponent<UDPView>())
     {
-        switch (_direction)
+      switch (_direction)
         {
             case ACommand::Action::DOWN:
                 _target->getComponent<UDPView>()->pushReceive
