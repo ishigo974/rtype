@@ -8,7 +8,8 @@ class NetPlayerObject : public GameObject
 {
 public:
     NetPlayerObject();
-    NetPlayerObject(unsigned int id, std::string const& name, EntityManager *em);
+    NetPlayerObject(unsigned int id, std::string const& name, EntityManager *em,
+                    unsigned int playerId);
     NetPlayerObject(NetPlayerObject& o);
     NetPlayerObject(NetPlayerObject&& o);
     NetPlayerObject& operator=(NetPlayerObject o);
@@ -19,9 +20,11 @@ public:
 
 public:
     void init();
+    unsigned int getPlayerId() const;
 
 private:
-    EntityManager *_em;
+    EntityManager*  _em;
+    unsigned int    _playerId;
 };
 
 #endif //RTYPE_NETPLAYEROBJECT_HPP
