@@ -78,7 +78,6 @@ namespace RType
                     std::make_unique<Component::Shot>(_shotType, &entity, game));
                 *shotPos = *pos;
                 _chrono.reset();
-                // std::cout << "bullet created" << std::endl; // debug
             }
         }
 

@@ -22,7 +22,9 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Game::Game() : _chrono(), _room(nullptr), _map()
+        Game::Game() :
+            _chrono(), _room(nullptr), _map(),
+            _elapsedTime(Ship::dftElapsedTime)
         {
         }
 
@@ -34,7 +36,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _room(other._room), _map(other._map)
+            _chrono(other._chrono), _room(other._room), _map(other._map),
+            _elapsedTime(other._elapsedTime)
         {
         }
 
@@ -45,6 +48,7 @@ namespace RType
                 _chrono = other._chrono;
                 _room = other._room;
                 _map = other._map;
+                _elapsedTime = other._elapsedTime;
             }
             return *this;
         }
@@ -102,7 +106,7 @@ namespace RType
                 _elapsedTime += ship->getElapsedTime();
             }
             _elapsedTime /= room->size();
-            std::cout << "elapsed " << _elapsedTime << std::endl;
+            std::cout << "Game updated elapsed time " << _elapsedTime << std::endl;
         }
 
         Time::HRChrono const&   Game::getChrono() const
