@@ -5,6 +5,7 @@
 #include <AudioEffect.hpp>
 #include <Mob.hpp>
 #include "NetPlayerComp.hpp"
+#include "NetPlayerObject.hpp"
 #include "Collider.hpp"
 #include "GameConfig.hpp"
 
@@ -154,10 +155,15 @@ void		NetPlayerComp::update(double elapsedtime)
     {
         RType::InGameEvent tmp = _udp->popReceive();
 
-        if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART && _shotTime >=
-                                                                         80)
+        if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART
+            && _shotTime >= 150)
             this->shoot();
-        else
+        else if ((tmp.getCode() == RType::InGameEvent::SE_PLAYERUP
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERDOWN
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERRIGHT
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERLEFT)
+                 && tmp.get<uint8_t>("player_id") ==
+                    static_cast<NetPlayerObject*>(parent())->getPlayerId())
             this->move(elapsedtime, tmp);
     }
 }

@@ -45,7 +45,6 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
-    // _em.attachComponent<UDPView>(_menu, "UDP");
     _menu->init();
     _renderer.init();
 }
@@ -120,7 +119,6 @@ void        RTypeGame::initGame()
         SpriteRenderer *renderer;
         gu::Rect<int> rect;
 
-        std::cout << "current player " << gm->getPlayerId() << " from " << gm << std::endl;
         if (entry.first == gm->getPlayerId())
         {
             entry.second = _em.createEntity<PlayerObject>("Player", 1, &_em);
@@ -134,7 +132,7 @@ void        RTypeGame::initGame()
         }
         else
         {
-            entry.second = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
+            entry.second = _em.createEntity<NetPlayerObject>("NetPlayer", &_em, entry.first);
             static_cast<NetPlayerObject *>(entry.second)->init();
         }
         renderer = entry.second->getComponent<SpriteRenderer>();

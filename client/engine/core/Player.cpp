@@ -118,8 +118,8 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(double elapsedtime)
 {
-    float		speed = RType::Speed::ship;
-    double       move;
+    float       speed = RType::Speed::ship;
+    double      move;
 
     move = speed * elapsedtime;
     switch (_action.front())

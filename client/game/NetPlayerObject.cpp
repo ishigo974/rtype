@@ -9,8 +9,9 @@
 NetPlayerObject::NetPlayerObject()
 { }
 
-NetPlayerObject::NetPlayerObject(unsigned int id, std::string const& name, EntityManager *em)
-        : GameObject(id, name, 0), _em(em)
+NetPlayerObject::NetPlayerObject(unsigned int id, std::string const& name,
+                                EntityManager *em, unsigned int playerId)
+        : GameObject(id, name, 0), _em(em), _playerId(playerId)
 { }
 
 NetPlayerObject::NetPlayerObject(NetPlayerObject& o) : GameObject(o)
@@ -57,4 +58,9 @@ void NetPlayerObject::init()
     _em->attachComponent<UDPView>(this, "NetPlayerUDPView");
     _em->attachComponent<NetPlayerComp>(this, "NPC", _em, 10, 5);
     getComponent<NetPlayerComp>()->init();
+}
+
+unsigned int NetPlayerObject::getPlayerId() const
+{
+    return _playerId;
 }
