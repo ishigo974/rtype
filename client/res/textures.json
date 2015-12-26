@@ -68,7 +68,7 @@
     "repeated": false
   },
   "player": {
-    "path": "../res/player.gif",
+    "path": "../res/player.png",
     "repeated": false
   },
   "forward": {
