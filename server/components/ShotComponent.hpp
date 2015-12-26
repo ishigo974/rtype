@@ -6,6 +6,7 @@
 # include "IBehaviour.hpp"
 # include "GameComponent.hpp"
 # include "Entity.hpp"
+# include "GameConfig.hpp"
 
 namespace RType
 {
@@ -14,13 +15,8 @@ namespace RType
         class Shot : public ECS::IBehaviour
         {
         public:
-            enum Type
-            {
-                NORMAL = 0,
-            };
-
-        public:
-            Shot(Shot::Type type = NORMAL, ECS::Entity* owner = nullptr,
+            Shot(RType::Shot::Type type = RType::Shot::NORMAL,
+                 ECS::Entity* owner = nullptr,
                  Component::Game* game = nullptr);
             virtual ~Shot();
 
@@ -32,8 +28,8 @@ namespace RType
             virtual void                update();
 
         public:
-            Type                        getType() const;
-            void                        setType(Type type);
+            RType::Shot::Type           getType() const;
+            void                        setType(RType::Shot::Type type);
             ECS::Entity*                getOwner() const;
             void                        setOwner(ECS::Entity* owner);
             Component::Game*            getGame() const;
@@ -50,7 +46,7 @@ namespace RType
             static const ECS::ComponentMask     mask;
 
         protected:
-            Type                _type;
+            RType::Shot::Type   _type;
             ECS::Entity*        _owner;
             Component::Game*    _game;
         };

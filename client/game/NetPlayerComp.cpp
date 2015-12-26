@@ -155,7 +155,7 @@ void		NetPlayerComp::update(double elapsedtime)
     {
         RType::InGameEvent tmp = _udp->popReceive();
 
-        if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART
+        if (tmp.getCode() == RType::InGameEvent::SE_SHOT
             && _shotTime >= 150)
             this->shoot();
         else if ((tmp.getCode() == RType::InGameEvent::SE_PLAYERUP

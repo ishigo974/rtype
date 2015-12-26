@@ -20,8 +20,7 @@ namespace RType
             SE_PLAYERDOWN  = 302,
             SE_PLAYERLEFT  = 303,
             SE_PLAYERRIGHT = 304,
-            SE_SHOTSTART   = 305,
-            SE_SHOTSTOP    = 306,
+            SE_SHOT        = 305,
             SE_MOBSPAWNED  = 307,
             SE_INPUTERROR  = 501,
             SE_PLYRDISCONN = 502,
@@ -30,8 +29,7 @@ namespace RType
             CL_PLAYERDOWN  = 202,
             CL_PLAYERLEFT  = 203,
             CL_PLAYERRIGHT = 204,
-            CL_SHOTSTART   = 205,
-            CL_SHOTSTOP    = 206,
+            CL_SHOT        = 205,
             CL_DISCONNECT  = 503
         };
 
