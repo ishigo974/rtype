@@ -42,11 +42,11 @@ namespace RType
     /*
     ** Constructors/Destructor
     */
-    InGameEvent::InGameEvent(uint16_t code) : ABasePacket(code)
+    InGameEvent::InGameEvent(uint16_t code) : ABasePacket(code), _id(0)
     {
     }
 
-    InGameEvent::InGameEvent(Buffer const& raw)
+    InGameEvent::InGameEvent(Buffer const& raw) : ABasePacket(), _id(0)
     {
         parse(raw);
     }
@@ -161,7 +161,10 @@ namespace RType
         for (auto& arg: it->second)
             data.append<Buffer>(_data.at(arg));
         res.append<uint32_t>(data.size());
+
+
         res.append(data);
+
         return res;
     }
 
