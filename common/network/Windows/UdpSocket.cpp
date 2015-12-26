@@ -54,10 +54,12 @@ const
     char               address[16];
     int                timeout;
 
-    timeout = UdpSocket::defaultTimeout;
+    timeval tv;
+    tv.tv_sec  = 0;
+    tv.tv_usec = 100;
 
     if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO,
-                   reinterpret_cast<char *>(&timeout), sizeof(timeout))
+                   reinterpret_cast<char *>(&tv), sizeof(timeout))
         == SOCKET_ERROR)
         throw std::runtime_error("SetSockOpt failed");
     wsabuf.buf = new char[len];
