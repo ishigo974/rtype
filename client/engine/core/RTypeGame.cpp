@@ -116,9 +116,11 @@ void        RTypeGame::initGame()
     for (auto& entry: *gm)
     {
         Transform*      transform;
+        SpriteRenderer* renderer;
+        gu::Rect<int>   rect;
 
-        std::cout << "current player " << gm->getId() << std::endl;
-        if (entry.first == gm->getId())
+        std::cout << "current player " << gm->getPlayerId() << " from " << gm << std::endl;
+        if (entry.first == gm->getPlayerId())
         {
             entry.second = _em.createEntity<PlayerObject>("Player", 1, &_em);
             static_cast<PlayerObject*>(entry.second)->init();
@@ -134,6 +136,10 @@ void        RTypeGame::initGame()
             entry.second = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
             static_cast<NetPlayerObject*>(entry.second)->init();
         }
+        renderer = entry.second->getComponent<SpriteRenderer>();
+        rect = renderer->getRect();
+        rect.y = 3 + entry.first * 17;
+        renderer->setRect(rect);
         transform = entry.second->getComponent<Transform>();
         transform->getPosition().setX(RType::Map::defaultPosX);
         transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
