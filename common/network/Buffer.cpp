@@ -10,7 +10,7 @@
 /*
 ** Constructor/Destructor
 */
-Buffer::Buffer()
+Buffer::Buffer() : _data()
 {
     _data.clear();
 }

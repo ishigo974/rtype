@@ -19,10 +19,10 @@ public:
 
 public:
     Buffer(Buffer const& buffer);
-    Buffer& operator=(Buffer const& buffer);
+    Buffer&     operator=(Buffer const& buffer);
 
 public:
-    uint8_t& operator[](size_t index);
+    uint8_t&    operator[](size_t index);
     bool        operator==(Buffer const& other) const;
 
 public:
@@ -59,7 +59,7 @@ public:
     {
         size_t  size = _data.size();
 
-        _data.resize(size + sizeof(data));
+        _data.resize(size + sizeof(data), 0);
         std::memcpy(_data.data() + size, &data, sizeof(T));
     }
 
