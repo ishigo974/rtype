@@ -114,13 +114,13 @@ void		              MobSpawner::update(double)
         }
     }
     if (_udpView->sizeRecv())
-    {
-        event = _udpView->popReceive();
-    }
-    try {
-        spawnMob(event.get<uint8_t>("mob_id"));
-    }
-    catch (Exception::ValueError const & e)
-    {
-    }
+      {
+	event = _udpView->popReceive();
+	try {
+	  spawnMob(event.get<uint8_t>("mob_id"));
+	}
+	catch (Exception::ValueError const & e)
+	  {
+	  }
+      }
 }
