@@ -70,7 +70,7 @@ namespace std
     }
 }
 
-void NetPlayerComp::move(double elapsedTime, UDPView::Action action)
+void NetPlayerComp::move(double elapsedTime, RType::InGameEvent action)
 {
     float speed = 1.25f;
 
@@ -85,18 +85,18 @@ void NetPlayerComp::move(double elapsedTime, UDPView::Action action)
         speed     = speed * 3 / 4;
     }
 
-    switch (action)
+    switch (action.getCode())
     {
-        case UDPView::Action::MOVE_UP:
+        case RType::InGameEvent::SE_PLAYERUP:
             _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedTime));
             break;
-        case UDPView::Action::MOVE_DOWN:
+        case RType::InGameEvent::SE_PLAYERDOWN:
             _transform->getPosition().setY(_transform->getPosition().Y() + speed * static_cast<float>(elapsedTime));
             break;
-        case UDPView::Action::MOVE_LEFT:
+        case RType::InGameEvent::SE_PLAYERLEFT:
             _transform->getPosition().setX(_transform->getPosition().X() - speed * static_cast<float>(elapsedTime));
             break;
-        case UDPView::Action::MOVE_RIGHT:
+        case RType::InGameEvent::SE_PLAYERRIGHT:
             _transform->getPosition().setX(_transform->getPosition().X() + speed * static_cast<float>(elapsedTime));
             break;
         default:
@@ -162,10 +162,11 @@ void		NetPlayerComp::update(double elapsedtime)
     checkAvailableBullets();
     while (_udp->sizeRecv() > 0)
     {
-        UDPView::Action tmp = _udp->popReceive();
+        RType::InGameEvent tmp = _udp->popReceive();
 
         std::cout << "PACKET RECEIVED" << std::endl;
-        if (tmp == UDPView::Action::SHOT_START && _shotTime >= 80)
+        if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART && _shotTime >=
+                                                                         80)
             this->shoot();
         else
             this->move(elapsedtime, tmp);

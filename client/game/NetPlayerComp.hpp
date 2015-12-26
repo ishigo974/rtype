@@ -32,7 +32,7 @@ public:
     void                             checkAvailableBullets();
     void                             shoot();
     void                             move(double elapsedtime,
-                                          UDPView::Action action);
+                                          RType::InGameEvent action);
     int                              getHp() const;
 
 private:

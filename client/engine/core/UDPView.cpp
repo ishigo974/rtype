@@ -50,15 +50,15 @@ namespace std
     }
 }
 
-UDPView::Action UDPView::popReceive()
+RType::InGameEvent UDPView::popReceive()
 {
-    UDPView::Action tmp = _receive.front();
+    RType::InGameEvent tmp = _receive.front();
 
     _receive.pop_front();
     return (tmp);
 }
 
-void UDPView::pushReceive(UDPView::Action dir)
+void UDPView::pushReceive(RType::InGameEvent dir)
 {
     _receive.push_back(dir);
 }
