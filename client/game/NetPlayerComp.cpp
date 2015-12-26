@@ -164,7 +164,6 @@ void		NetPlayerComp::update(double elapsedtime)
     {
         RType::InGameEvent tmp = _udp->popReceive();
 
-        std::cout << "PACKET RECEIVED" << std::endl;
         if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART && _shotTime >=
                                                                          80)
             this->shoot();
