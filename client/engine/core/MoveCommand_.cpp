@@ -5,6 +5,7 @@
 #include "NetworkUDP.hpp"
 #include "Player.hpp"
 #include "UDPView.hpp"
+#include "GameManager.hpp"
 
 MoveCommand_::MoveCommand_(EntityManager *entityManager,
                            ACommand::Action direction,
@@ -22,9 +23,11 @@ MoveCommand_::~MoveCommand_()
 void    MoveCommand_::execute()
 {
     std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::PlayerMask);
-    std::vector<Object *> request = _entityManager->getByMask(UDPMask);
     RType::InGameEvent    event;
+    GameManager* gm = static_cast<GameManager *>(_entityManager->getByTag("GameManager"));
 
+    if (gm == nullptr)
+      throw std::logic_error("Could not find GameManager");
     for (auto obj : objs)
     {
         Player *player = static_cast<GameObject *>(obj)->getComponent<Player>();
@@ -40,7 +43,7 @@ void    MoveCommand_::execute()
         case DOWN:
             event.setCode(RType::InGameEvent::CL_PLAYERDOWN);
             break;
-        case LEFT:
+	case LEFT:
             event.setCode(RType::InGameEvent::CL_PLAYERLEFT);
             break;
         case RIGHT:
@@ -50,13 +53,10 @@ void    MoveCommand_::execute()
             break;
     }
 
-    std::cout << "I MOVE " << event.getCode() << std::endl; 
+    std::cout << "I MOVE " << event.getCode() << std::endl;
     event.push<uint64_t>("time", _time.count());
-    for (auto toSend : request)
-      {
-	UDPView* Send = static_cast<GameObject *>(toSend)->getComponent<UDPView>();
-	Send->pushToSend(event);
-      }
+    UDPView* send = gm->getComponent<UDPView>();
+    send->pushToSend(event);
 }
 
 void    MoveCommand_::undo()
