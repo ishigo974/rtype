@@ -190,13 +190,12 @@ void	Player::checkAvailableBullets()
 void		Player::init()
 {
     _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
+    _parent = static_cast<GameObject *>(parent());
+    _transform = _parent->getComponent<Transform>();
 }
 
 void		Player::update(double elapsedtime)
 {
-    _parent = static_cast<GameObject *>(parent());
-    if (!_transform)
-        _transform = _parent->getComponent<Transform>();
     checkDeath();
     _shotTime += elapsedtime;
     checkAvailableBullets();
