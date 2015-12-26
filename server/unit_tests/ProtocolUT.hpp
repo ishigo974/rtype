@@ -22,6 +22,7 @@ namespace RType
     protected:
         static void             lobbyRequestParsingWithoutData();
         static void             lobbyRequestParsingWithData();
+        static void             lobbyRequestScoreParsing();
         static void             inGameEventParsingWithData();
         static void             createSingleRoomAndList();
         static void             createMultipleRoomsAndList();
