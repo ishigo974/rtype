@@ -62,16 +62,20 @@ void NetMoveCommand::execute()
         switch (_direction)
         {
             case ACommand::Action::DOWN:
-                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_DOWN);
+                _target->getComponent<UDPView>()->pushReceive
+                        (RType::InGameEvent(RType::InGameEvent::SE_PLAYERDOWN));
                 break;
             case ACommand::Action::UP:
-                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_UP);
+                _target->getComponent<UDPView>()->pushReceive
+                        (RType::InGameEvent(RType::InGameEvent::SE_PLAYERUP));
                 break;
             case ACommand::Action::LEFT:
-                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_LEFT);
+                _target->getComponent<UDPView>()->pushReceive
+                        (RType::InGameEvent(RType::InGameEvent::SE_PLAYERLEFT));
                 break;
             case ACommand::Action::RIGHT:
-                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_RIGHT);
+                _target->getComponent<UDPView>()->pushReceive
+                        (RType::InGameEvent(RType::InGameEvent::SE_PLAYERRIGHT));
                 break;
             default:
                 break;
