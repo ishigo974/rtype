@@ -1,5 +1,3 @@
-#include "GameManager.hpp"
-
 #include <iostream>
 #include "GameManagerBehaviour.hpp"
 #include "GameManager.hpp"
@@ -7,6 +5,7 @@
 #include "GameObject.hpp"
 #include "Bullet.hpp"
 #include "Mob.hpp"
+#include "UDPView.hpp"
 #include "ObjectPool.hpp"
 #include "AudioEffect.hpp"
 
@@ -79,6 +78,7 @@ void                GameManagerBehaviour::update(double)
     RType::Request::PlayersTab  players;
     GameManager*    goParent    = static_cast<GameManager *>(parent());
     TCPView*        tcp         = goParent->getComponent<TCPView>();
+    UDPView*        udp         = goParent->getComponent<UDPView>();
     unsigned int    id;
 
     while (tcp->sizeReceive() > 0)
@@ -107,4 +107,6 @@ void                GameManagerBehaviour::update(double)
                 break ;
         }
     }
+    while (udp->sizeRecv() > 0)
+        udp->popReceive();
 }

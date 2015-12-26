@@ -39,12 +39,13 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 
     _em.tagObject(gm, "GameManager");
     _em.attachComponent<TCPView>(gm, "TCP");
+    _em.attachComponent<UDPView>(gm, "UDP");
     _em.attachComponent<GameManagerBehaviour>(gm, "GMB");
     _gmb = gm->getComponent<GameManagerBehaviour>();
 
     _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
-    _em.attachComponent<UDPView>(_menu, "UDP");
+    // _em.attachComponent<UDPView>(_menu, "UDP");
     _menu->init();
     _renderer.init();
 }
