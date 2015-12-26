@@ -42,11 +42,11 @@ namespace RType
     /*
     ** Constructors/Destructor
     */
-    InGameEvent::InGameEvent(uint16_t code) : ABasePacket(code)
+    InGameEvent::InGameEvent(uint16_t code) : ABasePacket(code), _id(0)
     {
     }
 
-    InGameEvent::InGameEvent(Buffer const& raw)
+    InGameEvent::InGameEvent(Buffer const& raw) : ABasePacket(), _id(0)
     {
         parse(raw);
     }

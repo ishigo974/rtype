@@ -66,14 +66,14 @@ namespace RType
                 default:
                     break ;
             }
-            std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << _game->getElapsedTime() << std::endl; // debug
+            // std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << _game->getElapsedTime() << std::endl; // debug
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
                 ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
                 em.safeDestroy(em.getByCmpnt(this));
-                std::cout << "safedestroy bullet" << std::endl;
+                // std::cout << "safedestroy bullet" << std::endl;
             }
         }
 

@@ -3,6 +3,7 @@
 
 # include <unordered_map>
 # include <string>
+# include <mutex>
 # include "ASystem.hpp"
 # include "Entity.hpp"
 # include "UdpSocket.hpp"
@@ -46,6 +47,7 @@ namespace RType
             UdpSocket               _socket;
             IpBufferBook            _book;
             Command::EventFactory   _factory;
+            std::mutex              _mutex;
         };
     }
 }

@@ -58,6 +58,26 @@ namespace RType
         */
         void                Game::update()
         {
+            bool            endGame(true);
+            Buffer          score;
+
+            for (auto& room: *_room)
+            {
+                Component::Ship*    ship =
+                    room.second.first->getComponent<Component::Ship>();
+
+                if (ship->getLives() > 0)
+                    endGame = false;
+                score.append<uint8_t>(room.first);
+                score.append<uint32_t>(ship->getScore());
+            }
+            if (endGame)
+            {
+                Request     request(Request::SE_ENDOFGAME);
+
+                request.push<Buffer>("scores", score);
+                _room->broadcastTCP(request.toBuffer());
+            }
         }
 
         Map::Parser::Map&   Game::retrieveMap()

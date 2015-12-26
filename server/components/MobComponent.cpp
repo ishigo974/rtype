@@ -90,7 +90,7 @@ namespace RType
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
                 em.safeDestroy(em.getByCmpnt(this));
-                std::cout << "Mob deleted" << std::endl;
+                // std::cout << "Mob deleted" << std::endl;
             }
         }
 

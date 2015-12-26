@@ -80,7 +80,7 @@ namespace RType
                             &entity, game));
                 *shotPos = *pos;
                 _chrono.reset();
-                std::cout << "Fire" << std::endl;
+                // std::cout << "Fire" << std::endl;
             }
         }
 
