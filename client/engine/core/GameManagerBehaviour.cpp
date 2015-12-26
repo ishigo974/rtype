@@ -106,6 +106,5 @@ void                GameManagerBehaviour::update(double)
             default:
                 break ;
         }
-        std::cout << goParent->toString() << std::endl; // debug
     }
 }
