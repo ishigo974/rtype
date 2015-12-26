@@ -77,14 +77,15 @@ std::deque<ACommand *>& CommandPipeline::simulate(CommandPipeline::cmdIt const& 
         _cmdDiff.push_back(*it);
     return (_cmdDiff);
 }
-
 CommandPipeline::cmdIt const CommandPipeline::getDiff(CommandPipeline::timePoint t)
 {
     auto it = _commands.end();
 
     for (; it != _commands.begin(); --it)
-        if ((*it)->getTime() < t)
+      {
+	std::cout << *it << std::endl;
+	if ((*it)->getTime() < t)
             break;
-
+      }
     return (it);
 }

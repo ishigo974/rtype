@@ -57,6 +57,8 @@ void NetMoveCommand::execute()
 {
     _origin = Transform(_target->transform());
 
+    std::cout << "I RECEIVE" << _direction  << std::endl; 
+    if (!_target && !_target->getComponent<UDPView>())
     switch (_direction)
     {
         case ACommand::Action::DOWN:

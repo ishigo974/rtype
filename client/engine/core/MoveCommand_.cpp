@@ -4,6 +4,7 @@
 #include "MoveCommand_.hpp"
 #include "NetworkUDP.hpp"
 #include "Player.hpp"
+#include "UDPView.hpp"
 
 MoveCommand_::MoveCommand_(EntityManager *entityManager,
                            ACommand::Action direction,
@@ -21,6 +22,7 @@ MoveCommand_::~MoveCommand_()
 void    MoveCommand_::execute()
 {
     std::vector<Object *> objs = _entityManager->getByMask(ComponentMask::PlayerMask);
+    std::vector<Object *> request = _entityManager->getByMask(UDPMask);
     RType::InGameEvent    event;
 
     for (auto obj : objs)
@@ -49,7 +51,12 @@ void    MoveCommand_::execute()
     }
 
     //TODO: Change 1 to timestamp
-    event.push<uint32_t>("time", 1);
+    event.push<uint32_t>("time", _time.count());
+    for (auto toSend : request)
+      {
+	UDPView* Send = static_cast<GameObject *>(toSend)->getComponent<UDPView>();
+	Send->pushToSend(event);
+      }
 }
 
 void    MoveCommand_::undo()
