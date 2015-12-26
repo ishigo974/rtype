@@ -56,7 +56,8 @@ void    MoveCommand_::execute()
     std::cout << "I MOVE " << event.getCode() << std::endl;
     event.push<uint64_t>("time", _time.count());
     UDPView* send = gm->getComponent<UDPView>();
-    send->pushToSend(event);
+    if (send != nullptr)
+      send->pushToSend(event);
 }
 
 void    MoveCommand_::undo()
