@@ -50,8 +50,7 @@ void    MoveCommand_::execute()
             break;
     }
 
-    //TODO: Change 1 to timestamp
-    event.push<uint32_t>("time", _time.count());
+    event.push<uint64_t>("time", _time.count());
     for (auto toSend : request)
       {
 	UDPView* Send = static_cast<GameObject *>(toSend)->getComponent<UDPView>();

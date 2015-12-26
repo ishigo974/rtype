@@ -90,16 +90,20 @@ namespace RType
         catch (std::runtime_error const&)
         {
             _udpSock.close();
-            std::cout << "denis est un fdp" << std::endl;
+            std::cout << "Close udp socket" << std::endl;
             //TODO Send UI disconnection
         }
 
         try
         {
-            _udpSock.sendTo(_udpObj.toSend(), _addr);
-        }
-        catch (std::runtime_error const&)
-        { }
+	  Buffer toSend = _udpObj.toSend();
+	  if (!toSend.empty())
+	    {
+	      _udpSock.sendTo(toSend, _addr);
+	    }
+	}
+	catch (std::runtime_error const&)
+        {}
     }
 
     void NetworkSystem::pushTCP(Request const& request)

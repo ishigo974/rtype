@@ -81,7 +81,6 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
 void	MobSpawner::spawnMob(unsigned int id)
 {
     MobObject *mob = _mobs->create("Mob", 12);
-    std::cout << _mobTypes->at(id)->getName() << std::endl;
     mob->init(_mobTypes->at(id).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
