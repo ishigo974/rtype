@@ -65,6 +65,7 @@ namespace RType
         { "rooms",  { "list rooms",             &Server::handleCLIRooms     } },
         { "mobs",   { "list mobs types",        &Server::handleCLIMobs      } },
         { "maps",   { "list maps",              &Server::handleCLIMaps      } },
+        { "games",  { "list games",             &Server::handleCLIGames     } },
         { "quit",   { "shutdown server",        &Server::handleCLIQuit      } },
         { "help",   { "displays infos about how to use the server's CLI",
                       &Server::handleCLIHelp                                } },
@@ -98,23 +99,15 @@ namespace RType
 
         while (!_quit)
         {
-            // std::cout << "1" << std::endl;
             try {
-                // std::cout << "2" << std::endl;
                 _monitor.update();
-                // std::cout << "3" << std::endl;
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
-                    // std::cout << "4" << std::endl;
                 if (_monitor.isReadable(&_acceptor))
                     onClientConnection();
-                    // std::cout << "5" << std::endl;
                 _em.updateAll();
-                // std::cout << "6" << std::endl;
                 _sm.processAll();
-                // std::cout << "7" << std::endl;
                 checkDisconnected();
-                // std::cout << "8" << std::endl;
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
@@ -408,6 +401,28 @@ namespace RType
             Server::display("No maps yet");
         for (auto& map: maps)
             Server::display(map.first);
+    }
+
+    void            Server::handleCLIGames(ArgsTab const&)
+    {
+        ECS::EntityCollection   ec = _em.getByMask(Component::MASK_GAME);
+
+        if (ec.empty())
+            Server::display("No games yet");
+        else
+            Server::display("Name\t| Slots\t| Map\t\t| Time\t| Loop Time");
+        for (auto& entity: ec)
+        {
+            Component::Game*    game = entity->getComponent<Component::Game>();
+            Component::Room*    room = game->getRoom();
+
+            Server::display(room->getRoomName() + "\t| "
+                            + std::to_string(room->size()) + "/"
+                            + std::to_string(Component::Room::nbMaxPlayers)
+                            + "\t| " + game->getMapName() + "\t| "
+                            + std::to_string(game->getChrono().getElapsedTime())
+                            + "\t| " + std::to_string(game->getElapsedTime()));
+        }
     }
 
     void            Server::handleCLIQuit(ArgsTab const&)

@@ -7,9 +7,10 @@
 #include "Renderer.hpp"
 #include "GUIManager.hpp"
 #include "StateMachine.hpp"
+#include "GameConfig.hpp"
 
-unsigned int const Renderer::width  = 1280;
-unsigned int const Renderer::height = 720;
+unsigned int const Renderer::width  = RType::Map::width;
+unsigned int const Renderer::height = RType::Map::height;
 
 Renderer::Renderer(EntityManager *em) :
         _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type"),

@@ -26,6 +26,12 @@ namespace RType
 
         const unsigned int defaultPosX  = 100;
     }
+
+    namespace Speed
+    {
+        const float ship    = 1.25f;
+        const float bullet  = 2.0f;
+    }
 }
 
 #endif /* !GAMECONFIG_HPP_ */

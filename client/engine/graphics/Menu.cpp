@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+#include "GameConfig.hpp"
 
 Menu::Menu(unsigned int id, std::string const& name, int layer,
            EntityManager* em, cu::Event* event) :
@@ -569,7 +570,7 @@ void Menu::init()
     std::string str("menu");
     str += std::to_string(rand() % 4 + 1);
     _em->attachComponent<SpriteRenderer>(this, "sr", str,
-                                       gu::Rect<int>(0, 0, 1280, 720));
+       gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em->attachComponent<GUIManager>(this, "Manager");
 
     auto tmp = _em->getByMask(TCPMask)[0];

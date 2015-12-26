@@ -21,6 +21,7 @@ set(VERTICALMOB "rtype_verticalmob")
 set(SINUSOIDMOB "rtype_diagonalmob")
 
 include_directories( ../utils )
+include_directories( ../classes )
 
 file(GLOB forwardmob_files ForwardMobType.cpp ../utils/Utils.cpp)
 file(GLOB verticalmob_files VerticalMobType.cpp ../utils/Utils.cpp)

@@ -50,6 +50,7 @@ namespace RType
         void            handleCLIMobs(ArgsTab const& args);
         void            handleCLIClients(ArgsTab const& args);
         void            handleCLIMaps(ArgsTab const& args);
+        void            handleCLIGames(ArgsTab const& args);
         void            handleCLIQuit(ArgsTab const& args);
 
     public:

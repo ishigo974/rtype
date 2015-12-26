@@ -65,6 +65,16 @@ namespace RType
             return _map;
         }
 
+        std::string const&  Game::getMapName() const
+        {
+            return _map.first;
+        }
+
+        Component::Room*    Game::getRoom() const
+        {
+            return _room;
+        }
+
         void                Game::start(Map::Parser::Map const& map)
         {
             _map = map;

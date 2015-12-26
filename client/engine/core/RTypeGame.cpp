@@ -154,19 +154,24 @@ void        RTypeGame::initGame()
     _em.attachComponent<UDPView>(mobSpawn, "Spawner UDPView");
     mobSpawn->getComponent<MobSpawner>()->init();
 
-    _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar",
+        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.3);
 
-    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight",
+        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em.attachComponent<ScrollingBackground>(df, "Background", 0.3);
 
-    _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1",
+        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.27);
 
-    _em.attachComponent<SpriteRenderer>(opm, "opm", "opm", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<SpriteRenderer>(opm, "opm", "opm",
+        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.55);
 
-    _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
+    _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1",
+        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
     _chrono.start();

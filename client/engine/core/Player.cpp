@@ -6,6 +6,7 @@
 #include "Mob.hpp"
 #include "ObjectPool.hpp"
 #include "AudioEffect.hpp"
+#include "GameConfig.hpp"
 
 Player::Player()
 {
@@ -117,7 +118,8 @@ void	Player::setAction(ACommand::Action action)
 
 void		Player::move(double elapsedtime)
 {
-    float		speed = 1.25f;
+    float		speed = RType::Speed::ship;
+    float       move;
 
     if (_multiple)
     {
@@ -129,19 +131,20 @@ void		Player::move(double elapsedtime)
         _multiple = true;
         speed = speed * 3 / 4;
     }
+    move = speed * static_cast<float>(elapsedtime);
     switch (_action.front())
     {
         case ACommand::UP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedtime));
+            _transform->getPosition().setY(_transform->getPosition().Y() - move);
             break;
         case ACommand::DOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + speed * static_cast<float>(elapsedtime));
+            _transform->getPosition().setY(_transform->getPosition().Y() + move);
             break;
         case ACommand::LEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - speed * static_cast<float>(elapsedtime));
+            _transform->getPosition().setX(_transform->getPosition().X() - move);
             break;
         case ACommand::RIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + speed * static_cast<float>(elapsedtime));
+            _transform->getPosition().setX(_transform->getPosition().X() + move);
             break;
         default:
             break;

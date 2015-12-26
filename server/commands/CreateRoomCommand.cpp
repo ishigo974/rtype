@@ -71,7 +71,6 @@ expected LobbySystem"); // TODO
                                          "room/player/network component");
             if (maps.empty())
                 throw std::runtime_error("No maps loaded");
-            // validation name TODO
             room->addPlayer(*_entity);
             room->setName(_roomName);
             room->setMap(&maps.at(0));

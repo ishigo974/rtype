@@ -6,6 +6,7 @@
 #include <Mob.hpp>
 #include "NetPlayerComp.hpp"
 #include "Collider.hpp"
+#include "GameConfig.hpp"
 
 NetPlayerComp::NetPlayerComp() : _transform(nullptr)
 { }
@@ -72,7 +73,8 @@ namespace std
 
 void NetPlayerComp::move(double elapsedTime, RType::InGameEvent action)
 {
-    float speed = 1.25f;
+    float   speed = RType::Speed::ship;
+    float   move;
 
     if (_multiple)
     {
@@ -84,20 +86,20 @@ void NetPlayerComp::move(double elapsedTime, RType::InGameEvent action)
         _multiple = true;
         speed     = speed * 3 / 4;
     }
-
+    move = speed * static_cast<float>(elapsedTime);
     switch (action.getCode())
     {
         case RType::InGameEvent::SE_PLAYERUP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedTime));
+            _transform->getPosition().setY(_transform->getPosition().Y() - move);
             break;
         case RType::InGameEvent::SE_PLAYERDOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + speed * static_cast<float>(elapsedTime));
+            _transform->getPosition().setY(_transform->getPosition().Y() + move);
             break;
         case RType::InGameEvent::SE_PLAYERLEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - speed * static_cast<float>(elapsedTime));
+            _transform->getPosition().setX(_transform->getPosition().X() - move);
             break;
         case RType::InGameEvent::SE_PLAYERRIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + speed * static_cast<float>(elapsedTime));
+            _transform->getPosition().setX(_transform->getPosition().X() + move);
             break;
         default:
             break;

@@ -5,6 +5,7 @@
 #include "GameConfig.hpp"
 #include "GameComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "GameConfig.hpp"
 
 namespace RType
 {
@@ -14,7 +15,6 @@ namespace RType
         ** Static variables
         */
         const ECS::ComponentMask    Shot::mask      = Component::MASK_SHOT;
-        const float                 Shot::speed     = 0.75f;
 
         /*
         ** Constructor/Destructor
@@ -59,7 +59,8 @@ namespace RType
             switch (_type)
             {
                 case NORMAL:
-                    pos->setX(pos->getX() + (speed * _game->getElapsedTime()));
+                    pos->setX(pos->getX() + (Speed::bullet
+                                             * _game->getElapsedTime()));
                     break ;
                 default:
                     break ;

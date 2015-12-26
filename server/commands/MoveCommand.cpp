@@ -2,9 +2,12 @@
 #include <stdexcept>
 #include "MoveCommand.hpp"
 #include "RoomComponent.hpp"
+#include "GameComponent.hpp"
+#include "EntityManager.hpp"
 #include "PositionComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "InGameEvent.hpp"
+#include "GameConfig.hpp"
 
 namespace RType
 {
@@ -84,35 +87,39 @@ namespace RType
 
         void        Move::execute()
         {
-            static const float      speed = 10.0f; // TODO
             Component::Position*    pos =
                 _entity->getComponent<Component::Position>();
             Component::Player*      player =
                 _entity->getComponent<Component::Player>();
             Component::Room*        room;
+            Component::Game*        game;
             InGameEvent             event;
+            float                   move;
 
             if (_direction == NONE)
                 return ;
             if (pos == nullptr || player == nullptr
-                || ((room = player->getRoom()) == nullptr))
+                || ((room = player->getRoom()) == nullptr)
+                || ((game = ECS::EntityManager::getInstance().getByCmpnt(room)
+                                .getComponent<Component::Game>()) == nullptr))
                 throw std::runtime_error("Entity does not have a "
-                                         "position/room component");
+                                         "position/room/game component");
+            move = Speed::ship * static_cast<float>(game->getElapsedTime());
             switch (_direction)
             {
                 case NONE:
                     break ;
                 case UP:
-                    pos->setY(pos->getY() < static_cast<unsigned int>(speed) ? 0 : pos->getY() - static_cast<unsigned int>(speed));
+                    pos->setY(pos->getY() - move);
                     break ;
                 case DOWN:
-                    pos->setY(pos->getY() + static_cast<unsigned int>(speed) > 720 ? 720 : pos->getY() + static_cast<unsigned int>(speed)); // TODO
+                    pos->setY(pos->getY() + move);
                     break ;
                 case LEFT:
-                    pos->setX(pos->getX() < static_cast<unsigned int>(speed) ? 0 : pos->getX() - static_cast<unsigned int>(speed));
+                    pos->setX(pos->getX() - move);
                     break ;
                 case RIGHT:
-                    pos->setX(pos->getX() + static_cast<unsigned int>(speed) > 1280 ? 1280 : pos->getX() + static_cast<unsigned int>(speed)); // TODO
+                    pos->setX(pos->getX() + move);
                     break ;
             }
             event.setCode(dirCodeMatches.at(_direction));
