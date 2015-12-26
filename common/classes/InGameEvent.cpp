@@ -127,24 +127,22 @@ namespace RType
     {
         Buffer                   tmp = raw;
         EventMap::const_iterator it  =
-                                         inGameEvents
-                                                 .find(static_cast<Code>(_code));
+            inGameEvents.find(static_cast<Code>(_code));
 
         tmp.consume(headerSize);
         if (it == inGameEvents.end())
             throw Exception::NotImplemented("Request '" + std::to_string(_code)
-                                            +
-                                            "' does not exists or is not implemented");
+                                + "' does not exists or is not implemented");
         for (std::string const& arg: it->second)
         {
             auto   it = dataSizes.find(arg);
             Buffer res;
 
             if (it == dataSizes.end())
-                throw Exception::NotImplemented("Unknown data sizeRecv: " + arg);
+                throw Exception::NotImplemented("Unknown data size: " + arg);
             if (it->second > tmp.size())
-                throw Exception::IncompleteRequest("Buffer can't \
-                                                    contain argument");
+                throw Exception::IncompleteRequest("Buffer can't "
+                                                    "contain argument");
             res.setData(tmp.data(), it->second);
             tmp.consume(it->second);
             _data.insert(std::make_pair(it->first, res));

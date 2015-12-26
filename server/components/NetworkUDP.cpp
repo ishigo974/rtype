@@ -75,8 +75,10 @@ namespace RType
                     _received.consume(event.toBuffer().size());
                     _events.push(event);
                 }
-            } catch (Exception::IncompleteRequest const&) {
-            } catch (Exception::NotImplemented const&) {
+            } catch (Exception::IncompleteRequest const& e) {
+                std::cout << "incomplete: " << e.what() << std::endl;
+            } catch (Exception::NotImplemented const& e) {
+                std::cout << "notimplem: " << e.what() << std::endl;
                 _received.clear();
                 throw ;
             }

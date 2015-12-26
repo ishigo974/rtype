@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     event.push<double>("time", i);
     u.sendTo(event.toBuffer(), std::string(argv[1]));
     
-        sleep(5);
+        usleep(1);
     }
     return 0;
 }

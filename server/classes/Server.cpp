@@ -98,15 +98,23 @@ namespace RType
 
         while (!_quit)
         {
+            // std::cout << "1" << std::endl;
             try {
+                // std::cout << "2" << std::endl;
                 _monitor.update();
+                // std::cout << "3" << std::endl;
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
+                    // std::cout << "4" << std::endl;
                 if (_monitor.isReadable(&_acceptor))
                     onClientConnection();
+                    // std::cout << "5" << std::endl;
                 _em.updateAll();
+                // std::cout << "6" << std::endl;
                 _sm.processAll();
+                // std::cout << "7" << std::endl;
                 checkDisconnected();
+                // std::cout << "8" << std::endl;
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {

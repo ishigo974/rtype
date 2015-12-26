@@ -49,8 +49,8 @@ namespace RType
 
         void            InGame::processEntity(ECS::Entity& e)
         {
-            IpBufferBook::iterator it;
-            Component::NetworkUDP *udp =
+            IpBufferBook::iterator  it;
+            Component::NetworkUDP*  udp =
                 e.getComponent<Component::NetworkUDP>();
 
             if (udp == nullptr)
@@ -73,7 +73,7 @@ namespace RType
                     cmd->setEntity(e);
                     cmd->initFromEvent(event);
                     cmd->execute();
-                    std::cout << event << std::endl;
+                    // std::cout << event << std::endl;
                 } catch (std::out_of_range const&) {
                     Server::display("Invalid In Game event received from "
                                     + udp->getIpAddr());
@@ -84,7 +84,6 @@ namespace RType
                 Buffer b = udp->popToSend();
 
                 _socket.sendTo(b, udp->getIpAddr());
-                std::cout << "Send " << b.size() << " to " << udp->getIpAddr() << std::endl;
             }
         }
 

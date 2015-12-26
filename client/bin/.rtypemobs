@@ -1,3 +1,3 @@
-../../common/mob_types/build/librtype_forwardmob.so
-../../common/mob_types/build/librtype_verticalmob.so
-../../common/mob_types/build/librtype_sinusoidmob.so
+./.rtype/librtype_forwardmob.so
+./.rtype/librtype_verticalmob.so
+./.rtype/librtype_sinusoidmob.so
