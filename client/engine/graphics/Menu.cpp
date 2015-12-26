@@ -474,7 +474,7 @@ void Menu::transitionToStates()
         return false;
     }, _event, &_back, &_readyField, this);
 
-	_inRoom.addTransition("endGame", [](cu::Event *e, Menu *menu)
+	_inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
 	{
 		if (menu->done())
 			return true;

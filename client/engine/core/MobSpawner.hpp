@@ -37,7 +37,7 @@ public:
     void                            init();
 
 protected:
-    void                            spawnMob(unsigned int id);
+    void                            spawnMob(RType::InGameEvent const&);
 
 public:
     static const RTypes::my_uint16_t Mask   = ComponentMask::MobSpawnerMask;

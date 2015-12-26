@@ -19,7 +19,8 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Shot::Shot(Shot::Type type, ECS::Entity* owner, Component::Game* game) :
+        Shot::Shot(RType::Shot::Type type, ECS::Entity* owner,
+                    Component::Game* game) :
             _type(type), _owner(owner), _game(game)
         {
         }
@@ -58,7 +59,7 @@ namespace RType
                 return ;
             switch (_type)
             {
-                case NORMAL:
+                case RType::Shot::NORMAL:
                     pos->setX(pos->getX() + (Speed::bullet
                                              * _game->getElapsedTime()));
                     break ;
@@ -76,12 +77,12 @@ namespace RType
             }
         }
 
-        Shot::Type          Shot::getType() const
+        RType::Shot::Type   Shot::getType() const
         {
             return _type;
         }
 
-        void                Shot::setType(Type type)
+        void                Shot::setType(RType::Shot::Type type)
         {
             _type = type;
         }
@@ -123,7 +124,7 @@ namespace RType
 
         void                Shot::clear()
         {
-            _type = NORMAL;
+            _type = RType::Shot::NORMAL;
         }
 
         std::string         Shot::toString() const

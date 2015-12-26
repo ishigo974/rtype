@@ -98,7 +98,7 @@ bool        Mob::handleMessage(Collider *o)
 
     if ((otherParent->getComponent<Player>() != nullptr
         || otherParent->getComponent<Behaviour>() != nullptr
-        || otherParent->getComponent<Bullet>()) && _lives > 0)
+        || otherParent->getComponent<Bullet>() != nullptr) && _lives > 0)
         _lives -= 1;
     if (_lives == 0)
         _available = true;
