@@ -53,7 +53,6 @@ void    MoveCommand_::execute()
             break;
     }
 
-    std::cout << "I MOVE " << event.getCode() << std::endl;
     event.push<uint64_t>("time", _time.count());
     UDPView* send = gm->getComponent<UDPView>();
     if (send != nullptr)

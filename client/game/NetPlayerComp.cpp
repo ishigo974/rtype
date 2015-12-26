@@ -74,19 +74,9 @@ namespace std
 void NetPlayerComp::move(double elapsedTime, RType::InGameEvent action)
 {
     float   speed = RType::Speed::ship;
-    float   move;
+    double   move;
 
-    if (_multiple)
-    {
-        _multiple = false;
-        speed     = speed * 3 / 4;
-    }
-    if (_udp->sizeRecv() >= 2)
-    {
-        _multiple = true;
-        speed     = speed * 3 / 4;
-    }
-    move = speed * static_cast<float>(elapsedTime);
+    move = speed * elapsedTime;
     switch (action.getCode())
     {
         case RType::InGameEvent::SE_PLAYERUP:

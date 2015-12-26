@@ -7,7 +7,8 @@ namespace RType
 {
     namespace Config
     {
-        const double        fixedStep   = 0.003;
+        const double        fixedStep       = 0.003;
+        const double        dftElapsedTime  = 0.025;
     }
 
     namespace Map

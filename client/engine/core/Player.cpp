@@ -119,19 +119,9 @@ void	Player::setAction(ACommand::Action action)
 void		Player::move(double elapsedtime)
 {
     float		speed = RType::Speed::ship;
-    float       move;
+    double       move;
 
-    if (_multiple)
-    {
-        _multiple = false;
-        speed = speed * 3 / 4;
-    }
-    if (_action.size() >= 2)
-    {
-        _multiple = true;
-        speed = speed * 3 / 4;
-    }
-    move = speed * static_cast<float>(elapsedtime);
+    move = speed * elapsedtime;
     switch (_action.front())
     {
         case ACommand::UP:
@@ -212,7 +202,7 @@ void		Player::update(double elapsedtime)
     checkAvailableBullets();
     while (_action.size() > 0)
     {
-        if (_action.front() == ACommand::SHOOT && _shotTime >= 80)
+        if (_action.front() == ACommand::SHOOT && _shotTime >= 150) // TODO synchro serv
             this->shoot();
         else
             this->move(elapsedtime);

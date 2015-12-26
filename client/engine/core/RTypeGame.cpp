@@ -188,7 +188,7 @@ void        RTypeGame::handleGame()
     _audio.process();
     while (_lag >= _fixedStep)
     {
-        _bs.process(_lag / _fixedStep);
+        _bs.process(_fixedStep * 650);
         _lag -= _fixedStep;
     }
 }
@@ -216,8 +216,8 @@ void            RTypeGame::loadMobTypesFromFile()
             if (mobFile.good())
             {
                 mobType =
-                        DLLoader<RType::MobType::IMobType *>::getInstanceOf(line,
-                                                                            "getMobType");
+                    DLLoader<RType::MobType::IMobType *>::getInstanceOf(line,
+                                                                "getMobType");
                 std::cout << "Mob '" << mobType->getName()
                 << "' loaded" << std::endl;
                 _mobTypes[mobType->getId()] = UniqueMobType(mobType);

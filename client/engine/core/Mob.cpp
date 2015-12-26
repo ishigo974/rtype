@@ -129,7 +129,6 @@ void		Mob::update(double elapsedTime)
 
     if (_lives <= 0)
     {
-        std::cout << "Mob Mort" << std::endl;
         _enabled = false;
         _parent->setVisible(false);
         _parent->getComponent<Collider>()->setEnabled(false);
