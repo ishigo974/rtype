@@ -15,7 +15,7 @@ if (WIN32)
 endif ()
 
 if (WIN32)
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 /WX -std=c++14")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/W4 -std=c++14")
 endif ()
 
 if (UNIX)
@@ -93,7 +93,7 @@ if (UNIX)
 endif ()
 
 find_package(SFML 2 REQUIRED audio graphics window system)
-find_package(Boost REQUIRED)
+#find_package(Boost REQUIRED)
 
 # BOOST
 if(UNIX)
