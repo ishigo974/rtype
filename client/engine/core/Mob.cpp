@@ -252,7 +252,7 @@ void Mob::swap(Mob& other)
 namespace std
 {
     template<>
-    void swap<Mob>(Mob& a, Mob& b)
+    inline void swap<Mob>(Mob& a, Mob& b)
     {
         a.swap(b);
     }

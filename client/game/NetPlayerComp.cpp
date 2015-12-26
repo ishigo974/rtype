@@ -15,7 +15,7 @@ NetPlayerComp::NetPlayerComp(unsigned int id, std::string const& name, EntityMan
         : Behaviour(id, name), _hp(hp), _damage(dmg), _em(em), _transform(nullptr)
 { }
 
-NetPlayerComp::NetPlayerComp(NetPlayerComp& o) : Behaviour(o)
+NetPlayerComp::NetPlayerComp(NetPlayerComp const& o) : Behaviour(o)
 {
     _parent   = o._parent;
     _hp       = o._hp;
@@ -43,9 +43,7 @@ NetPlayerComp& NetPlayerComp::operator=(NetPlayerComp& o)
 }
 
 NetPlayerComp::~NetPlayerComp()
-{
-
-}
+{}
 
 void NetPlayerComp::swap(NetPlayerComp& o)
 {

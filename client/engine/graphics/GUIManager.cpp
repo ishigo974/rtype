@@ -65,7 +65,7 @@ GUIManager& GUIManager::operator=(GUIManager other)
 namespace std
 {
     template<>
-    void swap<GUIManager>(GUIManager& a, GUIManager& b)
+    inline void swap<GUIManager>(GUIManager& a, GUIManager& b)
     {
         a.swap(b);
     }

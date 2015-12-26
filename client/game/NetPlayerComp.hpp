@@ -14,7 +14,7 @@ class NetPlayerComp : public Behaviour
 public:
     NetPlayerComp();
     NetPlayerComp(unsigned int id, std::string const& name, EntityManager *em, int hp, int dmg);
-    NetPlayerComp(NetPlayerComp& o);
+    NetPlayerComp(NetPlayerComp const& o);
     NetPlayerComp(NetPlayerComp&& o);
     NetPlayerComp& operator=(NetPlayerComp& o);
 

@@ -44,7 +44,7 @@ void GameManager::swap(GameManager& o)
 namespace std
 {
     template <>
-    void swap<GameManager>(GameManager &a, GameManager &b)
+    inline void swap<GameManager>(GameManager &a, GameManager &b)
     {
         a.swap(b);
     }

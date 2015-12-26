@@ -63,7 +63,7 @@ void Animation::swap(Animation& other)
 namespace std
 {
     template<>
-    void swap<Animation>(Animation& a, Animation& b)
+    inline void swap<Animation>(Animation& a, Animation& b)
     {
         a.swap(b);
     }
