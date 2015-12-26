@@ -58,8 +58,8 @@ int main(int argc, char **argv)
     while (42)
     {
 
-    event.setCode(InGameEvent::CL_ELAPSEDTIME);
-    event.push<double>("elapsed_time", i);
+    event.setCode(InGameEvent::CL_PLAYERDOWN);
+    event.push<double>("time", i);
     u.sendTo(event.toBuffer(), std::string(argv[1]));
     
         sleep(5);

@@ -86,7 +86,6 @@ namespace RType
                              _game->getElapsedTime(), _state);
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            // std::cout << _id << ": " << newpos.X() << " " << newpos.Y() << std::endl; // Debug
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
