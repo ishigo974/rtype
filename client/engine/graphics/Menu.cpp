@@ -182,7 +182,7 @@ void Menu::joinRoom(RType::Request::Room room)
 
     std::cout << "Join room: " << room.name << "ID: " << room.id << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
-    request.push<unsigned int>("room_id", room.id);
+    request.push<uint>("room_id", room.id);
     _network->pushToSend(request);
     _lastRequest.push_back(request);
 }
@@ -203,7 +203,7 @@ void Menu::ready()
 {
     bool toSet;
 
-    toSet = (_ready == false);
+    toSet = !_ready;
     _ready = toSet;
     if (toSet)
     {
@@ -351,20 +351,14 @@ void Menu::transitionToStates()
 
     _mainMenu.addTransition("changeName", [](cu::Event *e, TextField *cN)
         {
-            if (e->type == cu::Event::MouseButtonReleased &&
-                cN->intersect(e->mouse.x, e->mouse.y))
-                  return true;
-            return false;
+            return e->type == cu::Event::MouseButtonReleased &&
+                   cN->intersect(e->mouse.x, e->mouse.y);
         }, _event, &_changeName);
 
     _mainMenu.addTransition("createRoom", [](cu::Event *e, TextField *cR)
         {
-            if (e->type == cu::Event::MouseButtonReleased &&
-                cR->intersect(e->mouse.x, e->mouse.y))
-            {
-                return true;
-            }
-            return false;
+            return e->type == cu::Event::MouseButtonReleased &&
+                   cR->intersect(e->mouse.x, e->mouse.y);
         }, _event, &_createRoom);
 
     _mainMenu.addTransition("mainMenu", [](cu::Event *e, TextField *r, Menu *menu)
@@ -476,18 +470,14 @@ void Menu::transitionToStates()
 
 	_inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
 	{
-		if (menu->done())
-			return true;
-		return false;
-	}, _event, this);
+        return menu->done();
+    }, _event, this);
 
 	_endGameState.addTransition("inRoom", [](cu::Event *e, TextField *c)
 	{
-		if (e->type == cu::Event::MouseButtonReleased &&
-			c->intersect(e->mouse.x, e->mouse.y))
-			return true;
-		return false;
-	}, _event, &_continue);
+        return e->type == cu::Event::MouseButtonReleased &&
+               c->intersect(e->mouse.x, e->mouse.y);
+    }, _event, &_continue);
 }
 
 void Menu::setupGUIElements()
@@ -587,6 +577,8 @@ void Menu::update()
                 _done = true;
 				std::cout << "from serv: game start" << std::endl;
 				break;
+            case RType::Request::SE_ENDOFGAME:
+                break;
             case RType::Request::SE_OK :
 				std::cout << "from serv: ok" << std::endl;
 				break;
