@@ -101,7 +101,7 @@ if (udpIn.size() > 0)
         {
             //            if ((command = _factory.createCommand(udpIn[i++])))
             //  _pipeline.addCommand(command);
-	  // if (gm[udpIn[i].get<uint16_t>("player_id")].getId() == e->getId())
+            // if (gm[udpIn[i].get<uint16_t>("player_id")].getId() == e->getId())
                 tmpComp->pushReceive(udpIn[i++]);
         }
         while (tmpComp->sizeToSend() > 0)
