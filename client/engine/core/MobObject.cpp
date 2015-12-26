@@ -82,20 +82,22 @@ void    MobObject::create()
                                                     gu::Rect<int>(1, 4, 32, 21));
     _entityManager->attachComponent<Mob>(this, "Mob");
     _entityManager->attachComponent<Collider>(this, "Mob collider", 32, 21);
-    _entityManager->attachComponent<Animation>(this, "AN", 0, 0, true);
+    _entityManager->attachComponent<Animation>(this, "AN", 0, 0, false);
+    getComponent<Animation>()->setEnabled(false);
 }
 
 void	MobObject::init(RType::MobType::IMobType const* mobtype)
 {
-    Mob *m = this->getComponent<Mob>();
+    Mob*        m       = getComponent<Mob>();
+    Animation*  anim    = getComponent<Animation>();
+
     m->init(mobtype);
     m->setEnabled(true);
     m->setAvailable(false);
     setVisible(true);
     getComponent<Collider>()->setEnabled(true);
-    // _em->attachComponent<Animation>(this, "AN",
-    //     _mobTypes->at(it->second.id).get()->getNumberFrames(),
-    //     _mobTypes->at(it->second.id).get()->getDuration(),
-    //     _mobTypes->at(it->second.id).get()->getLoop()
-    // );
+    anim->setFrames(mobtype->getNumberFrames());
+    anim->setDuration(mobtype->getDuration());
+    anim->setLoop(mobtype->getLoop());
+    anim->setEnabled(true);
 }

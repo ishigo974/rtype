@@ -76,7 +76,7 @@ void Animation::update(double elapsedTime)
         return;
 
     auto rect = sr->getRect();
-
+    std::cout << "nique" << std::endl;
     _elapsedTime += elapsedTime;
     if (_elapsedTime >= (_duration / _frames) * (_currentFrame + 1))
     {
@@ -86,7 +86,10 @@ void Animation::update(double elapsedTime)
     if (_currentFrame >= _frames)
     {
         while (_elapsedTime > _duration)
+        {
             _elapsedTime -= _duration;
+            std::cout << _elapsedTime << " -= " << _duration << std::endl;
+        }
         if (!_loop)
         {
             rect.x = 0;
@@ -100,6 +103,7 @@ void Animation::update(double elapsedTime)
         }
     }
     sr->setRect(rect);
+    std::cout << "ta mere" << std::endl;
 }
 
 void    Animation::play()

@@ -60,6 +60,7 @@ void        RTypeGame::run()
 {
     while (!_quit)
     {
+        std::cout << "1" << std::endl;
         while (_input.pollEvent(_event))
         {
             if (_event.type == cu::Event::Closed
@@ -70,31 +71,46 @@ void        RTypeGame::run()
             }
             if (!_isPlaying)
             {
+                std::cout << "2" << std::endl;
                 _menu->update();
+                std::cout << "3" << std::endl;
                 _menu->move();
+                std::cout << "4" << std::endl;
                 _cs.processNetwork();
+                std::cout << "5" << std::endl;
             }
             else
                 handleGame();
+            std::cout << "6" << std::endl;
         }
         if (_isPlaying)
+        {
+            std::cout << "7" << std::endl;
             handleGame();
+        }
         else
         {
+            std::cout << "8" << std::endl;
             _menu->update();
+            std::cout << "9" << std::endl;
             _cs.processNetwork();
+            std::cout << "10" << std::endl;
             if (_menu->done())
             {
+                std::cout << "11" << std::endl;
                 _isPlaying = true;
                 _menu->setVisible(false);
                 initGame();
             }
             else
             {
+                std::cout << "12" << std::endl;
                 _gmb->update(0);
             }
         }
+        std::cout << "13" << std::endl;
         _renderer.render();
+        std::cout << "14" << std::endl;
         _event.type = cu::Event::None;
     }
 }

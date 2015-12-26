@@ -4,6 +4,7 @@
 #include "MobSpawner.hpp"
 #include "ObjectPool.hpp"
 #include "MobObject.hpp"
+#include "Animation.hpp"
 
 MobSpawner::MobSpawner()
 {
@@ -79,15 +80,13 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
 
 void	MobSpawner::spawnMob(unsigned int id)
 {
-    std::cout << "On spawn un mob" << std::endl;
-    // std::cout << "inactive mobs => " << _mobs->_objects.size() << std::endl;
-    // std::cout << "Active mobs => " << _activeMobs.size() << std::endl;
-
     MobObject *mob = _mobs->create("Mob", 12);
+    std::cout << _mobTypes->at(id)->getName() << std::endl;
     mob->init(_mobTypes->at(id).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
     m->setX(500); // TODO mettre la position donnée dans le fichier _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
+    m->setY(500);
     // m->setY(_transform->getPosition().Y());
 }
 

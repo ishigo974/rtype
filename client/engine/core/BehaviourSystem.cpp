@@ -23,7 +23,6 @@ void BehaviourSystem::process(double elapsed)
         ComponentMask::MobSpawnerMask
     };
 
-
     for (auto& mask: masks)
     {
         auto tmp = _em->getByMask(mask);
