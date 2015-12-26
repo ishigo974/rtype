@@ -11,18 +11,15 @@
 #include "AudioEffect.hpp"
 
 GameManagerBehaviour::GameManagerBehaviour()
-{
-}
+{ }
 
 GameManagerBehaviour::GameManagerBehaviour(unsigned int _id, std::string const& _name) :
-    Behaviour(_id, _name)
-{
-}
+        Behaviour(_id, _name)
+{ }
 
 GameManagerBehaviour::GameManagerBehaviour(GameManagerBehaviour const& other) :
-    Behaviour(other)
-{
-}
+        Behaviour(other)
+{ }
 
 GameManagerBehaviour::GameManagerBehaviour(GameManagerBehaviour&& other) : GameManagerBehaviour(other)
 {
@@ -51,14 +48,13 @@ bool GameManagerBehaviour::operator!=(GameManagerBehaviour const& other)
 }
 
 void                GameManagerBehaviour::swap(GameManagerBehaviour&)
-{
-}
+{ }
 
 namespace std
 {
-    template <>
+    template<>
     inline void swap<GameManagerBehaviour>(GameManagerBehaviour& a,
-                                            GameManagerBehaviour& b)
+                                           GameManagerBehaviour& b)
     {
         a.swap(b);
     }
@@ -76,35 +72,35 @@ std::string         GameManagerBehaviour::toString() const
 
 void                GameManagerBehaviour::update(double)
 {
-    RType::Request::PlayersTab  players;
-    GameManager*    goParent    = static_cast<GameManager *>(parent());
-    TCPView*        tcp         = goParent->getComponent<TCPView>();
-    unsigned int    id;
+    RType::Request::PlayersTab players;
+    GameManager                *goParent = static_cast<GameManager *>(parent());
+    TCPView                    *tcp      = goParent->getComponent<TCPView>();
+    unsigned int               id;
 
     while (tcp->sizeReceive() > 0)
     {
-        RType::Request      request = tcp->popReceive();
+        RType::Request request = tcp->popReceive();
 
         switch (request.getCode())
         {
             case RType::Request::SE_JOINROOM:
                 (*goParent)[request.get<uint8_t>("player_id")] = nullptr;
-                break ;
+                break;
             case RType::Request::SE_QUITROOM:
                 goParent->erasePlayer(request.get<uint8_t>("player_id"));
-                break ;
+                break;
             case RType::Request::SE_ROOMINFO:
                 players =
-                    request.get<RType::Request::PlayersTab>("players");
+                        request.get<RType::Request::PlayersTab>("players");
                 id = request.get<uint8_t>("player_id");
                 goParent->clearPlayers();
                 (*goParent)[id] = nullptr;
                 goParent->setPlayerId(id);
                 for (auto& player: players)
                     (*goParent)[player.id] = nullptr;
-                break ;
+                break;
             default:
-                break ;
+                break;
         }
     }
 }

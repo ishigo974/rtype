@@ -1,3 +1,0 @@
-/home/fourdr_b/rendu/rtype/common/mob_types/out/CMakeFiles/rtype_sinusoidmob.dir
-/home/fourdr_b/rendu/rtype/common/mob_types/out/CMakeFiles/rtype_verticalmob.dir
-/home/fourdr_b/rendu/rtype/common/mob_types/out/CMakeFiles/rtype_forwardmob.dir
