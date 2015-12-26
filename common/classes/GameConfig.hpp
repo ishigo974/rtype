@@ -12,8 +12,8 @@ namespace RType
 
     namespace Map
     {
-        const unsigned int height       = 720;
-        const unsigned int width        = 1280;
+        const unsigned int  height       = 720;
+        const unsigned int  width        = 1280;
 
         const std::unordered_map<unsigned int, unsigned int>
         defaultPosY =

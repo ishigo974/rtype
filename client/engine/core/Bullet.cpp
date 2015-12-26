@@ -4,6 +4,7 @@
 #include "GameObject.hpp"
 #include "Player.hpp"
 #include "Renderer.hpp"
+#include "GameConfig.hpp"
 
 Bullet::Bullet()
 {
