@@ -49,7 +49,8 @@ void NetSpawnCommand::swap(NetSpawnCommand& o)
 
 void NetSpawnCommand::execute()
 {
-    _spawner->getComponent<UDPView>()->pushReceive(UDPView::Action::MOB_SPAWN);
+  _spawner->getComponent<UDPView>()->pushReceive
+    (RType::InGameEvent(RType::InGameEvent::SE_MOBSPAWNED));
 }
 
 void NetSpawnCommand::undo()

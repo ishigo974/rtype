@@ -12,7 +12,8 @@ class NetMoveCommand : public ACommand
 {
 public:
     NetMoveCommand();
-    NetMoveCommand(GameObject *target, ACommand::Action dir, std::chrono::microseconds time);
+    NetMoveCommand(GameObject *target, ACommand::Action dir,
+                   std::chrono::microseconds time);
     NetMoveCommand(NetMoveCommand& o);
     NetMoveCommand(NetMoveCommand&& o);
     NetMoveCommand& operator=(NetMoveCommand o);
@@ -27,6 +28,7 @@ public:
 
 private:
     GameObject       *_target;
+
     ACommand::Action _direction;
     Transform        _origin;
 };

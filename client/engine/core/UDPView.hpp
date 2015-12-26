@@ -12,18 +12,18 @@
 
 class UDPView : public Component
 {
-public:
-    enum Action
-    {
-        MOVE_UP = 0,
-        MOVE_DOWN,
-        MOVE_LEFT,
-        MOVE_RIGHT,
-        SHOT_START,
-        SHOT_STOP,
-        MOB_SPAWN,
-        MOB_DIE
-    };
+//public:
+//    enum Action
+//    {
+//        MOVE_UP = 0,
+//        MOVE_DOWN,
+//        MOVE_LEFT,
+//        MOVE_RIGHT,
+//        SHOT_START,
+//        SHOT_STOP,
+//        MOB_SPAWN,
+//        MOB_DIE
+//    };
 
 public:
     static const RTypes::my_uint16_t Mask = ComponentMask::UDPMask;
@@ -41,9 +41,9 @@ public:
     void swap(UDPView& other);
 
 public:
-    Action             popReceive();
+    RType::InGameEvent popReceive();
     RType::InGameEvent popToSend();
-    void               pushReceive(Action dir);
+    void               pushReceive(RType::InGameEvent dir);
     void               pushToSend(RType::InGameEvent event);
 
     size_t sizeRecv() const;
@@ -52,7 +52,7 @@ public:
     virtual RTypes::my_uint16_t getMask() const;
 
 private:
-    std::deque<Action>             _receive;
+    std::deque<RType::InGameEvent> _receive;
     std::deque<RType::InGameEvent> _toSend;
 };
 

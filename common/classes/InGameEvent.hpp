@@ -40,8 +40,8 @@ namespace RType
                                    std::hash<uint16_t> > EventMap;
 
     public:
-        InGameEvent(uint16_t code = 0);
-        InGameEvent(Buffer const& raw);
+        explicit InGameEvent(uint16_t code = 0);
+        explicit InGameEvent(Buffer const& raw);
         virtual ~InGameEvent();
 
     public:
