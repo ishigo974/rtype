@@ -33,6 +33,8 @@ void    ShootCommand::execute()
                                       ->setAction(ACommand::SHOOT);
 
 
+    event.setCode(RType::InGameEvent::CL_SHOTSTART);
+    event.push<uint8_t>("shot_type", 0);
     event.push<uint64_t>("time", _time.count());
     UDPView* send = gm->getComponent<UDPView>();
     if (send != nullptr)
