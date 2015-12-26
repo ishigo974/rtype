@@ -619,8 +619,7 @@ void Menu::init()
        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
     _em->attachComponent<GUIManager>(this, "Manager");
 
-    auto tmp = _em->getByMask(TCPMask)[0];
-    _network = static_cast<GameObject *>(tmp)->getComponent<TCPView>();
+    _network = getComponent<TCPView>();
     setupGUIElements();
     setupStates();
 
