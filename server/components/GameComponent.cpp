@@ -34,8 +34,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _room(other._room),
-            _map(other._map)
+            _chrono(other._chrono), _room(other._room), _map(other._map)
         {
         }
 
@@ -78,7 +77,7 @@ namespace RType
                         tcp->getIpAddr())
                     );
                 user->addComponent(std::make_unique<Component::Position>(
-                            Room::defaultPositions.at(entry.first)
+                            Map::defaultPosX, Map::defaultPosY.at(entry.first)
                     ));
                 user->addComponent(std::make_unique<Component::Ship>());
             }

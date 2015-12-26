@@ -20,8 +20,6 @@ namespace RType
         public:
             typedef std::pair<ECS::Entity*, bool>                   PlayerEntry;
             typedef std::unordered_map<unsigned int, PlayerEntry>   PlayersMap;
-            typedef std::unordered_map<unsigned int,
-                                        Component::Position>        PlayerPos; // TODO MOVE
 
         public:
             Room(Map::Parser::Map const* map = nullptr);
@@ -73,7 +71,6 @@ namespace RType
         public:
             static const unsigned int       nbMaxPlayers;
             static const ECS::ComponentMask mask;
-            static const PlayerPos          defaultPositions;
 
         protected:
             std::string                 _name;

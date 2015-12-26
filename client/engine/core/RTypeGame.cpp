@@ -10,6 +10,7 @@
 #include "AudioEffect.hpp"
 #include "MobSpawner.hpp"
 #include "TCPView.hpp"
+#include "GameConfig.hpp"
 #include "UDPView.hpp"
 
 /*
@@ -36,8 +37,6 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
 
     BigBen::getElapsedtime();
     loadMobTypesFromFile();
-    loadMapsFromFile();
-
 
     _em.tagObject(gm, "GameManager");
     _em.attachComponent<TCPView>(gm, "TCP");
@@ -115,35 +114,32 @@ void        RTypeGame::initGame()
     AudioEffect*    audio;
     GameManager* gm = static_cast<GameManager*>(_em.getByTag("GameManager"));
 
-    std::cout << "____ init game" << std::endl;
-    std::cout << gm->toString() << std::endl;
-    std::cout << "____ loop start" << std::endl;
     for (auto& entry: *gm)
     {
+        Transform*      transform;
+
         if (entry.first == gm->getId())
         {
-            std::cout << "init main player" << std::endl;
-	        PlayerObject *player = _em.createEntity<PlayerObject>("Player", 1, &_em);
-            player->init();
-            entry.second = player;
-    	    _em.attachComponent<AudioEffect>(player, "Audio");
-    	    audio = player->getComponent<AudioEffect>();
-    	    audio->addSound("../res/OnePunch.wav");
-    	    audio->addSound("../res/laser1.wav");
-    	    audio->addSound("../res/laser2.wav");
+            entry.second = _em.createEntity<PlayerObject>("Player", 1, &_em);
+            static_cast<PlayerObject*>(entry.second)->init();
+
+            _em.attachComponent<AudioEffect>(entry.second, "Audio");
+            audio = entry.second->getComponent<AudioEffect>();
+            audio->addSound("../res/OnePunch.wav");
+            audio->addSound("../res/laser1.wav");
+            audio->addSound("../res/laser2.wav");
         }
         else
         {
-            std::cout << "init other player" << std::endl;
-            NetPlayerObject *player = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
-            player->init();
-            entry.second = player;
+            entry.second = _em.createEntity<NetPlayerObject>("NetPlayer", &_em);
+            static_cast<NetPlayerObject*>(entry.second)->init();
         }
+        transform = entry.second->getComponent<Transform>();
+        transform->getPosition().setX(RType::Map::defaultPosX);
+        transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
     }
-    std::cout << "____ loop end" << std::endl;
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
-
 
     _em.tagObject(mobSpawn, "mobSpawn");
 
@@ -153,7 +149,7 @@ void        RTypeGame::initGame()
 
     _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.3);
-    //
+
     _em.attachComponent<SpriteRenderer>(df, "df", "dogfight", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(df, "Background", 0.3);
 
@@ -183,50 +179,6 @@ void        RTypeGame::handleGame()
         _bs.process(_lag / _fixedStep);
         _lag -= _fixedStep;
     }
-}
-
-void            RTypeGame::loadMapsFromFile()
-{
-    std::ifstream   file(mapsPath.c_str());
-    std::string     line;
-
-    if (!file)
-    {
-        std::cerr << "Warning: Map configuration file wasn't found"
-                  << std::endl;
-        return ;
-    }
-    while (std::getline(file, line))
-    {
-        std::ifstream       mapFile(line.c_str());
-
-        if (line.empty())
-            continue ;
-        try {
-            if (mapFile.good())
-            {
-               RType::Map::Parser         parser(line);
-               RType::Map::Parser::Map    map;
-
-               map = parser.parse();
-               _maps.push_back(map);
-               std::cout << "Map '" << map.first
-                         << "' loaded" << std::endl;
-            }
-            else
-            {
-                std::cerr   << "Can't load map: no such file: "
-                            << line << std::endl;
-                mapFile.close();
-            }
-        } catch (std::runtime_error const&) {
-            mapFile.close();
-            file.close();
-            throw ;
-        }
-        mapFile.close();
-    }
-    file.close();
 }
 
 void            RTypeGame::loadMobTypesFromFile()
