@@ -28,6 +28,9 @@ namespace RType
             virtual MovePattern     getMovePattern() const;
             virtual IMobType*       clone() const;
             virtual std::string     toString() const;
+            virtual unsigned int    getNumberFrames() const;
+            virtual double          getDuration() const;
+            virtual bool            getLoop() const;
         };
     }
 }

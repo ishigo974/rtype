@@ -63,7 +63,7 @@ namespace RType
 
         gu::Rect<int>   Forward::getRekt() const
         {
-            return (gu::Rect<int>(1, 4, 32, 21));
+            return (gu::Rect<int>(0, 0, 21, 24));
         }
 
         std::string     Forward::getName() const
@@ -83,7 +83,7 @@ namespace RType
 
         std::string     Forward::getSpriteFilePath() const
         {
-            return "mob";
+            return "forward";
         }
 
         /*
@@ -113,6 +113,21 @@ namespace RType
                    "\n\tscore value: " + std::to_string(getScoreValue()) +
                    "\n\tsprite file path: " + getSpriteFilePath() +
                    "\n}\n";
+        }
+
+        unsigned int    Forward::getNumberFrames() const
+        {
+            return 8;
+        }
+
+        double          Forward::getDuration() const
+        {
+            return 256.0;
+        }
+
+        bool            Forward::getLoop() const
+        {
+            return true;
         }
     }
 }

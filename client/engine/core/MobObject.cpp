@@ -1,6 +1,7 @@
 #include "MobObject.hpp"
 #include "Mob.hpp"
 #include "Collider.hpp"
+#include "Animation.hpp"
 
 MobObject::MobObject()
 { }
@@ -81,6 +82,7 @@ void    MobObject::create()
                                                     gu::Rect<int>(1, 4, 32, 21));
     _entityManager->attachComponent<Mob>(this, "Mob");
     _entityManager->attachComponent<Collider>(this, "Mob collider", 32, 21);
+    _em->attachComponent<Animation>(this, "AN", 0, 0, true);
 }
 
 void	MobObject::init(RType::MobType::IMobType const* mobtype)
@@ -91,4 +93,9 @@ void	MobObject::init(RType::MobType::IMobType const* mobtype)
     m->setAvailable(false);
     setVisible(true);
     getComponent<Collider>()->setEnabled(true);
+    // _em->attachComponent<Animation>(this, "AN",
+    //     _mobTypes->at(it->second.id).get()->getNumberFrames(),
+    //     _mobTypes->at(it->second.id).get()->getDuration(),
+    //     _mobTypes->at(it->second.id).get()->getLoop()
+    // );
 }
