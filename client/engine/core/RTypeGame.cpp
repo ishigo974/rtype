@@ -117,6 +117,7 @@ void        RTypeGame::initGame()
     {
         Transform*      transform;
 
+        std::cout << "current player " << gm->getId() << std::endl;
         if (entry.first == gm->getId())
         {
             entry.second = _em.createEntity<PlayerObject>("Player", 1, &_em);
@@ -136,6 +137,7 @@ void        RTypeGame::initGame()
         transform = entry.second->getComponent<Transform>();
         transform->getPosition().setX(RType::Map::defaultPosX);
         transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
+        std::cout << "player " << entry.first << ": " << transform->getPosition().X() << " " << transform->getPosition().Y() << std::endl;
     }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");

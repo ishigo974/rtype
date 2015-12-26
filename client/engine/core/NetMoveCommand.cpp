@@ -57,28 +57,25 @@ void NetMoveCommand::execute()
 {
     _origin = Transform(_target->transform());
 
-    std::cout << "I RECEIVE" << _direction  << std::endl; 
     if (!_target && !_target->getComponent<UDPView>())
-    switch (_direction)
     {
-        case ACommand::Action::DOWN:
-            _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_DOWN);
-            break;
-
-        case ACommand::Action::UP:
-            _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_UP);
-            break;
-
-        case ACommand::Action::LEFT:
-            _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_LEFT);
-            break;
-
-        case ACommand::Action::RIGHT:
-            _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_RIGHT);
-            break;
-
-        default:
-            break;
+        switch (_direction)
+        {
+            case ACommand::Action::DOWN:
+                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_DOWN);
+                break;
+            case ACommand::Action::UP:
+                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_UP);
+                break;
+            case ACommand::Action::LEFT:
+                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_LEFT);
+                break;
+            case ACommand::Action::RIGHT:
+                _target->getComponent<UDPView>()->pushReceive(UDPView::Action::MOVE_RIGHT);
+                break;
+            default:
+                break;
+        }
     }
 }
 

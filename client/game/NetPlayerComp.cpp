@@ -70,7 +70,7 @@ namespace std
     }
 }
 
-void NetPlayerComp::move(double elapsedTime)
+void NetPlayerComp::move(double elapsedTime, UDPView::Action action)
 {
     float speed = 1.25f;
 
@@ -85,9 +85,7 @@ void NetPlayerComp::move(double elapsedTime)
         speed     = speed * 3 / 4;
     }
 
-    auto tmp = _udp->popReceive(); // TODO add verif
-
-    switch (tmp)
+    switch (action)
     {
         case UDPView::Action::MOVE_UP:
             _transform->getPosition().setY(_transform->getPosition().Y() - speed * static_cast<float>(elapsedTime));
@@ -164,12 +162,13 @@ void		NetPlayerComp::update(double elapsedtime)
     checkAvailableBullets();
     while (_udp->sizeRecv() > 0)
     {
-        auto tmp = _udp->popReceive();
+        UDPView::Action tmp = _udp->popReceive();
 
+        std::cout << "PACKET RECEIVED" << std::endl;
         if (tmp == UDPView::Action::SHOT_START && _shotTime >= 80)
             this->shoot();
         else
-            this->move(elapsedtime);
+            this->move(elapsedtime, tmp);
     }
 }
 

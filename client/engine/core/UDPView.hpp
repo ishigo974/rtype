@@ -27,6 +27,7 @@ public:
 
 public:
     static const RTypes::my_uint16_t Mask = ComponentMask::UDPMask;
+    
 public:
     UDPView();
     UDPView(unsigned int id, std::string const& name);
