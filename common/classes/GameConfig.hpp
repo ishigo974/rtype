@@ -33,6 +33,16 @@ namespace RType
         const float ship    = 1.25f;
         const float bullet  = 2.0f;
     }
+
+    namespace Shot
+    {
+        enum Type
+        {
+            NORMAL = 0,
+        };
+
+        const unsigned int  usecFireDelay = 500000;
+    }
 }
 
 #endif /* !GAMECONFIG_HPP_ */

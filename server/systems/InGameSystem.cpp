@@ -18,8 +18,7 @@ namespace RType
             { InGameEvent::CL_PLAYERDOWN,   "MoveCommand"       },
             { InGameEvent::CL_PLAYERLEFT,   "MoveCommand"       },
             { InGameEvent::CL_PLAYERRIGHT,  "MoveCommand"       },
-            { InGameEvent::CL_SHOTSTART,    "ShotCommand"       },
-            { InGameEvent::CL_SHOTSTOP,     "ShotCommand"       },
+            { InGameEvent::CL_SHOT,         "ShotCommand"       },
             { InGameEvent::CL_ELAPSEDTIME,  "ElapsedCommand"    }
         };
 

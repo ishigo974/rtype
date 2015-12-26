@@ -3,6 +3,7 @@
 
 # include "EventCommand.hpp"
 # include "ShotComponent.hpp"
+# include "GameConfig.hpp"
 
 namespace RType
 {
@@ -26,8 +27,7 @@ namespace RType
             virtual std::string     getName() const;
 
         protected:
-            bool                    _isFiring;
-            Component::Shot::Type   _type;
+            RType::Shot::Type       _type;
             uint32_t                _time;
         };
     }
