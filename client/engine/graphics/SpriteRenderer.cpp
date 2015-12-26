@@ -68,6 +68,11 @@ const std::string& SpriteRenderer::getPath() const
     return this->_path;
 }
 
+void                SpriteRenderer::setPath(std::string const& s)
+{
+    _path = s;
+}
+
 const gu::Rect<int>& SpriteRenderer::getRect() const
 {
     return this->_rect;

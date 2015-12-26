@@ -96,3 +96,8 @@ void		Collider::setEnabled(bool e)
 {
     _enabled = e;
 }
+
+void Collider::setRect(gu::Rect<int> const& r)
+{
+    _bounds = r;
+}
