@@ -44,7 +44,7 @@ void UDPView::swap(UDPView& other)
 namespace std
 {
     template<>
-    void swap<UDPView>(UDPView& a, UDPView& b)
+    inline void swap<UDPView>(UDPView& a, UDPView& b)
     {
         a.swap(b);
     }

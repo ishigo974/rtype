@@ -45,7 +45,7 @@ void NetPlayerObject::swap(NetPlayerObject& o)
 namespace std
 {
     template<>
-    void swap<NetPlayerObject>(NetPlayerObject& a, NetPlayerObject& b)
+    inline void swap<NetPlayerObject>(NetPlayerObject& a, NetPlayerObject& b)
     {
         a.swap(b);
     }

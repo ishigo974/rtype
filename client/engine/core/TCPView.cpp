@@ -42,7 +42,7 @@ void TCPView::swap(TCPView& other)
 namespace std
 {
     template<>
-    void swap<TCPView>(TCPView& a, TCPView& b)
+    inline void swap<TCPView>(TCPView& a, TCPView& b)
     {
         a.swap(b);
     }

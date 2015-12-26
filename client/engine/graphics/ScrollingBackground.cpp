@@ -54,11 +54,11 @@ void ScrollingBackground::swap(ScrollingBackground& other)
 
 namespace std
 {
-template<>
-void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
-{
-	a.swap(b);
-}
+    template<>
+    inline void swap<ScrollingBackground>(ScrollingBackground& a, ScrollingBackground& b)
+    {
+        a.swap(b);
+    }
 }
 
 void ScrollingBackground::update(double elapsedTime)

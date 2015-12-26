@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 24/12/15.
-//
-
 #ifndef RTYPE_NETPLAYEROBJECT_HPP
 # define RTYPE_NETPLAYEROBJECT_HPP
 
@@ -27,6 +23,5 @@ public:
 private:
     EntityManager *_em;
 };
-
 
 #endif //RTYPE_NETPLAYEROBJECT_HPP

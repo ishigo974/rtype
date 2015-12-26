@@ -47,7 +47,7 @@ void NetMoveCommand::swap(NetMoveCommand& o)
 namespace std
 {
     template<>
-    void swap<NetMoveCommand>(NetMoveCommand& a, NetMoveCommand& b)
+    inline void swap<NetMoveCommand>(NetMoveCommand& a, NetMoveCommand& b)
     {
         a.swap(b);
     }

@@ -9,7 +9,7 @@ class SpriteRenderer : public Component
 public:
   SpriteRenderer();
   SpriteRenderer(unsigned _id, std::string const& _name,
-		 std::string const& path, gu::Rect<int> const& rect);
+                 std::string const& path, gu::Rect<int> const& rect);
   SpriteRenderer& operator=(SpriteRenderer other);
   SpriteRenderer(SpriteRenderer const& other);
   SpriteRenderer(SpriteRenderer&& other);
