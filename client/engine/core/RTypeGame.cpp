@@ -19,7 +19,6 @@
 const double        RTypeGame::defaultFixedStep = 0.006;
 const std::string   RTypeGame::defaultAddr      = "127.0.0.1";
 const short         RTypeGame::defaultPort      = 6667;
-const std::string   RTypeGame::mapsPath         = ".rtypemaps";
 const std::string   RTypeGame::mobTypesPath     = ".rtypemobs";
 
 /*
@@ -162,9 +161,7 @@ void        RTypeGame::initGame()
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1", gu::Rect<int>(0, 0, 1280, 720));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
-    if (_maps.empty())
-        throw std::runtime_error("No maps loaded");
-     _chrono.start();
+    _chrono.start();
 }
 
 void        RTypeGame::handleGame()

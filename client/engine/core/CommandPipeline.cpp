@@ -44,10 +44,12 @@ void CommandPipeline::setMaxLag(CommandPipeline::timePoint newMaxLag)
 
 void CommandPipeline::replace(CommandPipeline::cmdIt const& pos, std::deque<ACommand *>& diff)
 {
-    int i = 0;
+    int     i   = 0;
+    cmdIt   it  = _commands.end();
 
-    for (cmdIt it = _commands.end(); it != pos; --it)
+    while (it != pos)
     {
+        --it;
         (*it)->undo();
         i++;
     }
@@ -81,11 +83,11 @@ CommandPipeline::cmdIt const CommandPipeline::getDiff(CommandPipeline::timePoint
 {
     auto it = _commands.end();
 
-    for (; it != _commands.begin(); --it)
-      {
-	std::cout << *it << std::endl;
-	if ((*it)->getTime() < t)
+    while (it != _commands.begin())
+    {
+        --it;
+        if ((*it)->getTime() < t)
             break;
-      }
+    }
     return (it);
 }

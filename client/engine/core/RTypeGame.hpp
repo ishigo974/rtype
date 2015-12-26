@@ -53,7 +53,6 @@ public:
     static const std::string    defaultAddr;
     static const short          defaultPort;
     static const std::string    mobTypesPath;
-    static const std::string    mapsPath;
 
 protected:
     std::string                 _addr;
@@ -71,7 +70,6 @@ protected:
     double                      _lag;
     double                      _fixedStep;
     MobTypeMap                  _mobTypes;
-    RType::Map::Collection      _maps;
     Time::HRChrono              _chrono;
     PhysicsEngine               _physics;
     AudioEffectPlayer           _audio;
