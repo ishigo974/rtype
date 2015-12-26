@@ -85,8 +85,7 @@ void	MobSpawner::spawnMob(RType::InGameEvent const& request)
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
     m->setX(request.get<uint32_t>("x")); // TODO mettre la position donnée dans"
-                                          " le
-    // fichier
+                                             // fichier
     // _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
     m->setY(request.get<uint32_t>("y"));
     // m->setY(_transform->getPosition().Y());
