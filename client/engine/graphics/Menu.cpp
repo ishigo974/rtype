@@ -539,7 +539,6 @@ void Menu::update()
 //	std::cout << "update" << std::endl;
     while (_network->sizeReceive() > 0)
     {
-		std::cout << "got a request" << std::endl;
         RType::Request tmp = _network->popReceive();
         // std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())

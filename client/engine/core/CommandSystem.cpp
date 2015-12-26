@@ -83,7 +83,9 @@ void CommandSystem::processNetwork()
         while (i < tcpIn.size())
             tmpComp->pushReceive(tcpIn[i++]);
         while (tmpComp->sizeToSend() > 0)
+        {
             _ns->pushTCP(tmpComp->popToSend());
+        }
     }
     for (auto e : udpObjs)
     {
@@ -95,7 +97,7 @@ void CommandSystem::processNetwork()
             //            if ((command = _factory.createCommand(udpIn[i++])))
             //  _pipeline.addCommand(command);
             // if (gm[udpIn[i].get<uint16_t>("player_id")].getId() == e->getId())
-                tmpComp->pushReceive(udpIn[i++]);
+            tmpComp->pushReceive(udpIn[i++]);
         }
         while (tmpComp->sizeToSend() > 0)
             _ns->pushUDP(tmpComp->popToSend());

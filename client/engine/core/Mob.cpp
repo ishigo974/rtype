@@ -103,7 +103,6 @@ bool        Mob::handleMessage(Collider *o)
         _lives -= 1;
     if (_lives == 0)
     {
-        // _available = true;
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");
         _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
