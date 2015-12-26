@@ -26,6 +26,13 @@ public:
     void    stop();
     void    resume();
 
+    unsigned int    getFrames() const;
+    void            setFrames(unsigned int);
+    double          getDuration() const;
+    void            setDuration(double);
+    bool            getLoop() const;
+    void            setLoop(bool);
+
 private:
     unsigned int    _currentFrame;
     unsigned int    _frames;

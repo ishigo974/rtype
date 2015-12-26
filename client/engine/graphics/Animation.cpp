@@ -69,7 +69,6 @@ namespace std
     }
 }
 
-#include <iostream>
 void Animation::update(double elapsedTime)
 {
     SpriteRenderer *sr = static_cast<GameObject *>(parent())->getComponent<SpriteRenderer>();
@@ -77,18 +76,6 @@ void Animation::update(double elapsedTime)
         return;
 
     auto rect = sr->getRect();
-
-    // std::cout << "Rect : "
-    //         << "x = " << rect.x
-    //         << " y = " << rect.y
-    //         << " w = " << rect.w
-    //         << " h = " << rect.h << std::endl;
-    //
-    // std::cout << "CurrentFrame = " << _currentFrame << std::endl;
-    // std::cout << "Frames = " << _frames << std::endl;
-
-    // std::cout << "Time since last update : " << elapsedTime << std::endl;
-    // std::cout << "Time since first frame : " << _elapsedTime << std::endl;
 
     _elapsedTime += elapsedTime;
     if (_elapsedTime >= (_duration / _frames) * (_currentFrame + 1))
@@ -136,4 +123,34 @@ void    Animation::stop()
 void    Animation::resume()
 {
     _playing = true;
+}
+
+unsigned int    getFrames() const
+{
+    return _frames;
+}
+
+void            setFrames(unsigned int f)
+{
+    _frames = f;
+}
+
+double          getDuration() const
+{
+    return _duration;
+}
+
+void            setDuration(double d)
+{
+    _duration = d;
+}
+
+bool            getLoop() const
+{
+    return _loop;
+}
+
+void            setLoop(bool l)
+{
+    _loop = l;
 }
