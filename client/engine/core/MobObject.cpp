@@ -82,7 +82,7 @@ void    MobObject::create()
                                                     gu::Rect<int>(1, 4, 32, 21));
     _entityManager->attachComponent<Mob>(this, "Mob");
     _entityManager->attachComponent<Collider>(this, "Mob collider", 32, 21);
-    _em->attachComponent<Animation>(this, "AN", 0, 0, true);
+    _entityManager->attachComponent<Animation>(this, "AN", 0, 0, true);
 }
 
 void	MobObject::init(RType::MobType::IMobType const* mobtype)
