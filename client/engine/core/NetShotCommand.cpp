@@ -45,14 +45,14 @@ void NetShotCommand::swap(NetShotCommand& o)
 
 void NetShotCommand::execute()
 {
-    _target->getComponent<UDPView>()->pushReceive((_fire)
-                                                  ? UDPView::Action::SHOT_START
-                                                  : UDPView::Action::SHOT_STOP);
+  _target->getComponent<UDPView>()->pushReceive(RType::InGameEvent((_fire)
+								   ? RType::InGameEvent::SE_SHOTSTART
+								   : RType::InGameEvent::SE_SHOTSTOP));
 }
 
 void NetShotCommand::undo()
 {
-    _target->getComponent<UDPView>()->pushReceive((_fire)
-                                                  ? UDPView::Action::SHOT_STOP
-                                                  : UDPView::Action::SHOT_START);
+  _target->getComponent<UDPView>()->pushReceive(RType::InGameEvent((_fire)
+								   ? RType::InGameEvent::SE_SHOTSTART
+								   : RType::InGameEvent::SE_SHOTSTOP));
 }
