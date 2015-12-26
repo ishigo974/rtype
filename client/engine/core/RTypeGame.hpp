@@ -13,7 +13,6 @@
 # include "BehaviourSystem.hpp"
 # include "CommandSystem.hpp"
 # include "PhysicsEngine.hpp"
-// # include "MobSystem.hpp"
 # include "Menu.hpp"
 # include "NetworkSystem.hpp"
 # include "IMobType.hpp"
@@ -21,7 +20,6 @@
 # include "AudioEffectPlayer.hpp"
 # include "HRChrono.hpp"
 # include "GameManagerBehaviour.hpp"
-
 
 class MobSystem;
 
@@ -48,7 +46,6 @@ protected:
     void                handleGame();
     void                initGame();
     void                initGameSample();
-    void                loadMapsFromFile();
     void                loadMobTypesFromFile();
 
 public:
