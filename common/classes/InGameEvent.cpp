@@ -161,10 +161,7 @@ namespace RType
         for (auto& arg: it->second)
             data.append<Buffer>(_data.at(arg));
         res.append<uint32_t>(data.size());
-
-
         res.append(data);
-
         return res;
     }
 

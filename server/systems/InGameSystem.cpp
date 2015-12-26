@@ -43,7 +43,11 @@ namespace RType
             std::string addr;
 
             if (_socket.receiveFrom(buffer, bufferSize, addr) > 0)
+            {
+                _mutex.lock();
                 _book[addr].append(buffer);
+                _mutex.unlock();
+            }
         }
 
         void            InGame::processEntity(ECS::Entity& e)
@@ -55,11 +59,13 @@ namespace RType
             if (udp == nullptr)
                 throw std::runtime_error("InGameSystem: Entity has no "
                                          "NetworkUDP component");
+            _mutex.lock();
             if ((it = _book.find(udp->getIpAddr())) != _book.end())
             {
                 udp->pushReceived(it->second);
                 _book.erase(it);
             }
+            _mutex.unlock();
             while (udp->isEvent())
             {
                 try {
