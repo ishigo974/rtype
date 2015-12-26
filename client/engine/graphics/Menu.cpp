@@ -460,7 +460,7 @@ void Menu::transitionToStates()
     _inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
                                         TextField *r, Menu *menu)
     {
-        if (e->type == cu::Event::MouseButtonReleased &&
+		if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
             menu->quitRoom();
@@ -546,39 +546,50 @@ void Menu::move()
 
 void Menu::update()
 {
+//	std::cout << "update" << std::endl;
     while (_network->sizeReceive() > 0)
     {
+		std::cout << "got a request" << std::endl;
         RType::Request tmp = _network->popReceive();
         // std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
+				std::cout << "from serv: list room" << std::endl;
                 break;
             case RType::Request::SE_JOINROOM :
                 addPlayer(tmp);
-                break;
+				std::cout << "from serv: join room" << std::endl;
+				break;
             case RType::Request::SE_QUITROOM :
                 deletePlayer(tmp.get<uint8_t>("player_id"));
-                break;
+				std::cout << "from serv: quit room" << std::endl;
+				break;
             case RType::Request::SE_CLIENTRDY :
                 userReady(tmp);
-                break;
+				std::cout << "from serv: client rdy" << std::endl;
+				break;
             case RType::Request::SE_CLINOTRDY :
                 playerNotReady(tmp.get<uint8_t>("player_id"));
-                break;
+				std::cout << "from serv: client not rdy" << std::endl;
+				break;
             case RType::Request::SE_CLIUSRNM :
                 changePlayerName(tmp);
-                break;
+				std::cout << "from serv: client uname" << std::endl;
+				break;
             case RType::Request::SE_ROOMINFO :
                 _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
-                break;
+				std::cout << "from serv: room info" << std::endl;
+				break;
             case RType::Request::SE_GAMESTART :
                 _done = true;
-                break;
+				std::cout << "from serv: game start" << std::endl;
+				break;
             case RType::Request::SE_OK :
-                break;
+				std::cout << "from serv: ok" << std::endl;
+				break;
             case RType::Request::SE_KO :
                 //TODO REVERSE STATE
                 break;
@@ -624,6 +635,7 @@ void Menu::clearPlayers()
 
 void Menu::endGame(RType::Request::ScoresTab const &scores)
 {
+	_done = false;
 	auto player = _playersList.begin();
 	for (size_t nb = 0; nb != scores.size(); ++nb)
 	{

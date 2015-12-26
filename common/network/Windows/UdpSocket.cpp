@@ -27,8 +27,9 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     DWORD              SendBytes;
     size_t             ret;
     std::vector<char>  buff(buffer.data(), buffer.data() + buffer.size());
-    std::vector<char>  address(buffer.data(), buffer.data() + buffer.size());
+	std::string address(addr.size(), 0);
 
+	std::memcpy(&address, &addr, sizeof(addr));
     toSend.len        = buffer.size();
     toSend.buf        = buff.data();
     client.sin_family = AF_INET;
@@ -36,11 +37,14 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
             inet_pton(AF_INET, address.data(), &client.sin_addr);
     client.sin_port = _port;
 
-    if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
-                         reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
-                         nullptr, nullptr)) == SOCKET_ERROR)
-        throw std::runtime_error("WSASend failed");
-    return ret;
+	if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
+		reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
+		nullptr, nullptr)) == SOCKET_ERROR)
+	{
+		std::cout << WSAGetLastError() << std::endl;
+		throw std::runtime_error("WSASend failed");
+	}
+	return ret;
 }
 
 size_t    UdpSocket::receiveFrom(Buffer& buffer, size_t len, std::string& addr)
@@ -63,7 +67,6 @@ const
         throw std::runtime_error("SetSockOpt failed");
     wsabuf.buf = new char[len];
     wsabuf.len = len;
-	std::cout << "toto" << std::endl;
     if (::WSARecvFrom(_socket, &wsabuf, 1, &read_size, &flags,
                       reinterpret_cast<SOCKADDR *>(&client), &clientSize,
                       nullptr, nullptr) == SOCKET_ERROR)
@@ -76,7 +79,6 @@ const
             throw std::runtime_error("WSARecv failed");
         }
     }
-	std::cout << "titi" << std::endl;
 	if (read_size > 0)
     {
         buffer.append(wsabuf.buf, read_size);
