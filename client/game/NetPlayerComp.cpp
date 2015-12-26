@@ -158,8 +158,12 @@ void		NetPlayerComp::update(double elapsedtime)
         if (tmp.getCode() == RType::InGameEvent::SE_SHOTSTART
             && _shotTime >= 150)
             this->shoot();
-        else if (tmp.get<uint8_t>("player_id") ==
-                 static_cast<NetPlayerObject*>(parent())->getPlayerId())
+        else if ((tmp.getCode() == RType::InGameEvent::SE_PLAYERUP
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERDOWN
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERRIGHT
+                 || tmp.getCode() == RType::InGameEvent::SE_PLAYERLEFT)
+                 && tmp.get<uint8_t>("player_id") ==
+                    static_cast<NetPlayerObject*>(parent())->getPlayerId())
             this->move(elapsedtime, tmp);
     }
 }
