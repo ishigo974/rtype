@@ -102,9 +102,12 @@ namespace RType
 
         while (!_quit)
         {
+            size_t nbRooms = ECS::EntityManager::getInstance()
+                    .getByMask(Component::MASK_GAME).size();
+
             try {
                 _lag = (_clock.updateElapsedTime() / 1000000000);
-                lag = _lag; // TODO
+                lag = _lag / nbRooms; // TODO
                 _monitor.update();
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
