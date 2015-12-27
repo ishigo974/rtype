@@ -13,3 +13,4 @@ server_ut
 *.pdb
 build/
 .idea/
+cmake/

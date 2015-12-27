@@ -1,6 +1,0 @@
-/home/fourdr_b/rendu/rtype/cmake/server/CMakeFiles/server_rtype.dir
-/home/fourdr_b/rendu/rtype/cmake/common/mob_types/CMakeFiles/rtype_diagonalmob.dir
-/home/fourdr_b/rendu/rtype/cmake/client/CMakeFiles/rtype.dir
-/home/fourdr_b/rendu/rtype/cmake/common/mob_types/CMakeFiles/rtype_verticalmob.dir
-/home/fourdr_b/rendu/rtype/cmake/server/CMakeFiles/server_ut.dir
-/home/fourdr_b/rendu/rtype/cmake/common/mob_types/CMakeFiles/rtype_forwardmob.dir
