@@ -1,7 +1,3 @@
-//
-// Created by fourdr_b on 20/12/15.
-//
-
 #include "BehaviourSystem.hpp"
 #include "Behaviour.hpp"
 #include "Collider.hpp"
