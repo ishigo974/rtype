@@ -31,7 +31,7 @@ const sf::Texture* Resources::getTexture(const std::string& name) const
     }
     catch (std::out_of_range& e)
     {
-      //        std::cerr << e.what() << std::endl;
+      // TODO       std::cerr << e.what() << std::endl;
         return this->_textures.at("MissingTexture");
     }
 }

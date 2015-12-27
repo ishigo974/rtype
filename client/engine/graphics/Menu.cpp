@@ -37,13 +37,23 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
 }
 
 Menu::Menu(Menu const& other) :
-        GameObject(other),
-        _mainTitle(other._mainTitle),
-        _refresh(other._refresh),
-        _back(other._back),
-        _roomTitle(other._roomTitle),
-        _event(other._event),
-        _done(other._done),
+        GameObject(other), _roomsTextField(other._roomsTextField),
+        _playersInRoom(other._playersInRoom), _scores(other._scores),
+        _mainTitle(other._mainTitle), _changeName(other._changeName),
+        _createRoom(other._createRoom), _refresh(other._refresh),
+        _continue(other._continue), _back(other._back),
+        _roomTitle(other._roomTitle), _readyField(other._readyField),
+        _inputRoomName(other._inputRoomName),
+        _inputUserName(other._inputUserName),
+        _titleState(other._titleState), _mainMenu(other._mainMenu),
+        _inRoom(other._inRoom), _createRoomState(other._createRoomState),
+        _changeNameState(other._changeNameState),
+        _endGameState(other._endGameState), _sm(other._sm),
+        _event(other._event), _em(other._em), _gm(other._gm),
+        _ready(other._ready), _isVisible(other._isVisible),
+        _network(other._network), _roomsList(other._roomsList),
+        _playersList(other._playersList), _user(other._user),
+        _lastRequest(other._lastRequest), _done(other._done),
         _networkReject(other._networkReject)
 {}
 
@@ -92,11 +102,38 @@ void Menu::swap(Menu& other)
 {
     using std::swap;
 
+    swap(_roomsTextField, other._roomsTextField);
+    swap(_playersInRoom, other._playersInRoom);
+    swap(_scores, other._scores);
     swap(_mainTitle, other._mainTitle);
+    swap(_changeName, other._changeName);
+    swap(_createRoom, other._createRoom);
     swap(_refresh, other._refresh);
+    swap(_continue, other._continue);
     swap(_back, other._back);
     swap(_roomTitle, other._roomTitle);
-    // TODO: swap les autres attributs
+    swap(_readyField, other._readyField);
+    swap(_inputRoomName, other._inputRoomName);
+    swap(_inputUserName, other._inputUserName);
+    swap(_titleState, other._titleState);
+    swap(_mainMenu, other._mainMenu);
+    swap(_inRoom, other._inRoom);
+    swap(_createRoomState, other._createRoomState);
+    swap(_changeNameState, other._changeNameState);
+    swap(_endGameState, other._endGameState);
+    swap(_sm, other._sm);
+    swap(_event, other._event);
+    swap(_em, other._em);
+    swap(_gm, other._gm);
+    swap(_ready, other._ready);
+    swap(_isVisible, other._isVisible);
+    swap(_network, other._network);
+    swap(_roomsList, other._roomsList);
+    swap(_playersList, other._playersList);
+    swap(_user, other._user);
+    swap(_lastRequest, other._lastRequest);
+    swap(_done, other._done);
+    swap(_networkReject, other._networkReject);
 }
 
 void Menu::initTextFields()

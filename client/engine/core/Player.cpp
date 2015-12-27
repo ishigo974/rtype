@@ -176,7 +176,7 @@ void        Player::checkDeath()
     {
         if (!_parent->getComponent<Animation>()->isPlaying())
         {
-            std::cout << "Player Mort" << std::endl;
+            // TODO remove std::cout << "Player Mort" << std::endl;
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);

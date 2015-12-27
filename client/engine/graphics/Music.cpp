@@ -38,7 +38,6 @@ bool Music::operator!=(Music const &other)
 
 void Music::swap(Music &lhs, Music &rhs)
 {
-	//std::swap(lhs._music, rhs._music);
 	std::swap(lhs._curMusic, rhs._curMusic);
 }
 

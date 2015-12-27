@@ -62,8 +62,6 @@ void CommandSystem::processNetwork()
     size_t                          i;
     std::vector<RType::Request>     tcpIn;
     std::vector<RType::InGameEvent> udpIn;
-    // GameManager                     *gm = static_cast<GameManager *>(_entityManager->getByTag("GameManager"));
-    //    ACommand*                       command;
 
     _ns->processTCP();
     _ns->processUDP();
@@ -92,12 +90,7 @@ void CommandSystem::processNetwork()
         auto tmpComp = static_cast<GameObject *>(e)->getComponent<UDPView>();
 
         while (i < udpIn.size())
-        {
-            //            if ((command = _factory.createCommand(udpIn[i++])))
-            //  _pipeline.addCommand(command);
-            // if (gm[udpIn[i].get<uint16_t>("player_id")].getId() == e->getId())
             tmpComp->pushReceive(udpIn[i++]);
-        }
         while (tmpComp->sizeToSend() > 0)
             _ns->pushUDP(tmpComp->popToSend());
     }
