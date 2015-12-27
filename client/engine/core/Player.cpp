@@ -240,6 +240,12 @@ bool Player::handleMessage(Collider *o)
         _parent->getComponent<Animation>()->setDuration(256.0);
         _parent->getComponent<Animation>()->setLoop(false);
         _parent->getComponent<Animation>()->play();
+        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+        for (auto             play : sound)
+        {
+            static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                           ->setSoundToPlay("../res/mobDeath.wav");
+        }
     }
 
     return (true);

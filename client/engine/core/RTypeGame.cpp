@@ -128,6 +128,8 @@ void        RTypeGame::initGame()
             audio->addSound("../res/OnePunch.wav");
             audio->addSound("../res/laser1.wav");
             audio->addSound("../res/laser2.wav");
+            audio->addSound("../res/bulletExplosion.wav");
+            audio->addSound("../res/mobDeath.wav");
         }
         else
         {
