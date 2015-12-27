@@ -66,7 +66,8 @@ namespace RType
                 default:
                     break ;
             }
-            // std::cout << this << " Shot moved to " << pos->getX() << " " << pos->getY()  << " " << _game->getElapsedTime() << std::endl; // debug
+            // std::cout << "Shot moved to " << pos->getX() << " " << pos->getY() << " "
+            //             << _game->getChrono().getElapsedTime() << std::endl;
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {

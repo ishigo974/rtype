@@ -78,6 +78,7 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
     return Mask;
 }
 
+#include <iostream>
 void	MobSpawner::spawnMob(RType::InGameEvent const& request)
 {
     if (request.getCode() == RType::InGameEvent::SE_MOBSPAWNED)

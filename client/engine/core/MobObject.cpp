@@ -97,7 +97,7 @@ void	MobObject::init(RType::MobType::IMobType const* mobtype)
     m->setEnabled(true);
     m->setAvailable(false);
     setVisible(true);
-    getComponent<Collider>()->setEnabled(true);
+    c->setEnabled(true);
     a->setFrames(mobtype->getNumberFrames());
     a->setDuration(mobtype->getDuration());
     a->setLoop(mobtype->getLoop());
