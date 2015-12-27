@@ -89,17 +89,20 @@ RTypes::my_uint16_t     Player::getMask() const
 
 std::string Player::toString() const
 {
-    std::stringstream ss;
-
-    ss << "Player {"
-    << "\n\thp: " << _hp
-    << "\n\tdamage: " << _damage
-    << "\n\tenabled: " << _enabled;
+  std::string ss;
+  
+    ss += "Player {";
+    ss += "\n\thp: ";
+    ss += _hp;
+    ss += "\n\tdamage: ";
+    ss += _damage;
+    ss += "\n\tenabled: ";
+    ss += _enabled;
     if (_transform)
-        ss << "\n\t" << _transform->toString();
-    ss << "\n}" << std::endl;
+        ss += "\n\t" + _transform->toString();
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 int    Player::getDamage() const

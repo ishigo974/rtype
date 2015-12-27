@@ -63,17 +63,21 @@ PlayerObject::~PlayerObject()
 
 std::string	PlayerObject::toString() const
 {
-  std::stringstream ss;
+  std::string ss;
 
-  ss << "PlayerObject {"
-     << "\n\tid: " << _id
-     << "\n\tname: " << _name
-     << "\n\tlayer: " << _layer
-     << "\n\tnbComponents: " << _components.size()
-     << "\n\tTransform: " << getComponent<Transform>()->toString()
-     << "\n}" << std::endl;
+  ss = "PlayerObject {";
+  ss += "\n\tid: ";
+  ss += _id;
+  ss += "\n\tname: ";
+  ss += _name;
+  ss += "\n\tlayer: ";
+  ss += _layer;
+  ss += "\n\tnbComponents: ";
+  ss += _components.size();
+  ss += "\n\tTransform: " + getComponent<Transform>()->toString();
+  ss += "\n}\n";
 
-  return (ss.str());
+  return (ss);
 }
 
 void	PlayerObject::init()

@@ -48,16 +48,19 @@ bool GameObject::operator!=(GameObject const& other)
 
 std::string GameObject::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
+    
+    ss = "GameObject {";
+    ss += "\n\tid: ";
+    ss += _id;
+    ss += "\n\tname: ";
+    ss +=_name;
+    ss += "\n\tlayer: ";
+    ss += _layer;
+    ss += "\n\tTransform: " + getComponent<Transform>()->toString();
+    ss += "\n}\n";
 
-    ss << "GameObject {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tlayer: " << _layer
-    << "\n\tTransform: " << getComponent<Transform>()->toString()
-    << "\n}" << std::endl;
-
-    return (ss.str());
+    return (ss);
 }
 
 int GameObject::getLayer() const

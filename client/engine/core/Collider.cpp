@@ -56,15 +56,18 @@ RTypes::my_uint16_t Collider::getMask() const
 std::string Collider::toString() const
 {
     //TODO : _bounds.toString()
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "Collider {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tmask: " << Mask
-    << "\n}" << std::endl;
+    ss = "Collider {";
+    ss += "\n\tid: ";
+    ss += _id;
+    ss += "\n\tname: ";
+    ss += _name;
+    ss += "\n\tmask: ";
+    ss += Mask;
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 void Collider::fixedUpdate(double)
