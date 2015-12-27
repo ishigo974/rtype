@@ -7,6 +7,7 @@
 #include "ObjectPool.hpp"
 #include "AudioEffect.hpp"
 #include "GameConfig.hpp"
+#include "Animation.hpp"
 
 Player::Player()
 {
@@ -95,7 +96,7 @@ std::string Player::toString() const
     << "\n\tdamage: " << _damage
     << "\n\tenabled: " << _enabled;
     if (_transform)
-    ss << "\n\t" << _transform->toString();
+        ss << "\n\t" << _transform->toString();
     ss << "\n}" << std::endl;
 
     return (ss.str());
@@ -120,6 +121,9 @@ void		Player::move(double elapsedtime)
 {
     float       speed = RType::Speed::ship;
     double      move;
+
+    if (_hp <= 0)
+        return ;
 
     move = speed * elapsedtime;
     switch (_action.front())
@@ -151,9 +155,13 @@ void		Player::checkDeath()
     if (_hp <= 0)
     {
         std::cout << "Player Mort" << std::endl;
-        _enabled = false;
-        _parent->setVisible(false);
-        _parent->getComponent<Collider>()->setEnabled(false);
+
+        if (!_parent->getComponent<Animation>()->isPlaying())
+        {
+            _enabled = false;
+            _parent->setVisible(false);
+            _parent->getComponent<Collider>()->setEnabled(false);
+        }
     }
 }
 
@@ -216,5 +224,17 @@ bool Player::handleMessage(Collider *o)
 
     if (otherParent->getComponent<Mob>() != nullptr)
         _hp -= 1;
+    if (_hp == 0)
+    {
+        _parent->getComponent<Collider>()->setEnabled(false);
+        _parent->getComponent<SpriteRenderer>()->setPath("explosion");
+        _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
+                                                                       32, 30));
+        _parent->getComponent<Animation>()->setFrames(8);
+        _parent->getComponent<Animation>()->setDuration(256.0);
+        _parent->getComponent<Animation>()->setLoop(false);
+        _parent->getComponent<Animation>()->play();
+    }
+
     return (true);
 }
