@@ -136,7 +136,6 @@ void		Mob::move(double elapsedTime)
 
 void		Mob::update(double elapsedTime)
 {
-
     if (_lives <= 0)
     {
         if (!_parent->getComponent<Animation>()->isPlaying())
