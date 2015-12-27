@@ -24,6 +24,14 @@ public:
     void process();
     void init();
 
+public:
+    static const std::string Background;
+    static const std::string Shot1;
+    static const std::string Shot2;
+    static const std::string Explosion;
+    static const std::string Death;
+    static const std::string NoSound;
+
 private:
     EntityManager *_em;
     std::list<sf::Sound> _sounds;

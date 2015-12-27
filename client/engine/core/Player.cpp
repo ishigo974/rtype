@@ -7,6 +7,7 @@
 #include "Mob.hpp"
 #include "ObjectPool.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 #include "GameConfig.hpp"
 #include "Animation.hpp"
 
@@ -184,12 +185,12 @@ void        Player::checkDeath()
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
-	        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
-	        for (auto play : sound)
-	        {
-                static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                    ->setSoundToPlay("../client/res/mobDeath.wav");
-            }
+	    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	    for (auto             play : sound)
+	      {
+		static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+		  ->setSoundToPlay(AudioEffectPlayer::Death);
+	      }
         }
     }
 }
@@ -207,7 +208,7 @@ void    Player::shoot()
     for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                       ->setSoundToPlay("../client/res/laser1.wav");
+                                       ->setSoundToPlay(AudioEffectPlayer::Shot1);
     }
 }
 

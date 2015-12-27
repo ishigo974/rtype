@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "Animation.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 
 /*
 ** Constructor/Destructor
@@ -110,7 +111,7 @@ bool        Mob::handleMessage(Collider *o)
         for (auto             play : sound)
         {
             static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                           ->setSoundToPlay("../client/res/mobDeath.wav");
+                                           ->setSoundToPlay(AudioEffectPlayer::Death);
         }
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");
@@ -151,16 +152,16 @@ void		Mob::update(double elapsedTime)
             if (!_parent->getComponent<Animation>()->isPlaying())
             {
                 _available = true;
-                _enabled = false;
-                _parent->setVisible(false);
-                _parent->getComponent<Collider>()->setEnabled(false);
             }
     }
-    if (_transform->getPosition().X() > Renderer::width + 1000
-        || _transform->getPosition().X() < -1000
-        || _transform->getPosition().Y() > Renderer::height + 1000
-        || _transform->getPosition().Y() < -1000)
-        _lives = 0;
+    if (_transform->getPosition().X() > Renderer::width + 100
+        || _transform->getPosition().X() < -100
+        || _transform->getPosition().Y() > Renderer::height + 100
+        || _transform->getPosition().Y() < -100)
+        {
+            _available = true;
+            _lives = 0;
+        }
     move(elapsedTime);
 }
 

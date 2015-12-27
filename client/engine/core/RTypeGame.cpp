@@ -8,6 +8,7 @@
 #include "Mob.hpp"
 #include "Collider.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 #include "MobSpawner.hpp"
 #include "TCPView.hpp"
 #include "GameConfig.hpp"
@@ -126,11 +127,11 @@ void        RTypeGame::initGame()
 
             _em.attachComponent<AudioEffect>(entry.second, "Audio");
             audio = entry.second->getComponent<AudioEffect>();
-            audio->addSound("../client/res/OnePunch.wav");
-            audio->addSound("../client/res/laser1.wav");
-            audio->addSound("../client/res/laser2.wav");
-            audio->addSound("../client/res/bulletExplosion.wav");
-            audio->addSound("../client/res/mobDeath.wav");
+            audio->addSound(AudioEffectPlayer::Background);
+            audio->addSound(AudioEffectPlayer::Shot1);
+            audio->addSound(AudioEffectPlayer::Shot2);
+            audio->addSound(AudioEffectPlayer::Explosion);
+            audio->addSound(AudioEffectPlayer::Death);
         }
         else
         {
