@@ -9,7 +9,7 @@ class Label : public GUIElement
 {
 public:
     Label(gu::Rect<float> const& rect, std::string const& str, unsigned int size,
-          std::string const& font = "../res/cs_regular.ttf");
+          std::string const& font = "../client/res/cs_regular.ttf");
     virtual ~Label();
 
 public:

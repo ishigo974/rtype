@@ -126,11 +126,11 @@ void        RTypeGame::initGame()
 
             _em.attachComponent<AudioEffect>(entry.second, "Audio");
             audio = entry.second->getComponent<AudioEffect>();
-            audio->addSound("../res/OnePunch.wav");
-            audio->addSound("../res/laser1.wav");
-            audio->addSound("../res/laser2.wav");
-            audio->addSound("../res/bulletExplosion.wav");
-            audio->addSound("../res/mobDeath.wav");
+            audio->addSound("../client/res/OnePunch.wav");
+            audio->addSound("../client/res/laser1.wav");
+            audio->addSound("../client/res/laser2.wav");
+            audio->addSound("../client/res/bulletExplosion.wav");
+            audio->addSound("../client/res/mobDeath.wav");
         }
         else
         {

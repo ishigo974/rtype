@@ -187,7 +187,7 @@ void        Player::checkDeath()
 	        for (auto play : sound)
 	        {
                 static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                    ->setSoundToPlay("../res/mobDeath.wav");
+                    ->setSoundToPlay("../client/res/mobDeath.wav");
             }
         }
     }
@@ -206,7 +206,7 @@ void    Player::shoot()
     for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                       ->setSoundToPlay("../res/laser1.wav");
+                                       ->setSoundToPlay("../client/res/laser1.wav");
     }
 }
 
