@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "Animation.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 
 /*
 ** Constructor/Destructor
@@ -110,7 +111,7 @@ bool        Mob::handleMessage(Collider *o)
         for (auto             play : sound)
         {
             static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                           ->setSoundToPlay("../res/mobDeath.wav");
+                                           ->setSoundToPlay(AudioEffectPlayer::Death);
         }
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");
