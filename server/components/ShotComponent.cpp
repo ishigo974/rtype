@@ -6,6 +6,7 @@
 #include "GameComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "GameConfig.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -61,7 +62,7 @@ namespace RType
             {
                 case RType::Shot::NORMAL:
                     pos->setX(pos->getX() + (Speed::bullet
-                                             * Config::loopDuration));
+                                             * Server::lag));
                     break ;
                 default:
                     break ;

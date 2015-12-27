@@ -83,8 +83,8 @@ namespace RType
                             mobType->second->getRekt().h
                     ));
 
-                    event.push<uint8_t>("mobtype_id", cMob->getId());
-                    event.push<uint64_t>("mob_id", eMob.getId());
+                    event.push<uint8_t>("mob_id", cMob->getId());
+                    // event.push<uint64_t>("mob_id", eMob.getId());
                     event.push<uint32_t>("x", it->second.x);
                     event.push<uint32_t>("y", it->second.y);
                     event.push<uint64_t>("time",

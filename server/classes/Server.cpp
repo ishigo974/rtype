@@ -60,6 +60,7 @@ namespace RType
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
     const std::string   Server::mobTypesPath    = ".rtypemobs";
     const std::string   Server::mapsPath        = ".rtypemaps";
+    double              Server::lag             = 0;
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
@@ -82,7 +83,7 @@ namespace RType
         _monitor(SocketMonitor::getInstance()),
         _em(ECS::EntityManager::getInstance()),
         _sm(ECS::SystemManager::getInstance()),
-        _clock()
+        _clock(), _lag(0)
     {
         init();
     }
@@ -102,6 +103,8 @@ namespace RType
         while (!_quit)
         {
             try {
+                _lag = (_clock.updateElapsedTime() / 1000000000);
+                lag = _lag; // TODO
                 _monitor.update();
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
@@ -110,6 +113,10 @@ namespace RType
                 _em.updateAll();
                 _sm.processAll();
                 checkDisconnected();
+                // while (_lag >= Config::fixedStep)
+                // {
+                //     _lag -= Config::fixedStep;
+                // }
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
@@ -180,7 +187,7 @@ namespace RType
         _sm.registerSystem(std::make_unique<System::Game>(mobTypes));
         _sm.registerSystem(std::make_unique<System::Collision>());
 
-
+        _clock.updateElapsedTime();
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
     }

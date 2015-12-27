@@ -15,7 +15,7 @@ Mob::Mob() :
     _id(0), _name(""), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr),
-    _state(1), _parent(nullptr), _entityId(0)
+    _state(1), _parent(nullptr)
 {
 }
 
@@ -24,7 +24,7 @@ Mob::Mob(unsigned int id, std::string const& name, EntityManager* em, RType::Mob
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr),
     _state(1), _parent(nullptr),
-    _em(em), _entityId(0)
+    _em(em)
 {
 }
 
@@ -39,8 +39,7 @@ Mob::Mob(Mob const& other) :
     Behaviour(other), _id(other._id), _name(other._name), _lives(other._lives),
     _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
     _movePattern(other._movePattern), _transform(other._transform),
-    _state(other._state), _parent(other._parent), _em(other._em),
-    _entityId(other._entityId)
+    _state(other._state), _parent(other._parent), _em(other._em)
 {
 }
 
@@ -135,11 +134,6 @@ void		Mob::setY(float y)
     _transform->getPosition().setY(y);
 }
 
-void        Mob::setEntityId(unsigned int id)
-{
-    _entityId = id;
-}
-
 void		Mob::move(double elapsedTime)
 {
     cu::Position    pos = _movePattern(_transform->getPosition(), elapsedTime,
@@ -147,7 +141,7 @@ void		Mob::move(double elapsedTime)
 
     _transform->getPosition().setX(pos.X());
     _transform->getPosition().setY(pos.Y());
-    std::cout << pos.X() << " " << pos.Y() << std::endl;
+    // std::cout << pos.X() << " " << pos.Y() << std::endl;
 }
 
 void		Mob::update(double elapsedTime)
@@ -242,11 +236,6 @@ std::string const&      Mob::getSpriteFilePath() const
     return _spriteFilePath;
 }
 
-unsigned int            Mob::getEntityId() const
-{
-    return _entityId;
-}
-
 RType::MobType::MovePattern const&      Mob::getMovePattern() const
 {
     return _movePattern;
@@ -282,7 +271,6 @@ void Mob::swap(Mob& other)
     swap(_state, other._state);
     swap(_parent, other._parent);
     swap(_em, other._em);
-    swap(_entityId, other._entityId);
 }
 
 namespace std

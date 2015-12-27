@@ -5,6 +5,7 @@
 #include "EntityManager.hpp"
 #include "GameConfig.hpp"
 #include "InGameEvent.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -89,7 +90,7 @@ namespace RType
                     em.getByCmpnt(this).getComponent<Component::Position>();
                 cu::Position            newpos =
                     _movePattern(cu::Position(pos->getX(), pos->getY()),
-                                 Config::loopDuration, _state);
+                                 Server::lag, _state);
                 // InGameEvent             request(InGameEvent::SE_MOBMOVED);
 
                 pos->setX(newpos.X());
