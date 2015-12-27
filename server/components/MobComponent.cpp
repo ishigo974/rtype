@@ -87,12 +87,13 @@ namespace RType
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            if (pos->getX() <= 0 || pos->getX() >= Map::width
-                || pos->getY() <= 0 || pos->getY() >= Map::height)
-            {
-                em.safeDestroy(em.getByCmpnt(this));
-                // std::cout << "Mob deleted" << std::endl;
-            }
+            std::cout << "mob pos: " << pos->getX() << " " << pos->getY() << " " << _game->getChrono().getElapsedTime() << std::endl;
+            // if (pos->getX() <= 0 || pos->getX() >= Map::width
+            //     || pos->getY() <= 0 || pos->getY() >= Map::height)
+            // {
+            //     em.safeDestroy(em.getByCmpnt(this));
+            //     // std::cout << "Mob deleted" << std::endl;
+            // }
         }
 
         void            Mob::addLives(unsigned int nb)

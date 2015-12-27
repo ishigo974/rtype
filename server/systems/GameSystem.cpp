@@ -72,7 +72,7 @@ namespace RType
                     cMob->init(mobType->second.get());
                     cMob->setGame(game);
                     cPos->setX(it->second.x);
-                    cPos->setX(it->second.y);
+                    cPos->setY(it->second.y);
 
                     event.push<uint8_t>("mob_id", cMob->getId());
                     event.push<uint32_t>("x", it->second.x);
@@ -82,7 +82,7 @@ namespace RType
 
                     // std::cout << "Send mob spawned with time: " << event.get<uint64_t>("time") << std::endl;
                     room->broadcastUDP(event.toBuffer());
-                    // std::cout << "Mob spawned id: " << cMob->getId() << std::endl; // debug
+                    std::cout << "Mob spawned " << cPos->getX() << " " << cPos->getY() << std::endl;
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }

@@ -90,6 +90,7 @@ void	MobSpawner::spawnMob(RType::InGameEvent const& request)
                                              // fichier
     // _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
     m->setY(request.get<uint32_t>("y"));
+    std::cout << "spawn mob " << mob->getComponent<Transform>()->getPosition().X() << " " << mob->getComponent<Transform>()->getPosition().Y() << std::endl;
     // m->setY(_transform->getPosition().Y());
 }
 
