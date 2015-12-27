@@ -49,9 +49,13 @@ namespace RType
 
     namespace Ship
     {
-        const unsigned int  width   = 25;
-        const unsigned int  cWidth  = 32;
-        const unsigned int  cHeight = 12;
+        const unsigned int  width  = 32;
+        const unsigned int  height = 12;
+    }
+
+    namespace Mob
+    {
+        const unsigned int  usecMoveDelay   = 6000;
     }
 }
 

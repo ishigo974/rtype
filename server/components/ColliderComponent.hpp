@@ -13,7 +13,8 @@ namespace RType
         class Collider : public ECS::IBehaviour
         {
         public:
-            Collider(unsigned int width = 0, unsigned int height = 0);
+            Collider(unsigned int x = 0, unsigned int y = 0,
+                     unsigned int width = 0, unsigned int height = 0);
             virtual ~Collider();
 
         public:
@@ -23,6 +24,7 @@ namespace RType
         public:
             virtual void                update();
             bool                        intersects(Collider const& other) const;
+            gu::Rect<int>               getBounds() const;
 
         public:
             virtual std::string         getName() const;

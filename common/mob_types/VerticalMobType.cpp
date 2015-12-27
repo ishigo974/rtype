@@ -93,7 +93,7 @@ namespace RType
             return [](cu::Position const& pos, double elapsedTime,
                       int& state)->cu::Position
             {
-                static const float  speed = 2.0f;
+                static const float  speed = 0.75f;
 
                 if (pos.Y() >= Map::height - 144 || pos.Y() <= 0)
                     state = state ^ 1;

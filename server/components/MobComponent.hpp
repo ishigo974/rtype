@@ -60,6 +60,7 @@ namespace RType
             MobType::MovePattern    _movePattern;
             Component::Game*        _game;
             int                     _state;
+            uintmax_t               _lastMoveTime;
         };
     }
 }

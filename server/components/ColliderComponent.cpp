@@ -15,8 +15,9 @@ namespace RType
         /*
         ** Constructor/Destructor
         */
-        Collider::Collider(unsigned int width, unsigned int height) :
-            _bounds(0, 0, width, height)
+        Collider::Collider(unsigned int x, unsigned int y,
+                           unsigned int width, unsigned int height) :
+            _bounds(x, y, width, height)
         {
         }
 
@@ -58,6 +59,12 @@ namespace RType
         {
             return _bounds.intersects(other._bounds);
         }
+
+        gu::Rect<int>       Collider::getBounds() const
+        {
+            return _bounds;
+        }
+
 
         std::string         Collider::getName() const
         {

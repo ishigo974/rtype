@@ -115,8 +115,8 @@ namespace RType
                     ));
                 user->addComponent(std::make_unique<Component::Ship>());
                 user->addComponent(
-                    std::make_unique<Component::Collider>(RType::Ship::cWidth,
-                                                      RType::Ship::cHeight));
+                    std::make_unique<Component::Collider>(RType::Ship::width,
+                                                      RType::Ship::height));
             }
             _chrono.start();
         }

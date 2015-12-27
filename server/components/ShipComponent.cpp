@@ -1,10 +1,12 @@
-#include "ShipComponent.hpp"
+// #include "ShipComponent.hpp"
 #include "ShotComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "RoomComponent.hpp"
+#include "ComponentMask.hpp"
 #include "ComponentsMasks.hpp"
 #include "PositionComponent.hpp"
 #include "ColliderComponent.hpp"
+#include "ShipComponent.hpp"
 #include "EntityManager.hpp"
 
 namespace RType
@@ -14,8 +16,8 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Ship::mask              = Component::MASK_SHIP;
-        const unsigned int          Ship::defaultLives      = 1;
+        const ECS::ComponentMask    Ship::mask          = Component::MASK_SHIP;
+        const unsigned int          Ship::defaultLives  = 1;
 
         /*
         ** Constructor/Destructor
@@ -56,12 +58,25 @@ namespace RType
 
         void                Ship::collide(ECS::Entity& entity)
         {
-            if ((entity.getComponentMask() & Component::MASK_MOB) ==
+            if (((entity.getComponentMask() & Component::MASK_MOB) ==
                 Component::MASK_MOB
                 || (entity.getComponentMask() & Component::MASK_SHOT) ==
                     Component::MASK_SHOT)
+                && _lives > 0)
+            {
                 removeLives(1);
-            std::cout << "ship collided, reminaing lives: " << _lives << std::endl;
+                std::cout << "ship collided, reminaing lives: " << _lives << std::endl;
+            }
+            // Component::Collider* p = ECS::EntityManager::getInstance().getByCmpnt(this).getComponent<Component::Collider>();
+            // std::cout << "ship " << p->getBounds().x << " " << p->getBounds().y << " " << p->getBounds().w << " " << p->getBounds().h << std::endl;
+            // p = entity.getComponent<Component::Collider>();
+            // if ((entity.getComponentMask() & Component::MASK_MOB) ==
+            // Component::MASK_MOB)
+            //     std::cout << "mob";
+            // else if ((entity.getComponentMask() & Component::MASK_SHOT) ==
+            //     Component::MASK_SHOT)
+            // std::cout << "shot" << std::endl;
+            // std::cout << " " << p->getBounds().x << " " << p->getBounds().y << " " << p->getBounds().w << " " << p->getBounds().h << std::endl;
         }
 
         void                Ship::fire(unsigned int shot_type)
@@ -86,11 +101,12 @@ namespace RType
                     std::make_unique<Component::Shot>(
                         static_cast<RType::Shot::Type>(shot_type),
                             &entity, game));
-                shot.addComponent(
-                    std::make_unique<Component::Collider>(
-                        RType::Shot::width, RType::Shot::height));
                 shotPos->setX(pos->getX() + RType::Ship::width);
                 shotPos->setY(pos->getY());
+                shot.addComponent(
+                    std::make_unique<Component::Collider>(
+                        shotPos->getX(), shotPos->getY(),
+                        RType::Shot::width, RType::Shot::height));
                 _chrono.reset();
                 // std::cout << "Fire" << std::endl;
             }
