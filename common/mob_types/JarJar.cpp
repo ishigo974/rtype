@@ -117,17 +117,17 @@ namespace RType
 
         unsigned int    JarJar::getNumberFrames() const
         {
-            return 3;
+            return 1;
         }
 
         double          JarJar::getDuration() const
         {
-            return 64.0;
+            return 1.0;
         }
 
         bool            JarJar::getLoop() const
         {
-            return true;
+            return false;
         }
 
     }
