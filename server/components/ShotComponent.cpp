@@ -82,7 +82,7 @@ namespace RType
         {
             ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
-            std::cout << "shot collided" << std::endl;
+            // std::cout << "shot collided" << std::endl;
             em.safeDestroy(em.getByCmpnt(this));
         }
 
