@@ -351,7 +351,6 @@ void Menu::transitionToStates()
             return (false);
         }, _event, _roomsList, _roomsTextField, &_roomTitle, this);
 
-
     _mainMenu.addTransition("changeName", [](cu::Event *e, TextField *cN)
         {
             return e->type == cu::Event::MouseButtonReleased &&
@@ -453,6 +452,18 @@ void Menu::transitionToStates()
 
         return false;
     }, _event, &_inputUserName, &_back, this);
+
+    _inRoom.addTransition("mainMenu", [&](bool *reject)
+    {
+      if (*reject)
+	{
+	  *reject = false;
+	  clearPlayers();
+	  refreshRoomList();
+	  return true;
+        }
+      return false;
+    }, &_networkReject);
 
     _inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
                                         TextField *r, Menu *menu)
@@ -574,8 +585,7 @@ void Menu::update()
                 endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
-                reverseState();
-				break;
+	      break;
             case RType::Request::SE_KO :
                 reverseState();
                 break;
@@ -670,12 +680,18 @@ void Menu::quitRoom()
 void Menu::reverseState()
 {
     if (!_lastRequest.empty())
-        switch (_lastRequest.front().getCode())
+      {
+	_networkReject = true;
+	switch (_lastRequest.front().getCode())
         {
             case RType::Request::CL_CREATEROOM :
+                _gm->clearPlayers();
+                break;
+            case RType::Request::CL_JOINROOM :
                 _gm->clearPlayers();
                 break;
             default:
                 break;
         }
+      }
 }

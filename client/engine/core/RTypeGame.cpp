@@ -80,8 +80,9 @@ void        RTypeGame::run()
             handleGame();
         else
         {
+	  _menu->move();
             _menu->update();
-            _cs.processNetwork();
+	    _cs.processNetwork();
             if (_menu->done())
             {
                 _isPlaying = true;
