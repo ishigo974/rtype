@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "Animation.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 
 /*
 ** Constructor/Destructor

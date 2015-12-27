@@ -7,6 +7,7 @@
 #include "GameConfig.hpp"
 #include "Animation.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 
 Bullet::Bullet()
 {

@@ -3,6 +3,7 @@
 //
 
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 #include "Mob.hpp"
 #include "NetPlayerComp.hpp"
 #include "NetPlayerObject.hpp"
@@ -129,11 +130,7 @@ void	NetPlayerComp::shoot()
     for (auto play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-<<<<<<< HEAD
                                        ->setSoundToPlay(AudioEffectPlayer::Shot1);
-=======
-                                       ->setSoundToPlay("../client/res/laser1.wav");
->>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
     }
 }
 
