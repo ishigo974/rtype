@@ -1,3 +1,3 @@
-./.rtype/librtype_forwardmob.so
-./.rtype/librtype_verticalmob.so
-./.rtype/librtype_diagonalmob.so
+../../common/mob_types/build/Debug/rtype_verticalmob.dll
+../../common/mob_types/build/Debug/rtype_diagonalmob.dll
+../../common/mob_types/build/Debug/rtype_forwardmob.dll

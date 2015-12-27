@@ -150,7 +150,7 @@ void		Mob::move(double elapsedTime)
     // TODO remove std::cout << pos.X() << " " << pos.Y() << std::endl;
 }
 
-void		Mob::update(double)
+void		Mob::update(double elapsedTime)
 {
     if (_lives <= 0)
     {
@@ -167,6 +167,7 @@ void		Mob::update(double)
         || _transform->getPosition().Y() > Renderer::height + 1000
         || _transform->getPosition().Y() < -1000)
         _lives = 0;
+    move(elapsedTime);
 }
 
 void            Mob::addLives(unsigned int nb)

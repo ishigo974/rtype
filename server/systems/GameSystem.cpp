@@ -92,7 +92,7 @@ namespace RType
 
                     // std::cout << "Send mob spawned with time: " << event.get<uint64_t>("time") << std::endl;
                     room->broadcastUDP(event.toBuffer());
-                    std::cout << "Mob spawned " << cPos->getX() << " " << cPos->getY() << std::endl;
+                    // std::cout << "Mob spawned " << cPos->getX() << " " << cPos->getY() << std::endl;
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }
