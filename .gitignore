@@ -11,6 +11,5 @@ server_ut
 *.exe
 *.ilk
 *.pdb
-build/
 .idea/
 cmake/

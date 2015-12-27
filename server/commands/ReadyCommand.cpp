@@ -100,7 +100,7 @@ namespace RType
             room->broadcastTCP(RType::Request(RType::Request::SE_GAMESTART)
                             .toBuffer());
             e.addComponent(std::make_unique<Component::Game>());
-            if (room->getMap() == nullptr) // TODO handle better
+            if (room->getMap() == nullptr)
                 throw std::runtime_error("Room's map is not set");
             e.getComponent<Component::Game>()->start(*room->getMap());
             Server::display("Room '" + room->getRoomName() + "' launched");
