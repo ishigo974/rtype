@@ -184,12 +184,21 @@ void        Player::checkDeath()
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
+<<<<<<< HEAD
+	    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	    for (auto             play : sound)
+	      {
+		static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+		  ->setSoundToPlay(AudioEffectPlayer::Death);
+	      }
+=======
 	        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
 	        for (auto play : sound)
 	        {
                 static_cast<GameObject *>(play)->getComponent<AudioEffect>()
                     ->setSoundToPlay("../client/res/mobDeath.wav");
             }
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
         }
     }
 }
@@ -207,7 +216,11 @@ void    Player::shoot()
     for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+<<<<<<< HEAD
+                                       ->setSoundToPlay(AudioEffectPlayer::Shot1);
+=======
                                        ->setSoundToPlay("../client/res/laser1.wav");
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
     }
 }
 

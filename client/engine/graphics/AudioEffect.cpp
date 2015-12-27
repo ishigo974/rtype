@@ -1,5 +1,6 @@
 #include "NotImplemented.hpp"
 #include "AudioEffect.hpp"
+#include "AudioEffectPlayer.hpp"
 
 AudioEffect::AudioEffect(unsigned id, std::string const &name)
 	: Component(id, name)
@@ -107,5 +108,5 @@ void	AudioEffect::clearSounds()
 
 void AudioEffect::restartBackgroud()
 {
-	_sounds["../client/res/OnePunch.wav"] = true;
+	_sounds[AudioEffectPlayer::Background] = true;
 }

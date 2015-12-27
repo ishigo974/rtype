@@ -110,7 +110,7 @@ bool        Mob::handleMessage(Collider *o)
         for (auto             play : sound)
         {
             static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                           ->setSoundToPlay("../client/res/mobDeath.wav");
+                                           ->setSoundToPlay(AudioEffectPlayer::Death);
         }
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");

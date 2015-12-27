@@ -218,8 +218,7 @@ bool Bullet::handleMessage(Collider *)
     for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                       ->setSoundToPlay("../client/res/bulletExplosion"
-                                                                ".wav");
+                                       ->setSoundToPlay(AudioEffectPlayer::Explosion);
     }
     return (true);
 }

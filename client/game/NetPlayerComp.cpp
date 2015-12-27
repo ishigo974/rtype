@@ -110,7 +110,7 @@ void		NetPlayerComp::checkDeath()
 	  for (auto             play : sound)
 	    {
 	      static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-		->setSoundToPlay("../client/res/mobDeath.wav");
+    		->setSoundToPlay(AudioEffectPlayer::Death);
 	    }
 	}
     }
@@ -129,7 +129,11 @@ void	NetPlayerComp::shoot()
     for (auto play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+<<<<<<< HEAD
+                                       ->setSoundToPlay(AudioEffectPlayer::Shot1);
+=======
                                        ->setSoundToPlay("../client/res/laser1.wav");
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
     }
 }
 
