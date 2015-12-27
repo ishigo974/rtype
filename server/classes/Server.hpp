@@ -72,6 +72,7 @@ namespace RType
         static const CLICMDHandlers cliCmdHandlers;
         static const std::string    mobTypesPath;
         static const std::string    mapsPath;
+        static double               lag;
 
     protected:
         short int                   _port;
@@ -82,6 +83,7 @@ namespace RType
         ECS::SystemManager&         _sm;
         std::vector<unsigned int>   _disconnected;
         Time::GameClock             _clock;
+        double                      _lag;
     };
 }
 

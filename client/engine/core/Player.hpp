@@ -9,6 +9,7 @@
 # include "BulletObject.hpp"
 # include "EntityManager.hpp"
 # include "Collider.hpp"
+# include "TextField.hpp"
 
 class Player : public Behaviour
 {
@@ -31,29 +32,31 @@ public:
     virtual int     getDamage() const;
     void            init();
     void            swap(Player& other);
-    std::string    toString() const;
+    TextField const *getGUI();
+    std::string     toString() const;
 
 protected:
-    virtual bool   handleMessage(Collider *o);
-    void	       checkDeath();
-    void	       checkAvailableBullets();
-    void           shoot();
-    void           move(double elapsedtime);
-    int            getHp() const;
+    virtual bool handleMessage(Collider *o);
+    void         checkDeath();
+    void         checkAvailableBullets();
+    void         shoot();
+    void         move(double elapsedtime);
+    int          getHp() const;
 
-    const std::vector<BulletObject *> &getActiveBullets() const;
+    const std::vector<BulletObject *>& getActiveBullets() const;
 
 protected:
-    GameObject                          *_parent;
-    int                                 _hp;
-    int                                 _damage;
-    std::queue<ACommand::Action>        _action;
-    bool                                _multiple = false;
-    ObjectPool<BulletObject, Bullet>    *_bullets;
-    std::vector<BulletObject *>         _activeBullets;
-    EntityManager*                      _entityManager;
-    Transform*                          _transform;
-    double                              _shotTime = 0;
+    GameObject                       *_parent;
+    int                              _hp;
+    int                              _damage;
+    std::queue<ACommand::Action>     _action;
+    bool                             _multiple = false;
+    ObjectPool<BulletObject, Bullet> *_bullets;
+    std::vector<BulletObject *>      _activeBullets;
+    EntityManager                    *_entityManager;
+    Transform                        *_transform;
+    double                           _shotTime = 0;
+    TextField                        _gui;
 };
 
 #endif /* !PLAYER_HPP_ */

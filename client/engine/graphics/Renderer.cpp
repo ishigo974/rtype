@@ -8,13 +8,13 @@
 #include "GUIManager.hpp"
 #include "StateMachine.hpp"
 #include "GameConfig.hpp"
+#include "Player.hpp"
 
 unsigned int const Renderer::width  = RType::Map::width;
 unsigned int const Renderer::height = RType::Map::height;
 
 Renderer::Renderer(EntityManager *em) :
         _win(sf::VideoMode(Renderer::width, Renderer::height), "Hey-Type"),
-            //  sf::Style::Titlebar | sf::Style::Close),
         _em(em)
 {
     _win.setFramerateLimit(60);
@@ -34,11 +34,11 @@ void    Renderer::init()
     boost::property_tree::read_json(buf, pt);
 
     BOOST_FOREACH(boost::property_tree::ptree::value_type& v, pt)
-                {
-                    this->_res.addTexture(v.first.data(),
-                                          v.second.get<std::string>("path"),
-                                          v.second.get<bool>("repeated"));
-                }
+        {
+            this->_res.addTexture(v.first.data(),
+                                  v.second.get<std::string>("path"),
+                                  v.second.get<bool>("repeated"));
+        }
 }
 
 void Renderer::render()
@@ -57,6 +57,13 @@ void Renderer::render()
         for (auto i : obj)
             if (static_cast<GameObject *>(i)->isVisible())
                 this->drawGUI(static_cast<Menu *>(i));
+    }
+    {
+        auto obj = this->_em->getByMask(PlayerMask);
+        for (auto i : obj)
+            if (static_cast<GameObject *>(i)->isVisible())
+                this->drawGUIElement(static_cast<PlayerObject *>(i));
+
     }
     this->_win.display();
 }
@@ -90,11 +97,8 @@ void Renderer::draw(const GameObject *object)
     this->_win.draw(sprite);
 }
 
-#include <iostream>
 void Renderer::drawGUI(const Menu *object)
 {
-    // if (!object->isVisible())
-    //     return ;
     GUIManager      *gm = object->getComponent<GUIManager>();
 
     if (gm == nullptr)
@@ -112,6 +116,19 @@ void Renderer::drawGUI(const Menu *object)
            }
        }
 }
+
+void Renderer::drawGUIElement(PlayerObject* player)
+{
+    auto element = player->getComponent<Player>()->getGUI();
+    if (element != nullptr)
+    {
+        std::vector<const sf::Drawable *> tmp = element->getDrawable();
+        // if (tmp != nullptr)
+        for (auto drawable : tmp)
+            this->_win.draw(*drawable);
+    }
+}
+
 
 Renderer::~Renderer()
 { }

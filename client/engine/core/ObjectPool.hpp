@@ -17,7 +17,6 @@ public:
             obj = _entityManager->createEntity<T>(name, layer, _entityManager);
             obj->create();
             obj->deleteObject();
-            // std::cout << "test" << std::endl;
             _objects.push(obj);
         }
     }
@@ -41,7 +40,6 @@ public:
             obj = _objects.front();
             _objects.pop();
         }
-        // TODO delete obj->init();
         return obj;
     }
 

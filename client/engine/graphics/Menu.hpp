@@ -68,35 +68,35 @@ public:
 
 private:
     std::vector<TextField *>    _roomsTextField;
-	std::vector<TextField *>    _playersInRoom;
-	std::vector<TextField *>    _scores;
-    
+    std::vector<TextField *>    _playersInRoom;
+    std::vector<TextField *>    _scores;
+
     TextField                   _mainTitle;
     TextField                   _changeName;
     TextField                   _createRoom;
-	TextField                   _refresh;
-	TextField                   _continue;
+    TextField                   _refresh;
+    TextField                   _continue;
     TextField                   _back;
     TextField                   _roomTitle;
     TextField                   _readyField;
     TextField                   _inputRoomName;
     TextField                   _inputUserName;
 
-    State		                _titleState;
-    State		                _mainMenu;
-    State		                _inRoom;
-    State		                _createRoomState;
-	State                       _changeNameState;
-	State                       _endGameState;
+    State                       _titleState;
+    State                       _mainMenu;
+    State                       _inRoom;
+    State                       _createRoomState;
+    State                       _changeNameState;
+    State                       _endGameState;
 
     StateMachine*               _sm;
 
     cu::Event*                  _event;
     EntityManager*              _em;
     GameManager*                _gm;
-    bool		                _ready;
-    bool		                _isVisible;
-    TCPView*	                _network;
+    bool                        _ready;
+    bool                        _isVisible;
+    TCPView*                    _network;
     RType::Request::RoomsTab    _roomsList;
     RType::Request::PlayersTab  _playersList;
 

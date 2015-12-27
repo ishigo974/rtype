@@ -6,7 +6,9 @@
 # include "GameObject.hpp"
 # include "Resources.hpp"
 # include "Menu.hpp"
-
+# include "TextField.hpp"
+# include "Player.hpp"
+# include "PlayerObject.hpp"
 
 class Renderer
 {
@@ -32,6 +34,7 @@ public:
 private:
     void draw(const GameObject*);
     void drawGUI(const Menu *);
+    void drawGUIElement(PlayerObject*);
 
 private:
     sf::RenderWindow    _win;

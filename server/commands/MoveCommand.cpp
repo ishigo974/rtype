@@ -8,6 +8,7 @@
 #include "PlayerComponent.hpp"
 #include "InGameEvent.hpp"
 #include "GameConfig.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -104,7 +105,7 @@ namespace RType
                                 .getComponent<Component::Game>()) == nullptr))
                 throw std::runtime_error("Entity does not have a "
                                          "position/room/game component");
-            move = Speed::ship * Config::loopDuration;
+            move = Speed::ship * Server::lag;//Config::loopDuration;
             switch (_direction)
             {
                 case NONE:

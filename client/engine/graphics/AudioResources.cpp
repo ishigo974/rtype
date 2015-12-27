@@ -2,23 +2,21 @@
 
 AudioResources::AudioResources()
 {
-	_buffs["../res/0NoSound.wav"] = sf::SoundBuffer();
-	if (!_buffs["../res/NoSound.wav"].loadFromFile("../res/NoSound.wav"))
+	_buffs["../client/res/NoSound.wav"] = sf::SoundBuffer();
+	if (!_buffs["../client/res/NoSound.wav"].loadFromFile("../client/res/NoSound.wav"))
 		std::cout << "Fail init NoSound" << std::endl;
-	//throw std::runtime_error("../res/NoSound.png not found");
+	//throw std::runtime_error("../client/res/NoSound.png not found");
 }
 
 AudioResources::~AudioResources()
-{
-
-}
+{ }
 
 const sf::SoundBuffer &AudioResources::getBuffer(const std::string& path) const
 {
 	if (_buffs.find(path) != _buffs.end())
 		return _buffs.at(path);
 	else
-		return _buffs.at("../res/NoSound.wav");
+		return _buffs.at("../client/res/NoSound.wav");
 }
 
 const sf::SoundBuffer &AudioResources::operator[](const std::string& path) const

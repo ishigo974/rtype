@@ -8,9 +8,7 @@ Label::Label(gu::Rect<float> const& rect, std::string const& str, unsigned int s
   this->_text.setFont(this->_font);
   this->_text.setString(str);
   this->_text.setCharacterSize(size);
-  this->_text.setPosition(static_cast<float>(rect.x),
-			  static_cast<float>(rect.y));
-  static_cast<void>(_size); //TODO LE VIRER
+  this->_text.setPosition(rect.x, rect.y);
 }
 
 Label::~Label()

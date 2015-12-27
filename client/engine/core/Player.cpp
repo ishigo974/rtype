@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "Player.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
@@ -13,9 +14,16 @@ Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage) :
-        Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
+Player::Player(unsigned int _id, std::string const& _name,
+               EntityManager *manager, int hp, int damage) :
+    Behaviour(_id, _name),
+    _hp(hp),
+    _damage(damage),
+    _entityManager(manager),
+    _transform(0),
+    _gui(gu::Rect<float>(30, 30, 300, 50), "HP : 10", 10, 16)
 {
+    _gui.setForeColor(sf::Color::White);
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -28,6 +36,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _transform     = other._transform;
     _activeBullets = other._activeBullets;
     _damage        = other._damage;
+    _gui           = other._gui;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -71,6 +80,7 @@ void Player::swap(Player& other)
     swap(_activeBullets, other._activeBullets);
     swap(_transform, other._transform);
     swap(_damage, other._damage);
+    swap(_gui, other._gui);
 }
 
 namespace std
@@ -85,6 +95,11 @@ namespace std
 RTypes::my_uint16_t     Player::getMask() const
 {
     return Mask;
+}
+
+TextField const*  Player::getGUI()
+{
+    return &_gui;
 }
 
 std::string Player::toString() const
@@ -126,24 +141,28 @@ void        Player::move(double elapsedtime)
     double move;
 
     if (_hp <= 0)
-        return ;
+        return;
 
     move = speed * elapsedtime;
     if (_action.empty())
-        return ;
+        return;
     switch (_action.front())
     {
         case ACommand::UP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - move);
+            if (_transform->getPosition().Y() - move > 0)
+                _transform->getPosition().setY(_transform->getPosition().Y() - move);
             break;
         case ACommand::DOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + move);
+            if (_transform->getPosition().Y() + move < RType::Map::height)
+                _transform->getPosition().setY(_transform->getPosition().Y() + move);
             break;
         case ACommand::LEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - move);
+            if (_transform->getPosition().X() - move > 0)
+                _transform->getPosition().setX(_transform->getPosition().X() - move);
             break;
         case ACommand::RIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + move);
+            if (_transform->getPosition().X() + move < RType::Map::width)
+                _transform->getPosition().setX(_transform->getPosition().X() + move);
             break;
         default:
             break;
@@ -159,19 +178,27 @@ void        Player::checkDeath()
 {
     if (_hp <= 0)
     {
-        std::cout << "Player Mort" << std::endl;
-
         if (!_parent->getComponent<Animation>()->isPlaying())
         {
+            // TODO remove std::cout << "Player Mort" << std::endl;
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
+<<<<<<< HEAD
 	    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
 	    for (auto             play : sound)
 	      {
 		static_cast<GameObject *>(play)->getComponent<AudioEffect>()
 		  ->setSoundToPlay(AudioEffectPlayer::Death);
 	      }
+=======
+	        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	        for (auto play : sound)
+	        {
+                static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                    ->setSoundToPlay("../client/res/mobDeath.wav");
+            }
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
         }
     }
 }
@@ -189,7 +216,11 @@ void    Player::shoot()
     for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+<<<<<<< HEAD
                                        ->setSoundToPlay(AudioEffectPlayer::Shot1);
+=======
+                                       ->setSoundToPlay("../client/res/laser1.wav");
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
     }
 }
 
@@ -237,7 +268,10 @@ bool Player::handleMessage(Collider *o)
     GameObject *otherParent = static_cast<GameObject *>(o->parent());
 
     if (otherParent->getComponent<Mob>() != nullptr)
+    {
         _hp -= 1;
+        _gui.setText(std::string("HP : ") + std::to_string(_hp));
+    }
     if (_hp == 0)
     {
         _parent->getComponent<Collider>()->setEnabled(false);

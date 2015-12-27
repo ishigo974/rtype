@@ -7,7 +7,7 @@ Collider::Collider() : Component()
 { }
 
 Collider::Collider(unsigned int _id, std::string const& _name, int width, int height)
-  : Component(_id, _name), _bounds(0, 0, width, height), _enabled(true)
+        : Component(_id, _name), _bounds(0, 0, width, height), _enabled(true)
 { }
 
 Collider::Collider(Collider const& other) : Component(other)
@@ -85,17 +85,17 @@ namespace std
     }
 }
 
-bool Collider::intersects(Collider *o)
+bool Collider::intersects(Collider *o) const
 {
     return (_bounds.intersects(o->_bounds));
 }
 
-bool		Collider::isEnabled() const
+bool        Collider::isEnabled() const
 {
     return _enabled;
 }
 
-void		Collider::setEnabled(bool e)
+void        Collider::setEnabled(bool e)
 {
     _enabled = e;
 }

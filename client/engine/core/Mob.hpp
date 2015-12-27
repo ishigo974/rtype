@@ -44,9 +44,7 @@ public:
     RType::MobType::MovePattern const&     getMovePattern() const;
     bool                            getAvailable() const;
     int&                            getState();
-    unsigned int                    getEntityId() const;
 
-    void    setEntityId(unsigned int id);
     void    setName(std::string const & name);
     void    setLives(unsigned int lives);
     void    setScoreValue(unsigned int scoreValue);
@@ -75,7 +73,6 @@ protected:
     GameObject*                 _parent;
     bool                        _available;
     EntityManager*              _em;
-    unsigned int                _entityId;
 };
 
 #endif /* !MOB_HPP_ */

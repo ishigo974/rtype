@@ -100,7 +100,7 @@ void		NetPlayerComp::checkDeath()
 {
   if (_hp <= 0)
     {
-      std::cout << "NetPlayer Mort" << std::endl;
+      // TODO remove std::cout << "NetPlayer Mort" << std::endl;
       if (!_parent->getComponent<Animation>()->isPlaying())
         {
 	  _enabled = false;
@@ -110,7 +110,7 @@ void		NetPlayerComp::checkDeath()
 	  for (auto             play : sound)
 	    {
 	      static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-		->setSoundToPlay(AudioEffectPlayer::Death);
+    		->setSoundToPlay(AudioEffectPlayer::Death);
 	    }
 	}
     }
@@ -129,7 +129,11 @@ void	NetPlayerComp::shoot()
     for (auto play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+<<<<<<< HEAD
                                        ->setSoundToPlay(AudioEffectPlayer::Shot1);
+=======
+                                       ->setSoundToPlay("../client/res/laser1.wav");
+>>>>>>> f730fe49f3a85053114ec00e370556e7a82bb9cd
     }
 }
 
@@ -151,7 +155,7 @@ void		NetPlayerComp::init()
     _parent = static_cast<GameObject *>(parent());
     _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _em);
     _udp = _parent->getComponent<UDPView>();
-    std::cout << _hp << std::endl;
+    // TODO remove std::cout << _hp << std::endl;
 }
 
 void		NetPlayerComp::update(double elapsedtime)
