@@ -20,7 +20,7 @@ namespace RType
               _connector(addr, tcp), _udpSock(udpPort), _addr(addr)
     {
         _udpSock.setTimeoutSec(0);
-        _udpSock.setTimeoutUsec(1000);
+        _udpSock.setTimeoutUsec(1);
         _udpSock.bind();
         _connector.connect();
         SocketMonitor::getInstance().registerSocket(&_connector);
