@@ -62,17 +62,22 @@ bool Transform::operator!=(Transform const& other)
 
 std::string Transform::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "Transform {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tPosition: " << _position.toString()
-    << "\n\tScale: " << _scale.toString()
-    << "\n\tRotation: " << _rotation.toString()
-    << "\n}" << std::endl;
-
-    return (ss.str());
+    ss = "Transform {";
+    ss += "\n\tid: ";
+    ss += _id;
+    ss += "\n\tname: ";
+    ss += _name;
+    ss += "\n\tPosition: ";
+    ss +=_position.toString();
+    ss += "\n\tScale: ";
+    ss += _scale.toString();
+    ss += "\n\tRotation: ";
+    ss += _rotation.toString();
+    ss += "\n}\n";
+    
+    return (ss);
 }
 
 void Transform::swap(Transform& second)

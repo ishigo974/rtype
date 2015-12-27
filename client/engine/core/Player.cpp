@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "Player.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
@@ -13,9 +14,16 @@ Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage) :
-        Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
+Player::Player(unsigned int _id, std::string const& _name,
+               EntityManager *manager, int hp, int damage) :
+    Behaviour(_id, _name),
+    _hp(hp),
+    _damage(damage),
+    _entityManager(manager),
+    _transform(0),
+    _gui(gu::Rect<float>(30, 30, 300, 50), "HP : 10", 10, 16)
 {
+    _gui.setForeColor(sf::Color::White);
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -28,6 +36,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _transform     = other._transform;
     _activeBullets = other._activeBullets;
     _damage        = other._damage;
+    _gui           = other._gui;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -71,6 +80,7 @@ void Player::swap(Player& other)
     swap(_activeBullets, other._activeBullets);
     swap(_transform, other._transform);
     swap(_damage, other._damage);
+    swap(_gui, other._gui);
 }
 
 namespace std
@@ -87,19 +97,27 @@ RTypes::my_uint16_t     Player::getMask() const
     return Mask;
 }
 
+TextField const*  Player::getGUI()
+{
+    return &_gui;
+}
+
 std::string Player::toString() const
 {
-    std::stringstream ss;
+  std::string ss;
 
-    ss << "Player {"
-    << "\n\thp: " << _hp
-    << "\n\tdamage: " << _damage
-    << "\n\tenabled: " << _enabled;
+    ss += "Player {";
+    ss += "\n\thp: ";
+    ss += _hp;
+    ss += "\n\tdamage: ";
+    ss += _damage;
+    ss += "\n\tenabled: ";
+    ss += _enabled;
     if (_transform)
-        ss << "\n\t" << _transform->toString();
-    ss << "\n}" << std::endl;
+        ss += "\n\t" + _transform->toString();
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 int    Player::getDamage() const
@@ -148,7 +166,6 @@ void        Player::move(double elapsedtime)
         default:
             break;
     }
-    std::cout << "Player move: " << _transform->getPosition().X() << " " << _transform->getPosition().Y() << std::endl;
 }
 
 const std::vector<BulletObject *>& Player::getActiveBullets() const
@@ -160,13 +177,18 @@ void        Player::checkDeath()
 {
     if (_hp <= 0)
     {
-        std::cout << "Player Mort" << std::endl;
-
         if (!_parent->getComponent<Animation>()->isPlaying())
         {
+            // TODO remove std::cout << "Player Mort" << std::endl;
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
+	        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	        for (auto play : sound)
+	        {
+                static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                    ->setSoundToPlay("../res/mobDeath.wav");
+            }
         }
     }
 }
@@ -232,7 +254,10 @@ bool Player::handleMessage(Collider *o)
     GameObject *otherParent = static_cast<GameObject *>(o->parent());
 
     if (otherParent->getComponent<Mob>() != nullptr)
+    {
         _hp -= 1;
+        _gui.setText(std::string("HP : ") + std::to_string(_hp));
+    }
     if (_hp == 0)
     {
         _parent->getComponent<Collider>()->setEnabled(false);

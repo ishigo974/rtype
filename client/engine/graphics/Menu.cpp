@@ -25,7 +25,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
    _gm(nullptr),
    _ready(false), _isVisible(true),
    _network(nullptr),
-   _done(false)
+   _done(false),
+   _networkReject(false)
 {
     initTextFields();
     transitionToStates();
@@ -36,13 +37,24 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
 }
 
 Menu::Menu(Menu const& other) :
-        GameObject(other),
-        _mainTitle(other._mainTitle),
-        _refresh(other._refresh),
-        _back(other._back),
-        _roomTitle(other._roomTitle),
-        _event(other._event),
-        _done(other._done)
+        GameObject(other), _roomsTextField(other._roomsTextField),
+        _playersInRoom(other._playersInRoom), _scores(other._scores),
+        _mainTitle(other._mainTitle), _changeName(other._changeName),
+        _createRoom(other._createRoom), _refresh(other._refresh),
+        _continue(other._continue), _back(other._back),
+        _roomTitle(other._roomTitle), _readyField(other._readyField),
+        _inputRoomName(other._inputRoomName),
+        _inputUserName(other._inputUserName),
+        _titleState(other._titleState), _mainMenu(other._mainMenu),
+        _inRoom(other._inRoom), _createRoomState(other._createRoomState),
+        _changeNameState(other._changeNameState),
+        _endGameState(other._endGameState), _sm(other._sm),
+        _event(other._event), _em(other._em), _gm(other._gm),
+        _ready(other._ready), _isVisible(other._isVisible),
+        _network(other._network), _roomsList(other._roomsList),
+        _playersList(other._playersList), _user(other._user),
+        _lastRequest(other._lastRequest), _done(other._done),
+        _networkReject(other._networkReject)
 {}
 
 Menu::Menu(Menu&& other) :
@@ -63,12 +75,12 @@ Menu::~Menu()
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
         delete *it;
     _roomsTextField.clear();
-	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-		delete *it;
-	_playersInRoom.clear();
-	for (auto it = _scores.begin(); it != _scores.end(); ++it)
-		delete *it;
-	_scores.clear();
+    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+        delete *it;
+    _playersInRoom.clear();
+    for (auto it = _scores.begin(); it != _scores.end(); ++it)
+        delete *it;
+    _scores.clear();
 }
 
 bool Menu::operator==(Menu const& other)
@@ -90,11 +102,38 @@ void Menu::swap(Menu& other)
 {
     using std::swap;
 
+    swap(_roomsTextField, other._roomsTextField);
+    swap(_playersInRoom, other._playersInRoom);
+    swap(_scores, other._scores);
     swap(_mainTitle, other._mainTitle);
+    swap(_changeName, other._changeName);
+    swap(_createRoom, other._createRoom);
     swap(_refresh, other._refresh);
+    swap(_continue, other._continue);
     swap(_back, other._back);
     swap(_roomTitle, other._roomTitle);
-    // TODO: swap les autres attributs
+    swap(_readyField, other._readyField);
+    swap(_inputRoomName, other._inputRoomName);
+    swap(_inputUserName, other._inputUserName);
+    swap(_titleState, other._titleState);
+    swap(_mainMenu, other._mainMenu);
+    swap(_inRoom, other._inRoom);
+    swap(_createRoomState, other._createRoomState);
+    swap(_changeNameState, other._changeNameState);
+    swap(_endGameState, other._endGameState);
+    swap(_sm, other._sm);
+    swap(_event, other._event);
+    swap(_em, other._em);
+    swap(_gm, other._gm);
+    swap(_ready, other._ready);
+    swap(_isVisible, other._isVisible);
+    swap(_network, other._network);
+    swap(_roomsList, other._roomsList);
+    swap(_playersList, other._playersList);
+    swap(_user, other._user);
+    swap(_lastRequest, other._lastRequest);
+    swap(_done, other._done);
+    swap(_networkReject, other._networkReject);
 }
 
 void Menu::initTextFields()
@@ -182,7 +221,7 @@ void Menu::joinRoom(RType::Request::Room room)
 
     std::cout << "Join room: " << room.name << "ID: " << room.id << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
-    request.push<uint8_t>("room_id", room.id);
+    request.push<uint32_t>("room_id", room.id);
     _network->pushToSend(request);
     _lastRequest.push_back(request);
 }
@@ -451,10 +490,22 @@ void Menu::transitionToStates()
         return false;
     }, _event, &_inputUserName, &_back, this);
 
+    _inRoom.addTransition("mainMenu", [&](bool *reject)
+    {
+      if (*reject)
+	{
+	  *reject = false;
+	  clearPlayers();
+	  refreshRoomList();
+	  return true;
+        }
+      return false;
+    }, &_networkReject);
+
     _inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
                                         TextField *r, Menu *menu)
     {
-		if (e->type == cu::Event::MouseButtonReleased &&
+        if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
             menu->quitRoom();
@@ -468,8 +519,8 @@ void Menu::transitionToStates()
         return false;
     }, _event, &_back, &_readyField, this);
 
-	_inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
-	{
+    _inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
+    {
         return menu->done();
     }, _event, this);
 
@@ -487,18 +538,18 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_titleState.getName(), &_mainTitle);
 
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
-	    gm->addGUIElement(_mainMenu.getName(), *it);
+        gm->addGUIElement(_mainMenu.getName(), *it);
 
-	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-	{
-		gm->addGUIElement(_inRoom.getName(), *it);
-		gm->addGUIElement(_endGameState.getName(), *it);
-	}
+    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+    {
+        gm->addGUIElement(_inRoom.getName(), *it);
+        gm->addGUIElement(_endGameState.getName(), *it);
+    }
 
-	for (auto it = _scores.begin(); it != _scores.end(); ++it)
-		gm->addGUIElement(_endGameState.getName(), *it);
+    for (auto it = _scores.begin(); it != _scores.end(); ++it)
+        gm->addGUIElement(_endGameState.getName(), *it);
 
-	gm->addGUIElement(_mainMenu.getName(), &_refresh);
+    gm->addGUIElement(_mainMenu.getName(), &_refresh);
     gm->addGUIElement(_mainMenu.getName(), &_createRoom);
     gm->addGUIElement(_mainMenu.getName(), &_changeName);
     gm->addGUIElement(_createRoomState.getName(), &_back);
@@ -507,8 +558,8 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_changeNameState.getName(), &_inputUserName);
     gm->addGUIElement(_inRoom.getName(), &_back);
     gm->addGUIElement(_inRoom.getName(), &_roomTitle);
-	gm->addGUIElement(_inRoom.getName(), &_readyField);
-	gm->addGUIElement(_endGameState.getName(), &_continue);
+    gm->addGUIElement(_inRoom.getName(), &_readyField);
+    gm->addGUIElement(_endGameState.getName(), &_continue);
 }
 
 void Menu::setupStates()
@@ -516,8 +567,8 @@ void Menu::setupStates()
     _sm->addState(_mainMenu);
     _sm->addState(_inRoom);
     _sm->addState(_createRoomState);
-	_sm->addState(_changeNameState);
-	_sm->addState(_endGameState);
+    _sm->addState(_changeNameState);
+    _sm->addState(_endGameState);
 }
 
 namespace std
@@ -536,54 +587,53 @@ void Menu::move()
 
 void Menu::update()
 {
-//	std::cout << "update" << std::endl;
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
-        // std::cout << "{CODE} " << tmp.getCode() << std::endl;
+        std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
-				std::cout << "from serv: list room" << std::endl;
+                std::cout << "from serv: list room" << std::endl;
                 break;
             case RType::Request::SE_JOINROOM :
                 addPlayer(tmp);
-				std::cout << "from serv: join room" << std::endl;
-				break;
+                std::cout << "from serv: join room" << std::endl;
+                break;
             case RType::Request::SE_QUITROOM :
                 deletePlayer(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: quit room" << std::endl;
-				break;
+                std::cout << "from serv: quit room" << std::endl;
+                break;
             case RType::Request::SE_CLIENTRDY :
                 userReady(tmp);
-				std::cout << "from serv: client rdy" << std::endl;
-				break;
+                std::cout << "from serv: client rdy" << std::endl;
+                break;
             case RType::Request::SE_CLINOTRDY :
                 playerNotReady(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: client not rdy" << std::endl;
-				break;
+                std::cout << "from serv: client not rdy" << std::endl;
+                break;
             case RType::Request::SE_CLIUSRNM :
                 changePlayerName(tmp);
-				std::cout << "from serv: client uname" << std::endl;
-				break;
+                std::cout << "from serv: client uname" << std::endl;
+                break;
             case RType::Request::SE_ROOMINFO :
                 _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
-				std::cout << "from serv: room info" << std::endl;
-				break;
+                std::cout << "from serv: room info" << std::endl;
+                break;
             case RType::Request::SE_GAMESTART :
                 _done = true;
-				std::cout << "from serv: game start" << std::endl;
-				break;
+                std::cout << "from serv: game start" << std::endl;
+                break;
             case RType::Request::SE_ENDOFGAME:
                 endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
-				std::cout << "from serv: ok" << std::endl;
-				break;
+                std::cout << "from serv: ok" << std::endl;
+                break;
             case RType::Request::SE_KO :
-                //TODO REVERSE STATE
+                reverseState();
                 break;
             default :
                 break;
@@ -671,4 +721,23 @@ void Menu::quitRoom()
     _network->pushToSend(RType::Request(RType::Request::CL_QUITROOM));
     _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
     _gm->clearPlayers();
+}
+
+void Menu::reverseState()
+{
+    if (!_lastRequest.empty())
+      {
+	_networkReject = true;
+	switch (_lastRequest.front().getCode())
+        {
+            case RType::Request::CL_CREATEROOM :
+                _gm->clearPlayers();
+                break;
+            case RType::Request::CL_JOINROOM :
+                _gm->clearPlayers();
+                break;
+            default:
+                break;
+        }
+      }
 }

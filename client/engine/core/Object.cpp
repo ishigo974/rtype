@@ -33,15 +33,16 @@ Object& Object::operator=(Object other)
 
 std::string Object::toString() const
 {
-    std::stringstream ss;
+  std::string ss;
 
-    ss << "Object {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n}" << std::endl;
+  ss = "Object {";
+  ss += "\n\tid: ";
+  ss += _id;
+  ss += "\n\tname: ";
+  ss +=_name;
+  ss += "\n}\n";
 
-
-    return (ss.str());
+    return (ss);
 }
 
 unsigned int Object::getId() const

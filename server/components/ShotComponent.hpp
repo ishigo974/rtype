@@ -26,6 +26,7 @@ namespace RType
 
         public:
             virtual void                update();
+            void                        collide(ECS::Entity& entity);
 
         public:
             RType::Shot::Type           getType() const;

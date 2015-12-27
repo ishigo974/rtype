@@ -2,7 +2,7 @@
 
 AudioResources::AudioResources()
 {
-	_buffs["../client/res/0NoSound.wav"] = sf::SoundBuffer();
+	_buffs["../client/res/NoSound.wav"] = sf::SoundBuffer();
 	if (!_buffs["../client/res/NoSound.wav"].loadFromFile("../client/res/NoSound.wav"))
 		std::cout << "Fail init NoSound" << std::endl;
 	//throw std::runtime_error("../res/NoSound.png not found");

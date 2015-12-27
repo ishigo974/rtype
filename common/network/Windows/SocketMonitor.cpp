@@ -11,8 +11,8 @@
 /*
 ** Static variables
 */
-const long                          SocketMonitor::defaultSecVal  = 5;
-const long                          SocketMonitor::defaultUsecVal = 0;
+const long                          SocketMonitor::defaultSecVal  = 0;
+const long                          SocketMonitor::defaultUsecVal = 1;
 const unsigned int                  SocketMonitor::noFd           = 0;
 SocketMonitor::UniqueMonitorPtr     SocketMonitor::instance;
 
@@ -126,12 +126,12 @@ void SocketMonitor::update()
 
     _socketEvents.clear();
     index = WSAWaitForMultipleEvents(_eventTotal, _eventArray.data(), FALSE,
-                                     _secValue, FALSE);
+                                     _usecValue, FALSE);
     index = index - WSA_WAIT_EVENT_0;
     if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
         for (DWORD i = 0; i < _eventTotal; i++)
         {
-            index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, 1000,
+            index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, _usecValue,
                                              FALSE);
             if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
             {

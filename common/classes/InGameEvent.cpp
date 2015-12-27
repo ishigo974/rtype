@@ -18,6 +18,7 @@ namespace RType
         { InGameEvent::SE_PLAYERRIGHT,  { "player_id", "time"               } },
         { InGameEvent::SE_SHOT,         { "player_id", "shot_type", "time"  } },
         { InGameEvent::SE_MOBSPAWNED,   { "mob_id", "x", "y", "time"        } },
+        // { InGameEvent::SE_MOBMOVED,     { "mob_id", "x", "y", "time"        } },
         { InGameEvent::SE_INPUTERROR,   { "time"                            } },
         { InGameEvent::SE_PLYRDISCONN,  {                                   } },
         { InGameEvent::CL_PLAYERUP,     { "time"                            } },

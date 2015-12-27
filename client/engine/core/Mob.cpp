@@ -6,6 +6,7 @@
 #include "Collider.hpp"
 #include "Player.hpp"
 #include "Animation.hpp"
+#include "AudioEffect.hpp"
 
 /*
 ** Constructor/Destructor
@@ -18,11 +19,12 @@ Mob::Mob() :
 {
 }
 
-Mob::Mob(unsigned int id, std::string const& name, RType::MobType::IMobType const*) :
+Mob::Mob(unsigned int id, std::string const& name, EntityManager* em, RType::MobType::IMobType const*) :
     Behaviour(id, name), _lives(0),
     _scoreValue(0), _spriteFilePath(""),
     _movePattern(), _transform(nullptr),
-    _state(1), _parent(nullptr)
+    _state(1), _parent(nullptr),
+    _em(em)
 {
 }
 
@@ -37,7 +39,7 @@ Mob::Mob(Mob const& other) :
     Behaviour(other), _id(other._id), _name(other._name), _lives(other._lives),
     _scoreValue(other._scoreValue), _spriteFilePath(other._spriteFilePath),
     _movePattern(other._movePattern), _transform(other._transform),
-    _state(other._state), _parent(other._parent)
+    _state(other._state), _parent(other._parent), _em(other._em)
 {
 }
 
@@ -75,7 +77,6 @@ RTypes::my_uint16_t     Mob::getMask() const
 */
 void        Mob::init(RType::MobType::IMobType const* type)
 {
-    std::cout << "Fuck Menizob" << std::endl;
     initTransform();
     if (!_parent)
         _parent = static_cast<GameObject *>(parent());
@@ -105,6 +106,12 @@ bool        Mob::handleMessage(Collider *o)
         _lives -= 1;
     if (_lives == 0)
     {
+              std::vector<Object *> sound = _em->getByMask(SoundMask);
+        for (auto             play : sound)
+        {
+            static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                           ->setSoundToPlay("../res/mobDeath.wav");
+        }
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");
         _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
@@ -134,6 +141,7 @@ void		Mob::move(double elapsedTime)
 
     _transform->getPosition().setX(pos.X());
     _transform->getPosition().setY(pos.Y());
+    // TODO remove std::cout << pos.X() << " " << pos.Y() << std::endl;
 }
 
 void		Mob::update(double elapsedTime)
@@ -153,7 +161,7 @@ void		Mob::update(double elapsedTime)
         || _transform->getPosition().Y() > Renderer::height + 1000
         || _transform->getPosition().Y() < -1000)
         _lives = 0;
-    this->move(elapsedTime);
+    move(elapsedTime);
 }
 
 void            Mob::addLives(unsigned int nb)
@@ -262,6 +270,7 @@ void Mob::swap(Mob& other)
     swap(_transform, other._transform);
     swap(_state, other._state);
     swap(_parent, other._parent);
+    swap(_em, other._em);
 }
 
 namespace std

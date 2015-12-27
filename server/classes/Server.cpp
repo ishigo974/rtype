@@ -30,6 +30,7 @@
 #include "LobbySystem.hpp"
 #include "InGameSystem.hpp"
 #include "GameSystem.hpp"
+#include "CollisionSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
@@ -42,6 +43,7 @@
 #include "PositionComponent.hpp"
 #include "ShotComponent.hpp"
 #include "MobComponent.hpp"
+#include "ColliderComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"
@@ -58,6 +60,7 @@ namespace RType
     const unsigned int  Server::stdinFileNo     = STDIN_FILENO;
     const std::string   Server::mobTypesPath    = ".rtypemobs";
     const std::string   Server::mapsPath        = ".rtypemaps";
+    double              Server::lag             = 0;
 
     const Server::CLICMDHandlers    Server::cliCmdHandlers =
     {
@@ -80,7 +83,7 @@ namespace RType
         _monitor(SocketMonitor::getInstance()),
         _em(ECS::EntityManager::getInstance()),
         _sm(ECS::SystemManager::getInstance()),
-        _clock()
+        _clock(), _lag(0)
     {
         init();
     }
@@ -100,6 +103,8 @@ namespace RType
         while (!_quit)
         {
             try {
+                _lag = (_clock.updateElapsedTime() / 1000000000);
+                lag = _lag; // TODO
                 _monitor.update();
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
@@ -108,6 +113,10 @@ namespace RType
                 _em.updateAll();
                 _sm.processAll();
                 checkDisconnected();
+                // while (_lag >= Config::fixedStep)
+                // {
+                //     _lag -= Config::fixedStep;
+                // }
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
@@ -171,12 +180,14 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Shot>());
         _em.registerComponent(std::make_unique<Component::Mob>());
         _em.registerComponent(std::make_unique<Component::Game>());
+        _em.registerComponent(std::make_unique<Component::Collider>());
 
         _sm.registerSystem(std::make_unique<System::Lobby>(maps));
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
         _sm.registerSystem(std::make_unique<System::Game>(mobTypes));
+        _sm.registerSystem(std::make_unique<System::Collision>());
 
-
+        _clock.updateElapsedTime();
         display("Server is now running on port " +
                 std::to_string(_acceptor.getPort()));
     }

@@ -72,6 +72,7 @@ void        RTypeGame::run()
                 _menu->update();
                 _menu->move();
                 _cs.processNetwork();
+		        _event.type = cu::Event::None;
             }
             else
                 handleGame();
@@ -80,8 +81,9 @@ void        RTypeGame::run()
             handleGame();
         else
         {
+	        _menu->move();
             _menu->update();
-            _cs.processNetwork();
+	        _cs.processNetwork();
             if (_menu->done())
             {
                 _isPlaying = true;
@@ -105,7 +107,6 @@ void        RTypeGame::initGame()
 {
     GameObject *bg       = _em.createEntity<GameObject>("bg", -10);
     GameObject *ds       = _em.createEntity<GameObject>("ds", -5);
-    GameObject *df       = _em.createEntity<GameObject>("df", -4);
     GameObject *opm      = _em.createEntity<GameObject>("opm", -3);
     GameObject *pr       = _em.createEntity<GameObject>("pr", 2);
     GameObject *mobSpawn = _em.createEntity<GameObject>("mobSpawn", 10);
@@ -128,6 +129,8 @@ void        RTypeGame::initGame()
             audio->addSound("../res/OnePunch.wav");
             audio->addSound("../res/laser1.wav");
             audio->addSound("../res/laser2.wav");
+            audio->addSound("../res/bulletExplosion.wav");
+            audio->addSound("../res/mobDeath.wav");
         }
         else
         {
@@ -141,8 +144,6 @@ void        RTypeGame::initGame()
         transform = entry.second->getComponent<Transform>();
         transform->getPosition().setX(RType::Map::defaultPosX);
         transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
-        std::cout << "player " << entry.first << ": " << transform->getPosition().X() << " " <<
-        transform->getPosition().Y() << std::endl;
     }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
@@ -154,23 +155,23 @@ void        RTypeGame::initGame()
     mobSpawn->getComponent<MobSpawner>()->init();
 
     _em.attachComponent<SpriteRenderer>(ds, "ds", "deathstar",
-                                        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
+                                        gu::Rect<int>(0, 0, RType::Map::width,
+                                                      RType::Map::height));
     _em.attachComponent<ScrollingBackground>(ds, "DeathStar", 0.3);
 
-    _em.attachComponent<SpriteRenderer>(df, "df", "dogfight",
-                                        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
-    _em.attachComponent<ScrollingBackground>(df, "Background", 0.3);
-
     _em.attachComponent<SpriteRenderer>(bg, "bg", "bg1",
-                                        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
+                                        gu::Rect<int>(0, 0, RType::Map::width,
+                                                      RType::Map::height));
     _em.attachComponent<ScrollingBackground>(bg, "Background", 0.27);
 
     _em.attachComponent<SpriteRenderer>(opm, "opm", "opm",
-                                        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
+                                        gu::Rect<int>(0, 0, RType::Map::width,
+                                                      RType::Map::height));
     _em.attachComponent<ScrollingBackground>(opm, "OPM", 0.55);
 
     _em.attachComponent<SpriteRenderer>(pr, "pr", "pr1",
-                                        gu::Rect<int>(0, 0, RType::Map::width, RType::Map::height));
+                                        gu::Rect<int>(0, 0, RType::Map::width,
+                                                      RType::Map::height));
     _em.attachComponent<ScrollingBackground>(pr, "Paralax", 0.60);
 
     _chrono.start();
@@ -179,7 +180,6 @@ void        RTypeGame::initGame()
 void        RTypeGame::handleGame()
 {
     _lag += (BigBen::getElapsedtime() / 1000000000);
-    std::cout << _chrono.getElapsedTime() << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _physics.process(_fixedStep);

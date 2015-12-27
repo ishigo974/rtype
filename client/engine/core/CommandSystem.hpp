@@ -22,7 +22,7 @@ public:
 
     void          processInput();
     void          processNetwork();
-    std::string   toString();
+    std::string   toString() const;
     unsigned long getSize() const;
 
 private:

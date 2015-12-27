@@ -12,7 +12,6 @@ TextField::TextField(std::string const& str, unsigned int padding, unsigned int 
     _foreColor = sf::Color::Black;
     _text.setColor(_foreColor);
     setText(str);
-    //_text.setString(str);
 }
 
 TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsigned int padding,
@@ -27,7 +26,6 @@ TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsign
     _foreColor = sf::Color::Black;
     _text.setColor(_foreColor);
     setText(str);
-    //_text.setString(str);
 }
 
 TextField::~TextField()
@@ -92,7 +90,6 @@ void TextField::setText(const std::string& str)
     _str = str;
     _text.setString(_str);
     if (_strLimit != 0 && _text.getString().getSize() > _strLimit)
-    //     (_text.getLocalBounds().width + (2 * _padding) >= _rectShape.getLocalBounds().width))
     {
         _str = tmp;
         _text.setString(tmp);
@@ -155,9 +152,6 @@ void    TextField::setPosition()
     _rectShape.setPosition(_rect.x, _rect.y);
     _text.setPosition(_rect.x + _padding, _rect.y + _padding);
 }
-
-// TextField::TextField()
-// { }
 
 TextField::TextField(TextField const& other) : GUIElement(other._rect)
 {

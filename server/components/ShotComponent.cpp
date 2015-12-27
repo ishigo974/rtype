@@ -6,6 +6,7 @@
 #include "GameComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "GameConfig.hpp"
+#include "Server.hpp"
 
 namespace RType
 {
@@ -61,7 +62,7 @@ namespace RType
             {
                 case RType::Shot::NORMAL:
                     pos->setX(pos->getX() + (Speed::bullet
-                                             * Config::loopDuration));
+                                             * Server::lag));
                     break ;
                 default:
                     break ;
@@ -76,6 +77,14 @@ namespace RType
                 em.safeDestroy(em.getByCmpnt(this));
                 // std::cout << "safedestroy bullet" << std::endl;
             }
+        }
+
+        void                Shot::collide(ECS::Entity&)
+        {
+            ECS::EntityManager& em = ECS::EntityManager::getInstance();
+
+            // std::cout << "shot collided" << std::endl;
+            em.safeDestroy(em.getByCmpnt(this));
         }
 
         RType::Shot::Type   Shot::getType() const

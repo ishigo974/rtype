@@ -9,6 +9,7 @@
 # include "BulletObject.hpp"
 # include "EntityManager.hpp"
 # include "Collider.hpp"
+# include "TextField.hpp"
 
 class Player : public Behaviour
 {
@@ -26,12 +27,13 @@ public:
     virtual RTypes::my_uint16_t      getMask() const;
     static const RTypes::my_uint16_t Mask      = ComponentMask::PlayerMask;
 
-    void         setAction(ACommand::Action action);
-    virtual void update(double elapsed);
-    virtual int  getDamage() const;
-    void         init();
-    void         swap(Player& other);
-    std::string  toString() const;
+    void            setAction(ACommand::Action action);
+    virtual void    update(double elapsed);
+    virtual int     getDamage() const;
+    void            init();
+    void            swap(Player& other);
+    TextField const *getGUI();
+    std::string     toString() const;
 
 protected:
     virtual bool handleMessage(Collider *o);
@@ -51,9 +53,10 @@ protected:
     bool                             _multiple = false;
     ObjectPool<BulletObject, Bullet> *_bullets;
     std::vector<BulletObject *>      _activeBullets;
-    EntityManager *_entityManager;
-    Transform     *_transform;
-    double _shotTime = 0;
+    EntityManager                    *_entityManager;
+    Transform                        *_transform;
+    double                           _shotTime = 0;
+    TextField                        _gui;
 };
 
 #endif /* !PLAYER_HPP_ */

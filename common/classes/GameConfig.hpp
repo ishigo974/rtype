@@ -42,12 +42,20 @@ namespace RType
             NORMAL = 0,
         };
 
-        const unsigned int  usecFireDelay = 500000;
+        const unsigned int  usecFireDelay   = 500000;
+        const unsigned int  width           = 16;
+        const unsigned int  height          = 8;
     }
 
     namespace Ship
     {
-        const unsigned int  width = 20;
+        const unsigned int  width  = 32;
+        const unsigned int  height = 12;
+    }
+
+    namespace Mob
+    {
+        const unsigned int  usecMoveDelay   = 6000;
     }
 }
 

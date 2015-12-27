@@ -25,6 +25,7 @@ namespace RType
         public:
             void            init(MobType::IMobType const* type);
             void            update();
+            void            collide(ECS::Entity& entity);
 
         public:
             void            addLives(unsigned int nb = 1);
@@ -59,6 +60,7 @@ namespace RType
             MobType::MovePattern    _movePattern;
             Component::Game*        _game;
             int                     _state;
+            uintmax_t               _lastMoveTime;
         };
     }
 }

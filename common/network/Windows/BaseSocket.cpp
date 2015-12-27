@@ -55,7 +55,6 @@ size_t    BaseSocket::receive(Buffer& buffer, size_t len) const
     }
     buffer.append(wsabuf.buf, read_size);
     delete wsabuf.buf;
-	std::cout << read_size << std::endl;
     return (read_size);
 }
 
