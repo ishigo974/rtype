@@ -2,6 +2,12 @@
 #include "AudioEffectPlayer.hpp"
 #include "AudioEffect.hpp"
 
+const std::string AudioEffectPlayer::Background = "../client/res/OnePunch.wav";
+const std::string AudioEffectPlayer::Shot1 = "../client/res/laser1.wav";
+const std::string AudioEffectPlayer::Shot2 = "../client/res/laser2.wav";
+const std::string AudioEffectPlayer::Explosion = "../client/res/bulletExplosion.wav";
+const std::string AudioEffectPlayer::Death = "../client/res/mobDeath.wav";
+
 void    AudioEffectPlayer::play(GameObject *obj)
 {
     for (std::list<sf::Sound>::iterator it = _sounds.begin();
@@ -18,7 +24,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
             && _sounds.begin()->getStatus() == sf::Sound::Stopped
             && _backgroundStart) || _sounds.empty())
         {
-            obj->getComponent<AudioEffect>()->setSoundToPlay("../res/OnePunch.wav");
+            obj->getComponent<AudioEffect>()->setSoundToPlay(AudioEffectPlayer::Background);
             _sounds.push_front(obj->getComponent<AudioEffect>()->soundToPlay());
 	}
         else
