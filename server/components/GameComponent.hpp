@@ -30,6 +30,9 @@ namespace RType
             void                        start(Map::Parser::Map const& map);
             Time::HRChrono const&       getChrono() const;
             Component::Room*            getRoom() const;
+            unsigned int                getNbMobs() const;
+            void                        newMob();
+            void                        delMob();
 
         public:
             virtual void                update();
@@ -48,6 +51,8 @@ namespace RType
             Time::HRChrono      _chrono;
             Component::Room*    _room;
             Map::Parser::Map    _map;
+            unsigned int        _nbMobs;
+            bool                _running;
         };
     }
 }

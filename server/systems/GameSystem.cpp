@@ -84,24 +84,18 @@ namespace RType
                     ));
 
                     event.push<uint8_t>("mob_id", cMob->getId());
-                    // event.push<uint64_t>("mob_id", eMob.getId());
                     event.push<uint32_t>("x", it->second.x);
                     event.push<uint32_t>("y", it->second.y);
                     event.push<uint64_t>("time",
                                          game->getChrono().getElapsedTime());
 
-                    // std::cout << "Send mob spawned with time: " << event.get<uint64_t>("time") << std::endl;
                     room->broadcastUDP(event.toBuffer());
-                    // std::cout << "Mob spawned " << cPos->getX() << " " << cPos->getY() << std::endl;
+                    game->newMob();
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }
                 else
                     break ;
-            }
-            if (map.second.empty())
-            {
-                std::cout << "end of map" << std::endl; // TODO end of game
             }
         }
 
