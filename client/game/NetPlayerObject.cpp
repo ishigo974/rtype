@@ -5,6 +5,9 @@
 #include <UDPView.hpp>
 #include "NetPlayerObject.hpp"
 #include "NetPlayerComp.hpp"
+#include "Animation.hpp"
+#include "GameConfig.hpp"
+#include "Collider.hpp"
 
 NetPlayerObject::NetPlayerObject()
 { }
@@ -58,6 +61,7 @@ void NetPlayerObject::init()
     _em->attachComponent<UDPView>(this, "NetPlayerUDPView");
     _em->attachComponent<NetPlayerComp>(this, "NPC", _em, 10, 5);
     getComponent<NetPlayerComp>()->init();
+    _em->attachComponent<Collider>(this, "collider", RType::Ship::cWidth, RType::Ship::cHeight);
 }
 
 unsigned int NetPlayerObject::getPlayerId() const

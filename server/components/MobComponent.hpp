@@ -25,6 +25,7 @@ namespace RType
         public:
             void            init(MobType::IMobType const* type);
             void            update();
+            void            collide(ECS::Entity& entity);
 
         public:
             void            addLives(unsigned int nb = 1);

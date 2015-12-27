@@ -2,19 +2,20 @@
 // Created by fourdr_b on 24/12/15.
 //
 
-#include <AudioEffect.hpp>
-#include <Mob.hpp>
+#include "AudioEffect.hpp"
+#include "Mob.hpp"
 #include "NetPlayerComp.hpp"
 #include "NetPlayerObject.hpp"
 #include "Collider.hpp"
 #include "GameConfig.hpp"
+#include "Animation.hpp"
 
 NetPlayerComp::NetPlayerComp() : _transform(nullptr)
-{ }
+{}
 
 NetPlayerComp::NetPlayerComp(unsigned int id, std::string const& name, EntityManager *em, int hp, int dmg)
         : Behaviour(id, name), _hp(hp), _damage(dmg), _em(em), _transform(nullptr)
-{ }
+{}
 
 NetPlayerComp::NetPlayerComp(NetPlayerComp const& o) : Behaviour(o)
 {
@@ -97,18 +98,27 @@ void NetPlayerComp::move(double elapsedTime, RType::InGameEvent action)
 
 void		NetPlayerComp::checkDeath()
 {
-    if (_hp <= 0)
+  if (_hp <= 0)
     {
-        std::cout << "Player Mort" << std::endl;
-        _enabled = false;
-        _parent->setVisible(false);
-        _parent->getComponent<Collider>()->setEnabled(false);
+      std::cout << "NetPlayer Mort" << std::endl;
+      if (!_parent->getComponent<Animation>()->isPlaying())
+        {
+	  _enabled = false;
+	  _parent->setVisible(false);
+	  _parent->getComponent<Collider>()->setEnabled(false);
+	  std::vector<Object *> sound = _em->getByMask(SoundMask);
+	  for (auto             play : sound)
+	    {
+	      static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+		->setSoundToPlay("../res/mobDeath.wav");
+	    }
+	}
     }
 }
 
 void	NetPlayerComp::shoot()
 {
-    BulletObject *bullet = _bullets->create("Bullet", 12);
+  BulletObject *bullet = _bullets->create("Bullet", 12);
     bullet->init();
     _activeBullets.push_back(bullet);
     Bullet *b = bullet->getComponent<Bullet>();
@@ -140,8 +150,8 @@ void		NetPlayerComp::init()
 {
     _parent = static_cast<GameObject *>(parent());
     _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _em);
-
     _udp = _parent->getComponent<UDPView>();
+    std::cout << _hp << std::endl;
 }
 
 void		NetPlayerComp::update(double elapsedtime)
@@ -174,6 +184,14 @@ bool NetPlayerComp::handleMessage(Collider *o)
 
     if (otherParent->getComponent<Mob>() != nullptr)
         _hp -= 1;
+    if (_hp == 0)
+    {
+        _parent->getComponent<Collider>()->setEnabled(false);
+        _parent->getComponent<SpriteRenderer>()->setPath("explosion");
+        _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
+                                                                       32, 30));
+    }
+
     return (true);
 }
 

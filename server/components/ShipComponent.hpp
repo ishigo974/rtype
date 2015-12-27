@@ -24,6 +24,7 @@ namespace RType
         public:
             virtual void    update();
             void            fire(unsigned int shot_type);
+            void            collide(ECS::Entity& entity);
 
         public:
             void            addLives(unsigned int nb = 1);

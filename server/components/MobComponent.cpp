@@ -87,11 +87,28 @@ namespace RType
 
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
-            if (pos->getX() <= 0 || pos->getX() >= Map::width
-                || pos->getY() <= 0 || pos->getY() >= Map::height)
+            // std::cout << "mob pos: " << pos->getX() << " " << pos->getY() << " " << _game->getChrono().getElapsedTime() << std::endl;
+            // if (pos->getX() <= 0 || pos->getX() >= Map::width
+            //     || pos->getY() <= 0 || pos->getY() >= Map::height)
+            // {
+            //     em.safeDestroy(em.getByCmpnt(this));
+            //     // std::cout << "Mob deleted" << std::endl;
+            // }
+        }
+
+        void            Mob::collide(ECS::Entity& entity)
+        {
+            ECS::EntityManager& em = ECS::EntityManager::getInstance();
+
+            if ((entity.getComponentMask() & Component::MASK_SHIP) ==
+                Component::MASK_SHIP
+                || (entity.getComponentMask() & Component::MASK_SHOT) ==
+                    Component::MASK_SHOT)
+                removeLives(1);
+            std::cout << "mob hurted by shot " << _lives << std::endl;
+            if (_lives == 0)
             {
                 em.safeDestroy(em.getByCmpnt(this));
-                // std::cout << "Mob deleted" << std::endl;
             }
         }
 

@@ -30,6 +30,7 @@
 #include "LobbySystem.hpp"
 #include "InGameSystem.hpp"
 #include "GameSystem.hpp"
+#include "CollisionSystem.hpp"
 
 // Components related includes
 #include "IComponent.hpp"
@@ -42,6 +43,7 @@
 #include "PositionComponent.hpp"
 #include "ShotComponent.hpp"
 #include "MobComponent.hpp"
+#include "ColliderComponent.hpp"
 
 // Exceptions includes
 #include "NotImplemented.hpp"
@@ -171,10 +173,12 @@ namespace RType
         _em.registerComponent(std::make_unique<Component::Shot>());
         _em.registerComponent(std::make_unique<Component::Mob>());
         _em.registerComponent(std::make_unique<Component::Game>());
+        _em.registerComponent(std::make_unique<Component::Collider>());
 
         _sm.registerSystem(std::make_unique<System::Lobby>(maps));
         _sm.registerSystem(std::make_unique<System::InGame>(_port + 1));
         _sm.registerSystem(std::make_unique<System::Game>(mobTypes));
+        _sm.registerSystem(std::make_unique<System::Collision>());
 
 
         display("Server is now running on port " +

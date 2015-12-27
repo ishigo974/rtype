@@ -4,6 +4,7 @@
 # include "Behaviour.hpp"
 # include "Transform.hpp"
 # include "GameObject.hpp"
+# include "EntityManager.hpp"
 
 class Bullet : public Behaviour
 {
@@ -18,7 +19,7 @@ public:
 
 public:
     Bullet();
-    Bullet(unsigned int _id, std::string const& _name);
+    Bullet(unsigned int _id, std::string const& _name, EntityManager *manager);
     virtual ~Bullet();
 
     Bullet(Bullet const& other);
@@ -61,6 +62,7 @@ protected:
     Transform		    *_transform;
     GameObject          *_parent;
     bool		     	_available;
+    EntityManager       *_em;
 };
 
 #endif /* !BULLET_HPP_ */

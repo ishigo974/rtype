@@ -72,6 +72,7 @@ void        RTypeGame::run()
                 _menu->update();
                 _menu->move();
                 _cs.processNetwork();
+		        _event.type = cu::Event::None;
             }
             else
                 handleGame();
@@ -80,8 +81,9 @@ void        RTypeGame::run()
             handleGame();
         else
         {
+	        _menu->move();
             _menu->update();
-            _cs.processNetwork();
+	        _cs.processNetwork();
             if (_menu->done())
             {
                 _isPlaying = true;
@@ -128,6 +130,8 @@ void        RTypeGame::initGame()
             audio->addSound("../res/OnePunch.wav");
             audio->addSound("../res/laser1.wav");
             audio->addSound("../res/laser2.wav");
+            audio->addSound("../res/bulletExplosion.wav");
+            audio->addSound("../res/mobDeath.wav");
         }
         else
         {
@@ -141,8 +145,6 @@ void        RTypeGame::initGame()
         transform = entry.second->getComponent<Transform>();
         transform->getPosition().setX(RType::Map::defaultPosX);
         transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
-        std::cout << "player " << entry.first << ": " << transform->getPosition().X() << " " <<
-        transform->getPosition().Y() << std::endl;
     }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");

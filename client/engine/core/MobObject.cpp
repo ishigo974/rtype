@@ -80,7 +80,7 @@ void    MobObject::create()
 {
     _entityManager->attachComponent<SpriteRenderer>(this, "Mob", "mob",
                                                     gu::Rect<int>(1, 4, 32, 21));
-    _entityManager->attachComponent<Mob>(this, "Mob");
+    _entityManager->attachComponent<Mob>(this, "Mob", _entityManager);
     _entityManager->attachComponent<Collider>(this, "Mob collider", 32, 21);
     _entityManager->attachComponent<Animation>(this, "AN", 0, 0, false);
     getComponent<Animation>()->setEnabled(false);

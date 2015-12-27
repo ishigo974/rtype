@@ -20,7 +20,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
         {
             obj->getComponent<AudioEffect>()->setSoundToPlay("../res/OnePunch.wav");
             _sounds.push_front(obj->getComponent<AudioEffect>()->soundToPlay());
-        }
+	}
         else
             _sounds.push_back(obj->getComponent<AudioEffect>()->soundToPlay());
     }
@@ -30,7 +30,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
     }
     _sounds.front().setVolume(5);
     if (_sounds.size() > 1)
-        _sounds.back().setVolume(2.5);
+        _sounds.back().setVolume(10);
     _sounds.back().play();
     obj->getComponent<AudioEffect>()->clearSounds();
     _backgroundStart = true;
