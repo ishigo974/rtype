@@ -122,12 +122,6 @@ void		              MobSpawner::update(double)
 
     static int i = 0;
     ++i;
-    if (i == 100)
-{
-    std::cout << "Active mobs => " << _activeMobs.size() << std::endl;
-    std::cout << "Pool   mobs => " << _mobs->_objects.size() << std::endl;
-    i = 0;
-}
     for (auto it = _activeMobs.begin(); it != _activeMobs.end(); ++it)
     {
         if ((*it)->getComponent<Mob>()->getAvailable())
