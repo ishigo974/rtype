@@ -61,7 +61,7 @@ void NetPlayerObject::init()
     _em->attachComponent<UDPView>(this, "NetPlayerUDPView");
     _em->attachComponent<NetPlayerComp>(this, "NPC", _em, 10, 5);
     getComponent<NetPlayerComp>()->init();
-    _em->attachComponent<Collider>(this, "collider", RType::Ship::cWidth, RType::Ship::cHeight);
+    _em->attachComponent<Collider>(this, "collider", RType::Ship::width, RType::Ship::height);
 }
 
 unsigned int NetPlayerObject::getPlayerId() const
