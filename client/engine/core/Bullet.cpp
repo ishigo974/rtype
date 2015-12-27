@@ -12,8 +12,8 @@
 Bullet::Bullet()
 {
     _direction = Bullet::Direction::DEFAULT;
-    _hp = 1;
-    _damage = 1;
+    _hp = RType::Shot::lives;
+    _damage = RType::Shot::damages;
     _available = true;
     _transform = 0;
     _parent = nullptr;
@@ -23,8 +23,8 @@ Bullet::Bullet(unsigned int _id, std::string const& _name, EntityManager *manage
     : Behaviour(_id, _name), _em(manager)
 {
     _direction = Bullet::Direction::DEFAULT;
-    _hp = 1;
-    _damage = 5;
+    _hp = RType::Shot::lives;
+    _damage = RType::Shot::damages;
     _available = true;
     _transform = 0;
     _parent = nullptr;

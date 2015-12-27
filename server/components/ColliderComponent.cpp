@@ -83,6 +83,7 @@ namespace RType
 
         void                Collider::clear()
         {
+            _bounds = gu::Rect<int>();
         }
 
         std::string         Collider::toString() const

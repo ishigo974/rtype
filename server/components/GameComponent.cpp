@@ -72,12 +72,10 @@ namespace RType
                 score.append<uint8_t>(room.first);
                 score.append<uint32_t>(ship->getScore());
             }
-            std::cout << "test : " << allDead << std::endl;
-            if (allDead || (_map.second.empty() && _nbMobs == 0))
+            if (allDead || (_map.second.empty() && _nbMobs == 0 && _running))
             {
                 Request     request(Request::SE_ENDOFGAME);
 
-                std::cout << "lololol end !!!" << std::endl; // debug
                 request.push<Buffer>("scores", score);
                 _room->broadcastTCP(request.toBuffer());
                 _running = false;

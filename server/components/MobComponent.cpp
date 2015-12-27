@@ -79,15 +79,15 @@ namespace RType
 
         void            Mob::update()
         {
-                ECS::EntityManager&     em = ECS::EntityManager::getInstance();
-                Component::Position*    pos =
-                    em.getByCmpnt(this).getComponent<Component::Position>();
-                cu::Position            newpos =
-                    _movePattern(cu::Position(pos->getX(), pos->getY()),
-                                 Server::lag, _state);
+            ECS::EntityManager&     em = ECS::EntityManager::getInstance();
+            Component::Position*    pos =
+                em.getByCmpnt(this).getComponent<Component::Position>();
+            cu::Position            newpos =
+                _movePattern(cu::Position(pos->getX(), pos->getY()),
+                             Server::lag, _state);
 
-                pos->setX(newpos.X());
-                pos->setY(newpos.Y());
+            pos->setX(newpos.X());
+            pos->setY(newpos.Y());
         }
 
         void            Mob::collide(ECS::Entity& entity)

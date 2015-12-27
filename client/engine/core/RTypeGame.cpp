@@ -43,7 +43,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
     _em.attachComponent<GameManagerBehaviour>(gm, "GMB");
     _gmb = gm->getComponent<GameManagerBehaviour>();
 
-    _menu = _em.createEntity<Menu>("Niquez-vos-races-Type", 1, &_em, &_event);
+    _menu = _em.createEntity<Menu>("Menu R-Type", 1, &_em, &_event);
     _em.attachComponent<TCPView>(_menu, "TCP");
     _menu->init();
     _renderer.init();

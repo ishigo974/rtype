@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include "Player.hpp"
 #include "Transform.hpp"
@@ -22,7 +23,8 @@ Player::Player(unsigned int _id, std::string const& _name,
     _damage(damage),
     _entityManager(manager),
     _transform(0),
-    _gui(gu::Rect<float>(30, 30, 300, 50), "HP : 10", 10, 16)
+    _gui(gu::Rect<float>(30, 30, 300, 50), "HP : " +
+         std::to_string(RType::Ship::lives), 10, 16)
 {
     _gui.setForeColor(sf::Color::White);
 }
@@ -257,11 +259,12 @@ bool Player::handleMessage(Collider *o)
 
     if (otherParent->getComponent<Mob>() != nullptr)
     {
-        _hp -= 1;
+        _hp -= RType::Mob::damages;
         _gui.setText(std::string("HP : ") + std::to_string(_hp));
     }
-    if (_hp == 0)
+    if (_hp <= 0)
     {
+        _hp = 0;
         _parent->getComponent<Collider>()->setEnabled(false);
         _parent->getComponent<SpriteRenderer>()->setPath("explosion");
         _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
