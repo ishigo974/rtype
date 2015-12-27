@@ -3,10 +3,12 @@ set(EXECUTABLE_NAME "server_rtype")
 set(UT_NAME "server_ut")
 project(rtype_server)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BUILD_DIR}")
+
 if (WIN32)
     #	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
     #	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) #TODO FLAGS
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/Wall -std=c++14") #TODO FLAGS
 elseif (APPLE)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 elseif (UNIX)
@@ -42,70 +44,44 @@ include_directories(utils)
 
 if (WIN32)
     file(GLOB network_files
-            ../common/network/Windows/*.cpp
-            ../common/network/Windows/*.hpp)
+            ../common/network/Windows/*.cpp)
 endif ()
 
 if (UNIX)
     file(GLOB network_files
-            ../common/network/Unix/*.cpp
-            ../common/network/Unix/*.hpp)
+            ../common/network/Unix/*.cpp)
 endif ()
 
 file(GLOB source_files
         main.cpp
-        base_ecs/*.hpp
         base_ecs/*.cpp
-        ../common/network/*.hpp
         ../common/network/*.cpp
-        ../common/classes/*.hpp
         ../common/classes/*.cpp
-        classes/*.hpp
         classes/*.cpp
-        exceptions/*.hpp
         exceptions/*.cpp
-        utils/*.hpp
         utils/*.cpp
-        components/*.hpp
         components/*.cpp
-        systems/*.hpp
         systems/*.cpp
-        commands/*.hpp
         commands/*.cpp
-        ../common/exceptions/*.hpp
         ../common/exceptions/*.cpp
         ../common/utils/*.cpp
-        ../common/utils/*.hpp
         )
 
 file(GLOB ut_source_files
         main_ut.cpp
-        base_ecs/*.hpp
         base_ecs/*.cpp
-        ../common/network/*.hpp
         ../common/network/*.cpp
-        ../common/classes/*.hpp
         ../common/classes/*.cpp
-        exceptions/*.hpp
         exceptions/*.cpp
-        classes/*.hpp
         classes/*.cpp
-        commands/*.hpp
         commands/*.cpp
-        utils/*.hpp
         utils/*.cpp
-        components/*.hpp
         components/*.cpp
-        ../common/exceptions/*.hpp
         ../common/exceptions/*.cpp
-        systems/*.hpp
         systems/*.cpp
-        base_ut/*.hpp
         base_ut/*.cpp
-        unit_tests/*.hpp
         unit_tests/*.cpp
         ../common/utils/*.cpp
-        ../common/utils/*.hpp
         )
 
 add_executable(${EXECUTABLE_NAME} ${source_files} ${network_files})

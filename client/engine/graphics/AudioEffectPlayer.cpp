@@ -18,7 +18,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
             && _sounds.begin()->getStatus() == sf::Sound::Stopped
             && _backgroundStart) || _sounds.empty())
         {
-            obj->getComponent<AudioEffect>()->setSoundToPlay("../res/OnePunch.wav");
+            obj->getComponent<AudioEffect>()->setSoundToPlay("../client/res/OnePunch.wav");
             _sounds.push_front(obj->getComponent<AudioEffect>()->soundToPlay());
         }
         else

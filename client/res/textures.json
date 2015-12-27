@@ -1,82 +1,82 @@
 {
   "explosion": {
-    "path": "../res/explosion.png",
+    "path": "../client/res/explosion.png",
     "repeated": false
   },
   "r-typesheet1": {
-    "path": "../res/r-typesheet1.gif",
+    "path": "../client/res/r-typesheet1.gif",
     "repeated": false
   },
   "diagonal": {
-    "path": "../res/diagonal.png",
+    "path": "../client/res/diagonal.png",
     "repeated": false
   },
   "boss": {
-    "path": "../res/boss.png",
+    "path": "../client/res/boss.png",
     "repeated": false
   },
   "bg1": {
-    "path": "../res/bg1.jpg",
+    "path": "../client/res/bg1.jpg",
     "repeated": true
   },
   "bg2": {
-    "path": "../res/bg2.jpg",
+    "path": "../client/res/bg2.jpg",
     "repeated": true
   },
   "bg3": {
-    "path": "../res/bg3.jpg",
+    "path": "../client/res/bg3.jpg",
     "repeated": true
   },
   "bg4": {
-    "path": "../res/bg4.jpg",
+    "path": "../client/res/bg4.jpg",
     "repeated": true
   },
   "pr1": {
-      "path": "../res/pr1.png",
-      "repeated": true
+    "path": "../client/res/pr1.png",
+    "repeated": true
   },
   "deathstar": {
-      "path": "../res/deathstar.png",
-      "repeated": true
+    "path": "../client/res/deathstar.png",
+    "repeated": true
   },
   "dogfight": {
-      "path": "../res/dogfight.png",
-      "repeated": true
+    "path": "../client/res/dogfight.png",
+    "repeated": true
   },
   "opm": {
-      "path": "../res/opm.png",
-      "repeated": true
+    "path": "../client/res/opm.png",
+    "repeated": true
   },
   "menu1": {
-    "path": "../res/menu1.jpg",
+    "path": "../client/res/menu1.jpg",
     "repeated": false
   },
   "menu2": {
-    "path": "../res/menu2.jpg",
+    "path": "../client/res/menu2.jpg",
     "repeated": false
   },
   "menu3": {
-    "path": "../res/menu3.jpg",
+    "path": "../client/res/menu3.jpg",
     "repeated": false
   },
   "menu4": {
-    "path": "../res/menu4.jpg",
+    "path": "../client/res/menu4.jpg",
     "repeated": false
   },
   "menu5": {
-    "path": "../res/menu5.jpg",
+    "path": "../client/res/menu5.jpg",
     "repeated": false
   },
   "menu6": {
-    "path": "../res/menu6.jpg",
+    "path": "../client/res/menu6.jpg",
     "repeated": false
   },
   "player": {
-    "path": "../res/player.png",
+    "path": "../client/res/player.png",
     "repeated": false
   },
   "forward": {
-    "path": "../res/forward.png",
+    "path": "../client/res/forward.png",
     "repeated": false
   }
 }

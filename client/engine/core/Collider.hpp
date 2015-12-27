@@ -38,14 +38,16 @@ public:
     virtual std::string         toString() const;
 
 public:
-    bool intersects(Collider *o);
+    bool intersects(Collider *o) const;
     bool isEnabled() const;
+    bool isTraversable() const;
     void setEnabled(bool e);
     void setRect(gu::Rect<int> const&);
 
 protected:
     gu::Rect<int> _bounds;
     bool          _enabled;
+    bool          _traversable;
 };
 
 

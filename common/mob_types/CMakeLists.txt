@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(rtype_mobs)
 
-# set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin )
-# set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin/plugins )
-# set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../lib )
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BUILD_DIR}/.rtype)
 
 # foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 #     string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
@@ -20,12 +18,18 @@ set(FORWARDMOB "rtype_forwardmob")
 set(VERTICALMOB "rtype_verticalmob")
 set(SINUSOIDMOB "rtype_diagonalmob")
 
-include_directories( ../utils )
-include_directories( ../classes )
+include_directories(../utils)
+include_directories(../classes)
 
 file(GLOB forwardmob_files ForwardMobType.cpp ../utils/Utils.cpp)
 file(GLOB verticalmob_files VerticalMobType.cpp ../utils/Utils.cpp)
 file(GLOB diagonalmob_files DiagonalMobType.cpp ../utils/Utils.cpp)
+
+# ---- #
+# Copy #
+# ---- #
+
+file(COPY ".rtypemobs" DESTINATION "${BUILD_DIR}")
 
 add_library(${FORWARDMOB} MODULE ${forwardmob_files})
 add_library(${VERTICALMOB} MODULE ${verticalmob_files})

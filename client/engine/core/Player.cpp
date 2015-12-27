@@ -123,11 +123,14 @@ void        Player::move(double elapsedtime)
     double move;
 
     if (_hp <= 0)
-        return ;
+        return;
 
     move = speed * elapsedtime;
     if (_action.empty())
-        return ;
+        return;
+    if (_transform->getPosition().X() <= 0 || _transform->getPosition().Y() <= 0 ||
+        _transform->getPosition().X() >= 1280 || _transform->getPosition().Y() >= 720)
+        return;
     switch (_action.front())
     {
         case ACommand::UP:

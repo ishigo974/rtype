@@ -1,13 +1,13 @@
 #include <iostream>
 #include "Resources.hpp"
 
-std::string const Resources::resFile = "../res/textures.json";
+std::string const Resources::resFile = "../client/res/textures.json";
 
 Resources::Resources()
 {
 	this->_textures["MissingTexture"] = new sf::Texture();
 	if (!this->_textures["MissingTexture"]->
-                                    loadFromFile("../res/MissingTexture.png"))
+                                    loadFromFile("../client/res/MissingTexture.png"))
 		throw std::runtime_error("MissingTexture not found");
 	else
 		this->_textures["MissingTexture"]->setRepeated(true);

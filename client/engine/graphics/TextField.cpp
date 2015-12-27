@@ -3,7 +3,7 @@
 TextField::TextField(std::string const& str, unsigned int padding, unsigned int limit) :
         GUIElement(gu::Rect<float>(0, 0, 0, 0)), _padding(padding), _strLimit(limit)
 {
-    _font.loadFromFile("../res/cs_regular.ttf");
+    _font.loadFromFile("../client/res/cs_regular.ttf");
     setSize();
     setPosition();
     _backColor = sf::Color::Transparent;
@@ -16,10 +16,9 @@ TextField::TextField(std::string const& str, unsigned int padding, unsigned int 
 }
 
 TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsigned int padding,
-		     unsigned int limit) :
-        GUIElement(rect), _padding(padding), _strLimit(limit)
+		     unsigned int limit) : GUIElement(rect), _padding(padding), _strLimit(limit)
 {
-    _font.loadFromFile("../res/cs_regular.ttf");
+    _font.loadFromFile("../client/res/cs_regular.ttf");
     setSize();
     setPosition();
     _backColor = sf::Color::Transparent;
