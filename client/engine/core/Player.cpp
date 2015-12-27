@@ -146,22 +146,23 @@ void        Player::move(double elapsedtime)
     move = speed * elapsedtime;
     if (_action.empty())
         return;
-    if (_transform->getPosition().X() <= 0 || _transform->getPosition().Y() <= 0 ||
-        _transform->getPosition().X() >= 1280 || _transform->getPosition().Y() >= 720)
-        return;
     switch (_action.front())
     {
         case ACommand::UP:
-            _transform->getPosition().setY(_transform->getPosition().Y() - move);
+            if (_transform->getPosition().Y() - move > 0)
+                _transform->getPosition().setY(_transform->getPosition().Y() - move);
             break;
         case ACommand::DOWN:
-            _transform->getPosition().setY(_transform->getPosition().Y() + move);
+            if (_transform->getPosition().Y() + move < RType::Map::height)
+                _transform->getPosition().setY(_transform->getPosition().Y() + move);
             break;
         case ACommand::LEFT:
-            _transform->getPosition().setX(_transform->getPosition().X() - move);
+            if (_transform->getPosition().X() - move > 0)
+                _transform->getPosition().setX(_transform->getPosition().X() - move);
             break;
         case ACommand::RIGHT:
-            _transform->getPosition().setX(_transform->getPosition().X() + move);
+            if (_transform->getPosition().X() + move < RType::Map::width)
+                _transform->getPosition().setX(_transform->getPosition().X() + move);
             break;
         default:
             break;
