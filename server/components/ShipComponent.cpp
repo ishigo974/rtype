@@ -61,6 +61,7 @@ namespace RType
                 || (entity.getComponentMask() & Component::MASK_SHOT) ==
                     Component::MASK_SHOT)
                 removeLives(1);
+            std::cout << "ship collided, reminaing lives: " << _lives << std::endl;
         }
 
         void                Ship::fire(unsigned int shot_type)

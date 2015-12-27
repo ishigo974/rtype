@@ -90,7 +90,7 @@ RTypes::my_uint16_t     Player::getMask() const
 std::string Player::toString() const
 {
   std::string ss;
-  
+
     ss += "Player {";
     ss += "\n\thp: ";
     ss += _hp;
@@ -148,7 +148,6 @@ void        Player::move(double elapsedtime)
         default:
             break;
     }
-    std::cout << "Player move: " << _transform->getPosition().X() << " " << _transform->getPosition().Y() << std::endl;
 }
 
 const std::vector<BulletObject *>& Player::getActiveBullets() const
