@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "Player.hpp"
 #include "Transform.hpp"
 #include "GameObject.hpp"
@@ -13,9 +14,16 @@ Player::Player()
 {
 }
 
-Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage) :
-        Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
+Player::Player(unsigned int _id, std::string const& _name,
+               EntityManager *manager, int hp, int damage) :
+    Behaviour(_id, _name),
+    _hp(hp),
+    _damage(damage),
+    _entityManager(manager),
+    _transform(0),
+    _gui(gu::Rect<float>(30, 30, 300, 50), "HP : 10", 10, 16)
 {
+    _gui.setForeColor(sf::Color::White);
 }
 
 Player::Player(Player const& other) : Behaviour(other)
@@ -28,6 +36,7 @@ Player::Player(Player const& other) : Behaviour(other)
     _transform     = other._transform;
     _activeBullets = other._activeBullets;
     _damage        = other._damage;
+    _gui           = other._gui;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -71,6 +80,7 @@ void Player::swap(Player& other)
     swap(_activeBullets, other._activeBullets);
     swap(_transform, other._transform);
     swap(_damage, other._damage);
+    swap(_gui, other._gui);
 }
 
 namespace std
@@ -85,6 +95,11 @@ namespace std
 RTypes::my_uint16_t     Player::getMask() const
 {
     return Mask;
+}
+
+TextField const*  Player::getGUI()
+{
+    return &_gui;
 }
 
 std::string Player::toString() const
@@ -229,7 +244,10 @@ bool Player::handleMessage(Collider *o)
     GameObject *otherParent = static_cast<GameObject *>(o->parent());
 
     if (otherParent->getComponent<Mob>() != nullptr)
+    {
         _hp -= 1;
+        _gui.setText(std::string("HP : ") + std::to_string(_hp));
+    }
     if (_hp == 0)
     {
         _parent->getComponent<Collider>()->setEnabled(false);

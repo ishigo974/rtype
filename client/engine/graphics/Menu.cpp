@@ -63,12 +63,12 @@ Menu::~Menu()
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
         delete *it;
     _roomsTextField.clear();
-	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-		delete *it;
-	_playersInRoom.clear();
-	for (auto it = _scores.begin(); it != _scores.end(); ++it)
-		delete *it;
-	_scores.clear();
+    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+        delete *it;
+    _playersInRoom.clear();
+    for (auto it = _scores.begin(); it != _scores.end(); ++it)
+        delete *it;
+    _scores.clear();
 }
 
 bool Menu::operator==(Menu const& other)
@@ -454,7 +454,7 @@ void Menu::transitionToStates()
     _inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
                                         TextField *r, Menu *menu)
     {
-		if (e->type == cu::Event::MouseButtonReleased &&
+        if (e->type == cu::Event::MouseButtonReleased &&
             back->intersect(e->mouse.x, e->mouse.y))
         {
             menu->quitRoom();
@@ -468,8 +468,8 @@ void Menu::transitionToStates()
         return false;
     }, _event, &_back, &_readyField, this);
 
-	_inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
-	{
+    _inRoom.addTransition("endGame", [](cu::Event *, Menu *menu)
+    {
         return menu->done();
     }, _event, this);
 
@@ -487,18 +487,18 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_titleState.getName(), &_mainTitle);
 
     for (auto it = _roomsTextField.begin(); it != _roomsTextField.end(); ++it)
-	    gm->addGUIElement(_mainMenu.getName(), *it);
+        gm->addGUIElement(_mainMenu.getName(), *it);
 
-	for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
-	{
-		gm->addGUIElement(_inRoom.getName(), *it);
-		gm->addGUIElement(_endGameState.getName(), *it);
-	}
+    for (auto it = _playersInRoom.begin(); it != _playersInRoom.end(); ++it)
+    {
+        gm->addGUIElement(_inRoom.getName(), *it);
+        gm->addGUIElement(_endGameState.getName(), *it);
+    }
 
-	for (auto it = _scores.begin(); it != _scores.end(); ++it)
-		gm->addGUIElement(_endGameState.getName(), *it);
+    for (auto it = _scores.begin(); it != _scores.end(); ++it)
+        gm->addGUIElement(_endGameState.getName(), *it);
 
-	gm->addGUIElement(_mainMenu.getName(), &_refresh);
+    gm->addGUIElement(_mainMenu.getName(), &_refresh);
     gm->addGUIElement(_mainMenu.getName(), &_createRoom);
     gm->addGUIElement(_mainMenu.getName(), &_changeName);
     gm->addGUIElement(_createRoomState.getName(), &_back);
@@ -507,8 +507,8 @@ void Menu::setupGUIElements()
     gm->addGUIElement(_changeNameState.getName(), &_inputUserName);
     gm->addGUIElement(_inRoom.getName(), &_back);
     gm->addGUIElement(_inRoom.getName(), &_roomTitle);
-	gm->addGUIElement(_inRoom.getName(), &_readyField);
-	gm->addGUIElement(_endGameState.getName(), &_continue);
+    gm->addGUIElement(_inRoom.getName(), &_readyField);
+    gm->addGUIElement(_endGameState.getName(), &_continue);
 }
 
 void Menu::setupStates()
@@ -516,8 +516,8 @@ void Menu::setupStates()
     _sm->addState(_mainMenu);
     _sm->addState(_inRoom);
     _sm->addState(_createRoomState);
-	_sm->addState(_changeNameState);
-	_sm->addState(_endGameState);
+    _sm->addState(_changeNameState);
+    _sm->addState(_endGameState);
 }
 
 namespace std
@@ -536,52 +536,50 @@ void Menu::move()
 
 void Menu::update()
 {
-//	std::cout << "update" << std::endl;
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
-        // std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
-				std::cout << "from serv: list room" << std::endl;
+                std::cout << "from serv: list room" << std::endl;
                 break;
             case RType::Request::SE_JOINROOM :
                 addPlayer(tmp);
-				std::cout << "from serv: join room" << std::endl;
-				break;
+                std::cout << "from serv: join room" << std::endl;
+                break;
             case RType::Request::SE_QUITROOM :
                 deletePlayer(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: quit room" << std::endl;
-				break;
+                std::cout << "from serv: quit room" << std::endl;
+                break;
             case RType::Request::SE_CLIENTRDY :
                 userReady(tmp);
-				std::cout << "from serv: client rdy" << std::endl;
-				break;
+                std::cout << "from serv: client rdy" << std::endl;
+                break;
             case RType::Request::SE_CLINOTRDY :
                 playerNotReady(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: client not rdy" << std::endl;
-				break;
+                std::cout << "from serv: client not rdy" << std::endl;
+                break;
             case RType::Request::SE_CLIUSRNM :
                 changePlayerName(tmp);
-				std::cout << "from serv: client uname" << std::endl;
-				break;
+                std::cout << "from serv: client uname" << std::endl;
+                break;
             case RType::Request::SE_ROOMINFO :
                 _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
-				std::cout << "from serv: room info" << std::endl;
-				break;
+                std::cout << "from serv: room info" << std::endl;
+                break;
             case RType::Request::SE_GAMESTART :
                 _done = true;
-				std::cout << "from serv: game start" << std::endl;
-				break;
+                std::cout << "from serv: game start" << std::endl;
+                break;
             case RType::Request::SE_ENDOFGAME:
                 endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
-				std::cout << "from serv: ok" << std::endl;
-				break;
+                std::cout << "from serv: ok" << std::endl;
+                break;
             case RType::Request::SE_KO :
                 //TODO REVERSE STATE
                 break;
