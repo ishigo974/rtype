@@ -159,19 +159,18 @@ void        Player::checkDeath()
 {
     if (_hp <= 0)
     {
-        std::cout << "Player Mort" << std::endl;
-
         if (!_parent->getComponent<Animation>()->isPlaying())
         {
+            std::cout << "Player Mort" << std::endl;
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
-	    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
-	    for (auto             play : sound)
-	      {
-		static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-		  ->setSoundToPlay("../res/mobDeath.wav");
-	      }
+	        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	        for (auto play : sound)
+	        {
+                static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                    ->setSoundToPlay("../res/mobDeath.wav");
+            }
         }
     }
 }
