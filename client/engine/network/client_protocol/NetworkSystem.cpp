@@ -61,7 +61,6 @@ namespace RType
             {
                 _connector.close();
                 _monitor.deleteSocket(&_connector);
-                //TODO Send UI disconnection
             }
             _tcpObj.receive(receive);
         }
@@ -93,7 +92,6 @@ namespace RType
         {
             _udpSock.close();
             std::cout << "Close udp socket" << std::endl;
-            //TODO Send UI disconnection
         }
 
         try

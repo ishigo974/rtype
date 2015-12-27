@@ -88,7 +88,7 @@ namespace RType
         if (_code != SE_LISTROOMS)
             throw Exception::ValueError("Trying to retrieve rooms collection");
         if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
+            throw std::runtime_error("no such data: " + key);
         buffer = it->second;
         while (!buffer.empty())
         {
@@ -118,7 +118,7 @@ namespace RType
         if (_code != SE_ROOMINFO)
             throw Exception::ValueError("Trying to retrieve players infos");
         if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
+            throw std::runtime_error("no such data: " + key);
         buffer = it->second;
         while (!buffer.empty())
         {
@@ -148,7 +148,7 @@ namespace RType
         if (_code != SE_ENDOFGAME)
             throw Exception::ValueError("Trying to retrieve scores tab");
         if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
+            throw std::runtime_error("no such data: " + key);
         buffer = it->second;
         while (!buffer.empty())
         {
