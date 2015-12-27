@@ -81,24 +81,24 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
 #include <iostream>
 void	MobSpawner::spawnMob(RType::InGameEvent const& request)
 {
+    if (request.getCode() == RType::InGameEvent::SE_MOBSPAWNED)
+    {
     MobObject *mob = _mobs->create("Mob", 12);
     mob->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
-    m->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
-    m->setX(request.get<uint32_t>("x")); // TODO mettre la position donnée dans"
-                                             // fichier
-    // _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
+    m->setX(request.get<uint32_t>("x"));
     m->setY(request.get<uint32_t>("y"));
     std::cout << "spawn mob " << mob->getComponent<Transform>()->getPosition().X() << " " << mob->getComponent<Transform>()->getPosition().Y() << std::endl;
     // m->setY(_transform->getPosition().Y());
+    }
 }
 
 void                      MobSpawner::init()
 {
     _mobs = new ObjectPool<MobObject, Mob>("Mob", 12, _entityManager);
-    MobObject *mob = _mobs->create("Mob", 12);
-    mob->create();
+   MobObject *mob = _mobs->create("Mob", 12);
+   mob->create();
     _parent = static_cast<GameObject *>(parent());
     _udpView = _parent->getComponent<UDPView>();
 }
@@ -116,7 +116,7 @@ void		              MobSpawner::update(double)
             break;
         }
     }
-    if (_udpView->sizeRecv())
+    if (_udpView->sizeRecv() > 0)
     {
         try
         {
