@@ -120,8 +120,6 @@ void		              MobSpawner::update(double)
 {
     RType::InGameEvent    event;
 
-    static int i = 0;
-    ++i;
     for (auto it = _activeMobs.begin(); it != _activeMobs.end(); ++it)
     {
         if ((*it)->getComponent<Mob>()->getAvailable())

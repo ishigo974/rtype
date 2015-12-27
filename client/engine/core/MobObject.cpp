@@ -68,7 +68,6 @@ void	MobObject::deleteObject()
 
     Mob*            m = getComponent<Mob>();
     Animation*      a = getComponent<Animation>();
-    SpriteRenderer* s = getComponent<SpriteRenderer>();
     Collider*       c = getComponent<Collider>();
 
     m->setEnabled(false);

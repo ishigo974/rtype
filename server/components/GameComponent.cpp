@@ -24,7 +24,7 @@ namespace RType
         ** Constructor/Destructor
         */
         Game::Game() :
-            _chrono(), _room(nullptr), _map()
+            _chrono(), _room(nullptr), _map(), _nbMobs(0), _running(false)
         {
         }
 
@@ -36,7 +36,8 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _room(other._room), _map(other._map)
+            _chrono(other._chrono), _room(other._room),
+            _map(other._map), _nbMobs(other._nbMobs), _running(other._running)
         {
         }
 
@@ -47,6 +48,8 @@ namespace RType
                 _chrono = other._chrono;
                 _room = other._room;
                 _map = other._map;
+                _nbMobs = other._nbMobs;
+                _running = other._running;
             }
             return *this;
         }
@@ -56,8 +59,7 @@ namespace RType
         */
         void                Game::update()
         {
-            return ;
-            bool            endGame(true);
+            bool            allDead(true);
             Buffer          score;
 
             for (auto& room: *_room)
@@ -66,23 +68,41 @@ namespace RType
                     room.second.first->getComponent<Component::Ship>();
 
                 if (ship->getLives() > 0)
-                    endGame = false;
+                    allDead = false;
                 score.append<uint8_t>(room.first);
                 score.append<uint32_t>(ship->getScore());
             }
-            if (endGame)
+            std::cout << "test : " << allDead << std::endl;
+            if (allDead || (_map.second.empty() && _nbMobs == 0))
             {
                 Request     request(Request::SE_ENDOFGAME);
 
-                std::cout << "lololol end !!!" << std::endl;
+                std::cout << "lololol end !!!" << std::endl; // debug
                 request.push<Buffer>("scores", score);
                 _room->broadcastTCP(request.toBuffer());
+                _running = false;
             }
         }
 
         Map::Parser::Map&   Game::retrieveMap()
         {
             return _map;
+        }
+
+        void                Game::newMob()
+        {
+            ++_nbMobs;
+        }
+
+        void                Game::delMob()
+        {
+            if (_nbMobs > 0)
+                --_nbMobs;
+        }
+
+        unsigned int        Game::getNbMobs() const
+        {
+            return _nbMobs;
         }
 
         std::string const&  Game::getMapName() const
@@ -119,6 +139,7 @@ namespace RType
                                                       RType::Ship::height));
             }
             _chrono.start();
+            _running = true;
         }
 
         Time::HRChrono const&   Game::getChrono() const
@@ -147,6 +168,8 @@ namespace RType
             _room = nullptr;
             _map.first.clear();
             _map.second.clear();
+            _nbMobs = 0;
+            _running = true;
         }
 
         std::string         Game::toString() const
