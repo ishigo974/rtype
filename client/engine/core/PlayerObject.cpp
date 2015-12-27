@@ -1,5 +1,6 @@
 #include "PlayerObject.hpp"
 #include "Player.hpp"
+#include "Animation.hpp"
 
 PlayerObject::PlayerObject()
 { }
@@ -81,6 +82,8 @@ void	PlayerObject::init()
   _entityManager->attachComponent<Player>(this, "Player", _entityManager);
   this->getComponent<Player>()->init();
   _entityManager->attachComponent<Collider>(this, "collider", 32, 12);
+  _entityManager->attachComponent<Animation>(this, "AN", 1.0, 1.0, false);
+  getComponent<Animation>()->stop();
 
   Transform *t = this->getComponent<Transform>();
   t->getPosition().setX(100);

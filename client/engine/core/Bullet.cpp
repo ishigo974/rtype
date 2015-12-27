@@ -5,6 +5,7 @@
 #include "Player.hpp"
 #include "Renderer.hpp"
 #include "GameConfig.hpp"
+#include "Animation.hpp"
 
 Bullet::Bullet()
 {
@@ -171,6 +172,8 @@ void		Bullet::setDirection(Bullet::Direction d)
 
 void		Bullet::move(double elapsedtime) const
 {
+    if (_hp <= 0)
+        return ;
     _transform->getPosition().setX((_transform->getPosition().X() + _direction *
                                     RType::Speed::bullet *
                                     static_cast<float>(elapsedtime)));
@@ -178,13 +181,30 @@ void		Bullet::move(double elapsedtime) const
 
 void		Bullet::update(double elapsedtime)
 {
-    if (_hp <= 0 || _transform->getPosition().X() > Renderer::width)
+    if (_transform->getPosition().X() > Renderer::width)
         _available = true;
+    else if (_hp <= 0)
+    {
+        if (!_parent->getComponent<Animation>()->isPlaying())
+        {
+            _available = true;
+            _parent->setVisible(false);
+            _parent->getComponent<Collider>()->setEnabled(false);
+        }
+    }
     this->move(elapsedtime);
 }
 
 bool Bullet::handleMessage(Collider *)
 {
     _hp = 0;
+    _parent->getComponent<Collider>()->setEnabled(false);
+    _parent->getComponent<SpriteRenderer>()->setPath("explosion");
+    _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
+                                                                  32, 30));
+    _parent->getComponent<Animation>()->setFrames(8);
+    _parent->getComponent<Animation>()->setDuration(256.0);
+    _parent->getComponent<Animation>()->setLoop(false);
+    _parent->getComponent<Animation>()->play();
     return (true);
 }

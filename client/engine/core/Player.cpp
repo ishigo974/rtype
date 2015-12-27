@@ -7,26 +7,27 @@
 #include "ObjectPool.hpp"
 #include "AudioEffect.hpp"
 #include "GameConfig.hpp"
+#include "Animation.hpp"
 
 Player::Player()
 {
 }
 
 Player::Player(unsigned int _id, std::string const& _name, EntityManager *manager, int hp, int damage) :
-    Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
+        Behaviour(_id, _name), _hp(hp), _damage(damage), _entityManager(manager), _transform(0)
 {
 }
 
 Player::Player(Player const& other) : Behaviour(other)
 {
-    _hp = other._hp;
-    _action = other._action;
-    _multiple = other._multiple;
+    _hp            = other._hp;
+    _action        = other._action;
+    _multiple      = other._multiple;
     _entityManager = other._entityManager;
-    _bullets = other._bullets;
-    _transform = other._transform;
+    _bullets       = other._bullets;
+    _transform     = other._transform;
     _activeBullets = other._activeBullets;
-    _damage = other._damage;
+    _damage        = other._damage;
 }
 
 Player::Player(Player&& other) : Player(other)
@@ -95,31 +96,34 @@ std::string Player::toString() const
     << "\n\tdamage: " << _damage
     << "\n\tenabled: " << _enabled;
     if (_transform)
-    ss << "\n\t" << _transform->toString();
+        ss << "\n\t" << _transform->toString();
     ss << "\n}" << std::endl;
 
     return (ss.str());
 }
 
-int	Player::getDamage() const
+int    Player::getDamage() const
 {
     return _damage;
 }
 
-int	Player::getHp() const
+int    Player::getHp() const
 {
     return _hp;
 }
 
-void	Player::setAction(ACommand::Action action)
+void    Player::setAction(ACommand::Action action)
 {
     _action.push(action);
 }
 
-void		Player::move(double elapsedtime)
+void        Player::move(double elapsedtime)
 {
-    float       speed = RType::Speed::ship;
-    double      move;
+    float  speed = RType::Speed::ship;
+    double move;
+
+    if (_hp <= 0)
+        return ;
 
     move = speed * elapsedtime;
     switch (_action.front())
@@ -141,23 +145,27 @@ void		Player::move(double elapsedtime)
     }
 }
 
-const std::vector<BulletObject *>	&Player::getActiveBullets() const
+const std::vector<BulletObject *>& Player::getActiveBullets() const
 {
     return _activeBullets;
 }
 
-void		Player::checkDeath()
+void        Player::checkDeath()
 {
     if (_hp <= 0)
     {
         std::cout << "Player Mort" << std::endl;
-        _enabled = false;
-        _parent->setVisible(false);
-        _parent->getComponent<Collider>()->setEnabled(false);
+
+        if (!_parent->getComponent<Animation>()->isPlaying())
+        {
+            _enabled = false;
+            _parent->setVisible(false);
+            _parent->getComponent<Collider>()->setEnabled(false);
+        }
     }
 }
 
-void	Player::shoot()
+void    Player::shoot()
 {
     BulletObject *bullet = _bullets->create("Bullet", 12);
     bullet->init();
@@ -166,15 +174,15 @@ void	Player::shoot()
     b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
     b->setY(_transform->getPosition().Y());
     _shotTime = 0;
-    std::vector<Object *>sound = _entityManager->getByMask(SoundMask);
-    for (auto play : sound)
+    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+    for (auto             play : sound)
     {
         static_cast<GameObject *>(play)->getComponent<AudioEffect>()
                                        ->setSoundToPlay("../res/laser1.wav");
     }
 }
 
-void	Player::checkAvailableBullets()
+void    Player::checkAvailableBullets()
 {
     for (auto it = _activeBullets.begin(); it != _activeBullets.end(); ++it)
     {
@@ -187,16 +195,19 @@ void	Player::checkAvailableBullets()
     }
 }
 
-void		Player::init()
+void        Player::init()
 {
-    _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
+    _bullets   = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _entityManager);
+    _parent    = static_cast<GameObject *>(parent());
+    _transform = _parent->getComponent<Transform>();
 }
 
-void		Player::update(double elapsedtime)
+void        Player::update(double elapsedtime)
 {
-    _parent = static_cast<GameObject *>(parent());
+    _parent        = static_cast<GameObject *>(parent());
     if (!_transform)
         _transform = _parent->getComponent<Transform>();
+
     checkDeath();
     _shotTime += elapsedtime;
     checkAvailableBullets();
@@ -212,9 +223,21 @@ void		Player::update(double elapsedtime)
 
 bool Player::handleMessage(Collider *o)
 {
-    GameObject	*otherParent = static_cast<GameObject *>(o->parent());
+    GameObject *otherParent = static_cast<GameObject *>(o->parent());
 
     if (otherParent->getComponent<Mob>() != nullptr)
         _hp -= 1;
+    if (_hp == 0)
+    {
+        _parent->getComponent<Collider>()->setEnabled(false);
+        _parent->getComponent<SpriteRenderer>()->setPath("explosion");
+        _parent->getComponent<SpriteRenderer>()->setRect(gu::Rect<int>(0, 0,
+                                                                       32, 30));
+        _parent->getComponent<Animation>()->setFrames(8);
+        _parent->getComponent<Animation>()->setDuration(256.0);
+        _parent->getComponent<Animation>()->setLoop(false);
+        _parent->getComponent<Animation>()->play();
+    }
+
     return (true);
 }

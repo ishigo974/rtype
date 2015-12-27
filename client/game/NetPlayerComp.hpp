@@ -27,27 +27,27 @@ public:
     virtual void update(double elapsedTime);
 
 public:
-    virtual bool                     handleMessage(Collider *o);
-    void                             checkDeath();
-    void                             checkAvailableBullets();
-    void                             shoot();
-    void                             move(double elapsedtime,
-                                          RType::InGameEvent action);
-    int                              getHp() const;
+    virtual bool handleMessage(Collider *o);
+    void         checkDeath();
+    void         checkAvailableBullets();
+    void         shoot();
+    void         move(double elapsedtime,
+                      RType::InGameEvent action);
+    int          getHp() const;
 
 private:
-    GameObject*     _parent;
-    int             _hp;
-    int             _damage;
-    bool            _multiple    = false;
+    GameObject *_parent;
+    int        _hp;
+    int        _damage;
+    bool       _multiple    = false;
 
-    ObjectPool<BulletObject, Bullet>*   _bullets;
-    std::vector<BulletObject *>         _activeBullets;
+    ObjectPool<BulletObject, Bullet> *_bullets;
+    std::vector<BulletObject *>      _activeBullets;
 
-    EntityManager*  _em;
-    Transform*      _transform;
-    double          _shotTime = 0;
-    UDPView*        _udp;
+    EntityManager *_em;
+    Transform     *_transform;
+    double        _shotTime = 0;
+    UDPView       *_udp;
 };
 
 
