@@ -29,28 +29,28 @@ namespace ECS
     /*
     ** Static functions
     */
-    EntityManager&    EntityManager::getInstance()
+    EntityManager& EntityManager::getInstance()
     {
         if (EntityManager::instance == nullptr)
             EntityManager::instance =
-                std::unique_ptr<EntityManager>(new EntityManager());
+                    std::unique_ptr<EntityManager>(new EntityManager());
         return *EntityManager::instance;
     }
 
     /*
     ** Public member functions
     */
-    Entity&           EntityManager::create(ComponentMask mask)
+    Entity& EntityManager::create(ComponentMask mask)
     {
-        EntityMap::iterator   it =
-            std::find_if(_inactives.begin(), _inactives.end(),
-            [mask](std::pair<const unsigned int,
-                             UniqueEntityPtr> const& e)->bool
-            { return e.second->getComponentMask() == mask; });
+        EntityMap::iterator it =
+                                    std::find_if(_inactives.begin(), _inactives.end(),
+                                                 [mask](std::pair<const unsigned int,
+                                                                  UniqueEntityPtr> const& e) -> bool
+                                                 { return e.second->getComponentMask() == mask; });
 
         if (it != _inactives.end())
         {
-            unsigned int    id;
+            unsigned int id;
 
             id = it->first;
             _actives[id] = std::move(it->second);
@@ -58,12 +58,12 @@ namespace ECS
             _actives[id]->clear();
             return *_actives[id];
         }
-        _actives[_nextId] = std::make_unique<Entity>(_nextId);
+        _actives[_nextId]      = std::make_unique<Entity>(_nextId);
         for (auto&& pair : _components)
         {
             if ((mask & pair.first) != 0)
                 _actives[_nextId]
-                    ->addComponent(UniqueCompPtr(pair.second->clone()));
+                        ->addComponent(UniqueCompPtr(pair.second->clone()));
         }
         ++_nextId;
         return *_actives[_nextId - 1];
@@ -91,9 +91,9 @@ namespace ECS
         _toDestroy.insert(entity.getId());
     }
 
-    Entity&           EntityManager::get(unsigned int id) const
+    Entity& EntityManager::get(unsigned int id) const
     {
-        EntityMap::const_iterator   it;
+        EntityMap::const_iterator it;
 
         if ((it = _actives.find(id)) == _actives.end())
             throw Exception::ValueError("Id " + std::to_string(id) +
@@ -101,25 +101,25 @@ namespace ECS
         return *it->second;
     }
 
-    void             EntityManager::addCmpntEntityLink(IComponent const* cmp,
+    void             EntityManager::addCmpntEntityLink(IComponent const *cmp,
                                                        Entity const& e)
     {
         _cmpntsEntities.insert(std::make_pair(cmp, e.getId()));
     }
 
-    void             EntityManager::removeCmpntEntityLink(IComponent const* cmp)
+    void             EntityManager::removeCmpntEntityLink(IComponent const *cmp)
     {
         _cmpntsEntities.erase(cmp);
     }
 
-    Entity&           EntityManager::getByCmpnt(IComponent const* cmp) const
+    Entity& EntityManager::getByCmpnt(IComponent const *cmp) const
     {
         return get(_cmpntsEntities.at(cmp));
     }
 
     EntityCollection  EntityManager::getByMask(ComponentMask mask) const
     {
-        EntityCollection  res;
+        EntityCollection res;
 
         for (auto& entity : _actives)
             if ((entity.second->getComponentMask() & mask) == mask)
@@ -156,19 +156,19 @@ namespace ECS
 
     std::string       EntityManager::toString() const
     {
-        std::ostringstream  ss;
+        std::ostringstream ss;
 
         ss << "EntityManager {"
         << "\n\t_nextId " << _nextId
         << "\n\t_actives(" << _actives.size() << ")";
         for (auto&& e : _actives)
-        ss << " " << e.first;
+            ss << " " << e.first;
         ss << "\n\t_inactives(" << _inactives.size() << ")";
         for (auto&& e : _inactives)
-        ss << " " << e.first;
+            ss << " " << e.first;
         ss << "\n\t_components";
         for (auto&& c : _components)
-        ss << " " << c.second->getName();
+            ss << " " << c.second->getName();
         ss << std::endl;
         return ss.str();
     }
