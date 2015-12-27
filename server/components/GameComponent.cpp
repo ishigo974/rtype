@@ -59,6 +59,7 @@ namespace RType
         */
         void                Game::update()
         {
+            std::cout << "LOL UPDATE" << std::endl; // debug
             bool            allDead(true);
             Buffer          score;
 
@@ -77,7 +78,6 @@ namespace RType
             {
                 Request     request(Request::SE_ENDOFGAME);
 
-                std::cout << "lololol end !!!" << std::endl; // debug
                 request.push<Buffer>("scores", score);
                 _room->broadcastTCP(request.toBuffer());
                 _running = false;
