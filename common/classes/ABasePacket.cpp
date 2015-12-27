@@ -75,7 +75,7 @@ namespace RType
         DataMap::const_iterator it = _data.find(key);
 
         if (it == _data.end())
-            throw std::runtime_error("no such data: " + key); // TODO
+            throw std::runtime_error("no such data: " + key);
         return it->second.getString();
     }
 }

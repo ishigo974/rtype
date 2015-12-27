@@ -71,7 +71,6 @@ std::deque<ACommand *>& CommandPipeline::simulate(CommandPipeline::cmdIt const& 
     _cmdDiff.clear();
 
     _cmdDiff.push_back(_invalidCmd);
-    //TODO: [Opti] Check whether the cmd following the invalid one are the same type or not.
 
     for (cmdIt it = pos; it != _commands.end(); ++it)
         _cmdDiff.push_back(*it);

@@ -101,7 +101,6 @@ void		NetPlayerComp::checkDeath()
 {
   if (_hp <= 0)
     {
-      // TODO remove std::cout << "NetPlayer Mort" << std::endl;
       if (!_parent->getComponent<Animation>()->isPlaying())
         {
 	  _enabled = false;
@@ -152,7 +151,6 @@ void		NetPlayerComp::init()
     _parent = static_cast<GameObject *>(parent());
     _bullets = new ObjectPool<BulletObject, Bullet>("Bullet", 12, _em);
     _udp = _parent->getComponent<UDPView>();
-    // TODO remove std::cout << _hp << std::endl;
 }
 
 void		NetPlayerComp::update(double elapsedtime)

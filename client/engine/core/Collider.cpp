@@ -55,7 +55,6 @@ RTypes::my_uint16_t Collider::getMask() const
 
 std::string Collider::toString() const
 {
-    //TODO : _bounds.toString()
     std::string ss;
 
     ss = "Collider {";
