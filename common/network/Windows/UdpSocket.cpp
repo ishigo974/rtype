@@ -39,7 +39,7 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
                          reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
                          nullptr, nullptr)) == SOCKET_ERROR)
 	{
-		std::cout << WSAGetLastError() << std::endl;
+		std::cerr << WSAGetLastError() << std::endl;
 		throw std::runtime_error("WSASend failed");
 	}
 	return SendBytes;

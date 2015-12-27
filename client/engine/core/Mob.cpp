@@ -147,7 +147,7 @@ void		Mob::move(double elapsedTime)
 
     _transform->getPosition().setX(pos.X());
     _transform->getPosition().setY(pos.Y());
-    std::cout << pos.X() << " " << pos.Y() << std::endl;
+    // TODO remove std::cout << pos.X() << " " << pos.Y() << std::endl;
 }
 
 void		Mob::update(double)

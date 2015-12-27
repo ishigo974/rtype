@@ -185,7 +185,6 @@ void		Bullet::move(double elapsedtime) const
     _transform->getPosition().setX((_transform->getPosition().X() + _direction *
                                     RType::Speed::bullet *
                                     static_cast<float>(elapsedtime)));
-    // std::cout << "bullet " << _transform->getPosition().X() << " " << _transform->getPosition().Y() << std::endl;
 }
 
 void		Bullet::update(double elapsedtime)

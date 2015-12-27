@@ -27,8 +27,6 @@ bool CommandPipeline::validate(ACommand *cmd)
     auto diff = (std::chrono::duration_cast<std::chrono::microseconds>
             (std::chrono::high_resolution_clock::now().time_since_epoch()).count() - cmd->getTime().count());
 
-    std::cout << "Command lag = " << diff << std::endl;
-
     return (diff <= _maxLag.count());
 }
 

@@ -131,7 +131,7 @@ void SocketMonitor::update()
     if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
         for (DWORD i = 0; i < _eventTotal; i++)
         {
-            index = WSAWaitForMultipleEvents(1, &_eventArray[i], FALSE, _usecValue,
+            index = WSAWaitForMultipleEvents(1, &_eventArray[i], TRUE, _usecValue,
                                              FALSE);
             if ((index != WSA_WAIT_FAILED) && (index != WSA_WAIT_TIMEOUT))
             {

@@ -12,22 +12,10 @@
 
 class UDPView : public Component
 {
-//public:
-//    enum Action
-//    {
-//        MOVE_UP = 0,
-//        MOVE_DOWN,
-//        MOVE_LEFT,
-//        MOVE_RIGHT,
-//        SHOT_START,
-//        SHOT_STOP,
-//        MOB_SPAWN,
-//        MOB_DIE
-//    };
 
 public:
     static const RTypes::my_uint16_t Mask = ComponentMask::UDPMask;
-    
+
 public:
     UDPView();
     UDPView(unsigned int id, std::string const& name);
