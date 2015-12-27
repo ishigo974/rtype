@@ -1,4 +1,8 @@
 {
+  "jarjar": {
+    "path": "../client/res/jarjar.png",
+    "repeated": false
+  },
   "explosion": {
     "path": "../client/res/explosion.png",
     "repeated": false
