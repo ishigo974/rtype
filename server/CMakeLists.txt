@@ -8,7 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BUILD_DIR}")
 if (WIN32)
     #	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
     #	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/Wall -std=c++14") #TODO FLAGS
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "/Wall -std=c++14")
 elseif (APPLE)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -Werror -Wextra -std=c++14")
 elseif (UNIX)

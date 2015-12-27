@@ -120,7 +120,6 @@ namespace RType
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
                 display("Received an invalid request", true);
-                // TODO handle
             } catch (...) {
                 _quit = true;
                 display("Waiting for InGameHandler thread");
@@ -154,7 +153,7 @@ namespace RType
 
     std::string     Server::toString() const
     {
-        return std::to_string(_acceptor.getPort()); // TODO
+        return std::to_string(_acceptor.getPort());
     }
 
     /*

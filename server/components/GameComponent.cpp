@@ -77,7 +77,7 @@ namespace RType
                 Request     request(Request::SE_ENDOFGAME);
 
                 request.push<Buffer>("scores", score);
-                _room->broadcastTCP(request.toBuffer());
+                // _room->broadcastTCP(request.toBuffer());
                 _running = false;
             }
         }

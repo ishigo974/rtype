@@ -53,7 +53,7 @@ namespace RType
 
             if ((lobby = dynamic_cast<System::Lobby*>(sys)) == nullptr)
                 throw std::runtime_error("Can't initialize command: "
-                                         "expected LobbySystem"); // TODO
+                                         "expected LobbySystem");
             _room = lobby->getRoom(request.get<uint32_t>("room_id"));
         }
 

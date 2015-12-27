@@ -50,7 +50,6 @@ namespace RType
         {
             Component::Room*    room;
 
-            // validation username TODO
             if (_player == nullptr || _network == nullptr)
                 throw std::runtime_error("Entity does not have a \
 player/network component");

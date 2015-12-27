@@ -110,7 +110,7 @@ namespace RType
 
                 if (network == nullptr)
                     throw std::runtime_error("Player entity is missing his "
-                                             "NetworkTCP component"); // TODO except
+                                             "NetworkTCP component");
                 if (except == nullptr || except != entry.second.first)
                     network->send(buffer);
             }
@@ -126,7 +126,7 @@ namespace RType
 
                 if (network == nullptr)
                     throw std::runtime_error("Player entity is missing his "
-                                             "NetworkUDP component"); // TODO except
+                                             "NetworkUDP component");
                 if (except == nullptr || except != entry.second.first)
                     network->send(buffer);
             }

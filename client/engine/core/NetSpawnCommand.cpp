@@ -55,5 +55,4 @@ void NetSpawnCommand::execute()
 
 void NetSpawnCommand::undo()
 {
-    //TODO: Find some way to delete it~
 }

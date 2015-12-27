@@ -64,7 +64,7 @@ namespace RType
                         continue ;
                     }
                     ECS::Entity&    eMob = ECS::EntityManager::getInstance()
-                        .create(Component::MASK_MOB | Component::MASK_POSITION); // TODO add collider
+                        .create(Component::MASK_MOB | Component::MASK_POSITION);
                     Component::Mob* cMob = eMob.getComponent<Component::Mob>();
                     Component::Position*    cPos =
                         eMob.getComponent<Component::Position>();

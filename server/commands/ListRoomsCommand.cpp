@@ -48,8 +48,8 @@ namespace RType
             System::Lobby*      lobby;
 
             if ((lobby = dynamic_cast<System::Lobby*>(system)) == nullptr)
-                throw std::runtime_error("Can't initialize command: \
-expected LobbySystem"); // TODO
+                throw std::runtime_error("Can't initialize command: "
+                                         "expected LobbySystem");
             _rooms = &lobby->getRooms();
         }
 
