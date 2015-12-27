@@ -46,7 +46,7 @@ unsigned long    CommandSystem::getSize() const
     return _commands.size();
 }
 
-std::string    CommandSystem::toString()
+std::string    CommandSystem::toString() const
 {
     std::stringstream ss;
 
