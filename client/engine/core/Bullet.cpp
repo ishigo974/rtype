@@ -17,8 +17,8 @@ Bullet::Bullet()
     _parent = nullptr;
 }
 
-Bullet::Bullet(unsigned int _id, std::string const& _name)
-    : Behaviour(_id, _name)
+Bullet::Bullet(unsigned int _id, std::string const& _name, EntityManager *manager)
+    : Behaviour(_id, _name), _em(manager)
 {
     _direction = Bullet::Direction::DEFAULT;
     _hp = 1;
@@ -36,6 +36,7 @@ Bullet::Bullet(Bullet const& other) : Behaviour(other)
     _enabled = other._enabled;
     _available = other._available;
     _transform = other._transform;
+    _em = other._em;
 }
 
 Bullet::Bullet(Bullet&& other) : Bullet(other)
@@ -74,6 +75,7 @@ void Bullet::swap(Bullet& other)
     swap(_direction, other._direction);
     swap(_available, other._available);
     swap(_transform, other._transform);
+    swap(_em, other._em);
 }
 
 namespace std
@@ -207,5 +209,12 @@ bool Bullet::handleMessage(Collider *)
     _parent->getComponent<Animation>()->setDuration(256.0);
     _parent->getComponent<Animation>()->setLoop(false);
     _parent->getComponent<Animation>()->play();
+    std::vector<Object *> sound = _em->getByMask(SoundMask);
+    for (auto             play : sound)
+    {
+        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                       ->setSoundToPlay("../res/bulletExplosion"
+                                                                ".wav");
+    }
     return (true);
 }
