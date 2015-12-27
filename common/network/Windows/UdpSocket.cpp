@@ -6,7 +6,7 @@
 #include "SocketMonitor.hpp"
 #include "UdpSocket.hpp"
 
-const int UdpSocket::defaultTimeout = 500;
+int UdpSocket::defaultTimeout = 1;
 
 UdpSocket::UdpSocket(short int port)
         : BaseSocket()
@@ -24,27 +24,25 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
 {
     struct sockaddr_in client;
     WSABUF             toSend;
-    DWORD              SendBytes;
+    DWORD              SendBytes = 0;
     size_t             ret;
     std::vector<char>  buff(buffer.data(), buffer.data() + buffer.size());
-	std::string address(addr.size(), 0);
+    std::string        address(addr);
 
-	std::memcpy(&address, &addr, sizeof(addr));
-    toSend.len        = buffer.size();
+	toSend.len        = buffer.size();
     toSend.buf        = buff.data();
     client.sin_family = AF_INET;
-    client.sin_addr.s_addr =
-            inet_pton(AF_INET, address.data(), &client.sin_addr);
-    client.sin_port = _port;
+	inet_pton(AF_INET, address.c_str(), &(client.sin_addr));
+    client.sin_port = htons(_port);
 
-	if ((ret = WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
-		reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
-		nullptr, nullptr)) == SOCKET_ERROR)
+    if ((ret = ::WSASendTo(_socket, &toSend, 1, &SendBytes, 0,
+                         reinterpret_cast<SOCKADDR *>(&client), sizeof(client),
+                         nullptr, nullptr)) == SOCKET_ERROR)
 	{
 		std::cout << WSAGetLastError() << std::endl;
 		throw std::runtime_error("WSASend failed");
 	}
-	return ret;
+	return SendBytes;
 }
 
 size_t    UdpSocket::receiveFrom(Buffer& buffer, size_t len, std::string& addr)
@@ -57,6 +55,10 @@ const
     int                clientSize = sizeof(client);
     char               address[16];
 
+	if (setsockopt(_socket, SOL_SOCKET, SO_RCVTIMEO,
+                   reinterpret_cast<char *>(&defaultTimeout),
+                   sizeof(defaultTimeout)) < 0)
+        throw std::runtime_error("setsockopt failed");
     wsabuf.buf = new char[len];
     wsabuf.len = len;
     if (::WSARecvFrom(_socket, &wsabuf, 1, &read_size, &flags,

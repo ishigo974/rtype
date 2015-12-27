@@ -166,12 +166,12 @@ void        Player::checkDeath()
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
-        std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
-        for (auto             play : sound)
-        {
-            static_cast<GameObject *>(play)->getComponent<AudioEffect>()
-                                           ->setSoundToPlay("../res/mobDeath.wav");
-        }
+	    std::vector<Object *> sound = _entityManager->getByMask(SoundMask);
+	    for (auto             play : sound)
+	      {
+		static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+		  ->setSoundToPlay("../res/mobDeath.wav");
+	      }
         }
     }
 }

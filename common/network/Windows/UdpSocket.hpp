@@ -45,7 +45,7 @@ public:
 	long      getTimeoutUsec() const;
 
 protected:
-    static const int defaultTimeout;
+    static int defaultTimeout;
 
 private:
     UdpSocket(UdpSocket const& sock) = delete;
