@@ -95,26 +95,7 @@ void	MobSpawner::spawnMob(RType::InGameEvent const& request)
     Mob *m = mob->getComponent<Mob>();
     m->setX(request.get<uint32_t>("x"));
     m->setY(request.get<uint32_t>("y"));
-    // m->setEntityId(request.get<uint64_t>("mob_id"));
-    // std::cout << "spawn mob " << request.get<uint64_t>("mob_id") << " " << mob->getComponent<Transform>()->getPosition().X() << " " << mob->getComponent<Transform>()->getPosition().Y() << std::endl;
-    // m->setY(_transform->getPosition().Y());
 }
-
-// void    MobSpawner::moveMob(RType::InGameEvent const& request)
-// {
-//     unsigned int    id = request.get<uint64_t>("mob_id");
-//     auto            it =
-//         std::find_if(_activeMobs.begin(), _activeMobs.end(),
-//         [id](MobObject const* m)
-//         { return m->getComponent<Mob>()->getEntityId() == id; });
-//
-//     if (it != _activeMobs.end())
-//     {
-//         (*it)->transform().getPosition().setX(request.get<uint32_t>("x"));
-//         (*it)->transform().getPosition().setY(request.get<uint32_t>("y"));
-//         // std::cout << (*it)->transform().getPosition().X() << " " << (*it)->transform().getPosition().Y() << std::endl; // debug
-//     }
-// }
 
 void		              MobSpawner::update(double)
 {
