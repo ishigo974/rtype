@@ -6,6 +6,7 @@
 #include "Renderer.hpp"
 #include "GameConfig.hpp"
 #include "Animation.hpp"
+#include "AudioEffect.hpp"
 
 Bullet::Bullet()
 {
@@ -17,8 +18,8 @@ Bullet::Bullet()
     _parent = nullptr;
 }
 
-Bullet::Bullet(unsigned int _id, std::string const& _name)
-    : Behaviour(_id, _name)
+Bullet::Bullet(unsigned int _id, std::string const& _name, EntityManager *manager)
+    : Behaviour(_id, _name), _em(manager)
 {
     _direction = Bullet::Direction::DEFAULT;
     _hp = 1;
@@ -36,6 +37,7 @@ Bullet::Bullet(Bullet const& other) : Behaviour(other)
     _enabled = other._enabled;
     _available = other._available;
     _transform = other._transform;
+    _em = other._em;
 }
 
 Bullet::Bullet(Bullet&& other) : Bullet(other)
@@ -74,6 +76,7 @@ void Bullet::swap(Bullet& other)
     swap(_direction, other._direction);
     swap(_available, other._available);
     swap(_transform, other._transform);
+    swap(_em, other._em);
 }
 
 namespace std
@@ -107,19 +110,24 @@ int	Bullet::getDamage() const
 
 std::string Bullet::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "Bullet {"
-    << "\n\thp: " << _hp
-    << "\n\tdamage: " << _damage
-    << "\n\tdirection: " << _direction
-    << "\n\tavailable: " << _available
-    << "\n\tenabled: " << _enabled;
+    ss = "Bullet {";
+    ss += "\n\thp: ";
+    ss += _hp;
+    ss += "\n\tdamage: ";
+    ss += _damage;
+    ss += "\n\tdirection: ";
+    ss += _direction;
+    ss += "\n\tavailable: ";
+    ss += _available;
+    ss += "\n\tenabled: ";
+    ss += _enabled;
     if (_transform)
-        ss << "\n\t" << _transform->toString();
-    ss << "\n}" << std::endl;
+        ss += "\n\t" + _transform->toString();
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 RTypes::my_uint16_t     Bullet::getMask() const
@@ -207,5 +215,12 @@ bool Bullet::handleMessage(Collider *)
     _parent->getComponent<Animation>()->setDuration(256.0);
     _parent->getComponent<Animation>()->setLoop(false);
     _parent->getComponent<Animation>()->play();
+    std::vector<Object *> sound = _em->getByMask(SoundMask);
+    for (auto             play : sound)
+    {
+        static_cast<GameObject *>(play)->getComponent<AudioEffect>()
+                                       ->setSoundToPlay("../res/bulletExplosion"
+                                                                ".wav");
+    }
     return (true);
 }

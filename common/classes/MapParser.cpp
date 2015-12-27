@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 #include "MapParser.hpp"
 
