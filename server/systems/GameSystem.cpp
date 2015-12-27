@@ -9,6 +9,7 @@
 #include "GameComponent.hpp"
 #include "Server.hpp"
 #include "MobComponent.hpp"
+#include "ColliderComponent.hpp"
 
 namespace RType
 {
@@ -73,6 +74,12 @@ namespace RType
                     cMob->setGame(game);
                     cPos->setX(it->second.x);
                     cPos->setY(it->second.y);
+
+                    eMob.addComponent(
+                        std::make_unique<Component::Collider>(
+                            mobType->second->getRekt().w,
+                            mobType->second->getRekt().h
+                    ));
 
                     event.push<uint8_t>("mob_id", cMob->getId());
                     event.push<uint32_t>("x", it->second.x);

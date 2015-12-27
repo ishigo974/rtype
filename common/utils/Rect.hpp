@@ -31,7 +31,7 @@ namespace gu
             return !Rect::operator==(rhs);
         }
 
-        bool intersects(Rect const& other)
+        bool intersects(Rect const& other) const
         {
             return (x < other.x + other.w &&
                     x + w > other.x &&

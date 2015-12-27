@@ -4,6 +4,7 @@
 #include "RoomComponent.hpp"
 #include "ComponentsMasks.hpp"
 #include "PositionComponent.hpp"
+#include "ColliderComponent.hpp"
 #include "EntityManager.hpp"
 
 namespace RType
@@ -53,6 +54,15 @@ namespace RType
         {
         }
 
+        void                Ship::collide(ECS::Entity& entity)
+        {
+            if ((entity.getComponentMask() & Component::MASK_MOB) ==
+                Component::MASK_MOB
+                || (entity.getComponentMask() & Component::MASK_SHOT) ==
+                    Component::MASK_SHOT)
+                removeLives(1);
+        }
+
         void                Ship::fire(unsigned int shot_type)
         {
             ECS::EntityManager&     em      = ECS::EntityManager::getInstance();
@@ -75,6 +85,9 @@ namespace RType
                     std::make_unique<Component::Shot>(
                         static_cast<RType::Shot::Type>(shot_type),
                             &entity, game));
+                shot.addComponent(
+                    std::make_unique<Component::Collider>(
+                        RType::Shot::width, RType::Shot::height));
                 shotPos->setX(pos->getX() + RType::Ship::width);
                 shotPos->setY(pos->getY());
                 _chrono.reset();

@@ -141,8 +141,6 @@ void        RTypeGame::initGame()
         transform = entry.second->getComponent<Transform>();
         transform->getPosition().setX(RType::Map::defaultPosX);
         transform->getPosition().setY(RType::Map::defaultPosY.at(entry.first));
-        std::cout << "player " << entry.first << ": " << transform->getPosition().X() << " " <<
-        transform->getPosition().Y() << std::endl;
     }
     if (_mobTypes.empty())
         throw std::runtime_error("No mobs types loaded");
@@ -179,7 +177,6 @@ void        RTypeGame::initGame()
 void        RTypeGame::handleGame()
 {
     _lag += (BigBen::getElapsedtime() / 1000000000);
-    std::cout << _chrono.getElapsedTime() << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _physics.process(_fixedStep);

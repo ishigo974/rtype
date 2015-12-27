@@ -88,7 +88,7 @@ namespace ECS
 
     void              EntityManager::safeDestroy(Entity const& entity)
     {
-        _toDestroy.push_back(entity.getId());
+        _toDestroy.insert(entity.getId());
     }
 
     Entity&           EntityManager::get(unsigned int id) const
