@@ -351,10 +351,6 @@ void Menu::transitionToStates()
             return (false);
         }, _event, _roomsList, _roomsTextField, &_roomTitle, this);
 
-    _inRoom.addTransition("rejected", [](bool rejected, TextField *rT)
-        {
-            return rejected;
-        }, _networkReject, &_roomTitle);
 
     _mainMenu.addTransition("changeName", [](cu::Event *e, TextField *cN)
         {
