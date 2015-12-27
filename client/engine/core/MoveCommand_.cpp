@@ -43,7 +43,7 @@ void    MoveCommand_::execute()
         case DOWN:
             event.setCode(RType::InGameEvent::CL_PLAYERDOWN);
             break;
-	case LEFT:
+	    case LEFT:
             event.setCode(RType::InGameEvent::CL_PLAYERLEFT);
             break;
         case RIGHT:
@@ -56,7 +56,8 @@ void    MoveCommand_::execute()
     event.push<uint64_t>("time", _time.count());
     UDPView* send = gm->getComponent<UDPView>();
     if (send != nullptr)
-        send->pushToSend(event);
+        if (send->sizeToSend() > 0)
+            send->pushToSend(event);
 }
 
 void    MoveCommand_::undo()
