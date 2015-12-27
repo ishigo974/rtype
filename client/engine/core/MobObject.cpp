@@ -65,15 +65,17 @@ MobObject::~MobObject()
 
 void	MobObject::deleteObject()
 {
-    Mob *m = this->getComponent<Mob>();
-    m->setLives(0);
-    m->setScoreValue(0);
-    // m->setSpriteFilePath("");
-    // m->setMovePattern();
+
+    Mob*            m = getComponent<Mob>();
+    Animation*      a = getComponent<Animation>();
+    SpriteRenderer* s = getComponent<SpriteRenderer>();
+    Collider*       c = getComponent<Collider>();
+
     m->setEnabled(false);
     m->setAvailable(true);
     setVisible(false);
-    getComponent<Collider>()->setEnabled(false);
+    c->setEnabled(false);
+    a->setEnabled(false);
 }
 
 void    MobObject::create()
