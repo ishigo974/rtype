@@ -231,8 +231,7 @@ void            RTypeGame::loadMobTypesFromFile()
         catch (std::runtime_error const&)
         {
             mobFile.close();
-            std::cout << "load mob failed " << line << std::endl;
-            // TODO throw ;
+            std::cout << "Mob loading failed " << line << std::endl;
         }
     }
     file.close();

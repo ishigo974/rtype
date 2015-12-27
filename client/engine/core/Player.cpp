@@ -183,7 +183,6 @@ void        Player::checkDeath()
     {
         if (!_parent->getComponent<Animation>()->isPlaying())
         {
-            // TODO remove std::cout << "Player Mort" << std::endl;
             _enabled = false;
             _parent->setVisible(false);
             _parent->getComponent<Collider>()->setEnabled(false);
@@ -245,7 +244,7 @@ void        Player::update(double elapsedtime)
     checkAvailableBullets();
     while (_action.size() > 0)
     {
-        if (_action.front() == ACommand::SHOOT && _shotTime >= 150) // TODO synchro serv
+        if (_action.front() == ACommand::SHOOT && _shotTime >= 150)
             this->shoot();
         else
             this->move(elapsedtime);
