@@ -50,6 +50,7 @@ private:
     void joinRoom(std::string const &);
     void ready();
     void quitRoom();
+	void reverseState();
 
 public:
     bool isReady() const;
@@ -103,6 +104,7 @@ private:
     std::deque<RType::Request>  _lastRequest;
 
     bool                        _done;
+	bool 						_networkReject;
 };
 
 #endif // !MENU_HPP_

@@ -25,7 +25,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
    _gm(nullptr),
    _ready(false), _isVisible(true),
    _network(nullptr),
-   _done(false)
+   _done(false),
+   _networkReject(false)
 {
     initTextFields();
     transitionToStates();
@@ -42,7 +43,8 @@ Menu::Menu(Menu const& other) :
         _back(other._back),
         _roomTitle(other._roomTitle),
         _event(other._event),
-        _done(other._done)
+        _done(other._done),
+        _networkReject(other._networkReject)
 {}
 
 Menu::Menu(Menu&& other) :
@@ -349,6 +351,11 @@ void Menu::transitionToStates()
             return (false);
         }, _event, _roomsList, _roomsTextField, &_roomTitle, this);
 
+    _inRoom.addTransition("rejected", [](bool rejected, TextField *rT)
+        {
+            return rejected;
+        }, _networkReject, &_roomTitle);
+
     _mainMenu.addTransition("changeName", [](cu::Event *e, TextField *cN)
         {
             return e->type == cu::Event::MouseButtonReleased &&
@@ -536,54 +543,45 @@ void Menu::move()
 
 void Menu::update()
 {
-//	std::cout << "update" << std::endl;
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
-        // std::cout << "{CODE} " << tmp.getCode() << std::endl;
+         std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
                 addRoomList(tmp.get<RType::Request::RoomsTab>("rooms"));
-				std::cout << "from serv: list room" << std::endl;
                 break;
             case RType::Request::SE_JOINROOM :
                 addPlayer(tmp);
-				std::cout << "from serv: join room" << std::endl;
 				break;
             case RType::Request::SE_QUITROOM :
                 deletePlayer(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: quit room" << std::endl;
 				break;
             case RType::Request::SE_CLIENTRDY :
                 userReady(tmp);
-				std::cout << "from serv: client rdy" << std::endl;
 				break;
             case RType::Request::SE_CLINOTRDY :
                 playerNotReady(tmp.get<uint8_t>("player_id"));
-				std::cout << "from serv: client not rdy" << std::endl;
 				break;
             case RType::Request::SE_CLIUSRNM :
                 changePlayerName(tmp);
-				std::cout << "from serv: client uname" << std::endl;
 				break;
             case RType::Request::SE_ROOMINFO :
                 _user.id = tmp.get<uint8_t>("player_id");
                 addPlayerList(tmp.get<RType::Request::PlayersTab>("players"));
-				std::cout << "from serv: room info" << std::endl;
 				break;
             case RType::Request::SE_GAMESTART :
                 _done = true;
-				std::cout << "from serv: game start" << std::endl;
 				break;
             case RType::Request::SE_ENDOFGAME:
                 endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
-				std::cout << "from serv: ok" << std::endl;
+                reverseState();
 				break;
             case RType::Request::SE_KO :
-                //TODO REVERSE STATE
+                reverseState();
                 break;
             default :
                 break;
@@ -671,4 +669,17 @@ void Menu::quitRoom()
     _network->pushToSend(RType::Request(RType::Request::CL_QUITROOM));
     _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
     _gm->clearPlayers();
+}
+
+void Menu::reverseState()
+{
+    if (!_lastRequest.empty())
+        switch (_lastRequest.front().getCode())
+        {
+            case RType::Request::CL_CREATEROOM :
+                _gm->clearPlayers();
+                break;
+            default:
+                break;
+        }
 }
