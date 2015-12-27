@@ -37,15 +37,12 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
 	char               pd[16];
 	inet_ntop(AF_INET, &(client.sin_addr), pd, INET_ADDRSTRLEN);
 
-	std::cout << "port: " << _port << std::endl;
-
 	if ((ret = sendto(_socket, buff.data(), buff.size(), 0,
 		reinterpret_cast<SOCKADDR *>(&client), sizeof(client))) == SOCKET_ERROR)
 	{
 		std::cout << WSAGetLastError() << std::endl;
 		throw std::runtime_error("WSASend failed");
 	}
-	std::cout << "Sends bytes: " << SendBytes << " to " << pd << std::endl;
 	return ret;
 }
 
