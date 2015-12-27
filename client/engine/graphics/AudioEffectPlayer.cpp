@@ -30,7 +30,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
     }
     _sounds.front().setVolume(5);
     if (_sounds.size() > 1)
-        _sounds.back().setVolume(2.5);
+        _sounds.back().setVolume(10);
     _sounds.back().play();
     obj->getComponent<AudioEffect>()->clearSounds();
     _backgroundStart = true;
