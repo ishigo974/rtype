@@ -13,7 +13,7 @@ public:
     PhysicsEngine(EntityManager *em);
 
 public:
-    void process(double fixedElapsed);
+    void process(double fixedElapsed) const;
 
 private:
     EntityManager *_em;

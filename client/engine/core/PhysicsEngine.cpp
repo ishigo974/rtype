@@ -9,7 +9,7 @@ PhysicsEngine::PhysicsEngine(EntityManager *em)
         : _em(em)
 { }
 
-void PhysicsEngine::process(double fixedElapsed)
+void PhysicsEngine::process(double fixedElapsed) const
 {
     auto tmp = _em->getByMask(ComponentMask::ColliderMask);
 
