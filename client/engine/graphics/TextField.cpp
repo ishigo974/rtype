@@ -28,7 +28,6 @@ TextField::TextField(gu::Rect<float> const& rect, std::string const& str, unsign
     _foreColor = sf::Color::Black;
     _text.setColor(_foreColor);
     setText(str);
-    //_text.setString(str);
 }
 
 TextField::~TextField()

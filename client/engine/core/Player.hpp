@@ -9,6 +9,7 @@
 # include "BulletObject.hpp"
 # include "EntityManager.hpp"
 # include "Collider.hpp"
+# include "TextField.hpp"
 
 class Player : public Behaviour
 {
@@ -31,7 +32,8 @@ public:
     virtual int     getDamage() const;
     void            init();
     void            swap(Player& other);
-    std::string    toString() const;
+    TextField const*     getGUI();
+    std::string     toString() const;
 
 protected:
     virtual bool   handleMessage(Collider *o);
@@ -54,6 +56,7 @@ protected:
     EntityManager*                      _entityManager;
     Transform*                          _transform;
     double                              _shotTime = 0;
+    TextField                           _gui;
 };
 
 #endif /* !PLAYER_HPP_ */

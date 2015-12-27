@@ -4,11 +4,12 @@
 # include "GameObject.hpp"
 # include "EntityManager.hpp"
 
-class	PlayerObject : public GameObject
+class   PlayerObject : public GameObject
 {
 public:
     PlayerObject();
-    PlayerObject(unsigned int _id, std::string const& _name, int _layer, EntityManager *manager = nullptr);
+    PlayerObject(unsigned int _id, std::string const& _name, int _layer,
+                 EntityManager *manager = nullptr);
     virtual ~PlayerObject();
 
     PlayerObject(PlayerObject const& other);
