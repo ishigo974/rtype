@@ -1,3 +1,0 @@
-/Users/Denis/rtype/common/mob_types/build/CMakeFiles/rtype_diagonalmob.dir
-/Users/Denis/rtype/common/mob_types/build/CMakeFiles/rtype_verticalmob.dir
-/Users/Denis/rtype/common/mob_types/build/CMakeFiles/rtype_forwardmob.dir
