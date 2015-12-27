@@ -627,6 +627,7 @@ void Menu::update()
                 std::cout << "from serv: game start" << std::endl;
                 break;
             case RType::Request::SE_ENDOFGAME:
+                setVisible(true);
                 endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
