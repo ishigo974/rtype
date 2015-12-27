@@ -8,6 +8,7 @@
 #include "ColliderComponent.hpp"
 #include "ShipComponent.hpp"
 #include "EntityManager.hpp"
+#include "GameConfig.hpp"
 
 namespace RType
 {
@@ -16,14 +17,13 @@ namespace RType
         /*
         ** Static variables
         */
-        const ECS::ComponentMask    Ship::mask          = Component::MASK_SHIP;
-        const unsigned int          Ship::defaultLives  = 1;
+        const ECS::ComponentMask    Ship::mask  = Component::MASK_SHIP;
 
         /*
         ** Constructor/Destructor
         */
         Ship::Ship() :
-            _lives(defaultLives), _score(0)
+            _lives(RType::Ship::lives), _score(0)
         {
         }
 
@@ -67,16 +67,6 @@ namespace RType
                 removeLives(1);
                 std::cout << "ship collided, reminaing lives: " << _lives << std::endl;
             }
-            // Component::Collider* p = ECS::EntityManager::getInstance().getByCmpnt(this).getComponent<Component::Collider>();
-            // std::cout << "ship " << p->getBounds().x << " " << p->getBounds().y << " " << p->getBounds().w << " " << p->getBounds().h << std::endl;
-            // p = entity.getComponent<Component::Collider>();
-            // if ((entity.getComponentMask() & Component::MASK_MOB) ==
-            // Component::MASK_MOB)
-            //     std::cout << "mob";
-            // else if ((entity.getComponentMask() & Component::MASK_SHOT) ==
-            //     Component::MASK_SHOT)
-            // std::cout << "shot" << std::endl;
-            // std::cout << " " << p->getBounds().x << " " << p->getBounds().y << " " << p->getBounds().w << " " << p->getBounds().h << std::endl;
         }
 
         void                Ship::fire(unsigned int shot_type)
@@ -108,7 +98,6 @@ namespace RType
                         shotPos->getX(), shotPos->getY(),
                         RType::Shot::width, RType::Shot::height));
                 _chrono.reset();
-                // std::cout << "Fire" << std::endl;
             }
         }
 
@@ -165,7 +154,7 @@ namespace RType
 
         void                Ship::clear()
         {
-            _lives = defaultLives;
+            _lives = RType::Ship::lives;
             _score = 0;
         }
 

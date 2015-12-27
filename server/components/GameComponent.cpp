@@ -59,7 +59,6 @@ namespace RType
         */
         void                Game::update()
         {
-            std::cout << "LOL UPDATE" << std::endl; // debug
             bool            allDead(true);
             Buffer          score;
 
@@ -73,8 +72,7 @@ namespace RType
                 score.append<uint8_t>(room.first);
                 score.append<uint32_t>(ship->getScore());
             }
-            std::cout << "test : " << allDead << std::endl;
-            if (allDead || (_map.second.empty() && _nbMobs == 0))
+            if (allDead || (_map.second.empty() && _nbMobs == 0 && _running))
             {
                 Request     request(Request::SE_ENDOFGAME);
 

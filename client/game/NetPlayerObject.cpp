@@ -59,7 +59,7 @@ void NetPlayerObject::init()
 {
     _em->attachComponent<SpriteRenderer>(this, "NetPlayerSprite", "player", gu::Rect<int>(67, 3, 32, 12));
     _em->attachComponent<UDPView>(this, "NetPlayerUDPView");
-    _em->attachComponent<NetPlayerComp>(this, "NPC", _em, 10, 5);
+    _em->attachComponent<NetPlayerComp>(this, "NPC", _em, RType::Ship::lives, RType::Ship::damages);
     getComponent<NetPlayerComp>()->init();
     _em->attachComponent<Collider>(this, "collider", RType::Ship::width, RType::Ship::height);
 }

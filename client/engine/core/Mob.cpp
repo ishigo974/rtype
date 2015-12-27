@@ -8,6 +8,7 @@
 #include "Animation.hpp"
 #include "AudioEffect.hpp"
 #include "AudioEffectPlayer.hpp"
+#include "GameConfig.hpp"
 
 /*
 ** Constructor/Destructor
@@ -104,11 +105,11 @@ bool        Mob::handleMessage(Collider *o)
     if (((otherParent->getComponent<Player>() != nullptr
         || otherParent->getComponent<Bullet>() != nullptr)
         && otherParent->getComponent<Mob>() == nullptr) && _lives > 0)
-        _lives -= 1;
+        _lives -= RType::Ship::damages;
     if (_lives == 0)
     {
-              std::vector<Object *> sound = _em->getByMask(SoundMask);
-        for (auto             play : sound)
+        std::vector<Object *> sound = _em->getByMask(SoundMask);
+        for (auto play : sound)
         {
             static_cast<GameObject *>(play)->getComponent<AudioEffect>()
                                            ->setSoundToPlay(AudioEffectPlayer::Death);
@@ -142,26 +143,23 @@ void		Mob::move(double elapsedTime)
 
     _transform->getPosition().setX(pos.X());
     _transform->getPosition().setY(pos.Y());
-    // TODO remove std::cout << pos.X() << " " << pos.Y() << std::endl;
 }
 
 void		Mob::update(double elapsedTime)
 {
     if (_lives <= 0)
     {
-            if (!_parent->getComponent<Animation>()->isPlaying())
-            {
-                _available = true;
-            }
+        if (!_parent->getComponent<Animation>()->isPlaying())
+            _available = true;
     }
     if (_transform->getPosition().X() > Renderer::width + 100
         || _transform->getPosition().X() < -100
         || _transform->getPosition().Y() > Renderer::height + 100
         || _transform->getPosition().Y() < -100)
-        {
-            _available = true;
-            _lives = 0;
-        }
+    {
+        _available = true;
+        _lives = 0;
+    }
     move(elapsedTime);
 }
 

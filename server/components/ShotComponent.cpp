@@ -61,21 +61,17 @@ namespace RType
             switch (_type)
             {
                 case RType::Shot::NORMAL:
-                    pos->setX(pos->getX() + (Speed::bullet
-                                             * Server::lag));
+                    pos->setX(pos->getX() + (Speed::bullet * Server::lag));
                     break ;
                 default:
                     break ;
             }
-            // std::cout << "Shot moved to " << pos->getX() << " " << pos->getY() << " "
-            //             << _game->getChrono().getElapsedTime() << std::endl;
             if (pos->getX() <= 0 || pos->getX() >= Map::width
                 || pos->getY() <= 0 || pos->getY() >= Map::height)
             {
                 ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
                 em.safeDestroy(em.getByCmpnt(this));
-                // std::cout << "safedestroy bullet" << std::endl;
             }
         }
 
@@ -83,7 +79,6 @@ namespace RType
         {
             ECS::EntityManager& em = ECS::EntityManager::getInstance();
 
-            // std::cout << "shot collided" << std::endl;
             em.safeDestroy(em.getByCmpnt(this));
         }
 

@@ -176,7 +176,7 @@ namespace RType
         for (auto& arg: it->second)
         {
             if (dataSizes.at(arg) == Request::variableSize
-                && arg != "players" && arg != "rooms")
+                && arg != "players" && arg != "rooms" && arg != "scores")
                 data.append<uint32_t>(_data.at(arg).size());
             data.append<Buffer>(_data.at(arg));
         }

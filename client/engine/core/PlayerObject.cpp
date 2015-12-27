@@ -84,7 +84,7 @@ std::string	PlayerObject::toString() const
 void	PlayerObject::init()
 {
   _entityManager->attachComponent<SpriteRenderer>(this, "Player", "player", gu::Rect<int>(67, 3, 32, 12));
-  _entityManager->attachComponent<Player>(this, "Player", _entityManager);
+  _entityManager->attachComponent<Player>(this, "Player", _entityManager, RType::Ship::lives, RType::Ship::damages);
   this->getComponent<Player>()->init();
   _entityManager->attachComponent<Collider>(this, "collider", RType::Ship::width, RType::Ship::height);
   _entityManager->attachComponent<Animation>(this, "AN", 1.0, 1.0, false);
