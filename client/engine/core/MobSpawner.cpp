@@ -88,7 +88,6 @@ void	MobSpawner::spawnMob(RType::InGameEvent const& request)
     Mob *m = mob->getComponent<Mob>();
     m->setX(request.get<uint32_t>("x"));
     m->setY(request.get<uint32_t>("y"));
-    std::cout << "spawn mob " << mob->getComponent<Transform>()->getPosition().X() << " " << mob->getComponent<Transform>()->getPosition().Y() << std::endl;
     // m->setY(_transform->getPosition().Y());
     }
 }

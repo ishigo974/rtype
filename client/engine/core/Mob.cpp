@@ -77,7 +77,6 @@ RTypes::my_uint16_t     Mob::getMask() const
 */
 void        Mob::init(RType::MobType::IMobType const* type)
 {
-    std::cout << "Fuck Menizob" << std::endl;
     initTransform();
     if (!_parent)
         _parent = static_cast<GameObject *>(parent());

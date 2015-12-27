@@ -6,7 +6,7 @@
 #include "SocketMonitor.hpp"
 #include "UdpSocket.hpp"
 
-int UdpSocket::defaultTimeout = 500;
+int UdpSocket::defaultTimeout = 1;
 
 UdpSocket::UdpSocket(short int port)
         : BaseSocket()
