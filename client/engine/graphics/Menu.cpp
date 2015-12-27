@@ -182,7 +182,7 @@ void Menu::joinRoom(RType::Request::Room room)
 
     std::cout << "Join room: " << room.name << "ID: " << room.id << std::endl;
     request.setCode(RType::Request::CL_JOINROOM);
-    request.push<uint>("room_id", room.id);
+    request.push<uint8_t>("room_id", room.id);
     _network->pushToSend(request);
     _lastRequest.push_back(request);
 }
@@ -577,6 +577,7 @@ void Menu::update()
 				std::cout << "from serv: game start" << std::endl;
 				break;
             case RType::Request::SE_ENDOFGAME:
+                endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
 				std::cout << "from serv: ok" << std::endl;

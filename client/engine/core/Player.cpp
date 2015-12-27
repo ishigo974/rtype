@@ -126,6 +126,8 @@ void        Player::move(double elapsedtime)
         return ;
 
     move = speed * elapsedtime;
+    if (_action.empty())
+        return ;
     switch (_action.front())
     {
         case ACommand::UP:
