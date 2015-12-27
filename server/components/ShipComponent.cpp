@@ -75,7 +75,8 @@ namespace RType
                     std::make_unique<Component::Shot>(
                         static_cast<RType::Shot::Type>(shot_type),
                             &entity, game));
-                *shotPos = *pos;
+                shotPos->setX(pos->getX() + RType::Ship::width);
+                shotPos->setY(pos->getY());
                 _chrono.reset();
                 // std::cout << "Fire" << std::endl;
             }

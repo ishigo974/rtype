@@ -122,7 +122,6 @@ namespace RType
                     pos->setX(pos->getX() + move);
                     break ;
             }
-            std::cout << "move cmd: " << game->getChrono().getElapsedTime() << " " << pos->getX() << " " << pos->getY() << std::endl;
             event.setCode(dirCodeMatches.at(_direction));
             event.push<uint8_t>("player_id", room->getPlayerId(*_entity));
             event.push<uint64_t>("time", _time);

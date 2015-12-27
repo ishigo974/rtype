@@ -44,6 +44,11 @@ namespace RType
 
         const unsigned int  usecFireDelay = 500000;
     }
+
+    namespace Ship
+    {
+        const unsigned int  width = 20;
+    }
 }
 
 #endif /* !GAMECONFIG_HPP_ */

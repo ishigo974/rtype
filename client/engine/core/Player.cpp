@@ -174,7 +174,7 @@ void    Player::shoot()
     bullet->init();
     _activeBullets.push_back(bullet);
     Bullet *b = bullet->getComponent<Bullet>();
-    b->setX(_transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
+    b->setX(_transform->getPosition().X() + RType::Ship::width);
     b->setY(_transform->getPosition().Y());
     _shotTime = 0;
     std::vector<Object *> sound = _entityManager->getByMask(SoundMask);

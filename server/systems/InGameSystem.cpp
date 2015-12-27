@@ -46,7 +46,6 @@ namespace RType
                 _mutex.lock();
                 _book[addr].append(buffer);
                 _mutex.unlock();
-                std::cout << "received: " << addr << std::endl;
             }
         }
 
