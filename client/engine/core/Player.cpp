@@ -143,6 +143,7 @@ void        Player::move(double elapsedtime)
         default:
             break;
     }
+    std::cout << "Player move: " << _transform->getPosition().X() << " " << _transform->getPosition().Y() << std::endl;
 }
 
 const std::vector<BulletObject *>& Player::getActiveBullets() const
