@@ -107,7 +107,7 @@ namespace RType
 
             try {
                 _lag = (_clock.updateElapsedTime() / 1000000000);
-                lag = _lag / nbRooms; // TODO
+                lag = _lag / nbRooms;
                 _monitor.update();
                 if (_monitor.isReadable(stdinFileNo))
                     onCLICommand();
@@ -116,10 +116,6 @@ namespace RType
                 _em.updateAll();
                 _sm.processAll();
                 checkDisconnected();
-                // while (_lag >= Config::fixedStep)
-                // {
-                //     _lag -= Config::fixedStep;
-                // }
             } catch (Exception::NotImplemented const& e) {
                 display(std::string(e.what()), true);
             } catch (Exception::InvalidRequest const& /*e*/) {
