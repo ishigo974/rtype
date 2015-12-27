@@ -75,6 +75,8 @@ RTypes::my_uint16_t     Mob::getMask() const
 */
 void        Mob::init(RType::MobType::IMobType const* type)
 {
+    std::cout << "Fuck Menizob" << std::endl;
+    initTransform();
     if (!_parent)
         _parent = static_cast<GameObject *>(parent());
     if (!_transform)
@@ -139,14 +141,16 @@ void		Mob::update(double elapsedTime)
 
     if (_lives <= 0)
     {
-        if (!_parent->getComponent<Animation>()->isPlaying())
-        {
-            _available = true;
-            _enabled = false;
-            _parent->setVisible(false);
-            _parent->getComponent<Collider>()->setEnabled(false);
-        }
+        if (_parent != nullptr && _parent->getComponent<Animation>() != nullptr)
+            if (!_parent->getComponent<Animation>()->isPlaying())
+            {
+                _available = true;
+                _enabled = false;
+                _parent->setVisible(false);
+                _parent->getComponent<Collider>()->setEnabled(false);
+            }
     }
+    if (_transform != nullptr)
     if (_transform->getPosition().X() > Renderer::width + 1000
         || _transform->getPosition().X() < -1000
         || _transform->getPosition().Y() > Renderer::height + 1000

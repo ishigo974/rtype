@@ -78,12 +78,14 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
     return Mask;
 }
 
+#include <iostream>
 void	MobSpawner::spawnMob(RType::InGameEvent const& request)
 {
     MobObject *mob = _mobs->create("Mob", 12);
     mob->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
+    m->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
     m->setX(request.get<uint32_t>("x")); // TODO mettre la position donnée dans"
                                              // fichier
     // _transform->getPosition().X() + _parent->getComponent<SpriteRenderer>()->getRect().w);
