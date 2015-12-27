@@ -98,14 +98,12 @@ namespace RType
 
         try
         {
-	  Buffer toSend = _udpObj.toSend();
-	  if (!toSend.empty())
-	    {
-	      _udpSock.sendTo(toSend, _addr);
-	    }
+            Buffer toSend = _udpObj.toSend();
+            if (!toSend.empty())
+                _udpSock.sendTo(toSend, _addr);
 	}
 	catch (std::runtime_error const&)
-        {}
+        { }
     }
 
     void NetworkSystem::pushTCP(Request const& request)

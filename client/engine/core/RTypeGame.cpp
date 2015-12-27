@@ -179,7 +179,6 @@ void        RTypeGame::initGame()
 void        RTypeGame::handleGame()
 {
     _lag += (BigBen::getElapsedtime() / 1000000000);
-    std::cout << _chrono.getElapsedTime() << std::endl;
     _cs.processInput();
     _cs.processNetwork();
     _physics.process(_fixedStep);

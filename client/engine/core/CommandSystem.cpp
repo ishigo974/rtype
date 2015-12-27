@@ -83,9 +83,7 @@ void CommandSystem::processNetwork()
         while (i < tcpIn.size())
             tmpComp->pushReceive(tcpIn[i++]);
         while (tmpComp->sizeToSend() > 0)
-        {
             _ns->pushTCP(tmpComp->popToSend());
-        }
     }
     for (auto e : udpObjs)
     {

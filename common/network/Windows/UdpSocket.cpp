@@ -27,9 +27,8 @@ size_t    UdpSocket::sendTo(Buffer const& buffer, std::string const& addr) const
     DWORD              SendBytes;
     size_t             ret;
     std::vector<char>  buff(buffer.data(), buffer.data() + buffer.size());
-	std::string address(addr.size(), 0);
+    std::string        address(addr);
 
-	std::memcpy(&address, &addr, sizeof(addr));
     toSend.len        = buffer.size();
     toSend.buf        = buff.data();
     client.sin_family = AF_INET;
