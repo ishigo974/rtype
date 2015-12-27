@@ -127,7 +127,7 @@ namespace RType
 
         bool            JarJar::getLoop() const
         {
-            return false;
+            return true;
         }
 
     }
