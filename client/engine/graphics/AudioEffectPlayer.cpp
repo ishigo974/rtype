@@ -20,6 +20,7 @@ void    AudioEffectPlayer::play(GameObject *obj)
         {
             obj->getComponent<AudioEffect>()->setSoundToPlay("../res/OnePunch.wav");
             _sounds.push_front(obj->getComponent<AudioEffect>()->soundToPlay());
+            obj->getComponent<AudioEffect>()
         }
         else
             _sounds.push_back(obj->getComponent<AudioEffect>()->soundToPlay());
