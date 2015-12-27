@@ -25,7 +25,8 @@ Menu::Menu(unsigned int id, std::string const& name, int layer,
    _gm(nullptr),
    _ready(false), _isVisible(true),
    _network(nullptr),
-   _done(false)
+   _done(false),
+   _networkReject(false)
 {
     initTextFields();
     transitionToStates();
@@ -42,7 +43,8 @@ Menu::Menu(Menu const& other) :
         _back(other._back),
         _roomTitle(other._roomTitle),
         _event(other._event),
-        _done(other._done)
+        _done(other._done),
+        _networkReject(other._networkReject)
 {}
 
 Menu::Menu(Menu&& other) :
@@ -451,6 +453,18 @@ void Menu::transitionToStates()
         return false;
     }, _event, &_inputUserName, &_back, this);
 
+    _inRoom.addTransition("mainMenu", [&](bool *reject)
+    {
+      if (*reject)
+	{
+	  *reject = false;
+	  clearPlayers();
+	  refreshRoomList();
+	  return true;
+        }
+      return false;
+    }, &_networkReject);
+
     _inRoom.addTransition("mainMenu", [](cu::Event *e, TextField *back,
                                         TextField *r, Menu *menu)
     {
@@ -539,6 +553,7 @@ void Menu::update()
     while (_network->sizeReceive() > 0)
     {
         RType::Request tmp = _network->popReceive();
+        std::cout << "{CODE} " << tmp.getCode() << std::endl;
         switch (tmp.getCode())
         {
             case RType::Request::SE_LISTROOMS :
@@ -581,7 +596,7 @@ void Menu::update()
                 std::cout << "from serv: ok" << std::endl;
                 break;
             case RType::Request::SE_KO :
-                //TODO REVERSE STATE
+                reverseState();
                 break;
             default :
                 break;
@@ -669,4 +684,23 @@ void Menu::quitRoom()
     _network->pushToSend(RType::Request(RType::Request::CL_QUITROOM));
     _lastRequest.push_back(RType::Request(RType::Request::CL_QUITROOM));
     _gm->clearPlayers();
+}
+
+void Menu::reverseState()
+{
+    if (!_lastRequest.empty())
+      {
+	_networkReject = true;
+	switch (_lastRequest.front().getCode())
+        {
+            case RType::Request::CL_CREATEROOM :
+                _gm->clearPlayers();
+                break;
+            case RType::Request::CL_JOINROOM :
+                _gm->clearPlayers();
+                break;
+            default:
+                break;
+        }
+      }
 }

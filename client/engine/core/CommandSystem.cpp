@@ -46,14 +46,15 @@ unsigned long    CommandSystem::getSize() const
     return _commands.size();
 }
 
-std::string    CommandSystem::toString()
+std::string    CommandSystem::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "CommandSystem {"
-    << "\n\tqueue sizeRecv: " << _commands.size()
-    << "\n}";
-    return (ss.str());
+    ss = "CommandSystem {";
+    ss += "\n\tqueue sizeRecv: ";
+    ss += _commands.size();
+    ss += "\n}\n";
+    return (ss);
 }
 
 void CommandSystem::processNetwork()
@@ -83,9 +84,7 @@ void CommandSystem::processNetwork()
         while (i < tcpIn.size())
             tmpComp->pushReceive(tcpIn[i++]);
         while (tmpComp->sizeToSend() > 0)
-        {
             _ns->pushTCP(tmpComp->popToSend());
-        }
     }
     for (auto e : udpObjs)
     {

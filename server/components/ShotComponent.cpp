@@ -78,6 +78,14 @@ namespace RType
             }
         }
 
+        void                Shot::collide(ECS::Entity&)
+        {
+            ECS::EntityManager& em = ECS::EntityManager::getInstance();
+
+            std::cout << "shot collided" << std::endl;
+            em.safeDestroy(em.getByCmpnt(this));
+        }
+
         RType::Shot::Type   Shot::getType() const
         {
             return _type;

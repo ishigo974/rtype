@@ -17,7 +17,8 @@ namespace RType
             MASK_SHOT           = 1 << 5,
             MASK_SHIP           = 1 << 6,
             MASK_MOB            = 1 << 7,
-            MASK_GAME           = 1 << 8
+            MASK_GAME           = 1 << 8,
+            MASK_COLLIDER       = 1 << 9
         };
     }
 }

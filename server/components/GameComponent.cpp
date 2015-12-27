@@ -5,6 +5,7 @@
 #include "PositionComponent.hpp"
 #include "RoomComponent.hpp"
 #include "ShipComponent.hpp"
+#include "ColliderComponent.hpp"
 #include "NetworkTCP.hpp"
 #include "NetworkUDP.hpp"
 #include "GameConfig.hpp"
@@ -55,6 +56,7 @@ namespace RType
         */
         void                Game::update()
         {
+            return ;
             bool            endGame(true);
             Buffer          score;
 
@@ -72,6 +74,7 @@ namespace RType
             {
                 Request     request(Request::SE_ENDOFGAME);
 
+                std::cout << "lololol end !!!" << std::endl;
                 request.push<Buffer>("scores", score);
                 _room->broadcastTCP(request.toBuffer());
             }
@@ -111,6 +114,9 @@ namespace RType
                             Map::defaultPosX, Map::defaultPosY.at(entry.first)
                     ));
                 user->addComponent(std::make_unique<Component::Ship>());
+                user->addComponent(
+                    std::make_unique<Component::Collider>(RType::Ship::width,
+                                                      RType::Ship::height));
             }
             _chrono.start();
         }

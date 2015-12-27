@@ -48,19 +48,26 @@ void SpriteRenderer::swap(SpriteRenderer& lhs, SpriteRenderer& rhs)
 
 std::string SpriteRenderer::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "SpriteRenderer {"
-    << "\n\tid: " << _id
-    << "\n\tname: " << _name
-    << "\n\tpath: " << _path
-    << "\n\trect: " << _rect.x << ", "
-    << _rect.y << ", "
-    << _rect.w << ", "
-    << _rect.h << "\n}"
-    << std::endl;
+    ss = "SpriteRenderer {";
+    ss += "\n\tid: ";
+    ss += _id;
+    ss += "\n\tname: ";
+    ss += _name;
+    ss += "\n\tpath: ";
+    ss += _path;
+    ss += "\n\trect: ";
+    ss += _rect.x;
+    ss += ", ";
+    ss += _rect.y;
+    ss += ", ";
+    ss += _rect.w;
+    ss += ", ";
+    ss += _rect.h;
+    ss += "\n}\n";
 
-    return ss.str();
+    return ss;
 }
 
 const std::string& SpriteRenderer::getPath() const

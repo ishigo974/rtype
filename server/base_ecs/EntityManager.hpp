@@ -4,6 +4,7 @@
 # include <memory>
 # include <unordered_map>
 # include <algorithm>
+# include <set>
 # include <functional>
 # include "Entity.hpp"
 # include "IComponent.hpp"
@@ -65,7 +66,7 @@ namespace ECS
         EntityMap                   _inactives;
         ComponentMap                _components;
         ComponentIdMap              _cmpntsEntities;
-        std::vector<unsigned int>   _toDestroy;
+        std::set<unsigned int>      _toDestroy;
 
     protected:
         static UniqueEmPtr          instance;

@@ -9,6 +9,7 @@
 #include "GameComponent.hpp"
 #include "Server.hpp"
 #include "MobComponent.hpp"
+#include "ColliderComponent.hpp"
 
 namespace RType
 {
@@ -72,9 +73,18 @@ namespace RType
                     cMob->init(mobType->second.get());
                     cMob->setGame(game);
                     cPos->setX(it->second.x);
-                    cPos->setX(it->second.y);
+                    cPos->setY(it->second.y);
 
-                    event.push<uint8_t>("mob_id", cMob->getId());
+                    eMob.addComponent(
+                        std::make_unique<Component::Collider>(
+                            it->second.x,
+                            it->second.y,
+                            mobType->second->getRekt().w,
+                            mobType->second->getRekt().h
+                    ));
+
+                    event.push<uint8_t>("mobtype_id", cMob->getId());
+                    event.push<uint64_t>("mob_id", eMob.getId());
                     event.push<uint32_t>("x", it->second.x);
                     event.push<uint32_t>("y", it->second.y);
                     event.push<uint64_t>("time",
@@ -82,7 +92,7 @@ namespace RType
 
                     // std::cout << "Send mob spawned with time: " << event.get<uint64_t>("time") << std::endl;
                     room->broadcastUDP(event.toBuffer());
-                    // std::cout << "Mob spawned id: " << cMob->getId() << std::endl; // debug
+                    std::cout << "Mob spawned " << cPos->getX() << " " << cPos->getY() << std::endl;
                     if ((it = map.second.erase(it)) == map.second.end())
                         break ;
                 }

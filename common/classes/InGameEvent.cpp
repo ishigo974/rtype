@@ -17,7 +17,9 @@ namespace RType
         { InGameEvent::SE_PLAYERLEFT,   { "player_id", "time"               } },
         { InGameEvent::SE_PLAYERRIGHT,  { "player_id", "time"               } },
         { InGameEvent::SE_SHOT,         { "player_id", "shot_type", "time"  } },
-        { InGameEvent::SE_MOBSPAWNED,   { "mob_id", "x", "y", "time"        } },
+        { InGameEvent::SE_MOBSPAWNED,   { "mobtype_id", "mob_id", "x", "y",
+                                          "time"                            } },
+        { InGameEvent::SE_MOBMOVED,     { "mob_id", "x", "y", "time"        } },
         { InGameEvent::SE_INPUTERROR,   { "time"                            } },
         { InGameEvent::SE_PLYRDISCONN,  {                                   } },
         { InGameEvent::CL_PLAYERUP,     { "time"                            } },
@@ -32,7 +34,8 @@ namespace RType
         { "player_id",      sizeof(uint8_t)  },
         { "time",           sizeof(uint64_t) },
         { "shot_type",      sizeof(uint8_t)  },
-        { "mob_id",         sizeof(uint8_t)  },
+        { "mobtype_id",     sizeof(uint8_t)  },
+        { "mob_id",         sizeof(uint64_t) },
         { "x",              sizeof(uint32_t) },
         { "y",              sizeof(uint32_t) }
     };

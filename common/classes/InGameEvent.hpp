@@ -22,6 +22,7 @@ namespace RType
             SE_PLAYERRIGHT = 304,
             SE_SHOT        = 305,
             SE_MOBSPAWNED  = 307,
+            SE_MOBMOVED    = 308,
             SE_INPUTERROR  = 501,
             SE_PLYRDISCONN = 502,
             CL_PLAYERUP    = 201,

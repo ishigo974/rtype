@@ -110,19 +110,24 @@ int	Bullet::getDamage() const
 
 std::string Bullet::toString() const
 {
-    std::stringstream ss;
+    std::string ss;
 
-    ss << "Bullet {"
-    << "\n\thp: " << _hp
-    << "\n\tdamage: " << _damage
-    << "\n\tdirection: " << _direction
-    << "\n\tavailable: " << _available
-    << "\n\tenabled: " << _enabled;
+    ss = "Bullet {";
+    ss += "\n\thp: ";
+    ss += _hp;
+    ss += "\n\tdamage: ";
+    ss += _damage;
+    ss += "\n\tdirection: ";
+    ss += _direction;
+    ss += "\n\tavailable: ";
+    ss += _available;
+    ss += "\n\tenabled: ";
+    ss += _enabled;
     if (_transform)
-        ss << "\n\t" << _transform->toString();
-    ss << "\n}" << std::endl;
+        ss += "\n\t" + _transform->toString();
+    ss += "\n}\n";
 
-    return (ss.str());
+    return (ss);
 }
 
 RTypes::my_uint16_t     Bullet::getMask() const

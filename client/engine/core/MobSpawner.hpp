@@ -38,6 +38,7 @@ public:
 
 protected:
     void                            spawnMob(RType::InGameEvent const&);
+    void                            moveMob(RType::InGameEvent const& request);
 
 public:
     static const RTypes::my_uint16_t Mask   = ComponentMask::MobSpawnerMask;

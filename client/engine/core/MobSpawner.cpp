@@ -78,27 +78,42 @@ RTypes::my_uint16_t     MobSpawner::getMask() const
     return Mask;
 }
 
-#include <iostream>
+void                      MobSpawner::init()
+{
+    _mobs = new ObjectPool<MobObject, Mob>("Mob", 12, _entityManager);
+    MobObject *mob = _mobs->create("Mob", 12);
+    mob->create();
+    _parent = static_cast<GameObject *>(parent());
+    _udpView = _parent->getComponent<UDPView>();
+}
+
 void	MobSpawner::spawnMob(RType::InGameEvent const& request)
 {
-    if (request.getCode() == RType::InGameEvent::SE_MOBSPAWNED)
-    {
     MobObject *mob = _mobs->create("Mob", 12);
-    mob->init(_mobTypes->at(request.get<uint8_t>("mob_id")).get());
+    mob->init(_mobTypes->at(request.get<uint8_t>("mobtype_id")).get());
     _activeMobs.push_back(mob);
     Mob *m = mob->getComponent<Mob>();
     m->setX(request.get<uint32_t>("x"));
     m->setY(request.get<uint32_t>("y"));
-    }
+    m->setEntityId(request.get<uint64_t>("mob_id"));
+    std::cout << "spawn mob " << request.get<uint64_t>("mob_id") << " " << mob->getComponent<Transform>()->getPosition().X() << " " << mob->getComponent<Transform>()->getPosition().Y() << std::endl;
+    // m->setY(_transform->getPosition().Y());
 }
 
-void                      MobSpawner::init()
+void    MobSpawner::moveMob(RType::InGameEvent const& request)
 {
-    _mobs = new ObjectPool<MobObject, Mob>("Mob", 12, _entityManager);
-   MobObject *mob = _mobs->create("Mob", 12);
-   mob->create();
-    _parent = static_cast<GameObject *>(parent());
-    _udpView = _parent->getComponent<UDPView>();
+    unsigned int    id = request.get<uint64_t>("mob_id");
+    auto            it =
+        std::find_if(_activeMobs.begin(), _activeMobs.end(),
+        [id](MobObject const* m)
+        { return m->getComponent<Mob>()->getEntityId() == id; });
+
+    if (it != _activeMobs.end())
+    {
+        (*it)->transform().getPosition().setX(request.get<uint32_t>("x"));
+        (*it)->transform().getPosition().setY(request.get<uint32_t>("y"));
+        // std::cout << (*it)->transform().getPosition().X() << " " << (*it)->transform().getPosition().Y() << std::endl; // debug
+    }
 }
 
 void		              MobSpawner::update(double)
@@ -116,12 +131,11 @@ void		              MobSpawner::update(double)
     }
     if (_udpView->sizeRecv() > 0)
     {
-        try
-        {
-            spawnMob(_udpView->popReceive());
-        }
-        catch (Exception::ValueError const& e)
-        {
-        }
+        RType::InGameEvent request  = _udpView->popReceive();
+
+        if (request.getCode() == RType::InGameEvent::SE_MOBSPAWNED)
+            spawnMob(request);
+        else if (request.getCode() == RType::InGameEvent::SE_MOBMOVED)
+            moveMob(request);
     }
 }

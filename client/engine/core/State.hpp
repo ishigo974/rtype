@@ -28,7 +28,7 @@ public:
     template<class Predicate, class ...Args>
     void addTransition(std::string const& state, Predicate p, Args ...args)
     {
-        _transitions[state] = std::make_shared<Transition_<Predicate, Args...> >(p, args...);
+      _transitions.insert(std::make_pair(state,std::make_shared<Transition_<Predicate, Args...> >(p, args...)));
     };
 
     bool canMove(std::string& out);
@@ -37,7 +37,7 @@ public:
 
 protected:
     std::string                                         _name;
-    std::map<std::string, std::shared_ptr<Transition> > _transitions;
+    std::multimap<std::string, std::shared_ptr<Transition> > _transitions;
 };
 
 

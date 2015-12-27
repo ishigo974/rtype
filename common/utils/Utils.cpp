@@ -2,7 +2,6 @@
 // Created by fourdr_b on 27/11/15.
 //
 
-#include <sstream>
 #include <math.h>
 #include "Utils.hpp"
 
@@ -151,20 +150,24 @@ namespace cu
 
     std::string Position::toString() const
     {
-        std::stringstream ss;
+        std::string ss;
 
-        ss << "(" << _point.x << ", " << _point.y << ")";
+        ss = "(";
+	ss +=  _point.x;
+	ss += ", ";
+	ss += _point.y;
+	ss += ")";
 
-        return (ss.str());
+        return (ss);
     }
 
     std::string Rotation::toString() const
     {
-        std::stringstream ss;
+        std::string ss;
 
-        ss << _angle;
+        ss = _angle;
 
-        return (ss.str());
+        return (ss);
     }
 
     void Vector2D::swap(Vector2D& other)
