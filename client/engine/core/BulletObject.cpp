@@ -96,7 +96,7 @@ void    BulletObject::create()
 {
     _entityManager->attachComponent<SpriteRenderer>(this, "Bullet", "r-typesheet1",
                                                     gu::Rect<int>(249, 105, 16, 8));
-    _entityManager->attachComponent<Bullet>(this, "Bullet");
+    _entityManager->attachComponent<Bullet>(this, "Bullet", _entityManager);
     _entityManager->attachComponent<Collider>(this, "Bullet collider", 16, 8);
     _entityManager->attachComponent<Animation>(this, "AN", 1.0, 1.0, false);
     getComponent<Animation>()->stop();

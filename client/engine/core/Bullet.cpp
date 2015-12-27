@@ -6,6 +6,7 @@
 #include "Renderer.hpp"
 #include "GameConfig.hpp"
 #include "Animation.hpp"
+#include "AudioEffect.hpp"
 
 Bullet::Bullet()
 {
