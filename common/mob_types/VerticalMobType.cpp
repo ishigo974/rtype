@@ -75,7 +75,7 @@ namespace RType
 
         unsigned int    Vertical::getNbLives() const
         {
-            return 256;
+            return 50;
         }
 
         unsigned int    Vertical::getScoreValue() const
