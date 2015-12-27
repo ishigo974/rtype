@@ -577,6 +577,7 @@ void Menu::update()
 				std::cout << "from serv: game start" << std::endl;
 				break;
             case RType::Request::SE_ENDOFGAME:
+                endGame(tmp.get<RType::Request::ScoresTab>("scores"));
                 break;
             case RType::Request::SE_OK :
 				std::cout << "from serv: ok" << std::endl;
