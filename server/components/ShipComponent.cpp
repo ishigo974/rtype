@@ -15,13 +15,12 @@ namespace RType
         */
         const ECS::ComponentMask    Ship::mask              = Component::MASK_SHIP;
         const unsigned int          Ship::defaultLives      = 1;
-        const double                Ship::dftElapsedTime    = 0.02;
 
         /*
         ** Constructor/Destructor
         */
         Ship::Ship() :
-            _lives(defaultLives), _score(0), _elapsedTime(dftElapsedTime)
+            _lives(defaultLives), _score(0)
         {
         }
 
@@ -33,8 +32,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Ship::Ship(Ship const& other) :
-            _lives(other._lives), _score(other._score),
-            _elapsedTime(other._elapsedTime)
+            _lives(other._lives), _score(other._score)
         {
         }
 
@@ -44,7 +42,6 @@ namespace RType
             {
                 _lives = other._lives;
                 _score = other._score;
-                _elapsedTime = other._elapsedTime;
             }
             return *this;
         }
@@ -110,16 +107,6 @@ namespace RType
                 _score -= nb;
         }
 
-        void                Ship::setElapsedTime(double elapsedTime)
-        {
-            _elapsedTime = elapsedTime;
-        }
-
-        double              Ship::getElapsedTime() const
-        {
-            return _elapsedTime;
-        }
-
         unsigned int        Ship::getLives() const
         {
             return _lives;
@@ -149,7 +136,6 @@ namespace RType
         {
             _lives = defaultLives;
             _score = 0;
-            _elapsedTime = dftElapsedTime;
         }
 
         std::string         Ship::toString() const
@@ -157,7 +143,6 @@ namespace RType
             return "Component::Ship {"
                    "\n\t_lives: " + std::to_string(_lives) +
                    "\n\t_score: " + std::to_string(_score) +
-                   "\n\t_elapsedTime: " + std::to_string(_elapsedTime) +
                    "\n}\n";
         }
     }

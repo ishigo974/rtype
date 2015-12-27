@@ -29,8 +29,6 @@ namespace RType
             std::string const&          getMapName() const;
             void                        start(Map::Parser::Map const& map);
             Time::HRChrono const&       getChrono() const;
-            double                      getElapsedTime() const;
-            void                        updateElapsedTime();
             Component::Room*            getRoom() const;
 
         public:
@@ -50,7 +48,6 @@ namespace RType
             Time::HRChrono      _chrono;
             Component::Room*    _room;
             Map::Parser::Map    _map;
-            double              _elapsedTime;
         };
     }
 }

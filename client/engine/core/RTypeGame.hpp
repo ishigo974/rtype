@@ -49,7 +49,6 @@ protected:
     void                loadMobTypesFromFile();
 
 public:
-    static const double         defaultFixedStep;
     static const std::string    defaultAddr;
     static const short          defaultPort;
     static const std::string    mobTypesPath;

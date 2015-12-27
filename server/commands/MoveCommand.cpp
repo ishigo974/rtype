@@ -104,7 +104,7 @@ namespace RType
                                 .getComponent<Component::Game>()) == nullptr))
                 throw std::runtime_error("Entity does not have a "
                                          "position/room/game component");
-            move = Speed::ship * static_cast<float>(game->getElapsedTime());
+            move = Speed::ship * Config::loopDuration;
             switch (_direction)
             {
                 case NONE:

@@ -30,12 +30,10 @@ namespace RType
             void            removeLives(unsigned int nb = 1);
             void            addScore(unsigned int nb = 1);
             void            removeScore(unsigned int nb = 1);
-            void            setElapsedTime(double elapsedTime);
 
         public:
             unsigned int    getLives() const;
             unsigned int    getScore() const;
-            double          getElapsedTime() const;
 
         public:
             virtual std::string         getName() const;
@@ -47,13 +45,11 @@ namespace RType
         public:
             static const ECS::ComponentMask     mask;
             static const unsigned int           defaultLives;
-            static const double                 dftElapsedTime;
 
         protected:
             unsigned int    _lives;
             unsigned int    _score;
             Time::HRChrono  _chrono;
-            double          _elapsedTime;
         };
     }
 }

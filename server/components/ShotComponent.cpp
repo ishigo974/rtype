@@ -61,7 +61,7 @@ namespace RType
             {
                 case RType::Shot::NORMAL:
                     pos->setX(pos->getX() + (Speed::bullet
-                                             * _game->getElapsedTime()));
+                                             * Config::loopDuration));
                     break ;
                 default:
                     break ;

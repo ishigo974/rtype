@@ -23,8 +23,7 @@ namespace RType
         ** Constructor/Destructor
         */
         Game::Game() :
-            _chrono(), _room(nullptr), _map(),
-            _elapsedTime(Ship::dftElapsedTime)
+            _chrono(), _room(nullptr), _map()
         {
         }
 
@@ -36,8 +35,7 @@ namespace RType
         ** Copy constructor and assign operator
         */
         Game::Game(Game const& other) :
-            _chrono(other._chrono), _room(other._room), _map(other._map),
-            _elapsedTime(other._elapsedTime)
+            _chrono(other._chrono), _room(other._room), _map(other._map)
         {
         }
 
@@ -48,7 +46,6 @@ namespace RType
                 _chrono = other._chrono;
                 _room = other._room;
                 _map = other._map;
-                _elapsedTime = other._elapsedTime;
             }
             return *this;
         }
@@ -118,35 +115,9 @@ namespace RType
             _chrono.start();
         }
 
-        void                Game::updateElapsedTime()
-        {
-            Component::Room*    room =
-                ECS::EntityManager::getInstance().getByCmpnt(this)
-                    .getComponent<Component::Room>();
-
-            if (room == nullptr)
-                Server::display("Warning: Trying to update a game's elapsed "
-                                "time without room");
-            _elapsedTime = 0;
-            for (auto& entry: *room)
-            {
-                Component::Ship*    ship =
-                    entry.second.first->getComponent<Component::Ship>();
-
-                _elapsedTime += ship->getElapsedTime();
-            }
-            _elapsedTime /= room->size();
-            std::cout << "Game updated elapsed time " << _elapsedTime << std::endl;
-        }
-
         Time::HRChrono const&   Game::getChrono() const
         {
             return _chrono;
-        }
-
-        double              Game::getElapsedTime() const
-        {
-            return _elapsedTime;
         }
 
         std::string         Game::getName() const

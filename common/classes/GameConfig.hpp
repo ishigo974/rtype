@@ -7,7 +7,8 @@ namespace RType
 {
     namespace Config
     {
-        const double        fixedStep       = 0.003;
+        const double        fixedStep       = 0.006;
+        const double        loopDuration    = fixedStep * 650;
         const double        dftElapsedTime  = 0.025;
     }
 

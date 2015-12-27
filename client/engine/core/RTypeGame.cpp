@@ -16,7 +16,6 @@
 /*
 ** Static variables
 */
-const double        RTypeGame::defaultFixedStep = 0.006;
 const std::string   RTypeGame::defaultAddr = "127.0.0.1";
 const short         RTypeGame::defaultPort = 6667;
 const std::string   RTypeGame::mobTypesPath = ".rtypemobs";
@@ -29,7 +28,7 @@ RTypeGame::RTypeGame(std::string const& addr, short port) :
         _quit(false), _isPlaying(false), _em(), _renderer(&_em),
         _input(_renderer.getWindow()), _bs(&_em),
         _network(&_em, addr, port, port + 1), _cs(&_em, &_input, &_network, _chrono),
-        _event(), _menu(nullptr), _lag(0), _fixedStep(defaultFixedStep),
+        _event(), _menu(nullptr), _lag(0), _fixedStep(RType::Config::fixedStep),
         _physics(&_em), _audio(&_em)
 {
     GameManager *gm = _em.createEntity<GameManager>("gm", 0);
@@ -186,7 +185,7 @@ void        RTypeGame::handleGame()
     _audio.process();
     while (_lag >= _fixedStep)
     {
-        _bs.process(_fixedStep * 650);
+        _bs.process(RType::Config::loopDuration);
         _lag -= _fixedStep;
     }
 }

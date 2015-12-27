@@ -83,7 +83,8 @@ namespace RType
                 em.getByCmpnt(this).getComponent<Component::Position>();
             cu::Position            newpos =
                 _movePattern(cu::Position(pos->getX(), pos->getY()),
-                             _game->getElapsedTime(), _state);
+                             Config::loopDuration, _state);
+
             pos->setX(newpos.X());
             pos->setY(newpos.Y());
             if (pos->getX() <= 0 || pos->getX() >= Map::width

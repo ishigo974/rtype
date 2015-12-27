@@ -420,8 +420,8 @@ namespace RType
                             + std::to_string(room->size()) + "/"
                             + std::to_string(Component::Room::nbMaxPlayers)
                             + "\t| " + game->getMapName() + "\t| "
-                            + std::to_string(game->getChrono().getElapsedTime())
-                            + "\t| " + std::to_string(game->getElapsedTime()));
+                            + std::to_string(
+                                game->getChrono().getElapsedTime()));
         }
     }
 
